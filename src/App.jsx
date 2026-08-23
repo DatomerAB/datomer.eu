@@ -276,7 +276,7 @@ function HomePage({ onDownload }) {
     plus: {
       name: t('pricing.plus.name'),
       monthlyPrice: t('pricing.plus.price'),
-      yearlyPrice: t('pricing.plus.yearlyPrice', { defaultValue: '240 kr' }),
+      yearlyPrice: t('pricing.plus.yearlyPrice'),
       period: t('pricing.plus.period'),
       yearly: t('pricing.plus.yearly'),
       highlight: true,
@@ -289,7 +289,7 @@ function HomePage({ onDownload }) {
     pro: {
       name: t('pricing.pro.name'),
       monthlyPrice: t('pricing.pro.price'),
-      yearlyPrice: t('pricing.pro.yearlyPrice', { defaultValue: '600 kr' }),
+      yearlyPrice: t('pricing.pro.yearlyPrice'),
       period: t('pricing.pro.period'),
       yearly: t('pricing.pro.yearly'),
       highlight: false,

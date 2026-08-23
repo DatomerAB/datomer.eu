@@ -136,6 +136,7 @@ export const translations = {
       plus: {
         name: 'Plus',
         price: '$2',
+        yearlyPrice: '$20',
         period: '/ month',
         yearly: 'or $20/year',
         cta: 'Get Plus',
@@ -143,6 +144,7 @@ export const translations = {
       pro: {
         name: 'Pro',
         price: '$5',
+        yearlyPrice: '$49',
         period: '/ user / month',
         yearly: 'or $49/user/year · min 3 seats',
         cta: 'Contact sales',
@@ -427,6 +429,7 @@ export const translations = {
       plus: {
         name: 'Plus',
         price: '20 kr',
+        yearlyPrice: '240 kr',
         period: '/ månad',
         yearly: 'eller 240 kr/år',
         cta: 'Skaffa Plus',
@@ -434,6 +437,7 @@ export const translations = {
       pro: {
         name: 'Pro',
         price: '50 kr',
+        yearlyPrice: '600 kr',
         period: '/ användare / månad',
         yearly: 'eller 600 kr/användare/år · minst 3 platser',
         cta: 'Kontakta oss',
