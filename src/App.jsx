@@ -550,7 +550,7 @@ function HomePage() {
               <li>Apple Silicon Mac (M1 or newer)</li>
               <li>8 GB RAM minimum (16 GB recommended)</li>
               <li>2 GB free disk space for the app; additional space for models</li>
-              <li>Optional: Ollama installed for Ollama model support</li>
+              <li>Supports GGUF models and Ollama models</li>
             </ul>
             <p className="requirements-note">
               Beta builds are currently unsigned. On first launch, right-click the app and select Open,
