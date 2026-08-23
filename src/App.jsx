@@ -6,6 +6,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
 import { PaymentButton } from './components/PaymentButton.jsx'
 import { WaitlistForm } from './components/WaitlistForm.jsx'
+import { CookieConsent } from './components/CookieConsent.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -803,6 +804,7 @@ function App() {
       {showDownloadForm && (
         <DownloadForm downloadUrl={downloadUrl} onClose={() => setShowDownloadForm(false)} />
       )}
+      <CookieConsent />
     </div>
   )
 }

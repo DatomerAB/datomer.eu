@@ -248,6 +248,11 @@ export const translations = {
       error: 'Something went wrong. Please try again.',
       turnstileError: 'Security check failed. Please try again.',
     },
+    cookieConsent: {
+      text: 'We use cookies to understand how visitors use our site and to improve it.',
+      accept: 'Accept',
+      decline: 'Decline',
+    },
     footer: {
       managedBy: 'Managed and operated by Datomer AB',
       legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies' },
@@ -550,6 +555,11 @@ export const translations = {
       success: 'Du är med på listan. Vi mejlar dig uppdateringar.',
       error: 'Något gick fel. Försök igen.',
       turnstileError: 'Säkerhetskontrollen misslyckades. Försök igen.',
+    },
+    cookieConsent: {
+      text: 'Vi använder cookies för att förstå hur besökare använder vår webbplats och för att förbättra den.',
+      accept: 'Godkänn',
+      decline: 'Avböj',
     },
     footer: {
       managedBy: 'Hanteras och drivs av Datomer AB',
