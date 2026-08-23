@@ -98,6 +98,30 @@ export const translations = {
         best: 'Best for users without local GPUs',
       },
     },
+    language: {
+      label: 'Language',
+    },
+    downloadForm: {
+      title: 'Download Pär beta',
+      subtitle: 'Enter your details to get the latest macOS beta. We will email you when updates are available.',
+      name: 'Full name',
+      email: 'Email address',
+      phone: 'Phone number',
+      country: 'Country',
+      selectCountry: 'Select country',
+      sending: 'Sending…',
+      submit: 'Download for Mac',
+      success: 'Thanks! Your download should start automatically.',
+      downloadAgain: 'Download again',
+      consent: 'By downloading, you agree to receive occasional product updates. You can unsubscribe anytime.',
+    },
+    payment: {
+      unavailable: 'Payment is not configured yet.',
+      processing: 'Please wait…',
+      error: 'Payment failed. Please try again or contact us.',
+      successTitle: 'Thank you!',
+      successText: 'Your payment was received. We have sent a confirmation email with next steps.',
+    },
     pricing: {
       eyebrow: 'Simple, transparent pricing',
       headline: 'Start free. Upgrade when you want Pär to remember everything.',
@@ -213,11 +237,6 @@ export const translations = {
       managedBy: 'Managed and operated by Datomer AB',
       legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies' },
     },
-    language: {
-      label: 'Language',
-      en: 'English',
-      sv: 'Svenska',
-    },
     about: {
       title: 'About Pär',
       intro:
@@ -235,6 +254,9 @@ export const translations = {
     privacy: {
       title: 'Privacy Policy',
       updated: 'Last updated',
+      intro:
+        'This Privacy Policy explains how {{company}} processes personal data in connection with the Pär application and website.',
+      introParams: { company: 'Datomer AB' },
       controllerTitle: '1. Data controller',
       whatTitle: '2. What data we process',
       what: {
@@ -258,6 +280,9 @@ export const translations = {
     terms: {
       title: 'Terms of Service',
       updated: 'Last updated',
+      intro:
+        'These Terms of Service govern your use of the Pär website and beta software provided by {{company}} ({{orgNumber}}).',
+      introParams: { company: 'Datomer AB', orgNumber: '559199-6540' },
       betaTitle: '1. Beta software',
       betaText:
         'Pär is currently in beta. Features may change, break, or be removed. Do not rely on the beta for critical workflows.',
@@ -504,8 +529,27 @@ export const translations = {
     },
     language: {
       label: 'Språk',
-      en: 'English',
-      sv: 'Svenska',
+    },
+    downloadForm: {
+      title: 'Ladda ner Pär beta',
+      subtitle: 'Ange dina uppgifter för att få den senaste betaversionen för macOS. Vi mejlar dig när uppdateringar finns.',
+      name: 'Fullständigt namn',
+      email: 'E-postadress',
+      phone: 'Telefonnummer',
+      country: 'Land',
+      selectCountry: 'Välj land',
+      sending: 'Skickar…',
+      submit: 'Ladda ner för Mac',
+      success: 'Tack! Din nedladdning bör starta automatiskt.',
+      downloadAgain: 'Ladda ner igen',
+      consent: 'Genom att ladda ner godkänner du att få produktuppdateringar. Du kan avanmäla dig när som helst.',
+    },
+    payment: {
+      unavailable: 'Betalning är inte konfigurerad än.',
+      processing: 'Vänta…',
+      error: 'Betalningen misslyckades. Försök igen eller kontakta oss.',
+      successTitle: 'Tack!',
+      successText: 'Din betalning har mottagits. Vi har skickat ett bekräftelsemejl med nästa steg.',
     },
     about: {
       title: 'Om Pär',
@@ -524,6 +568,9 @@ export const translations = {
     privacy: {
       title: 'Integritetspolicy',
       updated: 'Senast uppdaterad',
+      intro:
+        'Denna integritetspolicy förklarar hur {{company}} behandlar personuppgifter i samband med Pär-applikationen och webbplatsen.',
+      introParams: { company: 'Datomer AB' },
       controllerTitle: '1. Personuppgiftsansvarig',
       whatTitle: '2. Vilka personuppgifter behandlar vi',
       what: {
@@ -547,6 +594,9 @@ export const translations = {
     terms: {
       title: 'Användarvillkor',
       updated: 'Senast uppdaterad',
+      intro:
+        'Dessa användarvillkor reglerar din användning av Pärs webbplats och betaversion som tillhandahålls av {{company}} ({{orgNumber}}).',
+      introParams: { company: 'Datomer AB', orgNumber: '559199-6540' },
       betaTitle: '1. Betaversion',
       betaText:
         'Pär är för närvarande i beta. Funktioner kan ändras, sluta fungera eller tas bort. Lita inte på betaversionen för kritiska arbetsflöden.',

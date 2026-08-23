@@ -1,4 +1,4 @@
-import { useLanguage } from '../i18n/LanguageProvider'
+import { useLanguage } from '../i18n/useLanguage.js'
 
 export function LanguageSwitcher() {
   const { lang, setLang, t } = useLanguage()
