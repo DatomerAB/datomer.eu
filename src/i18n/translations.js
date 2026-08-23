@@ -138,7 +138,9 @@ export const translations = {
         price: '$2',
         yearlyPrice: '$20',
         period: '/ month',
+        yearlyPeriod: '/ year',
         yearly: 'or $20/year',
+        monthly: 'or $2/month',
         cta: 'Get Plus',
       },
       pro: {
@@ -146,7 +148,9 @@ export const translations = {
         price: '$5',
         yearlyPrice: '$49',
         period: '/ user / month',
+        yearlyPeriod: '/ user / year',
         yearly: 'or $49/user/year · min 3 seats',
+        monthly: 'or $5/user/month',
         cta: 'Contact sales',
       },
       enterprise: {
@@ -431,7 +435,9 @@ export const translations = {
         price: '20 kr',
         yearlyPrice: '240 kr',
         period: '/ månad',
+        yearlyPeriod: '/ år',
         yearly: 'eller 240 kr/år',
+        monthly: 'eller 20 kr/månad',
         cta: 'Skaffa Plus',
       },
       pro: {
@@ -439,7 +445,9 @@ export const translations = {
         price: '50 kr',
         yearlyPrice: '600 kr',
         period: '/ användare / månad',
+        yearlyPeriod: '/ användare / år',
         yearly: 'eller 600 kr/användare/år · minst 3 platser',
+        monthly: 'eller 50 kr/användare/månad',
         cta: 'Kontakta oss',
       },
       enterprise: {

@@ -278,7 +278,9 @@ function HomePage({ onDownload }) {
       monthlyPrice: t('pricing.plus.price'),
       yearlyPrice: t('pricing.plus.yearlyPrice'),
       period: t('pricing.plus.period'),
+      yearlyPeriod: t('pricing.plus.yearlyPeriod'),
       yearly: t('pricing.plus.yearly'),
+      monthly: t('pricing.plus.monthly'),
       highlight: true,
       cta: t('pricing.plus.cta'),
       items: t('pricingFeatures.plus'),
@@ -291,7 +293,9 @@ function HomePage({ onDownload }) {
       monthlyPrice: t('pricing.pro.price'),
       yearlyPrice: t('pricing.pro.yearlyPrice'),
       period: t('pricing.pro.period'),
+      yearlyPeriod: t('pricing.pro.yearlyPeriod'),
       yearly: t('pricing.pro.yearly'),
+      monthly: t('pricing.pro.monthly'),
       highlight: false,
       cta: t('pricing.pro.cta'),
       items: t('pricingFeatures.pro'),
@@ -314,10 +318,13 @@ function HomePage({ onDownload }) {
 
   const pricing = Object.values(plans).map((plan) => {
     if (!plan.monthlyPriceId) return plan
+    const isYearly = billingInterval === 'yearly'
     return {
       ...plan,
-      price: billingInterval === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice,
-      priceId: billingInterval === 'yearly' ? plan.yearlyPriceId : plan.monthlyPriceId,
+      price: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
+      period: isYearly ? plan.yearlyPeriod : plan.period,
+      yearly: isYearly ? plan.monthly : plan.yearly,
+      priceId: isYearly ? plan.yearlyPriceId : plan.monthlyPriceId,
     }
   })
 
