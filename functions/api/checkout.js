@@ -1,3 +1,5 @@
+import { verifyTurnstileToken } from './_turnstile.js'
+
 export async function onRequestPost(context) {
   const { request, env } = context
 
@@ -19,9 +21,17 @@ export async function onRequestPost(context) {
     })
   }
 
-  const { priceId, mode = 'subscription', locale = 'en' } = body
+  const { priceId, mode = 'subscription', locale = 'en', turnstileToken } = body
   if (!priceId) {
     return new Response(JSON.stringify({ error: 'Missing priceId.' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
+  const turnstileCheck = await verifyTurnstileToken(turnstileToken, env.TURNSTILE_SECRET_KEY)
+  if (!turnstileCheck.success) {
+    return new Response(JSON.stringify({ error: turnstileCheck.error }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
     })
