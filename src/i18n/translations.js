@@ -125,6 +125,7 @@ export const translations = {
     pricing: {
       eyebrow: 'Simple, transparent pricing',
       headline: 'Start free. Upgrade when you want Pär to remember everything.',
+      billing: { monthly: 'Monthly', yearly: 'Yearly' },
       free: {
         name: 'Free',
         price: '$0',
@@ -134,16 +135,16 @@ export const translations = {
       },
       plus: {
         name: 'Plus',
-        price: '$4',
+        price: '$2',
         period: '/ month',
-        yearly: 'or $39/year',
+        yearly: 'or $20/year',
         cta: 'Get Plus',
       },
       pro: {
         name: 'Pro',
-        price: '$9',
+        price: '$5',
         period: '/ user / month',
-        yearly: 'or $79/user/year · min 3 seats',
+        yearly: 'or $49/user/year · min 3 seats',
         cta: 'Contact sales',
       },
       enterprise: {
@@ -415,6 +416,7 @@ export const translations = {
     pricing: {
       eyebrow: 'Enkel, transparent prissättning',
       headline: 'Börja gratis. Uppgradera när du vill att Pär ska komma ihåg allt.',
+      billing: { monthly: 'Månadsvis', yearly: 'Årsvis' },
       free: {
         name: 'Gratis',
         price: '0 kr',
@@ -424,16 +426,16 @@ export const translations = {
       },
       plus: {
         name: 'Plus',
-        price: '49 kr',
+        price: '20 kr',
         period: '/ månad',
-        yearly: 'eller 429 kr/år',
+        yearly: 'eller 240 kr/år',
         cta: 'Skaffa Plus',
       },
       pro: {
         name: 'Pro',
-        price: '99 kr',
+        price: '50 kr',
         period: '/ användare / månad',
-        yearly: 'eller 879 kr/användare/år · minst 3 platser',
+        yearly: 'eller 600 kr/användare/år · minst 3 platser',
         cta: 'Kontakta oss',
       },
       enterprise: {

@@ -1,7 +1,7 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import { useLanguage } from './i18n/LanguageProvider.jsx'
+import { useLanguage } from './i18n/useLanguage.js'
 import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
 import { PaymentButton } from './components/PaymentButton.jsx'
@@ -259,8 +259,10 @@ function HomePage({ onDownload }) {
     },
   ]
 
-  const pricing = [
-    {
+  const [billingInterval, setBillingInterval] = useState('monthly')
+
+  const plans = {
+    free: {
       name: t('pricing.free.name'),
       price: t('pricing.free.price'),
       period: t('pricing.free.period'),
@@ -268,26 +270,36 @@ function HomePage({ onDownload }) {
       cta: t('pricing.free.cta'),
       note: t('pricing.free.note'),
       items: t('pricingFeatures.free'),
+      priceId: '',
+      mode: 'subscription',
     },
-    {
+    plus: {
       name: t('pricing.plus.name'),
-      price: t('pricing.plus.price'),
+      monthlyPrice: t('pricing.plus.price'),
+      yearlyPrice: t('pricing.plus.yearlyPrice', { defaultValue: '240 kr' }),
       period: t('pricing.plus.period'),
       yearly: t('pricing.plus.yearly'),
       highlight: true,
       cta: t('pricing.plus.cta'),
       items: t('pricingFeatures.plus'),
+      monthlyPriceId: STRIPE_PRICE_IDS.plusMonthly,
+      yearlyPriceId: STRIPE_PRICE_IDS.plusYearly,
+      mode: 'subscription',
     },
-    {
+    pro: {
       name: t('pricing.pro.name'),
-      price: t('pricing.pro.price'),
+      monthlyPrice: t('pricing.pro.price'),
+      yearlyPrice: t('pricing.pro.yearlyPrice', { defaultValue: '600 kr' }),
       period: t('pricing.pro.period'),
       yearly: t('pricing.pro.yearly'),
       highlight: false,
       cta: t('pricing.pro.cta'),
       items: t('pricingFeatures.pro'),
+      monthlyPriceId: STRIPE_PRICE_IDS.proMonthly,
+      yearlyPriceId: STRIPE_PRICE_IDS.proYearly,
+      mode: 'subscription',
     },
-    {
+    enterprise: {
       name: t('pricing.enterprise.name'),
       price: t('pricing.enterprise.price'),
       period: t('pricing.enterprise.period'),
@@ -295,8 +307,19 @@ function HomePage({ onDownload }) {
       highlight: false,
       cta: t('pricing.enterprise.cta'),
       items: t('pricingFeatures.enterprise'),
+      priceId: '',
+      mode: 'subscription',
     },
-  ]
+  }
+
+  const pricing = Object.values(plans).map((plan) => {
+    if (!plan.monthlyPriceId) return plan
+    return {
+      ...plan,
+      price: billingInterval === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice,
+      priceId: billingInterval === 'yearly' ? plan.yearlyPriceId : plan.monthlyPriceId,
+    }
+  })
 
   const privacyFeatures = t('privacyHome.features')
 
@@ -463,6 +486,25 @@ function HomePage({ onDownload }) {
               <h2>{t('pricing.headline')}</h2>
             </div>
 
+            <div className="billing-toggle" role="group" aria-label={t('pricing.billing.monthly')}>
+              <button
+                type="button"
+                className={billingInterval === 'monthly' ? 'active' : ''}
+                onClick={() => setBillingInterval('monthly')}
+                aria-pressed={billingInterval === 'monthly'}
+              >
+                {t('pricing.billing.monthly')}
+              </button>
+              <button
+                type="button"
+                className={billingInterval === 'yearly' ? 'active' : ''}
+                onClick={() => setBillingInterval('yearly')}
+                aria-pressed={billingInterval === 'yearly'}
+              >
+                {t('pricing.billing.yearly')}
+              </button>
+            </div>
+
             <div className="pricing-grid">
               {pricing.map((plan) => (
                 <article key={plan.name} className={`pricing-card ${plan.highlight ? 'highlight' : ''}`}>
@@ -480,9 +522,31 @@ function HomePage({ onDownload }) {
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
-                  <button type="button" className={`button ${plan.highlight ? 'button-primary' : 'button-secondary'}`}>
-                    {plan.cta}
-                  </button>
+                  {plan.name === t('pricing.free.name') ? (
+                    <button
+                      type="button"
+                      className={`button ${plan.highlight ? 'button-primary' : 'button-secondary'}`}
+                      onClick={onDownload}
+                    >
+                      {plan.cta}
+                    </button>
+                  ) : plan.name === t('pricing.enterprise.name') ? (
+                    <button
+                      type="button"
+                      className={`button ${plan.highlight ? 'button-primary' : 'button-secondary'}`}
+                      onClick={() => window.location.href = `mailto:${COMPANY.email}?subject=${encodeURIComponent(plan.name + ' inquiry')}`}
+                    >
+                      {plan.cta}
+                    </button>
+                  ) : (
+                    <PaymentButton
+                      priceId={plan.priceId}
+                      mode={plan.mode}
+                      className={`button ${plan.highlight ? 'button-primary' : 'button-secondary'}`}
+                    >
+                      {plan.cta}
+                    </PaymentButton>
+                  )}
                   {plan.note && <p className="pricing-note">{plan.note}</p>}
                 </article>
               ))}
@@ -532,10 +596,10 @@ function HomePage({ onDownload }) {
             </div>
 
             <div className="cta-actions">
-              <a href="#download" className="button button-primary">
+              <button type="button" className="button button-primary" onClick={onDownload}>
                 {t('cta.downloadMac')}
-              </a>
-              <form className="waitlist-form">
+              </button>
+              <form className="waitlist-form" onSubmit={(e) => { e.preventDefault(); onDownload() }}>
                 <label>
                   <span className="sr-only">{t('cta.waitlistPlaceholder')}</span>
                   <input type="email" placeholder={t('cta.waitlistPlaceholder')} aria-label={t('cta.waitlistPlaceholder')} />
@@ -599,7 +663,7 @@ function PrivacyPage() {
         <strong>{t('privacy.updated')}:</strong> 23 August 2026
       </p>
       <p>
-        {t('privacy.intro', { defaultValue: `This Privacy Policy explains how ${COMPANY.name} processes personal data in connection with the Pär application and website.` })}
+        {t('privacy.intro')}
       </p>
 
       <h2>{t('privacy.controllerTitle')}</h2>
@@ -646,7 +710,7 @@ function TermsPage() {
         <strong>{t('terms.updated')}:</strong> 23 August 2026
       </p>
       <p>
-        {t('terms.intro', { defaultValue: `These Terms of Service govern your use of the Pär website and beta software provided by ${COMPANY.name} (${COMPANY.orgNumber}).` })}
+        {t('terms.intro')}
       </p>
 
       <h2>{t('terms.betaTitle')}</h2>
@@ -702,20 +766,43 @@ function ScrollToTop() {
   return null
 }
 
+function PaymentSuccessPage() {
+  const { t } = useLanguage()
+
+  return (
+    <main className="section container legal-page">
+      <h1>{t('payment.successTitle', { defaultValue: 'Thank you!' })}</h1>
+      <p>{t('payment.successText', { defaultValue: 'Your payment was received. We have sent a confirmation email with next steps.' })}</p>
+      <p>
+        <Link to="/" className="button button-primary">
+          {t('nav.home')}
+        </Link>
+      </p>
+    </main>
+  )
+}
+
 function App() {
+  const [showDownloadForm, setShowDownloadForm] = useState(false)
+  const downloadUrl = useDownloadUrl()
+
   return (
     <div className="page-shell">
       <ScrollToTop />
-      <TopBar />
+      <TopBar onDownload={() => setShowDownloadForm(true)} />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage onDownload={() => setShowDownloadForm(true)} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/cookies" element={<CookiesPage />} />
+        <Route path="/payment-success" element={<PaymentSuccessPage />} />
       </Routes>
       <Footer />
+      {showDownloadForm && (
+        <DownloadForm downloadUrl={downloadUrl} onClose={() => setShowDownloadForm(false)} />
+      )}
     </div>
   )
 }
