@@ -58,7 +58,7 @@ export const translations = {
       semanticCache: { title: 'Semantic cache', badge: 'Plus+', text: 'Near-instant answers to repeated questions without re-running the model.' },
       portability: { title: 'Full data portability', badge: 'All tiers', text: 'Export and import your vault, conversations, and profiles anytime. Your data is always yours.' },
     },
-    privacy: {
+    privacyHome: {
       eyebrow: 'Privacy is not a feature',
       headline: 'It is the foundation.',
       text:
@@ -347,7 +347,7 @@ export const translations = {
       semanticCache: { title: 'Semantiskt cache', badge: 'Plus+', text: 'Nästan omedelbara svar på upprepade frågor utan att köra modellen igen.' },
       portability: { title: 'Full dataportabilitet', badge: 'Alla nivåer', text: 'Exportera och importera ditt valv, konversationer och profiler när som helst. Dina data är alltid dina.' },
     },
-    privacy: {
+    privacyHome: {
       eyebrow: 'Integritet är inte en funktion',
       headline: 'Det är grunden.',
       text:

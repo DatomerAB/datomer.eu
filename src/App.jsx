@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { useLanguage } from './i18n/LanguageProvider.jsx'
 import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
+import { DownloadForm } from './components/DownloadForm.jsx'
+import { PaymentButton } from './components/PaymentButton.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -13,6 +15,14 @@ const COMPANY = {
   country: 'Sweden',
   email: 'hello@datomer.eu',
   domain: 'datomer.eu',
+}
+
+// Stripe price IDs (test-mode placeholders). Replace with real Stripe price IDs in Cloudflare Pages secrets/env.
+const STRIPE_PRICE_IDS = {
+  plusMonthly: import.meta.env.VITE_STRIPE_PLUS_MONTHLY || '',
+  plusYearly: import.meta.env.VITE_STRIPE_PLUS_YEARLY || '',
+  proMonthly: import.meta.env.VITE_STRIPE_PRO_MONTHLY || '',
+  proYearly: import.meta.env.VITE_STRIPE_PRO_YEARLY || '',
 }
 
 const FALLBACK_DOWNLOAD_URL =
@@ -110,11 +120,10 @@ function DatomerLogo() {
   )
 }
 
-function TopBar() {
+function TopBar({ onDownload }) {
   const { t } = useLanguage()
   const location = useLocation()
   const isHome = location.pathname === '/'
-  const downloadUrl = useDownloadUrl()
 
   return (
     <header className="topbar">
@@ -146,9 +155,9 @@ function TopBar() {
           <Link to="/" className="datomer-link" aria-label="Datomer home">
             <DatomerLogo />
           </Link>
-          <a href={downloadUrl} className="button button-primary" download>
+          <button type="button" className="button button-primary" onClick={onDownload}>
             {t('nav.download')}
-          </a>
+          </button>
         </div>
       </nav>
     </header>
@@ -191,9 +200,8 @@ function Footer() {
   )
 }
 
-function HomePage() {
+function HomePage({ onDownload }) {
   const { t } = useLanguage()
-  const downloadUrl = useDownloadUrl()
 
   const highlights = [
     { icon: '🖥️', title: t('highlights.localInference.title'), text: t('highlights.localInference.text') },
@@ -290,7 +298,7 @@ function HomePage() {
     },
   ]
 
-  const privacyFeatures = t('privacy.features')
+  const privacyFeatures = t('privacyHome.features')
 
   const faqs = [
     { question: t('faq.q1'), answer: t('faq.a1') },
@@ -314,9 +322,9 @@ function HomePage() {
             </p>
 
             <div className="cta-row">
-              <a href={downloadUrl} className="button button-primary" download>
+              <button type="button" className="button button-primary" onClick={onDownload}>
                 {t('hero.downloadMac')}
-              </a>
+              </button>
               <a href="#product" className="button button-secondary">
                 {t('hero.seeHowItWorks')}
               </a>
@@ -396,10 +404,10 @@ function HomePage() {
 
         <section className="section container privacy-section">
           <div className="privacy-copy">
-            <p className="eyebrow">{t('privacy.eyebrow')}</p>
-            <h2>{t('privacy.headline')}</h2>
+            <p className="eyebrow">{t('privacyHome.eyebrow')}</p>
+            <h2>{t('privacyHome.headline')}</h2>
             <p>
-              {t('privacy.text')}
+              {t('privacyHome.text')}
             </p>
             <ul className="privacy-list" aria-label="Privacy foundations">
               {Array.isArray(privacyFeatures) && privacyFeatures.map((item) => (
@@ -415,15 +423,15 @@ function HomePage() {
             <div className="privacy-pillars">
               <div className="privacy-pillar">
                 <span>🖥️</span>
-                <strong>{t('privacy.pillars.localInference')}</strong>
+                <strong>{t('privacyHome.pillars.localInference')}</strong>
               </div>
               <div className="privacy-pillar">
                 <span>🔒</span>
-                <strong>{t('privacy.pillars.encryptedVault')}</strong>
+                <strong>{t('privacyHome.pillars.encryptedVault')}</strong>
               </div>
               <div className="privacy-pillar">
                 <span>👤</span>
-                <strong>{t('privacy.pillars.ownTheKeys')}</strong>
+                <strong>{t('privacyHome.pillars.ownTheKeys')}</strong>
               </div>
             </div>
           </div>
