@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 
 const COMPANY = {
@@ -13,8 +13,33 @@ const COMPANY = {
   domain: 'datomer.eu',
 }
 
-const DOWNLOAD_URL =
+const FALLBACK_DOWNLOAD_URL =
   'https://github.com/DatomerAB/par-releases/releases/download/v0.1.0-beta.2026081301/Par_0.1.0-beta.2026081301_aarch64.dmg'
+
+function useDownloadUrl() {
+  const [url, setUrl] = useState(FALLBACK_DOWNLOAD_URL)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('https://raw.githubusercontent.com/DatomerAB/par-releases/main/latest.json')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !data?.version) return
+        const version = data.version
+        const tag = `v${version}`
+        const dmg = `https://github.com/DatomerAB/par-releases/releases/download/${tag}/Par_${version}_aarch64.dmg`
+        setUrl(dmg)
+      })
+      .catch(() => {
+        // keep fallback URL
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return url
+}
 
 function ParLogo() {
   return (
@@ -250,6 +275,7 @@ const faqs = [
 function TopBar() {
   const location = useLocation()
   const isHome = location.pathname === '/'
+  const downloadUrl = useDownloadUrl()
 
   return (
     <header className="topbar">
@@ -280,7 +306,7 @@ function TopBar() {
           <Link to="/" className="datomer-link" aria-label="Datomer home">
             <DatomerLogo />
           </Link>
-          <a href={DOWNLOAD_URL} className="button button-primary" download>
+          <a href={downloadUrl} className="button button-primary" download>
             Download
           </a>
         </div>
@@ -324,6 +350,8 @@ function Footer() {
 }
 
 function HomePage() {
+  const downloadUrl = useDownloadUrl()
+
   return (
     <main id="top">
       <section className="hero" id="about">
@@ -340,7 +368,7 @@ function HomePage() {
             </p>
 
             <div className="cta-row">
-              <a href={DOWNLOAD_URL} className="button button-primary" download>
+              <a href={downloadUrl} className="button button-primary" download>
                 Download for Mac
               </a>
               <a href="#product" className="button button-secondary">
