@@ -242,6 +242,12 @@ export const translations = {
       joinWaitlist: 'Join the waitlist',
       disclaimer: 'Beta release. Requires macOS 11+. Apple Silicon recommended. GGUF models run natively; Ollama is optional.',
     },
+    waitlist: {
+      sending: 'Joining…',
+      success: 'You are on the list. We will email you with updates.',
+      error: 'Something went wrong. Please try again.',
+      turnstileError: 'Security check failed. Please try again.',
+    },
     footer: {
       managedBy: 'Managed and operated by Datomer AB',
       legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies' },
@@ -538,6 +544,12 @@ export const translations = {
       waitlistPlaceholder: 'Ange din e-post',
       joinWaitlist: 'Gå med i väntelistan',
       disclaimer: 'Betaversion. Kräver macOS 11+. Apple Silicon rekommenderas. GGUF-modeller körs direkt; Ollama är valfritt.',
+    },
+    waitlist: {
+      sending: 'Går med…',
+      success: 'Du är med på listan. Vi mejlar dig uppdateringar.',
+      error: 'Något gick fel. Försök igen.',
+      turnstileError: 'Säkerhetskontrollen misslyckades. Försök igen.',
     },
     footer: {
       managedBy: 'Hanteras och drivs av Datomer AB',

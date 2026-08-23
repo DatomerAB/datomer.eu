@@ -5,6 +5,7 @@ import { useLanguage } from './i18n/useLanguage.js'
 import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
 import { PaymentButton } from './components/PaymentButton.jsx'
+import { WaitlistForm } from './components/WaitlistForm.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -606,15 +607,7 @@ function HomePage({ onDownload }) {
               <button type="button" className="button button-primary" onClick={onDownload}>
                 {t('cta.downloadMac')}
               </button>
-              <form className="waitlist-form" onSubmit={(e) => { e.preventDefault(); onDownload() }}>
-                <label>
-                  <span className="sr-only">{t('cta.waitlistPlaceholder')}</span>
-                  <input type="email" placeholder={t('cta.waitlistPlaceholder')} aria-label={t('cta.waitlistPlaceholder')} />
-                </label>
-                <button type="submit" className="button button-secondary">
-                  {t('cta.joinWaitlist')}
-                </button>
-              </form>
+              <WaitlistForm />
             </div>
           </div>
           <p className="container cta-disclaimer">

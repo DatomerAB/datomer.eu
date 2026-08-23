@@ -1002,6 +1002,8 @@
 
 .waitlist-form {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
 }
 
@@ -1013,7 +1015,7 @@
   color: #f8fafc;
   padding: 0 16px;
   font: inherit;
-  flex: 1;
+  flex: 1 1 180px;
   min-width: 0;
   transition: border-color var(--transition-fast), background var(--transition-fast);
 }
@@ -1026,6 +1028,30 @@
   outline: none;
   border-color: rgba(165, 180, 252, 0.5);
   background: rgba(255, 255, 255, 0.08);
+}
+
+.waitlist-form .turnstile-widget {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.waitlist-form .turnstile-widget iframe {
+  margin: 0;
+}
+
+.waitlist-form button {
+  flex: 0 0 auto;
+}
+
+.waitlist-error {
+  flex: 1 1 100%;
+  color: #fecaca;
+  font-size: 0.86rem;
+}
+
+.waitlist-success {
+  color: #bbf7d0;
+  font-weight: 500;
 }
 
 .cta-disclaimer {

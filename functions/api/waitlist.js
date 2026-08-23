@@ -15,7 +15,14 @@ export async function onRequestPost(context) {
 
   const { name, email, phone, country, type = 'download', locale = 'en', timestamp, turnstileToken } = body
 
-  if (!name || !email || !country) {
+  if (!email) {
+    return new Response(JSON.stringify({ error: 'Email is required.' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
+  if (type !== 'waitlist' && (!name || !country)) {
     return new Response(JSON.stringify({ error: 'Name, email, and country are required.' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -31,10 +38,10 @@ export async function onRequestPost(context) {
   }
 
   const payload = {
-    name: String(name).trim(),
+    name: name ? String(name).trim() : 'Subscriber',
     email: String(email).trim().toLowerCase(),
     phone: phone ? String(phone).trim() : '',
-    country: String(country).toUpperCase(),
+    country: country ? String(country).toUpperCase() : 'XX',
     type,
     locale,
     timestamp: timestamp || new Date().toISOString(),
