@@ -1,4 +1,20 @@
 import './App.css'
+import { useEffect } from 'react'
+import { Routes, Route, Link, useLocation } from 'react-router-dom'
+
+const COMPANY = {
+  name: 'Datomer AB',
+  orgNumber: '559199-6540',
+  address: 'Nyskogavägen 11',
+  postcode: '123 63',
+  city: 'Farsta',
+  country: 'Sweden',
+  email: 'hello@datomer.eu',
+  domain: 'datomer.eu',
+}
+
+const DOWNLOAD_URL =
+  'https://github.com/DatomerAB/par-releases/releases/download/v0.1.0-beta.2026081301/Par_0.1.0-beta.2026081301_aarch64.dmg'
 
 function ParLogo() {
   return (
@@ -36,6 +52,22 @@ function ParLogo() {
         <path d="M2885 3434 c-89 -46 -118 -131 -75 -218 31 -63 63 -81 142 -81 63 0 69 2 103 35 84 81 64 214 -38 260 -51 24 -92 25 -132 4z" />
       </g>
     </svg>
+  )
+}
+
+function CompanyAddress() {
+  return (
+    <address className="company-address">
+      <strong>{COMPANY.name}</strong>
+      <br />
+      {COMPANY.address}
+      <br />
+      {COMPANY.postcode} {COMPANY.city}
+      <br />
+      {COMPANY.country}
+      <br />
+      Org. nr: {COMPANY.orgNumber}
+    </address>
   )
 }
 
@@ -215,36 +247,86 @@ const faqs = [
   },
 ]
 
-function App() {
+function TopBar() {
+  const location = useLocation()
+  const isHome = location.pathname === '/'
+
   return (
-    <div className="page-shell">
-      <header className="topbar">
-        <nav className="nav container" aria-label="Main navigation">
-          <a href="#top" className="par-brand" aria-label="Pär home">
-            <ParLogo />
-            <span className="par-wordmark">Pär</span>
+    <header className="topbar">
+      <nav className="nav container" aria-label="Main navigation">
+        <Link to="/" className="par-brand" aria-label="Pär home">
+          <ParLogo />
+          <span className="par-wordmark">Pär</span>
+        </Link>
+
+        <div className="nav-links">
+          {isHome ? (
+            <>
+              <a href="#product">Product</a>
+              <a href="#features">Features</a>
+              <a href="#pricing">Pricing</a>
+              <a href="#faq">FAQ</a>
+            </>
+          ) : (
+            <>
+              <Link to="/">Home</Link>
+              <Link to="/about">About</Link>
+              <Link to="/contact">Contact</Link>
+            </>
+          )}
+        </div>
+
+        <div className="header-right" aria-label="Datomer brand group">
+          <Link to="/" className="datomer-link" aria-label="Datomer home">
+            <DatomerLogo />
+          </Link>
+          <a href={DOWNLOAD_URL} className="button button-primary" download>
+            Download
           </a>
+        </div>
+      </nav>
+    </header>
+  )
+}
 
-          <div className="nav-links">
-            <a href="#product">Product</a>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#faq">FAQ</a>
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="container footer-inner">
+        <div>
+          <div className="footer-brand">
+            <ParLogo />
+            <span>Pär</span>
           </div>
+          <p>Managed and operated by {COMPANY.name}</p>
+          <CompanyAddress />
+        </div>
 
-          <div className="header-right" aria-label="Datomer brand group">
-            <a href="#top" className="datomer-link" aria-label="Datomer home">
-              <DatomerLogo />
-            </a>
-            <a href="#download" className="button button-primary">
-              Download
-            </a>
+        <div className="footer-links">
+          <Link to="/about">About</Link>
+          <Link to="/contact">Contact</Link>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
+          <Link to="/cookies">Cookies</Link>
+        </div>
+
+        <div className="footer-meta">
+          <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+          <div className="legal-links">
+            <Link to="/privacy">Privacy policy</Link>
+            <Link to="/terms">Terms</Link>
+            <Link to="/cookies">Cookies</Link>
           </div>
-        </nav>
-      </header>
+        </div>
+      </div>
+    </footer>
+  )
+}
 
-      <main id="top">
-        <section className="hero" id="about">
+function HomePage() {
+  return (
+    <main id="top">
+      <section className="hero" id="about">
           <div className="container hero-inner">
             <div className="hero-badge">
               <span className="dot" aria-hidden="true" />
@@ -258,7 +340,7 @@ function App() {
             </p>
 
             <div className="cta-row">
-              <a href="#download" className="button button-primary">
+              <a href={DOWNLOAD_URL} className="button button-primary" download>
                 Download for Mac
               </a>
               <a href="#product" className="button button-secondary">
@@ -491,35 +573,216 @@ function App() {
             Beta release. Requires macOS 11+. Apple Silicon recommended. GGUF models run natively; Ollama is optional.
           </p>
         </section>
-      </main>
+    </main>
+  )
+}
 
-      <footer className="footer">
-        <div className="container footer-inner">
-          <div>
-            <div className="footer-brand">
-              <ParLogo />
-              <span>Pär</span>
-            </div>
-            <p>Managed and operated by Datomer AB</p>
-          </div>
+function PageShell({ children, title }) {
+  return (
+    <div className="page-shell">
+      <TopBar />
+      {children}
+      <Footer />
+    </div>
+  )
+}
 
-          <div className="footer-links">
-            <a href="#product">Product</a>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#faq">FAQ</a>
-          </div>
+function AboutPage() {
+  return (
+    <main className="section container legal-page">
+      <h1>About Pär</h1>
+      <p>
+        Pär is the local-first personal AI companion built by {COMPANY.name}. Our mission is to
+        give people an AI that actually remembers them, runs on their own hardware, and keeps their
+        data under their control.
+      </p>
+      <p>
+        We believe the future of AI is private. That means your conversations, files, and context
+        should live in an encrypted vault on your device — not on someone else's server.
+      </p>
 
-          <div className="footer-meta">
-            <a href="mailto:hello@datomer.eu">hello@datomer.eu</a>
-            <div className="legal-links">
-              <a href="#">Privacy policy</a>
-              <a href="#">Terms</a>
-              <a href="#">Cookies</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <h2>Company details</h2>
+      <CompanyAddress />
+
+      <h2>Contact</h2>
+      <p>
+        Email: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+      </p>
+    </main>
+  )
+}
+
+function ContactPage() {
+  return (
+    <main className="section container legal-page">
+      <h1>Contact</h1>
+      <p>
+        For questions, support, or partnership inquiries, reach out to us at{' '}
+        <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+      </p>
+      <CompanyAddress />
+    </main>
+  )
+}
+
+function PrivacyPage() {
+  return (
+    <main className="section container legal-page">
+      <h1>Privacy Policy</h1>
+      <p>
+        <strong>Last updated:</strong> 23 August 2026
+      </p>
+      <p>
+        This Privacy Policy explains how {COMPANY.name} ({""}
+        {COMPANY.orgNumber}) processes personal data in connection with the Pär application and
+        website.
+      </p>
+
+      <h2>1. Data controller</h2>
+      <CompanyAddress />
+      <p>
+        Email: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+      </p>
+
+      <h2>2. What data we process</h2>
+      <ul>
+        <li>
+          <strong>App data:</strong> Pär stores your conversations, files, and personal context in
+          an encrypted local vault on your device. We do not have access to this data.
+        </li>
+        <li>
+          <strong>Website data:</strong> When you visit {COMPANY.domain}, we may collect standard
+          server logs and analytics data to improve the site.
+        </li>
+        <li>
+          <strong>Waitlist/email:</strong> If you sign up for updates, we store your email address
+          to send you relevant communications. You can unsubscribe at any time.
+        </li>
+      </ul>
+
+      <h2>3. Legal basis</h2>
+      <p>
+        We process personal data based on your consent, to fulfil a contract, or because we have a
+        legitimate interest in operating and improving our services.
+      </p>
+
+      <h2>4. Third parties</h2>
+      <p>
+        We do not sell your data. We may use trusted service providers for hosting, analytics, and
+        email delivery. These providers are bound by appropriate data protection agreements.
+      </p>
+
+      <h2>5. Your rights</h2>
+      <p>
+        Under the GDPR, you have the right to access, rectify, erase, restrict, and port your
+        personal data. To exercise your rights, contact us at{' '}
+        <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+      </p>
+    </main>
+  )
+}
+
+function TermsPage() {
+  return (
+    <main className="section container legal-page">
+      <h1>Terms of Service</h1>
+      <p>
+        <strong>Last updated:</strong> 23 August 2026
+      </p>
+      <p>
+        These Terms of Service govern your use of the Pär website and beta software provided by{' '}
+        {COMPANY.name} ({COMPANY.orgNumber}).
+      </p>
+
+      <h2>1. Beta software</h2>
+      <p>
+        Pär is currently in beta. Features may change, break, or be removed. Do not rely on the beta
+        for critical workflows.
+      </p>
+
+      <h2>2. License</h2>
+      <p>
+        We grant you a limited, non-exclusive, non-transferable license to use Pär for personal or
+        internal business purposes, subject to these terms.
+      </p>
+
+      <h2>3. Your data</h2>
+      <p>
+        Pär is designed to keep your data on your device. You are responsible for backing up your
+        local vault and keeping your device secure.
+      </p>
+
+      <h2>4. Liability</h2>
+      <p>
+        To the extent permitted by law, {COMPANY.name}'s liability is limited to the amount you
+        paid for the service in the 12 months preceding the claim. We are not liable for data loss
+        caused by your device or configuration.
+      </p>
+
+      <h2>5. Governing law</h2>
+      <p>
+        These terms are governed by the laws of Sweden. Disputes shall be resolved in the courts of
+        Stockholm, Sweden.
+      </p>
+    </main>
+  )
+}
+
+function CookiesPage() {
+  return (
+    <main className="section container legal-page">
+      <h1>Cookie Policy</h1>
+      <p>
+        <strong>Last updated:</strong> 23 August 2026
+      </p>
+      <p>
+        {COMPANY.name} uses cookies and similar technologies only where necessary for the operation
+        of the website.
+      </p>
+
+      <h2>Cookies we use</h2>
+      <ul>
+        <li>
+          <strong>Essential cookies:</strong> required for the site to function, such as routing
+          and security.
+        </li>
+        <li>
+          <strong>Analytics cookies:</strong> help us understand how visitors use the site. These
+          are only used with your consent where required by law.
+        </li>
+      </ul>
+
+      <h2>Managing cookies</h2>
+      <p>
+        You can manage or disable cookies through your browser settings. Disabling essential
+        cookies may affect site functionality.
+      </p>
+    </main>
+  )
+}
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
+function App() {
+  return (
+    <div className="page-shell">
+      <ScrollToTop />
+      <TopBar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/cookies" element={<CookiesPage />} />
+      </Routes>
+      <Footer />
     </div>
   )
 }
