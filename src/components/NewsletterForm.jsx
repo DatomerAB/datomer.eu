@@ -2,9 +2,8 @@ import { useRef, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
-
 export function NewsletterForm({ source = 'homepage-cta' }) {
+  const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
   const [email, setEmail] = useState('')
   const [interests, setInterests] = useState({

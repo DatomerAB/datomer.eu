@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
-
 const STORAGE_KEY = 'par-download-info'
 
 const COUNTRY_LIST = [
@@ -44,6 +42,7 @@ function readStoredForm() {
 }
 
 export function DownloadForm({ downloadUrl, onClose }) {
+  const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
   const [form, setForm] = useState(readStoredForm)
   const [busy, setBusy] = useState(false)
