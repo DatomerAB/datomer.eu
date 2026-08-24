@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
 
@@ -15,21 +15,16 @@ export function NewsletterForm({ source = 'homepage-cta' }) {
   const [busy, setBusy] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(null)
-
-  const getTurnstileResponse = () => {
-    const input = document.querySelector(
-      '.newsletter-form .turnstile-widget input[name="cf-turnstile-response"]',
-    )
-    return input?.value || null
-  }
+  const turnstileRef = useRef(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!email.trim()) return
 
-    const token = getTurnstileResponse()
+    const token = turnstileRef.current?.getResponse?.() || null
     if (TURNSTILE_SITE_KEY && !token) {
       setError(t('newsletter.turnstileError'))
+      turnstileRef.current?.execute?.()
       return
     }
 
@@ -130,10 +125,12 @@ export function NewsletterForm({ source = 'homepage-cta' }) {
       </div>
 
       <Turnstile
+        ref={turnstileRef}
         siteKey={TURNSTILE_SITE_KEY}
         action="newsletter"
         size="compact"
-        onError={() => setError(t('newsletter.turnstileError'))}
+        onVerify={() => setError(null)}
+        onError={(code) => setError(`${t('newsletter.turnstileError')}${code ? ` (${code})` : ''}`)}
         onExpire={() => setError(null)}
       />
 

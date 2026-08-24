@@ -20,7 +20,7 @@ export const Turnstile = forwardRef(function Turnstile(
       theme,
       size,
       callback: (token) => onVerify?.(token),
-      'error-callback': () => onError?.(),
+      'error-callback': (code) => onError?.(code),
       'expired-callback': () => onExpire?.(),
     })
   }

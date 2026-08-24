@@ -26,6 +26,57 @@ This project was tested against the live preview deployment after the latest sta
 
 ---
 
+## Deployment configuration checklist for Turnstile and Stripe
+
+Use this checklist whenever a payment or challenge flow is failing in preview or production.
+
+### Cloudflare Pages environment checklist
+- [ ] Confirm the target deployment is the correct project: preview/staging vs production.
+- [ ] Verify the project is using the same hostname that the Turnstile widget was created for.
+- [ ] Check that the public vars in Wrangler match the environment you expect to deploy.
+- [ ] Check the Cloudflare Pages dashboard for the actual runtime values, not just the repo file.
+- [ ] Verify that `VITE_TURNSTILE_SITE_KEY` matches the exact widget used by the site.
+- [ ] Verify that `TURNSTILE_SECRET_KEY` matches that same widget secret.
+- [ ] Verify `STRIPE_SECRET_KEY` is the correct Stripe secret for the active environment.
+- [ ] Verify `VITE_STRIPE_PUBLISHABLE_KEY` matches the same Stripe account and environment.
+- [ ] Verify `SITE_URL` is correct for the live host (`https://datomer.eu` for production, preview URL for staging).
+- [ ] Confirm preview and production secrets are not mixed across projects.
+- [ ] Confirm no old/expired widget pair is still being used after a Turnstile reset or widget recreation.
+
+### Stripe and pricing checklist
+- [ ] Confirm each plan has a valid `priceId` in the target environment.
+- [ ] Verify the values for `VITE_STRIPE_PLUS_MONTHLY`, `VITE_STRIPE_PLUS_YEARLY`, `VITE_STRIPE_PRO_MONTHLY`, and `VITE_STRIPE_PRO_YEARLY` are not empty.
+- [ ] Check whether the deployed environment is using test-mode or live-mode Stripe keys.
+- [ ] Confirm the checkout button is not hitting the fallback path because the `priceId` is blank.
+- [ ] Validate that the button text and the connected `priceId` belong to the same plan.
+
+### Turnstile diagnosis checklist
+- [ ] Open the page and inspect the browser console for Cloudflare Turnstile error codes.
+- [ ] Confirm the error is not caused by a hidden or duplicate widget on the page.
+- [ ] Verify the site key is the public key from the same widget in Cloudflare.
+- [ ] Verify the secret is the private secret from the same widget in Cloudflare.
+- [ ] Confirm the hostname used by the challenge matches the deployment domain.
+- [ ] Confirm the deployment has been reloaded after updating Cloudflare secret values.
+- [ ] If the widget was recreated, ensure the app was redeployed and the correct key is being loaded.
+
+### Production validation checklist
+- [ ] Open the production domain and confirm the UI loads.
+- [ ] Click the pricing CTA and verify the challenge loads without error.
+- [ ] Confirm the backend route `/api/checkout` receives the Turnstile token.
+- [ ] Confirm the server verifies the token using the correct `TURNSTILE_SECRET_KEY`.
+- [ ] Confirm Stripe checkout starts only after Turnstile passes.
+- [ ] Complete a Stripe test checkout in preview before promoting to production.
+- [ ] Repeat the same validation in production after deployment.
+
+### Expected final state
+- The frontend site key matches the Cloudflare widget.
+- The backend secret matches the same widget.
+- The Stripe price IDs are present and valid in the target environment.
+- The payment flow reaches Stripe only after the Turnstile challenge succeeds.
+- Preview and production are not using mixed key pairs.
+
+---
+
 ## Scenario 0: Preview configuration sanity check
 
 ### Objective

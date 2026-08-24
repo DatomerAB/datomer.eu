@@ -79,6 +79,24 @@ vars = {
 
 The matching secret values should be created in Cloudflare as secrets, not committed into source control.
 
+## Pre-flight deployment checklist
+
+Before any push or merge, verify the following:
+
+- [ ] The target Cloudflare Pages project is correct: preview/staging or production.
+- [ ] The deployment hostname matches the Turnstile widget hostname.
+- [ ] The Turnstile site key matches the exact widget in Cloudflare.
+- [ ] The Turnstile secret matches that same widget.
+- [ ] The Stripe publishable key matches the correct environment and account.
+- [ ] The Stripe secret matches the correct environment and account.
+- [ ] All `VITE_STRIPE_*` values are non-empty and valid.
+- [ ] The live/preview environment is not mixing test and live keys.
+- [ ] The Cloudflare Pages dashboard value matches the repo/public env value for the active environment.
+- [ ] The `SITE_URL` is correct for the target host.
+- [ ] The site has been redeployed after any Turnstile key/secret change.
+- [ ] The pricing buttons render and have valid `priceId` values.
+- [ ] The app is not hitting the fallback `Payment is not configured yet.` path.
+
 ## Staging deployment flow
 
 1. Work on the staging branch.
