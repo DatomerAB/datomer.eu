@@ -36,15 +36,15 @@ export const translations = {
       subtitle:
         'Pär builds a living model of who you are, what you are working on, and what matters to you — and keeps it under your control.',
       knowsYou: {
-        title: 'Knows you 🤝',
+        title: 'Knows you',
         text: 'Persistent, encrypted memory means Pär remembers every conversation. Your profile, goals, and style are injected into every response.',
       },
       knowsWorld: {
-        title: 'Knows your world 🌍',
+        title: 'Knows your world',
         text: 'Connect calendar, email, tasks, and notes. Pär can pull live web context when you want it, or stay fully offline and private.',
       },
       actsForYou: {
-        title: 'Acts for you ⚡',
+        title: 'Acts for you',
         text: 'Smart model routing picks the best local model for each task. Routines, web search, and document exports get things done.',
       },
     },
@@ -155,7 +155,7 @@ export const translations = {
         yearlyPeriod: '/ user / year',
         yearly: 'or $49/user/year · min 3 seats',
         monthly: 'or $5/user/month',
-        cta: 'Contact sales',
+        cta: 'Get Pro',
       },
       enterprise: {
         name: 'Enterprise',
@@ -400,7 +400,7 @@ export const translations = {
       },
       knowsWorld: {
         title: 'Känner din värld',
-        text: 'Koppla ihop kalender, e-post, uppgifter och anteckningar. Pär uppdaterar sammanhanget i bakgrunden så att du aldrig behöver klistra in information igen.',
+        text: 'Koppla ihop kalender, e-post, uppgifter och anteckningar. Pär kan hämta live webbkontext när du vill, eller förbli helt offline och privat.',
       },
       actsForYou: {
         title: 'Handlar åt dig',
@@ -488,7 +488,7 @@ export const translations = {
         yearlyPeriod: '/ användare / år',
         yearly: 'eller 600 kr/användare/år · minst 3 platser',
         monthly: 'eller 50 kr/användare/månad',
-        cta: 'Kontakta oss',
+        cta: 'Skaffa Pro',
       },
       enterprise: {
         name: 'Enterprise',

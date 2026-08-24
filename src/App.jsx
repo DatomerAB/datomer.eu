@@ -10,6 +10,7 @@ import { NewsletterForm } from './components/NewsletterForm.jsx'
 import { CookieConsent } from './components/CookieConsent.jsx'
 import { BlogPage } from './pages/BlogPage.jsx'
 import { useExperiment } from './experiments/experiments.js'
+import { Icon } from './components/Icon.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -97,16 +98,21 @@ function ParLogo() {
   )
 }
 
-function CompanyAddress() {
+function CompanyAddress({ compact = false }) {
+  if (compact) {
+    return (
+      <address className="company-address company-address-compact">
+        <strong>{COMPANY.name}</strong>
+        <br />
+        {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · Org. nr: {COMPANY.orgNumber}
+      </address>
+    )
+  }
   return (
     <address className="company-address">
       <strong>{COMPANY.name}</strong>
       <br />
-      {COMPANY.address}
-      <br />
-      {COMPANY.postcode} {COMPANY.city}
-      <br />
-      {COMPANY.country}
+      {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country}
       <br />
       Org. nr: {COMPANY.orgNumber}
     </address>
@@ -159,9 +165,6 @@ function TopBar({ onDownload }) {
 
         <div className="header-right" aria-label="Datomer brand group">
           <LanguageSwitcher />
-          <Link to="/" className="datomer-link" aria-label="Datomer home">
-            <DatomerLogo />
-          </Link>
           <button type="button" className="button button-primary" onClick={onDownload}>
             {t('nav.download')}
           </button>
@@ -183,7 +186,10 @@ function Footer() {
             <span>Pär</span>
           </div>
           <p>{t('footer.managedBy')}</p>
-          <CompanyAddress />
+          <div className="footer-datomer">
+            <DatomerLogo />
+          </div>
+          <CompanyAddress compact />
         </div>
 
         <div className="footer-links">
@@ -214,24 +220,21 @@ function HomePage({ onDownload }) {
   const heroVariant = useExperiment('hero-cta-copy', ['control', 'social-proof'])
 
   const highlights = [
-    { icon: '🖥️', title: t('highlights.localInference.title'), text: t('highlights.localInference.text') },
-    { icon: '🔒', title: t('highlights.encryptedVault.title'), text: t('highlights.encryptedVault.text') },
-    { icon: '👤', title: t('highlights.ownTheKeys.title'), text: t('highlights.ownTheKeys.text') },
+    { icon: 'chip', title: t('highlights.localInference.title'), text: t('highlights.localInference.text') },
+    { icon: 'lock', title: t('highlights.encryptedVault.title'), text: t('highlights.encryptedVault.text') },
+    { icon: 'user', title: t('highlights.ownTheKeys.title'), text: t('highlights.ownTheKeys.text') },
   ]
 
   const capabilities = [
     {
-      icon: '�',
       title: t('capabilities.knowsYou.title'),
       text: t('capabilities.knowsYou.text'),
     },
     {
-      icon: '🌍',
       title: t('capabilities.knowsWorld.title'),
       text: t('capabilities.knowsWorld.text'),
     },
     {
-      icon: '⚡',
       title: t('capabilities.actsForYou.title'),
       text: t('capabilities.actsForYou.text'),
     },
@@ -327,14 +330,14 @@ function HomePage({ onDownload }) {
   }
 
   const pricing = Object.values(plans).map((plan) => {
-    if (!plan.monthlyPriceId) return plan
     const isYearly = billingInterval === 'yearly'
+    const hasPriceIds = Boolean(plan.monthlyPriceId)
     return {
       ...plan,
-      price: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
+      price: isYearly ? plan.yearlyPrice : (plan.monthlyPrice ?? plan.price),
       period: isYearly ? plan.yearlyPeriod : plan.period,
       yearly: isYearly ? plan.monthly : plan.yearly,
-      priceId: isYearly ? plan.yearlyPriceId : plan.monthlyPriceId,
+      priceId: hasPriceIds ? (isYearly ? plan.yearlyPriceId : plan.monthlyPriceId) : '',
     }
   })
 
@@ -373,7 +376,7 @@ function HomePage({ onDownload }) {
             <div className="hero-highlights" aria-label="Core promises">
               {highlights.map((item) => (
                 <div key={item.title} className="hero-highlight">
-                  <span className="hero-highlight-icon" aria-hidden="true">{item.icon}</span>
+                  <span className="hero-highlight-icon" aria-hidden="true"><Icon name={item.icon} /></span>
                   <div>
                     <strong>{item.title}</strong>
                     <span>{item.text}</span>
@@ -413,7 +416,6 @@ function HomePage({ onDownload }) {
           <div className="capability-grid">
             {capabilities.map((item) => (
               <article key={item.title} className="capability-card">
-                <span className="capability-icon" aria-hidden="true">{item.icon}</span>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
@@ -458,19 +460,19 @@ function HomePage({ onDownload }) {
 
           <div className="privacy-visual" aria-hidden="true">
             <div className="privacy-lock">
-              <span>🔒</span>
+              <Icon name="lock" />
             </div>
             <div className="privacy-pillars">
               <div className="privacy-pillar">
-                <span>🖥️</span>
+                <Icon name="chip" />
                 <strong>{t('privacyHome.pillars.localInference')}</strong>
               </div>
               <div className="privacy-pillar">
-                <span>🔒</span>
+                <Icon name="lock" />
                 <strong>{t('privacyHome.pillars.encryptedVault')}</strong>
               </div>
               <div className="privacy-pillar">
-                <span>👤</span>
+                <Icon name="user" />
                 <strong>{t('privacyHome.pillars.ownTheKeys')}</strong>
               </div>
             </div>
@@ -542,7 +544,7 @@ function HomePage({ onDownload }) {
                   {plan.name === t('pricing.free.name') ? (
                     <button
                       type="button"
-                      className={`button ${plan.highlight ? 'button-primary' : 'button-secondary'}`}
+                      className="button button-primary"
                       onClick={onDownload}
                     >
                       {plan.cta}
@@ -550,7 +552,7 @@ function HomePage({ onDownload }) {
                   ) : plan.name === t('pricing.enterprise.name') ? (
                     <button
                       type="button"
-                      className={`button ${plan.highlight ? 'button-primary' : 'button-secondary'}`}
+                      className="button button-secondary"
                       onClick={() => window.location.href = `mailto:${COMPANY.email}?subject=${encodeURIComponent(plan.name + ' inquiry')}`}
                     >
                       {plan.cta}
@@ -559,7 +561,7 @@ function HomePage({ onDownload }) {
                     <PaymentButton
                       priceId={plan.priceId}
                       mode={plan.mode}
-                      className={`button ${plan.highlight ? 'button-primary' : 'button-secondary'}`}
+                      className="button button-primary"
                     >
                       {plan.cta}
                     </PaymentButton>

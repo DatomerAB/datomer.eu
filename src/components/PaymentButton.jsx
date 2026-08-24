@@ -61,6 +61,9 @@ export function PaymentButton({ priceId, mode = 'subscription', children, classN
         {loading ? t('payment.processing') : children}
       </button>
       {error && <p className="payment-error">{error}</p>}
+      {!priceId && !error && !loading && (
+        <p className="payment-error">{t('payment.unavailable')}</p>
+      )}
       <Turnstile
         ref={turnstileRef}
         siteKey={TURNSTILE_SITE_KEY}

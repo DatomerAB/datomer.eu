@@ -122,6 +122,21 @@
   filter: grayscale(0.2) contrast(1.2);
 }
 
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  color: currentColor;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .datomer-link {
   display: inline-flex;
   align-items: center;
@@ -343,6 +358,7 @@
   border-radius: var(--radius-sm);
   background: var(--accent-soft);
   border: 1px solid rgba(193, 79, 68, 0.12);
+  color: var(--accent);
 }
 
 .hero-highlight strong {
@@ -467,20 +483,7 @@
 .capability-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-lg);
-  border-color: rgba(79, 70, 229, 0.18);
-}
-
-.capability-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--accent-soft) 0%, rgba(124, 58, 237, 0.06) 100%);
-  font-size: 1.6rem;
-  margin-bottom: 24px;
-  border: 1px solid rgba(79, 70, 229, 0.08);
+  border-color: rgba(31, 35, 40, 0.12);
 }
 
 .capability-card h3 {
@@ -514,7 +517,7 @@
 
 .feature-card:hover {
   background: var(--surface);
-  border-color: rgba(79, 70, 229, 0.15);
+  border-color: rgba(193, 79, 68, 0.15);
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
 }
@@ -542,8 +545,8 @@
   letter-spacing: 0.06em;
   padding: 5px 10px;
   border-radius: 999px;
-  background: var(--accent-light);
-  color: #3730a3;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
   flex-shrink: 0;
 }
 
@@ -620,7 +623,13 @@
   align-items: center;
   justify-content: center;
   font-size: 3.2rem;
+  color: #f8fafc;
   box-shadow: 0 32px 64px rgba(15, 23, 42, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.privacy-lock .icon {
+  width: 1em;
+  height: 1em;
 }
 
 .privacy-pillars {
@@ -649,8 +658,15 @@
   box-shadow: var(--shadow-md);
 }
 
-.privacy-pillar span {
+.privacy-pillar span,
+.privacy-pillar .icon {
   font-size: 1.7rem;
+  color: var(--accent);
+}
+
+.privacy-pillar .icon {
+  width: 1em;
+  height: 1em;
 }
 
 .privacy-pillar strong {
@@ -702,7 +718,7 @@
 }
 
 .deployment-card.available .deployment-status {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #1f2328 0%, #c14f44 100%);
   color: #ffffff;
 }
 
@@ -752,14 +768,14 @@
 }
 
 .pricing-card.highlight {
-  border-color: rgba(79, 70, 229, 0.25);
-  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(79, 70, 229, 0.08);
-  background: linear-gradient(180deg, #ffffff 0%, #fbfaff 100%);
+  border-color: rgba(193, 79, 68, 0.25);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(193, 79, 68, 0.08);
+  background: linear-gradient(180deg, #ffffff 0%, #fdf8f7 100%);
 }
 
 .pricing-card.highlight:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(79, 70, 229, 0.1);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(193, 79, 68, 0.1);
 }
 
 .popular-badge {
@@ -773,9 +789,9 @@
   letter-spacing: 0.07em;
   padding: 6px 14px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #1f2328 0%, #c14f44 100%);
   color: #ffffff;
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 6px 16px rgba(31, 35, 40, 0.25);
 }
 
 .pricing-header {
@@ -1197,6 +1213,22 @@
   color: var(--text);
 }
 
+.footer-datomer {
+  margin-top: 18px;
+}
+
+.footer-datomer .datomer-logo {
+  height: 34px;
+  opacity: 0.85;
+  filter: grayscale(1) contrast(1.1);
+  transition: opacity var(--transition-fast), filter var(--transition-fast);
+}
+
+.footer-datomer:hover .datomer-logo {
+  opacity: 1;
+  filter: grayscale(0.2) contrast(1.2);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1256,6 +1288,12 @@
   color: var(--text-secondary);
   line-height: 1.7;
   margin: 16px 0;
+}
+
+.company-address-compact {
+  line-height: 1.6;
+  margin: 12px 0 0;
+  font-size: 0.9rem;
 }
 
 /* Responsive */
