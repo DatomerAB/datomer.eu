@@ -102,9 +102,9 @@
 }
 
 .language-switcher button.active {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #1f2328 0%, #c14f44 100%);
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 2px 8px rgba(31, 35, 40, 0.18);
 }
 
 .datomer-logo {
@@ -112,18 +112,21 @@
   width: auto;
   display: block;
   flex-shrink: 0;
-  opacity: 0.92;
-  transition: opacity var(--transition-fast);
+  opacity: 0.9;
+  filter: grayscale(1) contrast(1.1);
+  transition: opacity var(--transition-fast), filter var(--transition-fast);
 }
 
 .datomer-link:hover .datomer-logo {
   opacity: 1;
+  filter: grayscale(0.2) contrast(1.2);
 }
 
 .datomer-link {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+  opacity: 0.9;
 }
 
 .nav-links {
@@ -189,14 +192,14 @@
 }
 
 .button-primary {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #1f2328 0%, #c14f44 100%);
   color: #ffffff;
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(31, 35, 40, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .button-primary:hover {
-  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
-  box-shadow: 0 12px 28px rgba(79, 70, 229, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, #12161a 0%, #aa413a 100%);
+  box-shadow: 0 12px 28px rgba(31, 35, 40, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .button-secondary {
@@ -219,9 +222,9 @@
   overflow: hidden;
   border-bottom: 1px solid var(--border);
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(79, 70, 229, 0.09), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 85% 75%, rgba(124, 58, 237, 0.06), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 15% 85%, rgba(16, 185, 129, 0.05), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(193, 79, 68, 0.07), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 75%, rgba(144, 148, 153, 0.06), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 15% 85%, rgba(15, 118, 110, 0.04), transparent 50%),
     var(--bg);
 }
 
@@ -230,8 +233,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle at 25% 30%, rgba(79, 70, 229, 0.04) 0%, transparent 30%),
-    radial-gradient(circle at 75% 70%, rgba(124, 58, 237, 0.04) 0%, transparent 30%);
+    radial-gradient(circle at 25% 30%, rgba(193, 79, 68, 0.03) 0%, transparent 30%),
+    radial-gradient(circle at 75% 70%, rgba(31, 35, 40, 0.03) 0%, transparent 30%);
   pointer-events: none;
 }
 
@@ -339,6 +342,7 @@
   justify-content: center;
   border-radius: var(--radius-sm);
   background: var(--accent-soft);
+  border: 1px solid rgba(193, 79, 68, 0.12);
 }
 
 .hero-highlight strong {
@@ -347,6 +351,7 @@
   font-weight: 700;
   font-size: 0.98rem;
   margin-bottom: 5px;
+  letter-spacing: -0.02em;
 }
 
 .hero-highlight span {
@@ -1007,6 +1012,64 @@
   gap: 10px;
 }
 
+.newsletter-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.newsletter-form input {
+  min-height: 46px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  padding: 0 16px;
+  font: inherit;
+  flex: 1 1 220px;
+  min-width: 0;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.newsletter-form input::placeholder {
+  color: rgba(248, 250, 252, 0.45);
+}
+
+.newsletter-form input:focus {
+  outline: none;
+  border-color: rgba(165, 180, 252, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.newsletter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.newsletter-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: rgba(248, 250, 252, 0.9);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 8px 12px;
+}
+
+.newsletter-option input {
+  min-height: 0;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  accent-color: #a5b4fc;
+  margin: 0;
+}
+
 .waitlist-form input {
   min-height: 46px;
   border-radius: var(--radius);
@@ -1527,11 +1590,58 @@
 
 /* Turnstile challenge widget */
 .turnstile-widget {
-  margin: 0.75rem 0;
-  min-height: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0.5rem auto;
+  min-height: 52px;
 }
 
 .turnstile-widget iframe {
   display: block;
+  width: 100% !important;
+  max-width: 220px !important;
+  min-width: 0 !important;
+  height: 52px !important;
   margin: 0 auto;
+}
+
+.contact-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.contact-form input,
+.contact-form textarea {
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.contact-form textarea {
+  min-height: 144px;
+  resize: vertical;
+  padding: 12px 14px;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px rgba(193, 79, 68, 0.08);
 }

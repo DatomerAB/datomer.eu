@@ -201,6 +201,7 @@ export function DownloadForm({ downloadUrl, onClose }) {
               ref={turnstileRef}
               siteKey={TURNSTILE_SITE_KEY}
               action="download"
+              size="compact"
               onVerify={handleTurnstileVerify}
               onError={handleTurnstileError}
               onExpire={() => setTurnstileToken(null)}

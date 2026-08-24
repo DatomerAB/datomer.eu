@@ -5,6 +5,7 @@ export const translations = {
       features: 'Features',
       pricing: 'Pricing',
       faq: 'FAQ',
+      blog: 'Blog',
       home: 'Home',
       about: 'About',
       contact: 'Contact',
@@ -12,9 +13,10 @@ export const translations = {
     },
     hero: {
       badge: 'Private by design',
+      variantBadge: 'Built for repeat users',
       headline: 'Your AI. On your device.',
       lede:
-        'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware — no cloud required. Bring your own GGUF models or Ollama models.',
+        'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware, no cloud required. Bring your own GGUF models or Ollama models.',
       downloadMac: 'Download for Mac',
       seeHowItWorks: 'See how it works',
     },
@@ -34,15 +36,15 @@ export const translations = {
       subtitle:
         'Pär builds a living model of who you are, what you are working on, and what matters to you — and keeps it under your control.',
       knowsYou: {
-        title: 'Knows you',
+        title: 'Knows you 🤝',
         text: 'Persistent, encrypted memory means Pär remembers every conversation. Your profile, goals, and style are injected into every response.',
       },
       knowsWorld: {
-        title: 'Knows your world',
-        text: 'Connect calendar, email, tasks, and notes. Pär refreshes context in the background so you never have to paste information again.',
+        title: 'Knows your world 🌍',
+        text: 'Connect calendar, email, tasks, and notes. Pär can pull live web context when you want it, or stay fully offline and private.',
       },
       actsForYou: {
-        title: 'Acts for you',
+        title: 'Acts for you ⚡',
         text: 'Smart model routing picks the best local model for each task. Routines, web search, and document exports get things done.',
       },
     },
@@ -253,6 +255,25 @@ export const translations = {
       accept: 'Accept',
       decline: 'Decline',
     },
+    newsletter: {
+      title: 'Get launch notes',
+      description: 'Receive release updates, product notes, and early access announcements.',
+      emailPlaceholder: 'Your email',
+      submit: 'Join the newsletter',
+      sending: 'Joining…',
+      success: 'You are subscribed. Watch for the next update.',
+      error: 'Something went wrong. Please try again.',
+      turnstileError: 'Security check failed. Please try again.',
+      interests: {
+        productUpdates: 'Product updates',
+        betaAccess: 'Beta access',
+        changelog: 'Changelog',
+      },
+    },
+    changelog: {
+      title: 'Changelog',
+      intro: 'The latest product updates, beta notes, and launch milestones.',
+    },
     footer: {
       managedBy: 'Managed and operated by Datomer AB',
       legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies' },
@@ -262,7 +283,7 @@ export const translations = {
       intro:
         'Pär is the local-first personal AI companion built by Datomer AB. Our mission is to give people an AI that actually remembers them, runs on their own hardware, and keeps their data under their control.',
       mission:
-        'We believe the future of AI is private. That means your conversations, files, and context should live in an encrypted vault on your device — not on someone else\'s server.',
+        'We believe the future of AI is private. That means your conversations, files, and context should live in an encrypted vault on your device, not on someone else\'s server.',
       companyTitle: 'Company details',
       contactTitle: 'Contact',
       emailLabel: 'Email',
@@ -270,6 +291,10 @@ export const translations = {
     contact: {
       title: 'Contact',
       intro: 'For questions, support, or partnership inquiries, reach out to us at',
+      name: 'Name',
+      email: 'Email',
+      message: 'Message',
+      submit: 'Send message',
     },
     privacy: {
       title: 'Privacy Policy',
@@ -339,6 +364,7 @@ export const translations = {
       features: 'Funktioner',
       pricing: 'Priser',
       faq: 'Frågor',
+      blog: 'Blogg',
       home: 'Hem',
       about: 'Om oss',
       contact: 'Kontakt',
@@ -346,6 +372,7 @@ export const translations = {
     },
     hero: {
       badge: 'Privat från grunden',
+      variantBadge: 'Byggt för återkommande användare',
       headline: 'Din AI. På din enhet.',
       lede:
         'Pär är den personliga AI-kompisen som faktiskt kommer ihåg dig. Den lär sig dina mål, kopplar ihop sig med dina verktyg och körs helt på din egen hårdvara — inget moln behövs. Använd dina egna GGUF-modeller eller Ollama-modeller.',
@@ -561,6 +588,25 @@ export const translations = {
       accept: 'Godkänn',
       decline: 'Avböj',
     },
+    newsletter: {
+      title: 'Få lanseringsnyheter',
+      description: 'Ta emot produktuppdateringar, releases och tidig tillgång till nya funktioner.',
+      emailPlaceholder: 'Din e-post',
+      submit: 'Prenumerera',
+      sending: 'Prenumererar…',
+      success: 'Du prenumererar nu. Håll utkik efter nästa uppdatering.',
+      error: 'Något gick fel. Försök igen.',
+      turnstileError: 'Säkerhetskontrollen misslyckades. Försök igen.',
+      interests: {
+        productUpdates: 'Produktuppdateringar',
+        betaAccess: 'Tillgång till beta',
+        changelog: 'Ändringslogg',
+      },
+    },
+    changelog: {
+      title: 'Ändringslogg',
+      intro: 'Senaste produktuppdateringarna, betanoteringarna och lanseringsmilstolparna.',
+    },
     footer: {
       managedBy: 'Hanteras och drivs av Datomer AB',
       legal: { privacy: 'Integritet', terms: 'Villkor', cookies: 'Cookies' },
@@ -596,7 +642,7 @@ export const translations = {
       intro:
         'Pär är den lokala personliga AI-kompisen byggd av Datomer AB. Vår mission är att ge människor en AI som faktiskt kommer ihåg dem, körs på deras egen hårdvara och håller deras data under deras kontroll.',
       mission:
-        'Vi tror att framtiden för AI är privat. Det betyder att dina konversationer, filer och kontext ska leva i ett krypterat valv på din enhet — inte på någon annans server.',
+        'Vi tror att framtiden för AI är privat. Det betyder att dina konversationer, filer och kontext ska leva i ett krypterat valv på din enhet, inte på någon annans server.',
       companyTitle: 'Företagsuppgifter',
       contactTitle: 'Kontakt',
       emailLabel: 'E-post',
@@ -604,6 +650,10 @@ export const translations = {
     contact: {
       title: 'Kontakt',
       intro: 'För frågor, support eller samarbetsförfrågningar, kontakta oss på',
+      name: 'Namn',
+      email: 'E-post',
+      message: 'Meddelande',
+      submit: 'Skicka meddelande',
     },
     privacy: {
       title: 'Integritetspolicy',

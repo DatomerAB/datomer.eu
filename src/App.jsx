@@ -6,7 +6,10 @@ import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
 import { PaymentButton } from './components/PaymentButton.jsx'
 import { WaitlistForm } from './components/WaitlistForm.jsx'
+import { NewsletterForm } from './components/NewsletterForm.jsx'
 import { CookieConsent } from './components/CookieConsent.jsx'
+import { BlogPage } from './pages/BlogPage.jsx'
+import { useExperiment } from './experiments/experiments.js'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -142,12 +145,14 @@ function TopBar({ onDownload }) {
               <a href="#features">{t('nav.features')}</a>
               <a href="#pricing">{t('nav.pricing')}</a>
               <a href="#faq">{t('nav.faq')}</a>
+              <Link to="/blog">{t('nav.blog')}</Link>
             </>
           ) : (
             <>
               <Link to="/">{t('nav.home')}</Link>
               <Link to="/about">{t('nav.about')}</Link>
               <Link to="/contact">{t('nav.contact')}</Link>
+              <Link to="/blog">{t('nav.blog')}</Link>
             </>
           )}
         </div>
@@ -184,6 +189,7 @@ function Footer() {
         <div className="footer-links">
           <Link to="/about">{t('nav.about')}</Link>
           <Link to="/contact">{t('nav.contact')}</Link>
+          <Link to="/blog">{t('nav.blog')}</Link>
           <Link to="/privacy">{t('footer.legal.privacy')}</Link>
           <Link to="/terms">{t('footer.legal.terms')}</Link>
           <Link to="/cookies">{t('footer.legal.cookies')}</Link>
@@ -192,6 +198,7 @@ function Footer() {
         <div className="footer-meta">
           <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
           <div className="legal-links">
+            <Link to="/blog">{t('nav.blog')}</Link>
             <Link to="/privacy">{t('footer.legal.privacy')}</Link>
             <Link to="/terms">{t('footer.legal.terms')}</Link>
             <Link to="/cookies">{t('footer.legal.cookies')}</Link>
@@ -204,6 +211,7 @@ function Footer() {
 
 function HomePage({ onDownload }) {
   const { t } = useLanguage()
+  const heroVariant = useExperiment('hero-cta-copy', ['control', 'social-proof'])
 
   const highlights = [
     { icon: '🖥️', title: t('highlights.localInference.title'), text: t('highlights.localInference.text') },
@@ -213,7 +221,7 @@ function HomePage({ onDownload }) {
 
   const capabilities = [
     {
-      icon: '🧠',
+      icon: '�',
       title: t('capabilities.knowsYou.title'),
       text: t('capabilities.knowsYou.text'),
     },
@@ -346,7 +354,7 @@ function HomePage({ onDownload }) {
           <div className="container hero-inner">
             <div className="hero-badge">
               <span className="dot" aria-hidden="true" />
-              {t('hero.badge')}
+              {heroVariant === 'social-proof' ? t('hero.variantBadge') : t('hero.badge')}
             </div>
             <h1>{t('hero.headline')}</h1>
             <p className="lede">
@@ -609,6 +617,7 @@ function HomePage({ onDownload }) {
                 {t('cta.downloadMac')}
               </button>
               <WaitlistForm />
+              <NewsletterForm source="homepage-cta" />
             </div>
           </div>
           <p className="container cta-disclaimer">
@@ -641,6 +650,21 @@ function AboutPage() {
 
 function ContactPage() {
   const { t } = useLanguage()
+  const [form, setForm] = useState({ name: '', email: '', message: '' })
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setForm((current) => ({ ...current, [name]: value }))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const subject = encodeURIComponent(`Website enquiry from ${form.name || 'new contact'}`)
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`,
+    )
+    window.location.href = `mailto:${COMPANY.email}?subject=${subject}&body=${body}`
+  }
 
   return (
     <main className="section container legal-page">
@@ -649,6 +673,25 @@ function ContactPage() {
         {t('contact.intro')}{' '}
         <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
       </p>
+
+      <form className="contact-form" onSubmit={handleSubmit}>
+        <label>
+          <span>{t('contact.name')}</span>
+          <input name="name" value={form.name} onChange={handleChange} required autoComplete="name" />
+        </label>
+        <label>
+          <span>{t('contact.email')}</span>
+          <input name="email" type="email" value={form.email} onChange={handleChange} required autoComplete="email" />
+        </label>
+        <label>
+          <span>{t('contact.message')}</span>
+          <textarea name="message" value={form.message} onChange={handleChange} required rows="6" />
+        </label>
+        <button type="submit" className="button button-primary">
+          {t('contact.submit')}
+        </button>
+      </form>
+
       <CompanyAddress />
     </main>
   )
@@ -795,6 +838,7 @@ function App() {
         <Route path="/" element={<HomePage onDownload={() => setShowDownloadForm(true)} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/cookies" element={<CookiesPage />} />

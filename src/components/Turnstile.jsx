@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 const SCRIPT_ID = 'cf-turnstile-script'
 
 export const Turnstile = forwardRef(function Turnstile(
-  { siteKey, onVerify, onError, onExpire, action, theme = 'auto', size = 'normal' },
+  { siteKey, onVerify, onError, onExpire, action, theme = 'auto', size = 'compact' },
   ref,
 ) {
   const containerRef = useRef(null)
