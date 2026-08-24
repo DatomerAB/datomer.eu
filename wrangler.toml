@@ -14,3 +14,14 @@
 name = "datomer"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-08-23"
+
+# Public build-time variables for the production environment.
+# These are NOT set in the dashboard for production, so they are defined here
+# to ensure the production build bakes in the live Stripe/Turnstile values.
+[env.production.vars]
+VITE_STRIPE_PLUS_MONTHLY = "price_1U7bblJjemtoqVYp32qGsxOG"
+VITE_STRIPE_PLUS_YEARLY = "price_1U7bghJjemtoqVYpBLK7UwxX"
+VITE_STRIPE_PRO_MONTHLY = "price_1U7bj5JjemtoqVYpUqT3E57S"
+VITE_STRIPE_PRO_YEARLY = "price_1U7bkTJjemtoqVYp0z9akUpq"
+VITE_STRIPE_PUBLISHABLE_KEY = "pk_live_51U7ZY2JjemtoqVYpHTWDR1eDkKPg1fWdb8idyEh8AKmRJhvTTcz75ZoPiJrKPY4bBtiU8GJRjGO2tWHxRRL0X3nx0063i6GnuL"
+VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEZRl56VvoSHPucq"
