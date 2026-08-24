@@ -1,0 +1,345 @@
+# Human tester scenarios
+
+This document is designed for a person who is testing the site without prior product knowledge. It covers the main user journeys, the key checks, and the expected outcomes.
+
+## Goal
+
+The tester should be able to understand the product, navigate the website, evaluate the pricing, and complete the main CTA flows without needing technical or product context.
+
+## Current live staging test status (2026-08-24)
+
+This project was tested against the live preview deployment after the latest staging push.
+
+### Verified working
+- Homepage and public routes return successful responses.
+- Navigation and page rendering are healthy.
+- The pricing UI loads and the CTA buttons render correctly.
+
+### Verified issue
+- The live preview checkout flow is still blocked by Cloudflare Turnstile.
+- Clicking Get Plus triggers repeated Cloudflare Turnstile error 110200 and the message “Security check failed. Please try again.”
+- This is an environment/configuration issue, not a page rendering issue.
+
+### Conclusion
+- App code is healthy.
+- Preview configuration must be corrected in Cloudflare before the checkout flow can be considered fully functional.
+
+---
+
+## Scenario 0: Preview configuration sanity check
+
+### Objective
+Verify the deployment is using the correct staging preview configuration and that the environment is not mixed with production values.
+
+### Steps
+1. Open the Cloudflare Pages project for the staging/preview deployment.
+2. Confirm the environment is the preview/staging project, not production.
+3. Check that the public preview values are defined in Wrangler for the project.
+4. Confirm the secret values exist in the Cloudflare dashboard as encrypted secrets.
+5. Verify the Stripe keys are test-mode values.
+6. Verify the Turnstile keys are the preview/staging site key and secret pair.
+
+### Expected outcome
+- Preview values are configured for the staging environment only.
+- Secret values are present in Cloudflare and not committed to the repo.
+- Test-mode Stripe and Turnstile keys are used for preview.
+
+### What to look for
+- No mixing of preview and production keys.
+- No missing site key or secret pair.
+- No payment flow blocked by a missing or mismatched challenge configuration.
+
+---
+
+## Scenario 1: First impression and basic navigation
+
+### Objective
+Check whether the landing page feels clear, professional, and easy to understand.
+
+### Steps
+1. Open the homepage.
+2. Look at the top navigation and page headline.
+3. Scroll through the page.
+4. Click the main navigation links: Product, Features, Pricing, FAQ, Blog.
+
+### Expected outcome
+- The site should look polished and easy to understand.
+- The headline should explain what the product is.
+- The navigation should work without errors.
+- Anchors should scroll to the correct sections.
+
+### What to look for
+- Content is readable and coherent.
+- Buttons are obvious and visually consistent.
+- No broken links or empty sections.
+
+---
+
+## Scenario 2: Download flow
+
+### Objective
+Check whether a user can discover the download CTA and start the download flow.
+
+### Steps
+1. On the homepage, click Download.
+2. If a modal appears, review the fields.
+3. Fill in the form with realistic values.
+4. Complete the Turnstile challenge if present.
+5. Submit the form.
+
+### Expected outcome
+- The form appears clearly and is easy to use.
+- Required fields are obvious.
+- The submit flow works without errors.
+- The app gives a clear success or next step message.
+
+### What to look for
+- No confusing validation errors.
+- The user knows what happens next.
+- The flow is smooth and not blocked by unexpected steps.
+
+---
+
+## Scenario 3: Pricing page review
+
+### Objective
+Check whether the pricing section is understandable and credible.
+
+### Steps
+1. Go to the pricing section.
+2. Switch between Monthly and Yearly billing.
+3. Review the content of each plan.
+4. Check which plan is highlighted and why.
+
+### Expected outcome
+- The toggle works correctly.
+- Pricing displays the correct monthly or yearly values.
+- Labels are understandable.
+- The highlighted plan is visually obvious.
+
+### What to look for
+- No incorrect amount or period mismatch.
+- No blank or broken values.
+- The selected billing interval is clearly reflected in the view.
+
+---
+
+## Scenario 4: Purchase flow for Plus plan
+
+### Objective
+Test the checkout path for the Plus monthly or yearly plan.
+
+### Steps
+1. Click Get Plus.
+2. Check whether the button is active and clickable.
+3. Complete the Turnstile challenge if required.
+4. Continue to Stripe checkout using a test card.
+5. Complete the payment.
+6. Check the redirect after checkout.
+
+### Expected outcome
+- The user is taken to Stripe checkout.
+- The challenge does not fail unexpectedly.
+- Payment can be completed with a test card.
+- The page redirects to the success state.
+
+### Test card to use
+- Card number: 4242 4242 4242 4242
+- Any future expiry date
+- Any 3-digit CVC
+
+### What to look for
+- The plan is correctly identified.
+- The redirect occurs after successful payment.
+- There are no confusing error messages.
+
+---
+
+## Scenario 5: Purchase flow for Pro plan
+
+### Objective
+Test the Pro pricing path.
+
+### Steps
+1. Click Get Pro.
+2. Check the button state and price selection.
+3. Continue through the Stripe payment flow.
+4. Complete the payment with a test card.
+5. Confirm the redirect and success screen.
+
+### Expected outcome
+- The user can complete the purchase without technical issues.
+- The correct plan is selected.
+- The success state is clear and easy to understand.
+
+### What to look for
+- No mismatch between selected plan and checkout session.
+- No dead end or confusing error.
+
+---
+
+## Scenario 6: Contact / sales flow
+
+### Objective
+Check whether a user can contact the company if they want a business or custom plan.
+
+### Steps
+1. Click Contact sales or navigate to the Contact page.
+2. Review the contact form or email route.
+3. Attempt to send a message.
+
+### Expected outcome
+- The action takes the user to a clear contact route or email flow.
+- The message is easy to understand.
+- The form or contact link works properly.
+
+### What to look for
+- Clear fields and labels.
+- Easy completion without friction.
+- No misleading or broken contact path.
+
+---
+
+## Scenario 7: Legal and trust pages
+
+### Objective
+Check whether the site provides trust and compliance information.
+
+### Steps
+1. Open the About page.
+2. Open the Privacy page.
+3. Open the Terms page.
+4. Open the Cookies page.
+
+### Expected outcome
+- These pages load correctly.
+- Company information is present and readable.
+- The legal links are consistent and accurate.
+
+### What to look for
+- No missing content.
+- No broken links.
+- No inconsistent branding or copy.
+
+---
+
+## Scenario 8: Cookie consent behavior
+
+### Objective
+Validate the cookie banner and consent flow.
+
+### Steps
+1. Load the homepage.
+2. Observe the cookie consent banner.
+3. Click Accept.
+4. Reload the page.
+5. Click Decline.
+
+### Expected outcome
+- The banner appears and is understandable.
+- Accept and Decline both work.
+- The page remains usable after consent choice.
+
+### What to look for
+- Consent interaction is clear and not blocking.
+- The banner does not repeatedly appear unnecessarily.
+
+---
+
+## Scenario 9: Mobile and small-screen usability
+
+### Objective
+Check whether the site is usable on a smaller screen.
+
+### Steps
+1. Open the page in a narrow browser width or mobile emulation.
+2. Verify the navigation and buttons still look usable.
+3. Scroll through the page.
+4. Try a CTA button.
+
+### Expected outcome
+- Content remains readable.
+- Buttons and links are still reachable.
+- No text overlap or broken layout.
+
+### What to look for
+- Responsive behavior is acceptable.
+- Important actions remain easy to hit.
+
+---
+
+## Scenario 10: Favicon and browser identity check
+
+### Objective
+Verify that the browser tab shows the correct branding.
+
+### Steps
+1. Open the homepage in a browser tab.
+2. Check the favicon in the browser tab.
+3. Check the browser tab title.
+
+### Expected outcome
+- The correct brand icon appears in the tab.
+- The title is professional and consistent.
+
+### What to look for
+- The icon is clear and matches the brand.
+- No broken or placeholder icon remains.
+
+---
+
+## Scenario 11: Error handling sanity check
+
+### Objective
+Check whether the site behaves sensibly when something goes wrong.
+
+### Steps
+1. Try a payment button with a forced error or blocked challenge.
+2. Submit the form with empty required fields.
+3. Check for validation feedback.
+
+### Expected outcome
+- Errors are understandable.
+- The user is told what to do next.
+- The site does not appear broken or blank.
+
+### What to look for
+- Clear messaging.
+- No silent failure.
+- No confusing technical text unless necessary.
+
+---
+
+## Pass criteria
+
+The tester should be able to complete the following without confusion:
+
+- understand the product from the homepage
+- navigate the site
+- review pricing and billing options
+- trigger a purchase flow
+- complete a test checkout with Stripe
+- contact the company
+- understand the legal/privacy information
+- complete the main CTA without needing product background
+
+## Notes for the tester
+
+- Use realistic personal information when testing forms.
+- Use the provided Stripe test card when testing checkout.
+- Do not rely on product knowledge or internal team context.
+- Record any confusion, dead ends, or broken steps.
+
+---
+
+## Suggested bug report format
+
+When you find an issue, record:
+
+- scenario number
+- action taken
+- expected result
+- actual result
+- browser/device used
+- screenshot if possible
+- rough severity (low / medium / high)
