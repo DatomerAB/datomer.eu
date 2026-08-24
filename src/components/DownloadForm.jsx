@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
-
 const STORAGE_KEY = 'par-download-info'
 
 const COUNTRY_LIST = [
@@ -44,6 +42,7 @@ function readStoredForm() {
 }
 
 export function DownloadForm({ downloadUrl, onClose }) {
+  const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
   const [form, setForm] = useState(readStoredForm)
   const [busy, setBusy] = useState(false)
@@ -115,23 +114,18 @@ export function DownloadForm({ downloadUrl, onClose }) {
     }
   }
 
-  const getTurnstileResponse = () => {
-    const input = document.querySelector(
-      '.download-form .turnstile-widget input[name="cf-turnstile-response"]',
-    )
-    return input?.value || null
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault()
+    setError(null)
     if (TURNSTILE_SITE_KEY && !turnstileToken) {
-      const token = getTurnstileResponse()
+      const token = turnstileRef.current?.getResponse?.() || null
       if (token) {
         setTurnstileToken(token)
         submitForm(token)
         return
       }
       setPendingSubmit(true)
+      turnstileRef.current?.execute?.()
       return
     }
     submitForm(turnstileToken)
@@ -139,14 +133,15 @@ export function DownloadForm({ downloadUrl, onClose }) {
 
   const handleTurnstileVerify = (token) => {
     setTurnstileToken(token)
+    setError(null)
     if (pendingSubmit) {
       setPendingSubmit(false)
       submitForm(token)
     }
   }
 
-  const handleTurnstileError = () => {
-    setError(t('downloadForm.turnstileError'))
+  const handleTurnstileError = (code) => {
+    setError(`${t('downloadForm.turnstileError')}${code ? ` (${code})` : ''}`)
     setTurnstileToken(null)
   }
 

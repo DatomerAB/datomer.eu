@@ -3,9 +3,8 @@ import { useCheckout } from '../payments/useCheckout.js'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
-
 export function PaymentButton({ priceId, mode = 'subscription', children, className = 'button button-primary', disabled = false }) {
+  const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t } = useLanguage()
   const { checkout, loading, error: checkoutError } = useCheckout()
   const turnstileRef = useRef(null)
@@ -17,6 +16,7 @@ export function PaymentButton({ priceId, mode = 'subscription', children, classN
 
   const handleClick = () => {
     if (!priceId || loading) return
+    setWidgetError(null)
     if (!TURNSTILE_SITE_KEY) {
       checkout(priceId, mode)
       return
@@ -25,29 +25,28 @@ export function PaymentButton({ priceId, mode = 'subscription', children, classN
       checkout(priceId, mode, turnstileToken)
       return
     }
-    const widget = document.querySelector(
-      '.payment-button-wrap .turnstile-widget input[name="cf-turnstile-response"]',
-    )
-    const token = widget?.value || null
+    const token = turnstileRef.current?.getResponse?.() || null
     if (token) {
       setTurnstileToken(token)
       checkout(priceId, mode, token)
       return
     }
     setPendingCheckout(true)
+    turnstileRef.current?.execute?.()
   }
 
   const handleVerify = (token) => {
     setTurnstileToken(token)
+    setWidgetError(null)
     if (pendingCheckout) {
       setPendingCheckout(false)
       checkout(priceId, mode, token)
     }
   }
 
-  const handleError = () => {
+  const handleError = (code) => {
     setTurnstileToken(null)
-    setWidgetError(t('payment.challengeFailed'))
+    setWidgetError(`${t('payment.challengeFailed')}${code ? ` (${code})` : ''}`)
   }
 
   return (
