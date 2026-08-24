@@ -1,5 +1,5 @@
 export async function verifyTurnstileToken(token, secret) {
-  if (!secret) return { success: true }
+  if (!secret) return { success: false, error: 'Turnstile secret not configured.' }
   if (!token) return { success: false, error: 'Challenge token missing.' }
 
   const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
