@@ -1,8 +1,13 @@
 # Cloudflare Pages configuration.
-# Environment variables (both public VITE_* values and secrets) are managed in
-# the Cloudflare Pages dashboard under Settings > Environment variables.
-# Defining them here AND in the dashboard causes duplicate binding errors during
-# deployment, so they are intentionally omitted from this file.
+# Secrets (STRIPE_SECRET_KEY, TURNSTILE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
+# RESEND_API_KEY) are managed in the Cloudflare Pages dashboard under
+# Settings > Environment variables or via `wrangler pages secret put`.
+# Defining the same variable in both wrangler.toml and the dashboard causes
+# duplicate binding errors during deployment.
+#
+# Public VITE_* build-time variables for production are defined below because
+# the Cloudflare dashboard API/UI was not persisting them for the production
+# environment. Preview/staging variables continue to be managed in the dashboard.
 #
 # Required environment variables for each environment:
 #   VITE_STRIPE_PLUS_MONTHLY, VITE_STRIPE_PLUS_YEARLY,
