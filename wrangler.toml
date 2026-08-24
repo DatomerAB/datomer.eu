@@ -1,8 +1,13 @@
 # Cloudflare Pages configuration.
-# Environment variables (both public VITE_* values and secrets) are managed in
-# the Cloudflare Pages dashboard under Settings > Environment variables.
-# Defining them here AND in the dashboard causes duplicate binding errors during
-# deployment, so they are intentionally omitted from this file.
+# Secrets (STRIPE_SECRET_KEY, TURNSTILE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
+# RESEND_API_KEY) must be set in the Cloudflare Pages dashboard under
+# Settings > Environment variables or via `wrangler pages secret put`.
+# Defining the same variable in both wrangler.toml and the dashboard causes
+# duplicate binding errors during deployment.
+#
+# Public VITE_* build-time variables are defined below because the Cloudflare
+# dashboard does not make them available to the production build. They are
+# replaced into the bundle at build time.
 #
 # Required environment variables for each environment:
 #   VITE_STRIPE_PLUS_MONTHLY, VITE_STRIPE_PLUS_YEARLY,
@@ -14,3 +19,12 @@
 name = "datomer"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-08-23"
+
+# Public build-time variables for the production environment.
+[env.production.vars]
+VITE_STRIPE_PLUS_MONTHLY = "price_1U7bblJjemtoqVYp32qGsxOG"
+VITE_STRIPE_PLUS_YEARLY = "price_1U7bghJjemtoqVYpBLK7UwxX"
+VITE_STRIPE_PRO_MONTHLY = "price_1U7bj5JjemtoqVYpUqT3E57S"
+VITE_STRIPE_PRO_YEARLY = "price_1U7bkTJjemtoqVYp0z9akUpq"
+VITE_STRIPE_PUBLISHABLE_KEY = "pk_live_51U7ZY2JjemtoqVYpHTWDR1eDkKPg1fWdb8idyEh8AKmRJhvTTcz75ZoPiJrKPY4bBtiU8GJRjGO2tWHxRRL0X3nx0063i6GnuL"
+VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEZRl56VvoSHPucq"
