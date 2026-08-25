@@ -242,6 +242,7 @@ export const translations = {
       downloadMac: 'Download for Mac',
       waitlistPlaceholder: 'Enter your email',
       joinWaitlist: 'Join the waitlist',
+      waitlistHint: 'Get notified about beta spots, updates, and launch notes.',
       disclaimer: 'Beta release. Requires macOS 11+. Apple Silicon recommended. GGUF models run natively; Ollama is optional.',
     },
     waitlist: {
@@ -575,6 +576,7 @@ export const translations = {
       downloadMac: 'Ladda ner för Mac',
       waitlistPlaceholder: 'Ange din e-post',
       joinWaitlist: 'Gå med i väntelistan',
+      waitlistHint: 'Få besked om betaplatser, uppdateringar och lanseringsnoteringar.',
       disclaimer: 'Betaversion. Kräver macOS 11+. Apple Silicon rekommenderas. GGUF-modeller körs direkt; Ollama är valfritt.',
     },
     waitlist: {
