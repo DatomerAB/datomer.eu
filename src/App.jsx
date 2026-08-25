@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { useLanguage } from './i18n/useLanguage.js'
 import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
@@ -8,6 +8,7 @@ import { PaymentButton } from './components/PaymentButton.jsx'
 import { WaitlistForm } from './components/WaitlistForm.jsx'
 import { NewsletterForm } from './components/NewsletterForm.jsx'
 import { CookieConsent } from './components/CookieConsent.jsx'
+import { Turnstile } from './components/Turnstile.jsx'
 import { BlogPage } from './pages/BlogPage.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
@@ -16,7 +17,7 @@ const COMPANY = {
   name: 'Datomer AB',
   orgNumber: '559199-6540',
   address: 'Nyskogavägen 11',
-  postcode: '123 63',
+  postcode: '123 64',
   city: 'Farsta',
   country: 'Sweden',
   email: 'hello@datomer.eu',
@@ -652,20 +653,60 @@ function AboutPage() {
 
 function ContactPage() {
   const { t } = useLanguage()
+  const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [status, setStatus] = useState({ loading: false, success: false, error: '' })
+  const turnstileRef = useRef(null)
+  const [turnstileToken, setTurnstileToken] = useState(null)
 
   const handleChange = (event) => {
     const { name, value } = event.target
     setForm((current) => ({ ...current, [name]: value }))
   }
 
-  const handleSubmit = (event) => {
+  const handleVerify = (token) => {
+    setTurnstileToken(token)
+  }
+
+  const handleError = () => {
+    setTurnstileToken(null)
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    const subject = encodeURIComponent(`Website enquiry from ${form.name || 'new contact'}`)
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`,
-    )
-    window.location.href = `mailto:${COMPANY.email}?subject=${subject}&body=${body}`
+    if (status.loading) return
+
+    setStatus({ loading: true, success: false, error: '' })
+
+    let token = turnstileToken
+    if (TURNSTILE_SITE_KEY && !token) {
+      token = turnstileRef.current?.getResponse?.() || null
+    }
+    if (TURNSTILE_SITE_KEY && !token) {
+      turnstileRef.current?.execute?.()
+      setStatus({ loading: false, success: false, error: t('contact.turnstileError') })
+      return
+    }
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, turnstileToken: token }),
+      })
+      const data = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        throw new Error(data.error || t('contact.error'))
+      }
+
+      setStatus({ loading: false, success: true, error: '' })
+      setForm({ name: '', email: '', message: '' })
+      turnstileRef.current?.reset?.()
+      setTurnstileToken(null)
+    } catch (err) {
+      setStatus({ loading: false, success: false, error: err.message })
+    }
   }
 
   return (
@@ -689,9 +730,20 @@ function ContactPage() {
           <span>{t('contact.message')}</span>
           <textarea name="message" value={form.message} onChange={handleChange} required rows="6" />
         </label>
-        <button type="submit" className="button button-primary">
-          {t('contact.submit')}
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={TURNSTILE_SITE_KEY}
+          action="contact"
+          size="compact"
+          onVerify={handleVerify}
+          onError={handleError}
+          onExpire={() => setTurnstileToken(null)}
+        />
+        <button type="submit" className="button button-primary" disabled={status.loading}>
+          {status.loading ? t('contact.sending') : t('contact.submit')}
         </button>
+        {status.success && <p className="form-success">{t('contact.success')}</p>}
+        {status.error && <p className="form-error">{status.error}</p>}
       </form>
 
       <CompanyAddress />

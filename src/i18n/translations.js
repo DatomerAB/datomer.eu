@@ -222,7 +222,7 @@ export const translations = {
       headline: 'Questions people ask before they get started.',
       q1: 'Does Pär send my data to the cloud?',
       a1:
-        'No. Pär runs inference locally and stores your memory, files, and profile in an encrypted vault on your device. Optional cloud backends only receive PII-redacted context.',
+        'No. Pär processes your prompts and data locally on your device and stores your memory, files, and profile in an encrypted vault. Optional cloud backends only receive information stripped of personally identifiable details.',
       q2: 'What models can I use?',
       a2:
         'Pär supports GGUF models natively and can connect to Ollama. You can bring your own models or use recommended local models for chat, code, vision, and reasoning.',
@@ -285,7 +285,7 @@ export const translations = {
         'Pär is the local-first personal AI companion built by Datomer AB. Our mission is to give people an AI that actually remembers them, runs on their own hardware, and keeps their data under their control.',
       mission:
         'We believe the future of AI is private. That means your conversations, files, and context should live in an encrypted vault on your device, not on someone else\'s server.',
-      companyTitle: 'Company details',
+      companyTitle: 'Company Details',
       contactTitle: 'Contact',
       emailLabel: 'Email',
     },
@@ -296,6 +296,10 @@ export const translations = {
       email: 'Email',
       message: 'Message',
       submit: 'Send message',
+      sending: 'Sending…',
+      success: 'Thank you. Your message has been sent.',
+      error: 'Something went wrong. Please try again.',
+      turnstileError: 'Security check failed. Please try again.',
     },
     privacy: {
       title: 'Privacy Policy',
@@ -303,25 +307,25 @@ export const translations = {
       intro:
         'This Privacy Policy explains how {{company}} processes personal data in connection with the Pär application and website.',
       introParams: { company: 'Datomer AB' },
-      controllerTitle: '1. Data controller',
-      whatTitle: '2. What data we process',
+      controllerTitle: '1. Data Controller',
+      whatTitle: '2. What Data We Process',
       what: {
-        app: 'App data',
-        appText: 'Pär stores your conversations, files, and personal context in an encrypted local vault on your device. We do not have access to this data.',
-        website: 'Website data',
-        websiteText: 'When you visit datomer.eu, we may collect standard server logs and analytics data to improve the site.',
-        waitlist: 'Waitlist/email',
+        app: 'App Data',
+        appText: 'Pär stores your conversations, files, and personal information in an encrypted local vault on your device. We do not have access to this data.',
+        website: 'Website Data',
+        websiteText: 'When you visit datomer.eu, we may collect standard server logs and analytics data to improve the website.',
+        waitlist: 'Waitlist & Email',
         waitlistText: 'If you sign up for updates, we store your email address to send you relevant communications. You can unsubscribe at any time.',
       },
-      basisTitle: '3. Legal basis',
+      basisTitle: '3. Legal Basis',
       basisText:
-        'We process personal data based on your consent, to fulfil a contract, or because we have a legitimate interest in operating and improving our services.',
-      thirdTitle: '4. Third parties',
+        'We process personal data only when we have a valid reason: with your consent, to fulfill our agreement with you, or because we have a legitimate interest in operating and improving our services.',
+      thirdTitle: '4. Third Parties',
       thirdText:
         'We do not sell your data. We may use trusted service providers for hosting, analytics, and email delivery. These providers are bound by appropriate data protection agreements.',
-      rightsTitle: '5. Your rights',
+      rightsTitle: '5. Your Rights',
       rightsText:
-        'Under the GDPR, you have the right to access, rectify, erase, restrict, and port your personal data. To exercise your rights, contact us at',
+        'Under the GDPR, you have the right to access, correct, delete, restrict, and receive a copy of your personal data. To exercise your rights, contact us at',
     },
     terms: {
       title: 'Terms of Service',
@@ -329,19 +333,19 @@ export const translations = {
       intro:
         'These Terms of Service govern your use of the Pär website and beta software provided by {{company}} ({{orgNumber}}).',
       introParams: { company: 'Datomer AB', orgNumber: '559199-6540' },
-      betaTitle: '1. Beta software',
+      betaTitle: '1. Beta Software',
       betaText:
         'Pär is currently in beta. Features may change, break, or be removed. Do not rely on the beta for critical workflows.',
       licenseTitle: '2. License',
       licenseText:
         'We grant you a limited, non-exclusive, non-transferable license to use Pär for personal or internal business purposes, subject to these terms.',
-      dataTitle: '3. Your data',
+      dataTitle: '3. Your Data',
       dataText:
         'Pär is designed to keep your data on your device. You are responsible for backing up your local vault and keeping your device secure.',
       liabilityTitle: '4. Liability',
       liabilityText:
         "To the extent permitted by law, Datomer AB's liability is limited to the amount you paid for the service in the 12 months preceding the claim. We are not liable for data loss caused by your device or configuration.",
-      lawTitle: '5. Governing law',
+      lawTitle: '5. Governing Law',
       lawText: 'These terms are governed by the laws of Sweden. Disputes shall be resolved in the courts of Stockholm, Sweden.',
     },
     cookies: {
@@ -349,7 +353,7 @@ export const translations = {
       updated: 'Last updated',
       intro:
         'Datomer AB uses cookies and similar technologies only where necessary for the operation of the website.',
-      typesTitle: 'Cookies we use',
+      typesTitle: 'Cookies We Use',
       essential: 'Essential cookies',
       essentialText: 'required for the site to function, such as routing and security.',
       analytics: 'Analytics cookies',
@@ -556,7 +560,7 @@ export const translations = {
       headline: 'Frågor folk ställer innan de kommer igång.',
       q1: 'Skickar Pär mina data till molnet?',
       a1:
-        'Nej. Pär kör inferens lokalt och lagrar ditt minne, filer och profil i ett krypterat valv på din enhet. Valfria molnbaserade backend får endast PII-redigerad kontext.',
+        'Nej. Pär behandlar dina frågor och data lokalt på din enhet och lagrar ditt minne, filer och profil i ett krypterat valv. Valfria molnbaserade backend får endast information utan personliga identifierare.',
       q2: 'Vilka modeller kan jag använda?',
       a2:
         'Pär stöder GGUF-modeller direkt och kan ansluta till Ollama. Du kan använda egna modeller eller rekommenderade lokala modeller för chatt, kod, bild och resonemang.',
@@ -656,6 +660,10 @@ export const translations = {
       email: 'E-post',
       message: 'Meddelande',
       submit: 'Skicka meddelande',
+      sending: 'Skickar…',
+      success: 'Tack. Ditt meddelande har skickats.',
+      error: 'Något gick fel. Försök igen.',
+      turnstileError: 'Säkerhetskontrollen misslyckades. Försök igen.',
     },
     privacy: {
       title: 'Integritetspolicy',
