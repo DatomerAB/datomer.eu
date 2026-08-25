@@ -6,10 +6,19 @@ export function WaitlistForm() {
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
   const [email, setEmail] = useState('')
+  const [interests, setInterests] = useState({
+    productUpdates: true,
+    betaAccess: true,
+    changelog: true,
+  })
   const [busy, setBusy] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(null)
   const turnstileRef = useRef(null)
+
+  const toggleInterest = (key) => {
+    setInterests((current) => ({ ...current, [key]: !current[key] }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -32,6 +41,7 @@ export function WaitlistForm() {
           email: email.trim(),
           type: 'waitlist',
           locale: lang,
+          interests,
           timestamp: new Date().toISOString(),
           turnstileToken: token,
         }),
@@ -42,6 +52,11 @@ export function WaitlistForm() {
       }
       setDone(true)
       setEmail('')
+      setInterests({
+        productUpdates: true,
+        betaAccess: true,
+        changelog: true,
+      })
     } catch (err) {
       setError(err.message)
     } finally {
@@ -80,6 +95,36 @@ export function WaitlistForm() {
         onError={(code) => setError(`${t('waitlist.turnstileError')}${code ? ` (${code})` : ''}`)}
         onExpire={() => setError(null)}
       />
+      <div className="waitlist-options" aria-label={t('newsletter.title')}>
+        <label className="waitlist-option">
+          <input
+            type="checkbox"
+            checked={interests.productUpdates}
+            onChange={() => toggleInterest('productUpdates')}
+          />
+          <span className="waitlist-tick" aria-hidden="true" />
+          <span>{t('newsletter.interests.productUpdates')}</span>
+        </label>
+        <label className="waitlist-option">
+          <input
+            type="checkbox"
+            checked={interests.betaAccess}
+            onChange={() => toggleInterest('betaAccess')}
+          />
+          <span className="waitlist-tick" aria-hidden="true" />
+          <span>{t('newsletter.interests.betaAccess')}</span>
+        </label>
+        <label className="waitlist-option">
+          <input
+            type="checkbox"
+            checked={interests.changelog}
+            onChange={() => toggleInterest('changelog')}
+          />
+          <span className="waitlist-tick" aria-hidden="true" />
+          <span>{t('newsletter.interests.changelog')}</span>
+        </label>
+      </div>
+
       <button type="submit" className="button button-secondary" disabled={busy}>
         {busy ? t('waitlist.sending') : t('cta.joinWaitlist')}
       </button>

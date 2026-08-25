@@ -11,18 +11,18 @@
   color-scheme: light;
 
   /* Design tokens */
-  --bg: #f7f6f4;
+  --bg: #f9f9fa;
   --surface: #ffffff;
-  --surface-soft: #faf9f7;
-  --text: #1f2328;
-  --text-secondary: #4b5563;
-  --text-muted: #697684;
-  --accent: #1f2328;
-  --accent-strong: #c14f44;
-  --accent-light: #f3e7e4;
-  --accent-soft: rgba(193, 79, 68, 0.09);
+  --surface-soft: #fbfbfc;
+  --text: #252529;
+  --text-secondary: #5c6068;
+  --text-muted: #8c9099;
+  --accent: #e06b6b;
+  --accent-strong: #d15757;
+  --accent-light: #f9eaea;
+  --accent-soft: rgba(224, 107, 107, 0.08);
   --success: #0f766e;
-  --border: rgba(15, 23, 42, 0.08);
+  --border: rgba(37, 37, 41, 0.07);
   --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.03);
   --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.03), 0 1px 2px rgba(15, 23, 42, 0.02);
   --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -2px rgba(15, 23, 42, 0.04);

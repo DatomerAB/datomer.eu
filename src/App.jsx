@@ -102,8 +102,6 @@ function CompanyAddress({ compact = false }) {
   if (compact) {
     return (
       <address className="company-address company-address-compact">
-        <strong>{COMPANY.name}</strong>
-        <br />
         {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · Org. nr: {COMPANY.orgNumber}
       </address>
     )
@@ -180,35 +178,34 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <div>
-          <div className="footer-brand">
-            <ParLogo />
-            <span>Pär</span>
+        <div className="footer-main">
+          <div className="footer-brand-group">
+            <div className="footer-brand">
+              <ParLogo />
+              <span>Pär</span>
+            </div>
+            <p className="footer-tagline">{t('footer.managedBy')}</p>
           </div>
-          <p>{t('footer.managedBy')}</p>
-          <div className="footer-datomer">
-            <DatomerLogo />
-          </div>
-          <CompanyAddress compact />
-        </div>
 
-        <div className="footer-links">
-          <Link to="/about">{t('nav.about')}</Link>
-          <Link to="/contact">{t('nav.contact')}</Link>
-          <Link to="/blog">{t('nav.blog')}</Link>
-          <Link to="/privacy">{t('footer.legal.privacy')}</Link>
-          <Link to="/terms">{t('footer.legal.terms')}</Link>
-          <Link to="/cookies">{t('footer.legal.cookies')}</Link>
-        </div>
-
-        <div className="footer-meta">
-          <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
-          <div className="legal-links">
+          <nav className="footer-links" aria-label="Site and legal links">
+            <Link to="/about">{t('nav.about')}</Link>
+            <Link to="/contact">{t('nav.contact')}</Link>
             <Link to="/blog">{t('nav.blog')}</Link>
+            <span className="footer-links-separator" aria-hidden="true" />
             <Link to="/privacy">{t('footer.legal.privacy')}</Link>
             <Link to="/terms">{t('footer.legal.terms')}</Link>
             <Link to="/cookies">{t('footer.legal.cookies')}</Link>
+          </nav>
+
+          <div className="footer-company" aria-label="Datomer company details">
+            <DatomerLogo />
           </div>
+        </div>
+
+        <div className="footer-bottom" aria-label="Datomer address details">
+          <p className="footer-legal-line">
+            © {new Date().getFullYear()} {COMPANY.name} · {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · Org. nr: {COMPANY.orgNumber}
+          </p>
         </div>
       </div>
     </footer>
@@ -608,18 +605,21 @@ function HomePage({ onDownload }) {
         </section>
 
         <section className="cta-band" id="download">
-          <div className="container cta-inner">
-            <div>
-              <p className="eyebrow">{t('cta.eyebrow')}</p>
-              <h2>{t('cta.headline')}</h2>
-            </div>
+          <div className="container">
+            <div className="cta-row">
+              <div className="cta-download-card">
+                <p className="eyebrow">{t('cta.eyebrow')}</p>
+                <h2>{t('cta.headline')}</h2>
+                <button type="button" className="button button-primary cta-download" onClick={onDownload}>
+                  {t('cta.downloadMac')}
+                </button>
+              </div>
 
-            <div className="cta-actions">
-              <button type="button" className="button button-primary" onClick={onDownload}>
-                {t('cta.downloadMac')}
-              </button>
-              <WaitlistForm />
-              <NewsletterForm source="homepage-cta" />
+              <div className="cta-action-card cta-signup-card">
+                <p className="cta-action-label">{t('cta.joinWaitlist')}</p>
+                <p className="cta-action-hint">{t('cta.waitlistHint')}</p>
+                <WaitlistForm />
+              </div>
             </div>
           </div>
           <p className="container cta-disclaimer">
