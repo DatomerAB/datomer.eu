@@ -5,7 +5,7 @@ const DEFAULT_TO_EMAIL = 'hello@datomer.eu'
 export async function sendSupportEmail({ env, to, subject, html, text, replyTo }) {
   if (!env.RESEND_API_KEY) {
     console.error('[sendSupportEmail] missing RESEND_API_KEY')
-    return { sent: false }
+    return { sent: false, error: 'missing_api_key' }
   }
 
   const recipients = Array.isArray(to) && to.length > 0 ? to : [env.CONTACT_TO_EMAIL || DEFAULT_TO_EMAIL]
@@ -30,11 +30,12 @@ export async function sendSupportEmail({ env, to, subject, html, text, replyTo }
       }),
     })
 
-    const result = { sent: response.ok }
-    console.log('[sendSupportEmail] response status', response.status, 'sent:', result.sent)
+    const responseBody = await response.text().catch(() => '')
+    const result = { sent: response.ok, status: response.status, body: responseBody }
+    console.log('[sendSupportEmail] response status', response.status, 'sent:', result.sent, 'body:', responseBody)
     return result
   } catch (err) {
     console.error('[sendSupportEmail] fetch error', err.message || err)
-    return { sent: false }
+    return { sent: false, error: err.message || 'fetch_error' }
   }
 }

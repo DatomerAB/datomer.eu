@@ -70,7 +70,7 @@ export async function onRequestPost(context) {
     .map(([key, value]) => `${key}: ${value}`)
     .join('\n')
 
-  await sendSupportEmail({
+  const supportResult = await sendSupportEmail({
     env,
     subject,
     replyTo: payload.email,
@@ -81,6 +81,7 @@ export async function onRequestPost(context) {
     `,
     text: `[source: ${sourceLabel}]\n\nNew ${sourceLabel.replace(/-/g, ' ')} submission\n\n${detailsText}`,
   })
+  console.log('[waitlist] support email result:', JSON.stringify(supportResult))
 
   const confirmationSubjectMap = {
     waitlist: 'You are on the Pär waitlist',
@@ -97,7 +98,7 @@ export async function onRequestPost(context) {
   const confirmationBodyHtml = confirmationBodyMap[payload.type] || '<p>Thank you for signing up.</p>'
   const confirmationBodyText = confirmationBodyHtml.replace(/<[^>]+>/g, '')
 
-  await sendSupportEmail({
+  const confirmationResult = await sendSupportEmail({
     env,
     to: [payload.email],
     subject: confirmationSubject,
@@ -109,6 +110,7 @@ export async function onRequestPost(context) {
     `,
     text: `Thank you, ${payload.name}.\n\n${confirmationBodyText}\n\n---\nDatomer AB · hello@datomer.eu`,
   })
+  console.log('[waitlist] confirmation email result:', JSON.stringify(confirmationResult))
 
   // If a webhook URL is configured (e.g. Zapier, Make, Slack), forward the submission.
   if (env.WAITLIST_WEBHOOK_URL) {
