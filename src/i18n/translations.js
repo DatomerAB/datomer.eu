@@ -12,57 +12,57 @@ export const translations = {
       download: 'Download',
     },
     hero: {
-      badge: 'Private by design',
-      variantBadge: 'Built for repeat users',
-      headline: 'Your AI. On your device.',
+      badge: 'Private By Design',
+      variantBadge: 'Built For Repeat Users',
+      headline: 'Your AI. On Your Device.',
       lede:
         'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware, no cloud required. Bring your own GGUF models or Ollama models.',
       downloadMac: 'Download for Mac',
       seeHowItWorks: 'See how it works',
     },
     highlights: {
-      localInference: { title: 'Local inference', text: 'Runs on your device using GGUF or Ollama models.' },
-      encryptedVault: { title: 'Encrypted vault', text: 'SQLCipher AES-256 encryption keeps your data safe.' },
-      ownTheKeys: { title: 'You own the keys', text: 'Your memory, files, and profile stay under your control.' },
+      localInference: { title: 'Local Inference', text: 'Runs on your device using GGUF or Ollama models.' },
+      encryptedVault: { title: 'Encrypted Vault', text: 'SQLCipher AES-256 encryption keeps your data safe.' },
+      ownTheKeys: { title: 'You Own The Keys', text: 'Your memory, files, and profile stay under your control.' },
     },
     proof: {
-      localFirst: { strong: 'Local-first', span: 'No cloud required' },
-      encrypted: { strong: 'Encrypted vault', span: 'AES-256 protected' },
-      oneAgent: { strong: 'One agent', span: 'For your digital life' },
+      localFirst: { strong: 'Local-First', span: 'No cloud required' },
+      encrypted: { strong: 'Encrypted Vault', span: 'AES-256 protected' },
+      oneAgent: { strong: 'One Agent', span: 'For your digital life' },
     },
     capabilities: {
-      eyebrow: 'Why Pär is different',
-      headline: 'Most AI assistants start every conversation from zero.',
+      eyebrow: 'Why Pär Is Different',
+      headline: 'Most AI Assistants Start Every Conversation From Zero.',
       subtitle:
-        'Pär builds a living model of who you are, what you are working on, and what matters to you — and keeps it under your control.',
+        'Pär Builds A Living Model Of Who You Are, What You Are Working On, And What Matters To You — And Keeps It Under Your Control.',
       knowsYou: {
-        title: 'Knows you',
+        title: 'Knows You',
         text: 'Persistent, encrypted memory means Pär remembers every conversation. Your profile, goals, and style are injected into every response.',
       },
       knowsWorld: {
-        title: 'Knows your world',
+        title: 'Knows Your World',
         text: 'Connect calendar, email, tasks, and notes. Pär can pull live web context when you want it, or stay fully offline and private.',
       },
       actsForYou: {
-        title: 'Acts for you',
+        title: 'Acts For You',
         text: 'Smart model routing picks the best local model for each task. Routines, web search, and document exports get things done.',
       },
     },
     features: {
-      eyebrow: 'Built for serious daily use',
-      headline: 'Everything you expect from a modern AI assistant, designed around privacy and ownership.',
-      persistentMemory: { title: 'Persistent memory', badge: 'Plus+', text: 'Cross-session history stored encrypted on-device. Find past conversations by meaning, not just keyword.' },
+      eyebrow: 'Built For Serious Daily Use',
+      headline: 'Everything You Expect From A Modern AI Assistant, Designed Around Privacy And Ownership.',
+      persistentMemory: { title: 'Persistent Memory', badge: 'Plus+', text: 'Cross-session history stored encrypted on-device. Find past conversations by meaning, not just keyword.' },
       contextGraph: { title: 'Personal Context Graph', badge: 'Plus+', text: 'A unified, continuously updated view of your profile, commitments, and live external state.' },
-      modelRouting: { title: 'Smart model routing', badge: 'Plus+', text: 'Automatically chooses the right local model for chat, code, vision, or reasoning tasks.' },
-      integrations: { title: 'Live integrations', badge: 'Plus+', text: 'Gmail, Google Calendar, Notion, Todoist, Slack, GitHub, and more — read and write on your behalf.' },
-      fileIntelligence: { title: 'Local file intelligence', badge: 'Plus+', text: 'Drag in text, PDFs, and images. Build a personal knowledge base from folders on your machine.' },
-      routines: { title: 'Routines & templates', badge: 'Plus+', text: 'Saved workflows like Morning Briefing, Weekly Review, and Inbox Zero run on your schedule.' },
-      semanticCache: { title: 'Semantic cache', badge: 'Plus+', text: 'Near-instant answers to repeated questions without re-running the model.' },
-      portability: { title: 'Full data portability', badge: 'All tiers', text: 'Export and import your vault, conversations, and profiles anytime. Your data is always yours.' },
+      modelRouting: { title: 'Smart Model Routing', badge: 'Plus+', text: 'Automatically chooses the right local model for chat, code, vision, or reasoning tasks.' },
+      integrations: { title: 'Live Integrations', badge: 'Plus+', text: 'Gmail, Google Calendar, Notion, Todoist, Slack, GitHub, and more — read and write on your behalf.' },
+      fileIntelligence: { title: 'Local File Intelligence', badge: 'Plus+', text: 'Drag in text, PDFs, and images. Build a personal knowledge base from folders on your machine.' },
+      routines: { title: 'Routines & Templates', badge: 'Plus+', text: 'Saved workflows like Morning Briefing, Weekly Review, and Inbox Zero run on your schedule.' },
+      semanticCache: { title: 'Semantic Cache', badge: 'Plus+', text: 'Near-instant answers to repeated questions without re-running the model.' },
+      portability: { title: 'Full Data Portability', badge: 'All Tiers', text: 'Export and import your vault, conversations, and profiles anytime. Your data is always yours.' },
     },
     privacyHome: {
-      eyebrow: 'Privacy is not a feature',
-      headline: 'It is the foundation.',
+      eyebrow: 'Privacy Is Not A Feature',
+      headline: 'It Is The Foundation.',
       text:
         'Pär runs inference on your device using local models. Your memory, files, and profile live in an encrypted vault on your machine. No silent cloud sync. No training on your data.',
       features: [
@@ -73,31 +73,31 @@ export const translations = {
         'Backup integrity verification',
       ],
       pillars: {
-        localInference: 'Local inference',
-        encryptedVault: 'Encrypted vault',
-        ownTheKeys: 'You own the keys',
+        localInference: 'Local Inference',
+        encryptedVault: 'Encrypted Vault',
+        ownTheKeys: 'You Own The Keys',
       },
     },
     deployments: {
-      eyebrow: 'Choose where it runs',
-      headline: 'One brand, one license, multiple deployment options.',
-      subtitle: 'Pick the privacy level that fits your hardware.',
+      eyebrow: 'Choose Where It Runs',
+      headline: 'One Brand, One License, Multiple Deployment Options.',
+      subtitle: 'Pick The Privacy Level That Fits Your Hardware.',
       available: 'Available now',
       comingSoon: 'Coming soon',
       desktop: {
         title: 'Pär Desktop',
         text: 'macOS app with on-device models and a local vault in ~/.peer/. Everything stays on your Mac.',
-        best: 'Best for Mac users',
+        best: 'Best For Mac Users',
       },
       web: {
         title: 'Pär Web',
         text: 'Runs in your browser, talks to your own local backend. Windows, Linux, and Chromebook support.',
-        best: 'Best for cross-platform',
+        best: 'Best For Cross-Platform',
       },
       cloud: {
         title: 'Pär Cloud',
         text: 'We host the model; your personal context stays on your device. PII-redacted by default.',
-        best: 'Best for users without local GPUs',
+        best: 'Best For Users Without Local GPUs',
       },
     },
     language: {
@@ -123,12 +123,12 @@ export const translations = {
       processing: 'Please wait…',
       error: 'Payment failed. Please try again or contact us.',
       challengeFailed: 'Security check failed. Please try again.',
-      successTitle: 'Thank you!',
+      successTitle: 'Thank You!',
       successText: 'Your payment was received. We have sent a confirmation email with next steps.',
     },
     pricing: {
-      eyebrow: 'Simple, transparent pricing',
-      headline: 'Start free. Upgrade when you want Pär to remember everything.',
+      eyebrow: 'Simple, Transparent Pricing',
+      headline: 'Start Free. Upgrade When You Want Pär To Remember Everything.',
       billing: { monthly: 'Monthly', yearly: 'Yearly' },
       free: {
         name: 'Free',
@@ -164,7 +164,7 @@ export const translations = {
         yearly: 'Starting at $2,000/mo for up to 25 seats',
         cta: 'Contact sales',
       },
-      popularBadge: 'Most popular',
+      popularBadge: 'Most Popular',
     },
     pricingFeatures: {
       free: [
@@ -206,8 +206,8 @@ export const translations = {
       ],
     },
     requirements: {
-      eyebrow: 'System requirements',
-      headline: 'Built for modern Macs.',
+      eyebrow: 'System Requirements',
+      headline: 'Built For Modern Macs.',
       items: [
         'macOS 11 (Big Sur) or later',
         'Apple Silicon Mac (M1 or newer)',
@@ -218,8 +218,8 @@ export const translations = {
       note: 'Beta builds are currently unsigned. On first launch, right-click the app and select Open, then confirm in System Settings → Privacy & Security if prompted.',
     },
     faq: {
-      eyebrow: 'Frequently asked questions',
-      headline: 'Questions people ask before they get started.',
+      eyebrow: 'Frequently Asked Questions',
+      headline: 'Questions People Ask Before They Get Started.',
       q1: 'Does Pär send my data to the cloud?',
       a1:
         'No. Pär processes your prompts and data locally on your device and stores your memory, files, and profile in an encrypted vault. Optional cloud backends only receive information stripped of personally identifiable details.',
@@ -237,8 +237,8 @@ export const translations = {
         'Pär is one brand with one license and multiple deployment options. Start free, upgrade to Plus for persistent memory, or choose Pro / Enterprise for teams and advanced controls.',
     },
     cta: {
-      eyebrow: 'Ready to meet Pär?',
-      headline: 'Download the free beta for macOS and keep your AI entirely on your device.',
+      eyebrow: 'Ready To Meet Pär?',
+      headline: 'Download The Free Beta For MacOS And Keep Your AI Entirely On Your Device.',
       downloadMac: 'Download for Mac',
       waitlistPlaceholder: 'Enter your email',
       joinWaitlist: 'Join the waitlist',
@@ -257,8 +257,8 @@ export const translations = {
       decline: 'Decline',
     },
     newsletter: {
-      title: 'Get launch notes',
-      description: 'Receive release updates, product notes, and early access announcements.',
+      title: 'Get Launch Notes',
+      description: 'Receive Release Updates, Product Notes, And Early Access Announcements.',
       emailPlaceholder: 'Your email',
       submit: 'Join the newsletter',
       sending: 'Joining…',
@@ -273,7 +273,7 @@ export const translations = {
     },
     changelog: {
       title: 'Changelog',
-      intro: 'The latest product updates, beta notes, and launch milestones.',
+      intro: 'The Latest Product Updates, Beta Notes, And Launch Milestones.',
     },
     footer: {
       managedBy: 'Managed and operated by Datomer AB',
@@ -328,7 +328,7 @@ export const translations = {
         'Under the GDPR, you have the right to access, correct, delete, restrict, and receive a copy of your personal data. To exercise your rights, contact us at',
     },
     terms: {
-      title: 'Terms of Service',
+      title: 'Terms Of Service',
       updated: 'Last updated',
       intro:
         'These Terms of Service govern your use of the Pär website and beta software provided by {{company}} ({{orgNumber}}).',
@@ -354,11 +354,11 @@ export const translations = {
       intro:
         'Datomer AB uses cookies and similar technologies only where necessary for the operation of the website.',
       typesTitle: 'Cookies We Use',
-      essential: 'Essential cookies',
+      essential: 'Essential Cookies',
       essentialText: 'required for the site to function, such as routing and security.',
-      analytics: 'Analytics cookies',
+      analytics: 'Analytics Cookies',
       analyticsText: 'help us understand how visitors use the site. These are only used with your consent where required by law.',
-      manageTitle: 'Managing cookies',
+      manageTitle: 'Managing Cookies',
       manageText:
         'You can manage or disable cookies through your browser settings. Disabling essential cookies may affect site functionality.',
     },
@@ -376,57 +376,57 @@ export const translations = {
       download: 'Ladda ner',
     },
     hero: {
-      badge: 'Privat från grunden',
-      variantBadge: 'Byggt för återkommande användare',
-      headline: 'Din AI. På din enhet.',
+      badge: 'Privat Från Grunden',
+      variantBadge: 'Byggt För Återkommande Användare',
+      headline: 'Din AI. På Din Enhet.',
       lede:
         'Pär är den personliga AI-kompisen som faktiskt kommer ihåg dig. Den lär sig dina mål, kopplar ihop sig med dina verktyg och körs helt på din egen hårdvara — inget moln behövs. Använd dina egna GGUF-modeller eller Ollama-modeller.',
       downloadMac: 'Ladda ner för Mac',
       seeHowItWorks: 'Se hur det fungerar',
     },
     highlights: {
-      localInference: { title: 'Lokal inferens', text: 'Körs på din enhet med GGUF- eller Ollama-modeller.' },
-      encryptedVault: { title: 'Krypterat valv', text: 'SQLCipher AES-256-kryptering håller dina data säkra.' },
-      ownTheKeys: { title: 'Du äger nycklarna', text: 'Ditt minne, dina filer och din profil förblir under din kontroll.' },
+      localInference: { title: 'Lokal Inferens', text: 'Körs på din enhet med GGUF- eller Ollama-modeller.' },
+      encryptedVault: { title: 'Krypterat Valv', text: 'SQLCipher AES-256-kryptering håller dina data säkra.' },
+      ownTheKeys: { title: 'Du Äger Nycklarna', text: 'Ditt minne, dina filer och din profil förblir under din kontroll.' },
     },
     proof: {
-      localFirst: { strong: 'Lokal-först', span: 'Inget moln krävs' },
-      encrypted: { strong: 'Krypterat valv', span: 'AES-256-skyddat' },
-      oneAgent: { strong: 'En agent', span: 'För ditt digitala liv' },
+      localFirst: { strong: 'Lokal-Först', span: 'Inget moln krävs' },
+      encrypted: { strong: 'Krypterat Valv', span: 'AES-256-skyddat' },
+      oneAgent: { strong: 'En Agent', span: 'För ditt digitala liv' },
     },
     capabilities: {
-      eyebrow: 'Det som skiljer Pär',
-      headline: 'De flesta AI-assistenter börjar varje konversation från noll.',
+      eyebrow: 'Det Som Skiljer Pär',
+      headline: 'De Flesta AI-Assistenter Börjar Varje Konversation Från Noll.',
       subtitle:
-        'Pär bygger en levande modell av vem du är, vad du arbetar med och vad som betyder något för dig — och håller den under din kontroll.',
+        'Pär Bygger En Levande Modell Av Vem Du Är, Vad Du Arbetar Med Och Vad Som Betyder Något För Dig — Och Håller Den Under Din Kontroll.',
       knowsYou: {
-        title: 'Känner dig',
+        title: 'Känner Dig',
         text: 'Bestående, krypterat minne innebär att Pär kommer ihåg varje konversation. Din profil, dina mål och din stil matas in i varje svar.',
       },
       knowsWorld: {
-        title: 'Känner din värld',
+        title: 'Känner Din Värld',
         text: 'Koppla ihop kalender, e-post, uppgifter och anteckningar. Pär kan hämta live webbkontext när du vill, eller förbli helt offline och privat.',
       },
       actsForYou: {
-        title: 'Handlar åt dig',
+        title: 'Handlar Åt Dig',
         text: 'Smart modellroutning väljer den bästa lokala modellen för varje uppgift. Rutiner, webbsökning och dokumentexport får saker gjorda.',
       },
     },
     features: {
-      eyebrow: 'Byggt för seriös daglig användning',
-      headline: 'Allt du förväntar dig av en modern AI-assistent, utformat kring integritet och ägandeskap.',
-      persistentMemory: { title: 'Bestående minne', badge: 'Plus+', text: 'Sessionsöverskridande historik lagrad krypterat på enheten. Hitta tidigare konversationer efter innebörd, inte bara nyckelord.' },
-      contextGraph: { title: 'Personlig kontextgraf', badge: 'Plus+', text: 'En enhetlig, kontinuerligt uppdaterad vy av din profil, åtaganden och live extern status.' },
-      modelRouting: { title: 'Smart modellroutning', badge: 'Plus+', text: 'Väljer automatiskt rätt lokala modell för chatt, kod, bild eller resonemangsuppgifter.' },
-      integrations: { title: 'Live-integrationer', badge: 'Plus+', text: 'Gmail, Google Kalender, Notion, Todoist, Slack, GitHub och fler — läs och skriv i dina verktyg.' },
-      fileIntelligence: { title: 'Lokal filintelligens', badge: 'Plus+', text: 'Dra in text, PDF:er och bilder. Bygg en personlig kunskapsbas från mappar på din dator.' },
-      routines: { title: 'Rutiner och mallar', badge: 'Plus+', text: 'Sparade arbetsflöden som Morgonbriefing, Veckogenomgång och Inkorg Noll körs enligt ditt schema.' },
-      semanticCache: { title: 'Semantiskt cache', badge: 'Plus+', text: 'Nästan omedelbara svar på upprepade frågor utan att köra modellen igen.' },
-      portability: { title: 'Full dataportabilitet', badge: 'Alla nivåer', text: 'Exportera och importera ditt valv, konversationer och profiler när som helst. Dina data är alltid dina.' },
+      eyebrow: 'Byggt För Seriös Daglig Användning',
+      headline: 'Allt Du Förväntar Dig Av En Modern AI-Assistent, Utformat Kring Integritet Och Ägandeskap.',
+      persistentMemory: { title: 'Bestående Minne', badge: 'Plus+', text: 'Sessionsöverskridande historik lagrad krypterat på enheten. Hitta tidigare konversationer efter innebörd, inte bara nyckelord.' },
+      contextGraph: { title: 'Personlig Kontextgraf', badge: 'Plus+', text: 'En enhetlig, kontinuerligt uppdaterad vy av din profil, åtaganden och live extern status.' },
+      modelRouting: { title: 'Smart Modellroutning', badge: 'Plus+', text: 'Väljer automatiskt rätt lokala modell för chatt, kod, bild eller resonemangsuppgifter.' },
+      integrations: { title: 'Live-Integrationer', badge: 'Plus+', text: 'Gmail, Google Kalender, Notion, Todoist, Slack, GitHub och fler — läs och skriv i dina verktyg.' },
+      fileIntelligence: { title: 'Lokal Filintelligens', badge: 'Plus+', text: 'Dra in text, PDF:er och bilder. Bygg en personlig kunskapsbas från mappar på din dator.' },
+      routines: { title: 'Rutiner Och Mallar', badge: 'Plus+', text: 'Sparade arbetsflöden som Morgonbriefing, Veckogenomgång och Inkorg Noll körs enligt ditt schema.' },
+      semanticCache: { title: 'Semantiskt Cache', badge: 'Plus+', text: 'Nästan omedelbara svar på upprepade frågor utan att köra modellen igen.' },
+      portability: { title: 'Full Dataportabilitet', badge: 'Alla Nivåer', text: 'Exportera och importera ditt valv, konversationer och profiler när som helst. Dina data är alltid dina.' },
     },
     privacyHome: {
-      eyebrow: 'Integritet är inte en funktion',
-      headline: 'Det är grunden.',
+      eyebrow: 'Integritet Är Inte En Funktion',
+      headline: 'Det Är Grunden.',
       text:
         'Pär kör inferens på din enhet med lokala modeller. Ditt minne, dina filer och din profil lever i ett krypterat valv på din dator. Ingen tyst molnsynkronisering. Ingen träning på dina data.',
       features: [
@@ -437,36 +437,36 @@ export const translations = {
         'Verifiering av backupintegritet',
       ],
       pillars: {
-        localInference: 'Lokal inferens',
-        encryptedVault: 'Krypterat valv',
-        ownTheKeys: 'Du äger nycklarna',
+        localInference: 'Lokal Inferens',
+        encryptedVault: 'Krypterat Valv',
+        ownTheKeys: 'Du Äger Nycklarna',
       },
     },
     deployments: {
-      eyebrow: 'Välj var det körs',
-      headline: 'Ett varumärke, en licens, flera distributionsalternativ.',
-      subtitle: 'Välj den integritetsnivå som passar din hårdvara.',
+      eyebrow: 'Välj Var Det Körs',
+      headline: 'Ett Varumärke, En Licens, Flera Distributionsalternativ.',
+      subtitle: 'Välj Den Integritetsnivå Som Passar Din Hårdvara.',
       available: 'Tillgänglig nu',
       comingSoon: 'Kommer snart',
       desktop: {
         title: 'Pär Desktop',
         text: 'macOS-app med lokala modeller och ett lokalt valv i ~/.peer/. Allt stannar på din Mac.',
-        best: 'Bäst för Mac-användare',
+        best: 'Bäst För Mac-Användare',
       },
       web: {
         title: 'Pär Web',
         text: 'Körs i din webbläsare, pratar med ditt eget lokala backend. Stöd för Windows, Linux och Chromebook.',
-        best: 'Bäst för flera plattformar',
+        best: 'Bäst För Flera Plattformar',
       },
       cloud: {
         title: 'Pär Cloud',
         text: 'Vi hostar modellen; din personliga kontext stannar på din enhet. PII-redigerat som standard.',
-        best: 'Bäst för användare utan lokala GPU:er',
+        best: 'Bäst För Användare Utan Lokala GPU:er',
       },
     },
     pricing: {
-      eyebrow: 'Enkel, transparent prissättning',
-      headline: 'Börja gratis. Uppgradera när du vill att Pär ska komma ihåg allt.',
+      eyebrow: 'Enkel, Transparent Prissättning',
+      headline: 'Börja Gratis. Uppgradera När Du Vill Att Pär Ska Komma Ihåg Allt.',
       billing: { monthly: 'Månadsvis', yearly: 'Årsvis' },
       free: {
         name: 'Gratis',
@@ -502,7 +502,7 @@ export const translations = {
         yearly: 'Från 20 000 kr/mån för upp till 25 platser',
         cta: 'Kontakta oss',
       },
-      popularBadge: 'Mest populär',
+      popularBadge: 'Mest Populär',
     },
     pricingFeatures: {
       free: [
@@ -545,7 +545,7 @@ export const translations = {
     },
     requirements: {
       eyebrow: 'Systemkrav',
-      headline: 'Byggt för moderna Mac-datorer.',
+      headline: 'Byggt För Moderna Mac-Datorer.',
       items: [
         'macOS 11 (Big Sur) eller senare',
         'Apple Silicon Mac (M1 eller nyare)',
@@ -556,8 +556,8 @@ export const translations = {
       note: 'Beta-versionerna är för närvarande osignerade. Vid första starten, högerklicka på appen och välj Öppna, bekräfta sedan i Systeminställningar → Integritet & säkerhet om du tillfrågas.',
     },
     faq: {
-      eyebrow: 'Vanliga frågor',
-      headline: 'Frågor folk ställer innan de kommer igång.',
+      eyebrow: 'Vanliga Frågor',
+      headline: 'Frågor Folk Ställer Innan De Kommer Igång.',
       q1: 'Skickar Pär mina data till molnet?',
       a1:
         'Nej. Pär behandlar dina frågor och data lokalt på din enhet och lagrar ditt minne, filer och profil i ett krypterat valv. Valfria molnbaserade backend får endast information utan personliga identifierare.',
@@ -575,8 +575,8 @@ export const translations = {
         'Pär är ett varumärke med en licens och flera distributionsalternativ. Börja gratis, uppgradera till Plus för bestående minne, eller välj Pro / Enterprise för team och avancerad kontroll.',
     },
     cta: {
-      eyebrow: 'Redo att träffa Pär?',
-      headline: 'Ladda ner den kostnadsfria betaversionen för macOS och behåll din AI helt på din enhet.',
+      eyebrow: 'Redo Att Träffa Pär?',
+      headline: 'Ladda Ner Den Kostnadsfria Betaversionen För MacOS Och Behåll Din AI Helt På Din Enhet.',
       downloadMac: 'Ladda ner för Mac',
       waitlistPlaceholder: 'Ange din e-post',
       joinWaitlist: 'Gå med i väntelistan',
@@ -595,8 +595,8 @@ export const translations = {
       decline: 'Avböj',
     },
     newsletter: {
-      title: 'Få lanseringsnyheter',
-      description: 'Ta emot produktuppdateringar, releases och tidig tillgång till nya funktioner.',
+      title: 'Få Lanseringsnyheter',
+      description: 'Ta Emot Produktuppdateringar, Releases Och Tidig Tillgång Till Nya Funktioner.',
       emailPlaceholder: 'Din e-post',
       submit: 'Prenumerera',
       sending: 'Prenumererar…',
@@ -611,7 +611,7 @@ export const translations = {
     },
     changelog: {
       title: 'Ändringslogg',
-      intro: 'Senaste produktuppdateringarna, betanoteringarna och lanseringsmilstolparna.',
+      intro: 'Senaste Produktuppdateringarna, Betanoteringarna Och Lanseringsmilstolparna.',
     },
     footer: {
       managedBy: 'Hanteras och drivs av Datomer AB',
@@ -672,22 +672,22 @@ export const translations = {
         'Denna integritetspolicy förklarar hur {{company}} behandlar personuppgifter i samband med Pär-applikationen och webbplatsen.',
       introParams: { company: 'Datomer AB' },
       controllerTitle: '1. Personuppgiftsansvarig',
-      whatTitle: '2. Vilka personuppgifter behandlar vi',
+      whatTitle: '2. Vilka Personuppgifter Behandlar Vi',
       what: {
         app: 'Appdata',
         appText: 'Pär lagrar dina konversationer, filer och personliga kontext i ett krypterat lokalt valv på din enhet. Vi har inte tillgång till dessa data.',
         website: 'Webbplatsdata',
         websiteText: 'När du besöker datomer.eu kan vi samla in vanliga serverloggar och analysdata för att förbättra webbplatsen.',
-        waitlist: 'Väntelista/e-post',
+        waitlist: 'Väntelista/E-post',
         waitlistText: 'Om du anmäler dig för uppdateringar lagrar vi din e-postadress för att skicka relevant kommunikation. Du kan avanmäla dig när som helst.',
       },
-      basisTitle: '3. Rättslig grund',
+      basisTitle: '3. Rättslig Grund',
       basisText:
         'Vi behandlar personuppgifter baserat på ditt samtycke, för att uppfylla ett avtal, eller för att vi har ett berättigat intresse av att driva och förbättra våra tjänster.',
-      thirdTitle: '4. Tredje parter',
+      thirdTitle: '4. Tredje Parter',
       thirdText:
         'Vi säljer inte dina data. Vi kan använda betrodda tjänsteleverantörer för hosting, analys och e-postleverans. Dessa leverantörer är bundna av lämpliga dataskyddsavtal.',
-      rightsTitle: '5. Dina rättigheter',
+      rightsTitle: '5. Dina Rättigheter',
       rightsText:
         'Enligt GDPR har du rätt att få tillgång till, rätta, radera, begränsa och överföra dina personuppgifter. För att utöva dina rättigheter, kontakta oss på',
     },
@@ -703,13 +703,13 @@ export const translations = {
       licenseTitle: '2. Licens',
       licenseText:
         'Vi ger dig en begränsad, icke-exklusiv, icke-överlåtbar licens att använda Pär för personliga eller interna affärsändamål, i enlighet med dessa villkor.',
-      dataTitle: '3. Dina data',
+      dataTitle: '3. Dina Data',
       dataText:
         'Pär är utformat för att hålla dina data på din enhet. Du ansvarar för att säkerhetskopiera ditt lokala valv och hålla din enhet säker.',
       liabilityTitle: '4. Ansvar',
       liabilityText:
         'I den utsträckning lagen tillåter är Datomer AB:s ansvar begränsat till det belopp du betalat för tjänsten under de 12 månaderna före kravet. Vi är inte ansvariga för dataförlust orsakad av din enhet eller konfiguration.',
-      lawTitle: '5. Tillämplig lag',
+      lawTitle: '5. Tillämplig Lag',
       lawText: 'Dessa villkor regleras av svensk lag. Tvister ska lösas i svensk domstol i Stockholm.',
     },
     cookies: {
@@ -717,12 +717,12 @@ export const translations = {
       updated: 'Senast uppdaterad',
       intro:
         'Datomer AB använder cookies och liknande tekniker endast där det är nödvändigt för webbplatsens drift.',
-      typesTitle: 'Cookies vi använder',
-      essential: 'Nödvändiga cookies',
+      typesTitle: 'Cookies Vi Använder',
+      essential: 'Nödvändiga Cookies',
       essentialText: 'krävs för att webbplatsen ska fungera, till exempel för routning och säkerhet.',
-      analytics: 'Analys-cookies',
+      analytics: 'Analys-Cookies',
       analyticsText: 'hjälper oss att förstå hur besökare använder webbplatsen. Dessa används endast med ditt samtycke där lagen kräver det.',
-      manageTitle: 'Hantera cookies',
+      manageTitle: 'Hantera Cookies',
       manageText:
         'Du kan hantera eller inaktivera cookies via din webbläsares inställningar. Inaktivering av nödvändiga cookies kan påverka webbplatsens funktionalitet.',
     },
