@@ -238,7 +238,7 @@ export const translations = {
     },
     cta: {
       eyebrow: 'Ready To Meet Pär?',
-      headline: 'Download The Free Beta For MacOS And Keep Your AI Entirely On Your Device.',
+      headline: 'Download The Free Beta For macOS And Keep Your AI Entirely On Your Device.',
       downloadMac: 'Download for Mac',
       waitlistPlaceholder: 'Enter your email',
       joinWaitlist: 'Join Waitlist',
@@ -576,7 +576,7 @@ export const translations = {
     },
     cta: {
       eyebrow: 'Redo Att Träffa Pär?',
-      headline: 'Ladda Ner Den Kostnadsfria Betaversionen För MacOS Och Behåll Din AI Helt På Din Enhet.',
+      headline: 'Ladda Ner Den Kostnadsfria Betaversionen För macOS Och Behåll Din AI Helt På Din Enhet.',
       downloadMac: 'Ladda ner för Mac',
       waitlistPlaceholder: 'Ange din e-post',
       joinWaitlist: 'Gå med i väntelistan',
