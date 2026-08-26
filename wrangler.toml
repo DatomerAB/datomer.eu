@@ -27,6 +27,8 @@ VITE_STRIPE_PRO_MONTHLY = "price_1U7bj5JjemtoqVYpUqT3E57S"
 VITE_STRIPE_PRO_YEARLY = "price_1U7bkTJjemtoqVYp0z9akUpq"
 VITE_STRIPE_PUBLISHABLE_KEY = "pk_live_51U7ZY2JjemtoqVYpHTWDR1eDkKPg1fWdb8idyEh8AKmRJhvTTcz75ZoPiJrKPY4bBtiU8GJRjGO2tWHxRRL0X3nx0063i6GnuL"
 VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEZRl56VvoSHPucq"
+RESEND_FROM_EMAIL = "hello@datomer.eu"
+CONTACT_TO_EMAIL = "hello@datomer.eu"
 
 # Test credentials for the preview / staging environment only.
 [env.preview.vars]
@@ -36,3 +38,5 @@ VITE_STRIPE_PRO_MONTHLY = "price_1U8FWvJjemtoqVYpWWsN3bmL"
 VITE_STRIPE_PRO_YEARLY = "price_1U8FXWJjemtoqVYp1tXPWmoD"
 VITE_STRIPE_PUBLISHABLE_KEY = "pk_test_51U7ZY2JjemtoqVYpdgzC3NYr0Us9FzlE5gisBomIkjVpBXlCIziLGwV0VRzv4RyoA3DDcdl1UHRTcV0r869hFqcS00UJq0I386"
 VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEaZMJCV6o1b_ZFh"
+RESEND_FROM_EMAIL = "hello@datomer.eu"
+CONTACT_TO_EMAIL = "hello@datomer.eu"
