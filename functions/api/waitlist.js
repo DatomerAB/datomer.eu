@@ -1,4 +1,5 @@
 import { verifyTurnstileToken } from './_turnstile.js'
+import { sendSupportEmail } from './_email.js'
 
 export async function onRequestPost(context) {
   const { request, env } = context
@@ -22,7 +23,7 @@ export async function onRequestPost(context) {
     })
   }
 
-  if (type !== 'waitlist' && (!name || !country)) {
+  if (type !== 'waitlist' && type !== 'newsletter' && (!name || !country)) {
     return new Response(JSON.stringify({ error: 'Name, email, and country are required.' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -47,6 +48,40 @@ export async function onRequestPost(context) {
     timestamp: timestamp || new Date().toISOString(),
   }
 
+  const labelMap = {
+    waitlist: 'waitlist-form',
+    newsletter: 'newsletter-form',
+    download: 'download-form',
+  }
+  const sourceLabel = labelMap[payload.type] || payload.type
+
+  const subjectMap = {
+    waitlist: `Waitlist signup: ${payload.email}`,
+    newsletter: `Newsletter signup: ${payload.email}`,
+    download: `Download request: ${payload.name} (${payload.email})`,
+  }
+  const subject = subjectMap[payload.type] || `Form submission: ${payload.email}`
+
+  const detailsHtml = Object.entries(payload)
+    .map(([key, value]) => `<p><strong>${key}:</strong> ${String(value).replace(/\n/g, '<br>')}</p>`)
+    .join('\n')
+
+  const detailsText = Object.entries(payload)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n')
+
+  await sendSupportEmail({
+    env,
+    subject,
+    replyTo: payload.email,
+    html: `
+      <p><strong>[source: ${sourceLabel}]</strong></p>
+      <h2>New ${sourceLabel.replace(/-/g, ' ')} submission</h2>
+      ${detailsHtml}
+    `,
+    text: `[source: ${sourceLabel}]\n\nNew ${sourceLabel.replace(/-/g, ' ')} submission\n\n${detailsText}`,
+  })
+
   // If a webhook URL is configured (e.g. Zapier, Make, Slack), forward the submission.
   if (env.WAITLIST_WEBHOOK_URL) {
     try {
@@ -60,8 +95,6 @@ export async function onRequestPost(context) {
     }
   }
 
-  // TODO: connect to a real store (Airtable, Google Sheets, Supabase, Stripe customer, etc.)
-  // For now, return success so the frontend can proceed with the download.
   return new Response(JSON.stringify({ ok: true, payload }), {
     status: 200,
     headers: { 'Content-Type': 'application/json' },

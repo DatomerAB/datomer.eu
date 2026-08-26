@@ -1,4 +1,5 @@
 import { verifyTurnstileToken } from './_turnstile.js'
+import { sendSupportEmail } from './_email.js'
 
 export async function onRequestPost(context) {
   const { request, env } = context
@@ -34,10 +35,20 @@ export async function onRequestPost(context) {
   const cleanedEmail = String(email).trim().toLowerCase()
   const cleanedMessage = String(message).trim()
 
-  // Intentionally not sending emails: submissions are stored/forwarded elsewhere.
-  void cleanedName
-  void cleanedEmail
-  void cleanedMessage
+  await sendSupportEmail({
+    env,
+    subject: `Contact form: enquiry from ${cleanedName}`,
+    replyTo: cleanedEmail,
+    html: `
+      <p><strong>[source: contact-form]</strong></p>
+      <h2>New contact form submission</h2>
+      <p><strong>Name:</strong> ${cleanedName}</p>
+      <p><strong>Email:</strong> ${cleanedEmail}</p>
+      <p><strong>Message:</strong></p>
+      <p>${cleanedMessage.replace(/\n/g, '<br>')}</p>
+    `,
+    text: `[source: contact-form]\n\nNew contact form submission\n\nName: ${cleanedName}\nEmail: ${cleanedEmail}\n\nMessage:\n${cleanedMessage}`,
+  })
 
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,

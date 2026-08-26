@@ -52,6 +52,7 @@ Public variables:
 - VITE_STRIPE_PUBLISHABLE_KEY
 - VITE_TURNSTILE_SITE_KEY
 - RESEND_FROM_EMAIL
+- CONTACT_TO_EMAIL
 
 Secret values:
 
@@ -59,6 +60,10 @@ Secret values:
 - STRIPE_WEBHOOK_SECRET
 - TURNSTILE_SECRET_KEY
 - RESEND_API_KEY
+
+Optional variables:
+
+- WAITLIST_WEBHOOK_URL (forwards form submissions to an external webhook)
 
 These must be the test-mode values for the preview environment.
 
@@ -73,7 +78,8 @@ vars = {
   VITE_STRIPE_PRO_YEARLY = "price_1U7zHrR09UqACN9NaYgW8Byi",
   VITE_STRIPE_PUBLISHABLE_KEY = "pk_test_51U7ZYCR09UqACN9NT2FVNCu5PyCFv4fMIYymJdcRP0HfPgPxwnuJfNwL8PgYAcNXRCJCx8sNh8m3vwFivElEKjyT0028UDEk0d",
   VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEZ22x8qe4HNWU2O",
-  RESEND_FROM_EMAIL = "hello1@datomer.eu"
+  RESEND_FROM_EMAIL = "hello1@datomer.eu",
+  CONTACT_TO_EMAIL = "hello@datomer.eu"
 }
 ```
 
