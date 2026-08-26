@@ -12,13 +12,13 @@ export const translations = {
       download: 'Download',
     },
     hero: {
-      badge: 'Private By Design',
-      variantBadge: 'Built For Repeat Users',
+      badge: 'Private by Design',
+      variantBadge: 'Built for Repeat Users',
       headline: 'Your AI. On Your Device.',
       lede:
         'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware, no cloud required. Bring your own GGUF models or Ollama models.',
       downloadMac: 'Download for Mac',
-      seeHowItWorks: 'See how it works',
+      seeHowItWorks: 'See How It Works',
     },
     highlights: {
       localInference: { title: 'Local Inference', text: 'Runs on your device using GGUF or Ollama models.' },
@@ -64,7 +64,7 @@ export const translations = {
       eyebrow: 'Privacy Is Not A Feature',
       headline: 'It Is The Foundation.',
       text:
-        'Pär runs inference on your device using local models. Your memory, files, and profile live in an encrypted vault on your machine. No silent cloud sync. No training on your data.',
+        'Pär runs entirely on your device using local models. Your memory, files, and profile live in an encrypted vault on your device. No silent cloud sync. No training on your data.',
       features: [
         'Native GGUF support + optional Ollama integration',
         'SQLCipher AES-256 encrypted vault',
@@ -91,12 +91,12 @@ export const translations = {
       },
       web: {
         title: 'Pär Web',
-        text: 'Runs in your browser, talks to your own local backend. Windows, Linux, and Chromebook support.',
+        text: 'Runs on your browser, talks to your local backend. Windows, Linux, and Chromebook support.',
         best: 'Best For Cross-Platform',
       },
       cloud: {
         title: 'Pär Cloud',
-        text: 'We host the model; your personal context stays on your device. PII-redacted by default.',
+        text: 'We host the model; your personal data stays on your device. PII is redacted by default.',
         best: 'Best For Users Without Local GPUs',
       },
     },
@@ -241,7 +241,7 @@ export const translations = {
       headline: 'Download The Free Beta For MacOS And Keep Your AI Entirely On Your Device.',
       downloadMac: 'Download for Mac',
       waitlistPlaceholder: 'Enter your email',
-      joinWaitlist: 'Join the waitlist',
+      joinWaitlist: 'Join Waitlist',
       waitlistHint: 'Get notified about beta spots, updates, and launch notes.',
       disclaimer: 'Beta release. Requires macOS 11+. Apple Silicon recommended. GGUF models run natively; Ollama is optional.',
     },
@@ -258,7 +258,7 @@ export const translations = {
     },
     newsletter: {
       title: 'Get Launch Notes',
-      description: 'Receive Release Updates, Product Notes, And Early Access Announcements.',
+      description: 'Receive release updates, product notes, and early access announcements.',
       emailPlaceholder: 'Your email',
       submit: 'Join the newsletter',
       sending: 'Joining…',
@@ -273,7 +273,7 @@ export const translations = {
     },
     changelog: {
       title: 'Changelog',
-      intro: 'The Latest Product Updates, Beta Notes, And Launch Milestones.',
+      intro: 'The latest product updates, release notes, and launch milestones.',
     },
     footer: {
       managedBy: 'Managed and operated by Datomer AB',

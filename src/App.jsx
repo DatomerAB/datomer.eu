@@ -1,7 +1,7 @@
 import './App.css'
 import { useEffect, useRef, useState } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import { formatHeading } from './lib/formatHeading.js'
+import { formatHeading, useLocalizedHeading } from './lib/formatHeading.js'
 import { useLanguage } from './i18n/useLanguage.js'
 import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
@@ -216,12 +216,13 @@ function Footer() {
 
 function HomePage({ onDownload }) {
   const { t } = useLanguage()
+  const formatHeading = useLocalizedHeading()
   const heroVariant = useExperiment('hero-cta-copy', ['control', 'social-proof'])
 
   const highlights = [
-    { icon: 'chip', title: t('highlights.localInference.title'), text: t('highlights.localInference.text') },
+    { icon: 'device', title: t('highlights.localInference.title'), text: t('highlights.localInference.text') },
     { icon: 'lock', title: t('highlights.encryptedVault.title'), text: t('highlights.encryptedVault.text') },
-    { icon: 'user', title: t('highlights.ownTheKeys.title'), text: t('highlights.ownTheKeys.text') },
+    { icon: 'arrowRight', title: t('highlights.ownTheKeys.title'), text: t('highlights.ownTheKeys.text') },
   ]
 
   const capabilities = [
@@ -240,6 +241,7 @@ function HomePage({ onDownload }) {
   ]
 
   const features = [
+    { title: t('features.portability.title'), badge: t('features.portability.badge'), text: t('features.portability.text') },
     { title: t('features.persistentMemory.title'), badge: t('features.persistentMemory.badge'), text: t('features.persistentMemory.text') },
     { title: t('features.contextGraph.title'), badge: t('features.contextGraph.badge'), text: t('features.contextGraph.text') },
     { title: t('features.modelRouting.title'), badge: t('features.modelRouting.badge'), text: t('features.modelRouting.text') },
@@ -247,7 +249,6 @@ function HomePage({ onDownload }) {
     { title: t('features.fileIntelligence.title'), badge: t('features.fileIntelligence.badge'), text: t('features.fileIntelligence.text') },
     { title: t('features.routines.title'), badge: t('features.routines.badge'), text: t('features.routines.text') },
     { title: t('features.semanticCache.title'), badge: t('features.semanticCache.badge'), text: t('features.semanticCache.text') },
-    { title: t('features.portability.title'), badge: t('features.portability.badge'), text: t('features.portability.text') },
   ]
 
   const deployments = [
@@ -335,7 +336,7 @@ function HomePage({ onDownload }) {
       ...plan,
       price: isYearly ? plan.yearlyPrice : (plan.monthlyPrice ?? plan.price),
       period: isYearly ? plan.yearlyPeriod : plan.period,
-      yearly: isYearly ? plan.monthly : plan.yearly,
+      yearly: hasPriceIds ? (isYearly ? plan.monthly : plan.yearly) : plan.yearly,
       priceId: hasPriceIds ? (isYearly ? plan.yearlyPriceId : plan.monthlyPriceId) : '',
     }
   })
@@ -377,7 +378,7 @@ function HomePage({ onDownload }) {
                 <div key={item.title} className="hero-highlight">
                   <span className="hero-highlight-icon" aria-hidden="true"><Icon name={item.icon} /></span>
                   <div>
-                    <strong>{item.title}</strong>
+                    <strong>{formatHeading(item.title)}</strong>
                     <span>{item.text}</span>
                   </div>
                 </div>
@@ -415,7 +416,7 @@ function HomePage({ onDownload }) {
           <div className="capability-grid">
             {capabilities.map((item) => (
               <article key={item.title} className="capability-card">
-                <h3>{item.title}</h3>
+                <h3>{formatHeading(item.title)}</h3>
                 <p>{item.text}</p>
               </article>
             ))}
@@ -433,7 +434,7 @@ function HomePage({ onDownload }) {
               {features.map((feature) => (
                 <article key={feature.title} className="feature-card">
                   <div className="feature-card-header">
-                    <h3>{feature.title}</h3>
+                    <h3>{formatHeading(feature.title)}</h3>
                     <span className="feature-badge">{feature.badge}</span>
                   </div>
                   <p>{feature.text}</p>
@@ -463,16 +464,16 @@ function HomePage({ onDownload }) {
             </div>
             <div className="privacy-pillars">
               <div className="privacy-pillar">
-                <Icon name="chip" />
-                <strong>{t('privacyHome.pillars.localInference')}</strong>
+                <Icon name="device" />
+                <strong>{formatHeading(t('privacyHome.pillars.localInference'))}</strong>
               </div>
               <div className="privacy-pillar">
                 <Icon name="lock" />
-                <strong>{t('privacyHome.pillars.encryptedVault')}</strong>
+                <strong>{formatHeading(t('privacyHome.pillars.encryptedVault'))}</strong>
               </div>
               <div className="privacy-pillar">
-                <Icon name="user" />
-                <strong>{t('privacyHome.pillars.ownTheKeys')}</strong>
+                <Icon name="arrowRight" />
+                <strong>{formatHeading(t('privacyHome.pillars.ownTheKeys'))}</strong>
               </div>
             </div>
           </div>
@@ -489,7 +490,7 @@ function HomePage({ onDownload }) {
             {deployments.map((item) => (
               <article key={item.title} className={`deployment-card ${item.status === t('deployments.available') ? 'available' : ''}`}>
                 <span className="deployment-status">{item.status}</span>
-                <h3>{item.title}</h3>
+                <h3>{formatHeading(item.title)}</h3>
                 <p>{item.text}</p>
                 <span className="deployment-best">{item.best}</span>
               </article>
@@ -528,7 +529,7 @@ function HomePage({ onDownload }) {
                 <article key={plan.name} className={`pricing-card ${plan.highlight ? 'highlight' : ''}`}>
                   {plan.highlight && <span className="popular-badge">{t('pricing.popularBadge')}</span>}
                   <div className="pricing-header">
-                    <h3>{plan.name}</h3>
+                    <h3>{formatHeading(plan.name)}</h3>
                     <div className="pricing-price">
                       <strong>{plan.price}</strong>
                       <span>{plan.period}</span>
@@ -633,6 +634,7 @@ function HomePage({ onDownload }) {
 
 function AboutPage() {
   const { t } = useLanguage()
+  const formatHeading = useLocalizedHeading()
 
   return (
     <main className="section container legal-page">
@@ -653,6 +655,7 @@ function AboutPage() {
 
 function ContactPage() {
   const { t } = useLanguage()
+  const formatHeading = useLocalizedHeading()
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState({ loading: false, success: false, error: '' })
@@ -753,6 +756,7 @@ function ContactPage() {
 
 function PrivacyPage() {
   const { t } = useLanguage()
+  const formatHeading = useLocalizedHeading()
 
   return (
     <main className="section container legal-page">
@@ -800,6 +804,7 @@ function PrivacyPage() {
 
 function TermsPage() {
   const { t } = useLanguage()
+  const formatHeading = useLocalizedHeading()
 
   return (
     <main className="section container legal-page">
@@ -831,6 +836,7 @@ function TermsPage() {
 
 function CookiesPage() {
   const { t } = useLanguage()
+  const formatHeading = useLocalizedHeading()
 
   return (
     <main className="section container legal-page">
@@ -866,6 +872,7 @@ function ScrollToTop() {
 
 function PaymentSuccessPage() {
   const { t } = useLanguage()
+  const formatHeading = useLocalizedHeading()
 
   return (
     <main className="section container legal-page">

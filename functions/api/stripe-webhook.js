@@ -1,3 +1,5 @@
+import { sendSupportEmail } from './_email.js'
+
 export async function onRequestPost(context) {
   const { request, env } = context
 
@@ -90,32 +92,39 @@ export async function onRequestPost(context) {
   }
 
   if (env.RESEND_API_KEY) {
-    try {
-      await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${env.RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-          to: [email],
-          subject: `Your Pär ${plan} purchase confirmation`,
-          html: `
-            <h2>Thank you for your purchase</h2>
-            <p>Your Pär <strong>${plan}</strong> subscription is now active.</p>
-            <p>Your license key is:</p>
-            <p style="font-size: 1.25rem; font-weight: bold;">${licenseKey}</p>
-            <p>Use this key in the Pär app to activate your subscription.</p>
-            <hr />
-            <p><small>Datomer AB · hello@datomer.eu</small></p>
-          `,
-          text: `Thank you for your purchase.\n\nYour Pär ${plan} subscription is now active.\n\nYour license key is: ${licenseKey}\n\nUse this key in the Pär app to activate your subscription.\n\n---\nDatomer AB · hello@datomer.eu`,
-        }),
-      })
-    } catch {
-      // Logging is intentionally silent for now; support and later monitoring can add auditing.
-    }
+    const supportHtml = `
+      <p><strong>[source: stripe-purchase]</strong></p>
+      <h2>New purchase</h2>
+      <p><strong>Plan:</strong> ${plan}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>License key:</strong> ${licenseKey}</p>
+      <p><strong>Session:</strong> ${stripeSessionId}</p>
+    `
+    const supportText = `[source: stripe-purchase]\n\nNew purchase\n\nPlan: ${plan}\nEmail: ${email}\nLicense key: ${licenseKey}\nSession: ${stripeSessionId}`
+
+    await sendSupportEmail({
+      env,
+      subject: `Purchase: Pär ${plan} — ${email}`,
+      replyTo: email,
+      html: supportHtml,
+      text: supportText,
+    })
+
+    await sendSupportEmail({
+      env,
+      to: [email],
+      subject: `Your Pär ${plan} purchase confirmation`,
+      html: `
+        <h2>Thank you for your purchase</h2>
+        <p>Your Pär <strong>${plan}</strong> subscription is now active.</p>
+        <p>Your license key is:</p>
+        <p style="font-size: 1.25rem; font-weight: bold;">${licenseKey}</p>
+        <p>Use this key in the Pär app to activate your subscription.</p>
+        <hr />
+        <p><small>Datomer AB · hello@datomer.eu</small></p>
+      `,
+      text: `Thank you for your purchase.\n\nYour Pär ${plan} subscription is now active.\n\nYour license key is: ${licenseKey}\n\nUse this key in the Pär app to activate your subscription.\n\n---\nDatomer AB · hello@datomer.eu`,
+    })
   }
 
   return new Response(JSON.stringify({ received: true, license: licenseRecord }), {
