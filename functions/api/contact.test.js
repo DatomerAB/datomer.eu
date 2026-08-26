@@ -36,17 +36,23 @@ describe('contact handler', () => {
     const resendCalls = fetchSpy.mock.calls.filter((call) =>
       String(call[0]).includes('resend.com')
     )
-    expect(resendCalls).toHaveLength(1)
+    expect(resendCalls).toHaveLength(2)
 
-    const [, options] = resendCalls[0]
-    const body = JSON.parse(options.body)
-    expect(body.subject).toBe('Contact form: enquiry from Test User')
-    expect(body.reply_to).toBe('test@example.com')
-    expect(body.to).toEqual(['to@example.com'])
-    expect(body.html).toContain('[source: contact-form]')
-    expect(body.text).toContain('[source: contact-form]')
-    expect(body.html).toContain('Hello')
-    expect(body.text).toContain('Hello')
+    const [, supportOptions] = resendCalls[0]
+    const supportBody = JSON.parse(supportOptions.body)
+    expect(supportBody.subject).toBe('Contact form: enquiry from Test User')
+    expect(supportBody.reply_to).toBe('test@example.com')
+    expect(supportBody.to).toEqual(['to@example.com'])
+    expect(supportBody.html).toContain('[source: contact-form]')
+    expect(supportBody.text).toContain('[source: contact-form]')
+    expect(supportBody.html).toContain('Hello')
+    expect(supportBody.text).toContain('Hello')
+
+    const [, confirmationOptions] = resendCalls[1]
+    const confirmationBody = JSON.parse(confirmationOptions.body)
+    expect(confirmationBody.to).toEqual(['test@example.com'])
+    expect(confirmationBody.subject).toBe('We received your message')
+    expect(confirmationBody.html).toContain('Thank you, Test User')
 
     fetchSpy.mockRestore()
   })

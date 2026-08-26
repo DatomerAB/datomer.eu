@@ -82,6 +82,34 @@ export async function onRequestPost(context) {
     text: `[source: ${sourceLabel}]\n\nNew ${sourceLabel.replace(/-/g, ' ')} submission\n\n${detailsText}`,
   })
 
+  const confirmationSubjectMap = {
+    waitlist: 'You are on the Pär waitlist',
+    newsletter: 'You are subscribed to Pär updates',
+    download: 'Thank you for downloading Pär beta',
+  }
+  const confirmationSubject = confirmationSubjectMap[payload.type] || 'Thank you for signing up'
+
+  const confirmationBodyMap = {
+    waitlist: '<p>Thank you for joining the waitlist. We will email you with beta spots, updates, and launch notes.</p>',
+    newsletter: '<p>Thank you for subscribing. You will receive product updates, release notes, and early access announcements.</p>',
+    download: '<p>Thank you for your interest in the Pär beta. Your download should start automatically. We will email you when updates are available.</p>',
+  }
+  const confirmationBodyHtml = confirmationBodyMap[payload.type] || '<p>Thank you for signing up.</p>'
+  const confirmationBodyText = confirmationBodyHtml.replace(/<[^>]+>/g, '')
+
+  await sendSupportEmail({
+    env,
+    to: [payload.email],
+    subject: confirmationSubject,
+    html: `
+      <h2>Thank you, ${payload.name}</h2>
+      ${confirmationBodyHtml}
+      <hr />
+      <p><small>Datomer AB · hello@datomer.eu</small></p>
+    `,
+    text: `Thank you, ${payload.name}.\n\n${confirmationBodyText}\n\n---\nDatomer AB · hello@datomer.eu`,
+  })
+
   // If a webhook URL is configured (e.g. Zapier, Make, Slack), forward the submission.
   if (env.WAITLIST_WEBHOOK_URL) {
     try {

@@ -1,6 +1,7 @@
 import './App.css'
 import { useEffect, useRef, useState } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import { formatHeading } from './lib/formatHeading.js'
 import { useLanguage } from './i18n/useLanguage.js'
 import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
@@ -357,7 +358,7 @@ function HomePage({ onDownload }) {
               <span className="dot" aria-hidden="true" />
               {heroVariant === 'social-proof' ? t('hero.variantBadge') : t('hero.badge')}
             </div>
-            <h1>{t('hero.headline')}</h1>
+            <h1>{formatHeading(t('hero.headline'))}</h1>
             <p className="lede">
               {t('hero.lede')}
             </p>
@@ -404,10 +405,10 @@ function HomePage({ onDownload }) {
 
         <section className="section container capabilities-section" id="product">
           <div className="section-heading">
-            <p className="eyebrow">{t('capabilities.eyebrow')}</p>
-            <h2>{t('capabilities.headline')}</h2>
+            <p className="eyebrow">{formatHeading(t('capabilities.eyebrow'))}</p>
+            <h2>{formatHeading(t('capabilities.headline'))}</h2>
             <p className="section-subtitle">
-              {t('capabilities.subtitle')}
+              {formatHeading(t('capabilities.subtitle'))}
             </p>
           </div>
 
@@ -424,8 +425,8 @@ function HomePage({ onDownload }) {
         <section className="section section-alt" id="features">
           <div className="container">
             <div className="section-heading">
-              <p className="eyebrow">{t('features.eyebrow')}</p>
-              <h2>{t('features.headline')}</h2>
+              <p className="eyebrow">{formatHeading(t('features.eyebrow'))}</p>
+              <h2>{formatHeading(t('features.headline'))}</h2>
             </div>
 
             <div className="feature-grid">
@@ -444,8 +445,8 @@ function HomePage({ onDownload }) {
 
         <section className="section container privacy-section">
           <div className="privacy-copy">
-            <p className="eyebrow">{t('privacyHome.eyebrow')}</p>
-            <h2>{t('privacyHome.headline')}</h2>
+            <p className="eyebrow">{formatHeading(t('privacyHome.eyebrow'))}</p>
+            <h2>{formatHeading(t('privacyHome.headline'))}</h2>
             <p>
               {t('privacyHome.text')}
             </p>
@@ -479,9 +480,9 @@ function HomePage({ onDownload }) {
 
         <section className="section container deployments-section">
           <div className="section-heading">
-            <p className="eyebrow">{t('deployments.eyebrow')}</p>
-            <h2>{t('deployments.headline')}</h2>
-            <p className="section-subtitle">{t('deployments.subtitle')}</p>
+            <p className="eyebrow">{formatHeading(t('deployments.eyebrow'))}</p>
+            <h2>{formatHeading(t('deployments.headline'))}</h2>
+            <p className="section-subtitle">{formatHeading(t('deployments.subtitle'))}</p>
           </div>
 
           <div className="deployment-grid">
@@ -499,8 +500,8 @@ function HomePage({ onDownload }) {
         <section className="section section-alt" id="pricing">
           <div className="container">
             <div className="section-heading">
-              <p className="eyebrow">{t('pricing.eyebrow')}</p>
-              <h2>{t('pricing.headline')}</h2>
+              <p className="eyebrow">{formatHeading(t('pricing.eyebrow'))}</p>
+              <h2>{formatHeading(t('pricing.headline'))}</h2>
             </div>
 
             <div className="billing-toggle" role="group" aria-label={t('pricing.billing.monthly')}>
@@ -548,13 +549,12 @@ function HomePage({ onDownload }) {
                       {plan.cta}
                     </button>
                   ) : plan.name === t('pricing.enterprise.name') ? (
-                    <button
-                      type="button"
+                    <Link
+                      to="/contact"
                       className="button button-secondary"
-                      onClick={() => window.location.href = `mailto:${COMPANY.email}?subject=${encodeURIComponent(plan.name + ' inquiry')}`}
                     >
                       {plan.cta}
-                    </button>
+                    </Link>
                   ) : (
                     <PaymentButton
                       priceId={plan.priceId}
@@ -573,8 +573,8 @@ function HomePage({ onDownload }) {
 
         <section className="section container requirements-section">
           <div className="section-heading narrow">
-            <p className="eyebrow">{t('requirements.eyebrow')}</p>
-            <h2>{t('requirements.headline')}</h2>
+            <p className="eyebrow">{formatHeading(t('requirements.eyebrow'))}</p>
+            <h2>{formatHeading(t('requirements.headline'))}</h2>
           </div>
 
           <div className="requirements-card">
@@ -591,8 +591,8 @@ function HomePage({ onDownload }) {
 
         <section className="section container faq-section" id="faq">
           <div className="section-heading narrow">
-            <p className="eyebrow">{t('faq.eyebrow')}</p>
-            <h2>{t('faq.headline')}</h2>
+            <p className="eyebrow">{formatHeading(t('faq.eyebrow'))}</p>
+            <h2>{formatHeading(t('faq.headline'))}</h2>
           </div>
 
           <div className="faq-list">
@@ -609,8 +609,8 @@ function HomePage({ onDownload }) {
           <div className="container">
             <div className="cta-row">
               <div className="cta-download-card">
-                <p className="eyebrow">{t('cta.eyebrow')}</p>
-                <h2>{t('cta.headline')}</h2>
+                <p className="eyebrow">{formatHeading(t('cta.eyebrow'))}</p>
+                <h2>{formatHeading(t('cta.headline'))}</h2>
                 <button type="button" className="button button-primary cta-download" onClick={onDownload}>
                   {t('cta.downloadMac')}
                 </button>
@@ -636,14 +636,14 @@ function AboutPage() {
 
   return (
     <main className="section container legal-page">
-      <h1>{t('about.title')}</h1>
+      <h1>{formatHeading(t('about.title'))}</h1>
       <p>{t('about.intro')}</p>
       <p>{t('about.mission')}</p>
 
-      <h2>{t('about.companyTitle')}</h2>
+      <h2>{formatHeading(t('about.companyTitle'))}</h2>
       <CompanyAddress />
 
-      <h2>{t('about.contactTitle')}</h2>
+      <h2>{formatHeading(t('about.contactTitle'))}</h2>
       <p>
         {t('about.emailLabel')}: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
       </p>
@@ -711,7 +711,7 @@ function ContactPage() {
 
   return (
     <main className="section container legal-page">
-      <h1>{t('contact.title')}</h1>
+      <h1>{formatHeading(t('contact.title'))}</h1>
       <p>
         {t('contact.intro')}{' '}
         <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
@@ -756,7 +756,7 @@ function PrivacyPage() {
 
   return (
     <main className="section container legal-page">
-      <h1>{t('privacy.title')}</h1>
+      <h1>{formatHeading(t('privacy.title'))}</h1>
       <p>
         <strong>{t('privacy.updated')}:</strong> 23 August 2026
       </p>
@@ -803,7 +803,7 @@ function TermsPage() {
 
   return (
     <main className="section container legal-page">
-      <h1>{t('terms.title')}</h1>
+      <h1>{formatHeading(t('terms.title'))}</h1>
       <p>
         <strong>{t('terms.updated')}:</strong> 23 August 2026
       </p>
@@ -834,7 +834,7 @@ function CookiesPage() {
 
   return (
     <main className="section container legal-page">
-      <h1>{t('cookies.title')}</h1>
+      <h1>{formatHeading(t('cookies.title'))}</h1>
       <p>
         <strong>{t('cookies.updated')}:</strong> 23 August 2026
       </p>
@@ -869,7 +869,7 @@ function PaymentSuccessPage() {
 
   return (
     <main className="section container legal-page">
-      <h1>{t('payment.successTitle', { defaultValue: 'Thank you!' })}</h1>
+      <h1>{formatHeading(t('payment.successTitle', { defaultValue: 'Thank you!' }))}</h1>
       <p>{t('payment.successText', { defaultValue: 'Your payment was received. We have sent a confirmation email with next steps.' })}</p>
       <p>
         <Link to="/" className="button button-primary">

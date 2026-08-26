@@ -39,15 +39,20 @@ describe('waitlist handler', () => {
     const resendCalls = fetchSpy.mock.calls.filter((call) =>
       String(call[0]).includes('resend.com')
     )
-    expect(resendCalls).toHaveLength(1)
+    expect(resendCalls).toHaveLength(2)
 
-    const [, options] = resendCalls[0]
-    const body = JSON.parse(options.body)
-    expect(body.subject).toBe('Waitlist signup: waitlist@example.com')
-    expect(body.reply_to).toBe('waitlist@example.com')
-    expect(body.to).toEqual(['support@example.com'])
-    expect(body.html).toContain('[source: waitlist-form]')
-    expect(body.text).toContain('[source: waitlist-form]')
+    const [, supportOptions] = resendCalls[0]
+    const supportBody = JSON.parse(supportOptions.body)
+    expect(supportBody.subject).toBe('Waitlist signup: waitlist@example.com')
+    expect(supportBody.reply_to).toBe('waitlist@example.com')
+    expect(supportBody.to).toEqual(['support@example.com'])
+    expect(supportBody.html).toContain('[source: waitlist-form]')
+    expect(supportBody.text).toContain('[source: waitlist-form]')
+
+    const [, confirmationOptions] = resendCalls[1]
+    const confirmationBody = JSON.parse(confirmationOptions.body)
+    expect(confirmationBody.to).toEqual(['waitlist@example.com'])
+    expect(confirmationBody.subject).toBe('You are on the Pär waitlist')
 
     fetchSpy.mockRestore()
   })
@@ -71,12 +76,17 @@ describe('waitlist handler', () => {
     const resendCalls = fetchSpy.mock.calls.filter((call) =>
       String(call[0]).includes('resend.com')
     )
-    expect(resendCalls).toHaveLength(1)
+    expect(resendCalls).toHaveLength(2)
 
-    const [, options] = resendCalls[0]
-    const body = JSON.parse(options.body)
-    expect(body.subject).toBe('Newsletter signup: newsletter@example.com')
-    expect(body.html).toContain('[source: newsletter-form]')
+    const [, supportOptions] = resendCalls[0]
+    const supportBody = JSON.parse(supportOptions.body)
+    expect(supportBody.subject).toBe('Newsletter signup: newsletter@example.com')
+    expect(supportBody.html).toContain('[source: newsletter-form]')
+
+    const [, confirmationOptions] = resendCalls[1]
+    const confirmationBody = JSON.parse(confirmationOptions.body)
+    expect(confirmationBody.to).toEqual(['newsletter@example.com'])
+    expect(confirmationBody.subject).toBe('You are subscribed to Pär updates')
 
     fetchSpy.mockRestore()
   })
@@ -102,14 +112,19 @@ describe('waitlist handler', () => {
     const resendCalls = fetchSpy.mock.calls.filter((call) =>
       String(call[0]).includes('resend.com')
     )
-    expect(resendCalls).toHaveLength(1)
+    expect(resendCalls).toHaveLength(2)
 
-    const [, options] = resendCalls[0]
-    const body = JSON.parse(options.body)
-    expect(body.subject).toBe('Download request: Download User (download@example.com)')
-    expect(body.html).toContain('[source: download-form]')
-    expect(body.html).toContain('Download User')
-    expect(body.html).toContain('SE')
+    const [, supportOptions] = resendCalls[0]
+    const supportBody = JSON.parse(supportOptions.body)
+    expect(supportBody.subject).toBe('Download request: Download User (download@example.com)')
+    expect(supportBody.html).toContain('[source: download-form]')
+    expect(supportBody.html).toContain('Download User')
+    expect(supportBody.html).toContain('SE')
+
+    const [, confirmationOptions] = resendCalls[1]
+    const confirmationBody = JSON.parse(confirmationOptions.body)
+    expect(confirmationBody.to).toEqual(['download@example.com'])
+    expect(confirmationBody.subject).toBe('Thank you for downloading Pär beta')
 
     fetchSpy.mockRestore()
   })

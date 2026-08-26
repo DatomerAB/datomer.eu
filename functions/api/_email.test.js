@@ -34,6 +34,24 @@ describe('sendSupportEmail', () => {
     fetchSpy.mockRestore()
   })
 
+  it('sends to a custom recipient list when provided', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}', { status: 200 }))
+
+    await sendSupportEmail({
+      env: { RESEND_API_KEY: 're_123' },
+      to: ['customer@example.com'],
+      subject: 'Confirmation',
+      html: '<p>Confirmed</p>',
+      text: 'Confirmed',
+    })
+
+    const [, options] = fetchSpy.mock.calls[0]
+    const body = JSON.parse(options.body)
+    expect(body.to).toEqual(['customer@example.com'])
+
+    fetchSpy.mockRestore()
+  })
+
   it('returns sent: false when RESEND_API_KEY is missing', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}'))
 

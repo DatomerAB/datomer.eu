@@ -100,14 +100,17 @@ export async function onRequestPost(context) {
         body: JSON.stringify({
           from: env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
           to: [email],
-          subject: 'Your Pär license key',
+          subject: `Your Pär ${plan} purchase confirmation`,
           html: `
             <h2>Thank you for your purchase</h2>
-            <p>Your Pär license key is:</p>
-            <p><strong>${licenseKey}</strong></p>
+            <p>Your Pär <strong>${plan}</strong> subscription is now active.</p>
+            <p>Your license key is:</p>
+            <p style="font-size: 1.25rem; font-weight: bold;">${licenseKey}</p>
             <p>Use this key in the Pär app to activate your subscription.</p>
+            <hr />
+            <p><small>Datomer AB · hello@datomer.eu</small></p>
           `,
-          text: `Thank you for your purchase.\n\nYour Pär license key is: ${licenseKey}\n\nUse this key in the Pär app to activate your subscription.`,
+          text: `Thank you for your purchase.\n\nYour Pär ${plan} subscription is now active.\n\nYour license key is: ${licenseKey}\n\nUse this key in the Pär app to activate your subscription.\n\n---\nDatomer AB · hello@datomer.eu`,
         }),
       })
     } catch {

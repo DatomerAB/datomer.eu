@@ -50,6 +50,21 @@ export async function onRequestPost(context) {
     text: `[source: contact-form]\n\nNew contact form submission\n\nName: ${cleanedName}\nEmail: ${cleanedEmail}\n\nMessage:\n${cleanedMessage}`,
   })
 
+  await sendSupportEmail({
+    env,
+    to: [cleanedEmail],
+    subject: 'We received your message',
+    html: `
+      <h2>Thank you, ${cleanedName}</h2>
+      <p>We have received your message and will get back to you as soon as possible.</p>
+      <p><strong>Your message:</strong></p>
+      <p>${cleanedMessage.replace(/\n/g, '<br>')}</p>
+      <hr />
+      <p><small>Datomer AB · hello@datomer.eu</small></p>
+    `,
+    text: `Thank you, ${cleanedName}.\n\nWe have received your message and will get back to you as soon as possible.\n\nYour message:\n${cleanedMessage}\n\n---\nDatomer AB · hello@datomer.eu`,
+  })
+
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
     headers: { 'Content-Type': 'application/json' },
