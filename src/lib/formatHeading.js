@@ -42,29 +42,36 @@ function titleCaseWord(word, index, isFirst, isLast) {
   return capitalizeCore(core) + punctuation
 }
 
+function isSentenceEnd(word) {
+  return /[.!?]$/.test(word)
+}
+
 export function formatHeading(text) {
   if (typeof text !== 'string' || text.trim().length === 0) return text
 
   const trimmed = text.trim()
   const words = trimmed.split(/\s+/)
 
-  // Headers/subheaders longer than four words: sentence case (first word + acronyms/proper nouns).
-  if (words.length > 4) {
+  // Short headers: Title Case with small words lowercased unless first/last.
+  if (words.length <= 4) {
     return words
-      .map((word, index) => {
-        const { core, punctuation } = splitWord(word)
-        if (!core) return word
-        if (index === 0 || preserveCasing(core)) {
-          return capitalizeCore(core) + punctuation
-        }
-        return core.toLowerCase() + punctuation
-      })
+      .map((word, index) => titleCaseWord(word, index, index === 0, index === words.length - 1))
       .join(' ')
   }
 
-  // Short headers: Title Case with small words lowercased unless first/last.
+  // Headers/subheaders longer than four words: sentence case.
+  // Capitalize the first word of each sentence and preserve acronyms/proper nouns.
+  let startOfSentence = true
   return words
-    .map((word, index) => titleCaseWord(word, index, index === 0, index === words.length - 1))
+    .map((word) => {
+      const { core, punctuation } = splitWord(word)
+      if (!core) return word
+      const formatted =
+        startOfSentence || preserveCasing(core) ? capitalizeCore(core) : core.toLowerCase()
+      const result = formatted + punctuation
+      startOfSentence = isSentenceEnd(word)
+      return result
+    })
     .join(' ')
 }
 
