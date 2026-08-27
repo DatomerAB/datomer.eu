@@ -1,8 +1,8 @@
-import { sendSupportEmail } from '../api/_email.js'
-import { getSubmissionsSince, pruneOldSubmissions } from '../api/_db.js'
+import { sendSupportEmail } from './_email.js'
+import { getSubmissionsSince, pruneOldSubmissions } from './_db.js'
 
-const SUMMARY_TO_EMAIL = 'dailysummary@datomer.eu'
-const RETENTION_DAYS = 30
+export const SUMMARY_TO_EMAIL = 'dailysummary@datomer.eu'
+export const RETENTION_DAYS = 30
 
 function formatLocalTime(iso) {
   try {
@@ -20,7 +20,7 @@ function escapeCsv(value) {
   return str
 }
 
-function buildCsv(rows) {
+export function buildCsv(rows) {
   const headers = ['category', 'time', 'from_email', 'name', 'country', 'subject', 'message', 'body', 'metadata']
   const lines = [headers.join(',')]
   for (const row of rows) {
@@ -41,7 +41,7 @@ function buildCsv(rows) {
   return lines.join('\n')
 }
 
-function buildHtmlSummary(rows) {
+export function buildHtmlSummary(rows) {
   if (rows.length === 0) {
     return `<p>No submissions in the last 24 hours.</p>`
   }
@@ -77,7 +77,7 @@ function buildHtmlSummary(rows) {
   return html
 }
 
-function buildTextSummary(rows) {
+export function buildTextSummary(rows) {
   if (rows.length === 0) {
     return 'No submissions in the last 24 hours.'
   }
@@ -105,7 +105,7 @@ function buildTextSummary(rows) {
   return text
 }
 
-export async function scheduled(event, env, ctx) {
+export async function runDailySummary(env, ctx) {
   const now = new Date()
   const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
   const since = yesterday.toISOString()
@@ -121,7 +121,7 @@ export async function scheduled(event, env, ctx) {
 
   const subject = `Datomer daily summary — ${rows.length} submission(s) — ${now.toISOString().slice(0, 10)}`
 
-  await sendSupportEmail({
+  const result = await sendSupportEmail({
     env,
     to: [SUMMARY_TO_EMAIL],
     subject,
@@ -135,9 +135,13 @@ export async function scheduled(event, env, ctx) {
     ],
   })
 
-  console.log('[daily-summary] summary email sent to', SUMMARY_TO_EMAIL)
+  console.log('[daily-summary] summary email result:', JSON.stringify(result))
 
-  ctx.waitUntil(pruneOldSubmissions(env, RETENTION_DAYS))
+  if (ctx?.waitUntil) {
+    ctx.waitUntil(pruneOldSubmissions(env, RETENTION_DAYS))
+  } else {
+    await pruneOldSubmissions(env, RETENTION_DAYS)
+  }
 
-  return new Response('OK', { status: 200 })
+  return { ok: true, count: rows.length, emailResult: result }
 }
