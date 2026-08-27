@@ -35,7 +35,7 @@ function verifyStripeSignature({ signature, rawBody, webhookSecret }) {
 }
 
 export async function onRequestPost(context) {
-  const { request, env, ctx } = context
+  const { request, env, waitUntil } = context
 
   const stripeSecret = env.STRIPE_SECRET_KEY
   const webhookSecret = env.STRIPE_WEBHOOK_SECRET
@@ -137,7 +137,7 @@ export async function onRequestPost(context) {
   const supportText = `[source: stripe-purchase]\n\nNew purchase\n\nPlan: ${plan}\nEmail: ${email}\nLicense key: ${licenseKey}\nSession: ${stripeSessionId}`
 
   // Non-blocking: store submission for daily summary.
-  ctx?.waitUntil?.(
+  waitUntil?.(
     insertSubmission(env, {
       source: 'stripe-purchase',
       createdAt: licenseRecord.issuedAt,

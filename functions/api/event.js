@@ -1,7 +1,7 @@
 import { insertEvent } from './_db.js'
 
 export async function onRequestPost(context) {
-  const { request, env, ctx } = context
+  const { request, env, waitUntil } = context
 
   let body
   try {

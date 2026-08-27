@@ -5,7 +5,7 @@ import { buildWaitlistSupportEmail, buildWaitlistConfirmationEmail } from './_em
 import { getTrackingMeta } from './_tracking.js'
 
 export async function onRequestPost(context) {
-  const { request, env, ctx } = context
+  const { request, env, waitUntil } = context
 
   let body
   try {
@@ -95,7 +95,7 @@ export async function onRequestPost(context) {
   ].join('\n')
 
   // Non-blocking: store submission for daily summary.
-  ctx?.waitUntil?.(
+  waitUntil?.(
     insertSubmission(env, {
       source: sourceLabel.replace(/-form$/, ''),
       createdAt,
