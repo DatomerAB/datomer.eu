@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .wrangler/
-scripts/
+scripts/*
+!scripts/trigger-daily-summary.js
+!scripts/generate-datomer-brand-images.py
