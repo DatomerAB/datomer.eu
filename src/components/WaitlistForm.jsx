@@ -147,7 +147,7 @@ export function WaitlistForm({ action = 'waitlist-form', source = 'website' }) {
       <button type="submit" className="button button-secondary" disabled={busy}>
         {busy ? t('waitlist.sending') : t('cta.joinWaitlist')}
       </button>
-      {error && <span className="waitlist-error">{error}</span>}
+      {error && <span className="form-error">{error}</span>}
     </form>
   )
 }

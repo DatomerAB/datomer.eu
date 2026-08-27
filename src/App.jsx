@@ -167,7 +167,7 @@ function TopBar({ onDownload }) {
         <div className="header-right" aria-label="Datomer brand group">
           <LanguageSwitcher />
           <button type="button" className="button button-primary" onClick={() => onDownload('download-topbar')}>
-            {t('nav.download')}
+            {t('nav.downloadFreeVersion')}
           </button>
         </div>
       </nav>
@@ -203,6 +203,14 @@ function Footer() {
           <div className="footer-company" aria-label="Datomer company details">
             <DatomerLogo />
           </div>
+        </div>
+
+        <div className="footer-newsletter" aria-label="Newsletter signup">
+          <div className="footer-newsletter-copy">
+            <strong>{t('newsletter.title')}</strong>
+            <span>{t('newsletter.description')}</span>
+          </div>
+          <NewsletterForm action="newsletter-footer" source="footer" />
         </div>
 
         <div className="footer-bottom" aria-label="Datomer address details">
@@ -367,7 +375,7 @@ function HomePage({ onDownload }) {
 
             <div className="cta-row">
               <button type="button" className="button button-primary" onClick={() => onDownload('download-hero')}>
-                {t('hero.downloadMac')}
+                {t('hero.downloadFreeTier')}
               </button>
               <a href="#product" className="button button-secondary">
                 {t('hero.seeHowItWorks')}
@@ -614,8 +622,8 @@ function HomePage({ onDownload }) {
               <div className="cta-download-card">
                 <p className="eyebrow">{formatHeading(t('cta.eyebrow'))}</p>
                 <h2>{formatHeading(t('cta.headline'))}</h2>
-                <button type="button" className="button button-primary cta-download" onClick={onDownload}>
-                  {t('cta.downloadMac')}
+                <button type="button" className="button button-primary cta-download" onClick={() => onDownload('download-cta-band')}>
+                  {t('cta.downloadMacBeta')}
                 </button>
               </div>
 
@@ -697,7 +705,7 @@ function ContactPage() {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, turnstileToken: token }),
+        body: JSON.stringify({ ...form, turnstileToken: token, action: 'contact-page' }),
       })
       const data = await response.json().catch(() => ({}))
 
@@ -722,7 +730,7 @@ function ContactPage() {
         <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
       </p>
 
-      <form className="contact-form" onSubmit={handleSubmit}>
+      <form className="contact-form" onSubmit={handleSubmit} aria-label={t('contact.title')}>
         <label>
           <span>{t('contact.name')}</span>
           <input name="name" value={form.name} onChange={handleChange} required autoComplete="name" />

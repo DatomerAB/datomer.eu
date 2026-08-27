@@ -58,7 +58,16 @@ const EMAIL_I18N = {
     waitlistConfirmationBeta: 'Beta access is limited and rolled out in batches. We will notify you as soon as a spot opens up for you.',
     waitlistConfirmationUpdates: 'Expect transparent, low-volume updates. No spam, no tracking pixels, no third-party data sharing.',
     waitlistConfirmationQuestions: 'Questions? Reply to this email or contact us at',
-    downloadConfirmationBody: (name) => `Hi ${name}, thank you for downloading the <strong style="color: ${BRAND.text};">Pär beta</strong>.`,
+    downloadContext: (action) => {
+      const map = {
+        'download-topbar': 'the free version of Pär',
+        'download-hero': 'Pär for Mac',
+        'download-pricing-free': 'the Pär free tier',
+        'download-cta-band': 'the Pär Mac beta',
+      }
+      return map[action] || 'the Pär beta'
+    },
+    downloadConfirmationBody: (name, action) => `Hi ${name}, thank you for downloading <strong style="color: ${BRAND.text};">${EMAIL_I18N.en.downloadContext(action)}</strong>.`,
     downloadConfirmationBody2: 'Your download should start automatically. We will email you when updates, new features, and the public launch are ready.',
     dailySummaryNoSubmissions: 'No submissions in the last 24 hours',
     dailySummaryNoSubmissionsBody: 'There were no new submissions between 06:00 UTC yesterday and 06:00 UTC today. The next summary will arrive tomorrow.',
@@ -109,7 +118,16 @@ const EMAIL_I18N = {
     waitlistConfirmationBeta: 'Betaåtkomst är begränsad och rullas ut i omgångar. Vi meddelar dig så snart en plats öppnas för dig.',
     waitlistConfirmationUpdates: 'Räkna med transparenta, fåtaliga uppdateringar. Ingen skräppost, inga spårningspixlar, ingen delning med tredje part.',
     waitlistConfirmationQuestions: 'Frågor? Svara på detta e-postmeddelande eller kontakta oss på',
-    downloadConfirmationBody: (name) => `Hej ${name}, tack för att du laddar ned <strong style="color: ${BRAND.text};">Pär-beta</strong>.`,
+    downloadContext: (action) => {
+      const map = {
+        'download-topbar': 'den kostnadsfria versionen av Pär',
+        'download-hero': 'Pär för Mac',
+        'download-pricing-free': 'Pär gratisnivå',
+        'download-cta-band': 'Pär Mac-beta',
+      }
+      return map[action] || 'Pär-beta'
+    },
+    downloadConfirmationBody: (name, action) => `Hej ${name}, tack för att du laddar ned <strong style="color: ${BRAND.text};">${EMAIL_I18N.sv.downloadContext(action)}</strong>.`,
     downloadConfirmationBody2: 'Din nedladdning bör starta automatiskt. Vi mejlar dig när uppdateringar, nya funktioner och den offentliga lanseringen är redo.',
     dailySummaryNoSubmissions: 'Inga inskick det senaste dygnet',
     dailySummaryNoSubmissionsBody: 'Det kom inga nya inskick mellan 06:00 UTC igår och 06:00 UTC idag. Nästa sammanfattning kommer i morgon.',
@@ -160,7 +178,16 @@ const EMAIL_I18N = {
     waitlistConfirmationBeta: 'Der Beta-Zugang ist begrenzt und wird schrittweise freigegeben. Wir benachrichtigen Sie, sobald ein Platz für Sie frei ist.',
     waitlistConfirmationUpdates: 'Erwarten Sie transparente, seltene Updates. Kein Spam, keine Tracking-Pixel, keine Weitergabe an Dritte.',
     waitlistConfirmationQuestions: 'Fragen? Antworten Sie auf diese E-Mail oder kontaktieren Sie uns unter',
-    downloadConfirmationBody: (name) => `Hallo ${name}, vielen Dank, dass Sie die <strong style="color: ${BRAND.text};">Pär-Beta</strong> herunterladen.`,
+    downloadContext: (action) => {
+      const map = {
+        'download-topbar': 'die kostenlose Version von Pär',
+        'download-hero': 'Pär für Mac',
+        'download-pricing-free': 'die Pär Free-Tier',
+        'download-cta-band': 'die Pär Mac-Beta',
+      }
+      return map[action] || 'die Pär-Beta'
+    },
+    downloadConfirmationBody: (name, action) => `Hallo ${name}, vielen Dank, dass Sie <strong style="color: ${BRAND.text};">${EMAIL_I18N.de.downloadContext(action)}</strong> herunterladen.`,
     downloadConfirmationBody2: 'Ihr Download sollte automatisch starten. Wir schreiben Ihnen, wenn Updates, neue Funktionen und der öffentliche Start bereit sind.',
     dailySummaryNoSubmissions: 'Keine Einsendungen in den letzten 24 Stunden',
     dailySummaryNoSubmissionsBody: 'Es gab keine neuen Einsendungen zwischen 06:00 UTC gestern und 06:00 UTC heute. Die nächste Zusammenfassung kommt morgen.',
@@ -383,12 +410,31 @@ export function buildContactConfirmationEmail({ name, message, locale = 'en' }) 
 
 // --- Waitlist / newsletter / download ---
 
-function waitlistSupportSubject({ type, interests, name, email }) {
+function downloadSupportSubject({ action, firstName }) {
+  if (action === 'download-topbar') return `${firstName} downloaded the free version of Pär`
+  if (action === 'download-hero') return `${firstName} downloaded Pär for Mac`
+  if (action === 'download-pricing-free') return `${firstName} downloaded the Pär free tier`
+  if (action === 'download-cta-band') return `${firstName} downloaded the Pär Mac beta`
+  return `${firstName} downloaded the Pär beta`
+}
+
+function downloadConfirmationSubject({ action }) {
+  if (action === 'download-topbar') return 'Your Pär free version download'
+  if (action === 'download-hero') return 'Your Pär for Mac download'
+  if (action === 'download-pricing-free') return 'Your Pär free tier download'
+  if (action === 'download-cta-band') return 'Your Pär Mac beta download'
+  return 'Your Pär beta download'
+}
+
+function waitlistSupportSubject({ type, interests, name, email, action }) {
   const firstName = getFirstName(name)
   const list = formatInterests(interests)
   const wantsBeta = list.includes('Early beta access')
   const wantsUpdates = list.includes('Product updates')
 
+  if (type === 'download') {
+    return downloadSupportSubject({ action, firstName })
+  }
   if (type === 'waitlist') {
     return wantsBeta
       ? `${firstName} joined the Pär beta waitlist`
@@ -400,17 +446,17 @@ function waitlistSupportSubject({ type, interests, name, email }) {
     if (wantsUpdates) return `${firstName} subscribed to Pär product updates`
     return `${firstName} subscribed to Pär updates`
   }
-  if (type === 'download') {
-    return `${firstName} downloaded the Pär beta`
-  }
   return `New ${BRAND.product} signup from ${firstName || email}`
 }
 
-function waitlistConfirmationSubject({ type, interests }) {
+function waitlistConfirmationSubject({ type, interests, action }) {
   const list = formatInterests(interests)
   const wantsBeta = list.includes('Early beta access')
   const wantsUpdates = list.includes('Product updates')
 
+  if (type === 'download') {
+    return downloadConfirmationSubject({ action })
+  }
   if (type === 'waitlist') {
     return wantsBeta ? 'You are on the Pär beta waitlist' : 'You are on the Pär waitlist'
   }
@@ -420,13 +466,10 @@ function waitlistConfirmationSubject({ type, interests }) {
     if (wantsUpdates) return 'Product updates confirmed'
     return 'Welcome to Pär updates'
   }
-  if (type === 'download') {
-    return 'Your Pär beta download'
-  }
   return 'Welcome — Pär'
 }
 
-function waitlistConfirmationBody({ type, interests, name, locale = 'en' }) {
+function waitlistConfirmationBody({ type, interests, name, locale = 'en', action }) {
   const firstName = getFirstName(name)
   const strings = i18n(locale)
   const list = formatInterests(interests)
@@ -437,8 +480,8 @@ function waitlistConfirmationBody({ type, interests, name, locale = 'en' }) {
 
   if (type === 'download') {
     return {
-      html: `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody(escapeHtml(firstName))}</p><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody2}</p>`,
-      text: `${strings.salutation(firstName)}, ${strings.downloadConfirmationBody(firstName).replace(/<[^>]+>/g, '')} ${strings.downloadConfirmationBody2}`,
+      html: `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody(escapeHtml(firstName), action)}</p><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody2}</p>`,
+      text: `${strings.salutation(firstName)}, ${strings.downloadConfirmationBody(firstName, action).replace(/<[^>]+>/g, '')} ${strings.downloadConfirmationBody2}`,
     }
   }
 
@@ -468,9 +511,9 @@ function waitlistConfirmationBody({ type, interests, name, locale = 'en' }) {
 
 export function buildWaitlistSupportEmail({ type, name, email, phone, country, interests, source, locale = 'en', action, environment, city }) {
   const firstName = getFirstName(name)
-  const subject = waitlistSupportSubject({ type, interests, name, email })
+  const subject = waitlistSupportSubject({ type, interests, name, email, action })
   const strings = i18n(locale)
-  const title = strings.waitlistSupportTitle
+  const title = type === 'download' ? strings.downloadSupportTitle || strings.waitlistSupportTitle : strings.waitlistSupportTitle
   const interestList = formatInterests(interests)
 
   const fields = [
@@ -502,12 +545,12 @@ export function buildWaitlistSupportEmail({ type, name, email, phone, country, i
   return { subject, html, text: wrappedText, replyTo: email }
 }
 
-export function buildWaitlistConfirmationEmail({ type, name, email, interests, locale = 'en' }) {
+export function buildWaitlistConfirmationEmail({ type, name, email, interests, locale = 'en', action }) {
   const firstName = getFirstName(name)
   const strings = i18n(locale)
-  const subject = `${waitlistConfirmationSubject({ type, interests })} ${strings.waitlistConfirmationSubjectSuffix}`
+  const subject = `${waitlistConfirmationSubject({ type, interests, action })} ${strings.waitlistConfirmationSubjectSuffix}`
   const title = `${strings.salutation(firstName)}`
-  const { html: bodyHtml, text: bodyText } = waitlistConfirmationBody({ type, interests, name, locale })
+  const { html: bodyHtml, text: bodyText } = waitlistConfirmationBody({ type, interests, name, locale, action })
 
   const contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>${bodyHtml}`
   const contentText = `${title}\n\n${bodyText}`

@@ -123,4 +123,25 @@ describe('email templates', () => {
     expect(text).toContain('preview · download · download-hero (1)')
     expect(html).toContain('Average time on site')
   })
+
+  it('uses action-aware subjects and body copy for download CTAs', () => {
+    const topbar = buildWaitlistConfirmationEmail({ type: 'download', name: 'Anna', email: 'anna@example.com', action: 'download-topbar' })
+    expect(topbar.subject).toBe('Your Pär free version download — Pär')
+    expect(topbar.html).toContain('the free version of Pär')
+
+    const hero = buildWaitlistConfirmationEmail({ type: 'download', name: 'Anna', email: 'anna@example.com', action: 'download-hero' })
+    expect(hero.subject).toBe('Your Pär for Mac download — Pär')
+    expect(hero.html).toContain('Pär for Mac')
+
+    const pricing = buildWaitlistConfirmationEmail({ type: 'download', name: 'Anna', email: 'anna@example.com', action: 'download-pricing-free' })
+    expect(pricing.subject).toBe('Your Pär free tier download — Pär')
+    expect(pricing.html).toContain('the Pär free tier')
+
+    const cta = buildWaitlistConfirmationEmail({ type: 'download', name: 'Anna', email: 'anna@example.com', action: 'download-cta-band' })
+    expect(cta.subject).toBe('Your Pär Mac beta download — Pär')
+    expect(cta.html).toContain('the Pär Mac beta')
+
+    const support = buildWaitlistSupportEmail({ type: 'download', name: 'Anna Svensson', email: 'anna@example.com', action: 'download-pricing-free' })
+    expect(support.subject).toBe('Anna downloaded the Pär free tier')
+  })
 })

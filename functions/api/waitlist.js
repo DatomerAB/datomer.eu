@@ -78,6 +78,7 @@ export async function onRequestPost(context) {
     email: payload.email,
     interests,
     locale: payload.locale,
+    action: tracking.action,
   })
   const confirmationResult = await sendSupportEmail({ env, to: [payload.email], ...confirmationEmail })
   console.log('[waitlist] confirmation email result:', JSON.stringify(confirmationResult))

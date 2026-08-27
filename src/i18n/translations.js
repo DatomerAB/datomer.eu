@@ -9,7 +9,7 @@ export const translations = {
       home: 'Home',
       about: 'About',
       contact: 'Contact',
-      download: 'Download',
+      downloadFreeVersion: 'Download free version',
     },
     hero: {
       badge: 'Private by Design',
@@ -17,8 +17,8 @@ export const translations = {
       headline: 'Your AI. On Your Device.',
       lede:
         'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware, no cloud required. Bring your own GGUF models or Ollama models.',
-      downloadMac: 'Download for Mac',
       seeHowItWorks: 'See How It Works',
+      downloadFreeTier: 'Free tier download',
     },
     highlights: {
       localInference: { title: 'Local Inference', text: 'Runs on your device using GGUF or Ollama models.' },
@@ -239,7 +239,7 @@ export const translations = {
     cta: {
       eyebrow: 'Ready To Meet Pär?',
       headline: 'Download The Free Beta For macOS And Keep Your AI Entirely On Your Device.',
-      downloadMac: 'Download for Mac',
+      downloadMacBeta: 'Mac download',
       waitlistPlaceholder: 'Enter your email',
       joinWaitlist: 'Join Waitlist',
       waitlistHint: 'Get notified about beta spots, updates, and launch notes.',
@@ -380,7 +380,7 @@ export const translations = {
       home: 'Hem',
       about: 'Om oss',
       contact: 'Kontakt',
-      download: 'Ladda ner',
+      downloadFreeVersion: 'Ladda ner gratisversion',
     },
     hero: {
       badge: 'Privat Från Grunden',
@@ -388,8 +388,8 @@ export const translations = {
       headline: 'Din AI. På Din Enhet.',
       lede:
         'Pär är den personliga AI-kompisen som faktiskt kommer ihåg dig. Den lär sig dina mål, kopplar ihop sig med dina verktyg och körs helt på din egen hårdvara — inget moln behövs. Använd dina egna GGUF-modeller eller Ollama-modeller.',
-      downloadMac: 'Ladda ner för Mac',
       seeHowItWorks: 'Se hur det fungerar',
+      downloadFreeTier: 'Ladda ner gratisnivå',
     },
     highlights: {
       localInference: { title: 'Lokal Inferens', text: 'Körs på din enhet med GGUF- eller Ollama-modeller.' },
@@ -584,7 +584,7 @@ export const translations = {
     cta: {
       eyebrow: 'Redo Att Träffa Pär?',
       headline: 'Ladda Ner Den Kostnadsfria Betaversionen För macOS Och Behåll Din AI Helt På Din Enhet.',
-      downloadMac: 'Ladda ner för Mac',
+      downloadMacBeta: 'Ladda ner Mac-beta',
       waitlistPlaceholder: 'Ange din e-post',
       joinWaitlist: 'Gå med i väntelistan',
       waitlistHint: 'Få besked om betaplatser, uppdateringar och lanseringsnoteringar.',
@@ -751,7 +751,7 @@ export const translations = {
       home: 'Start',
       about: 'Über uns',
       contact: 'Kontakt',
-      download: 'Download',
+      downloadFreeVersion: 'Kostenlose Version herunterladen',
     },
     hero: {
       badge: 'Von Grund auf privat',
@@ -759,8 +759,8 @@ export const translations = {
       headline: 'Deine KI. Auf Deinem Gerät.',
       lede:
         'Pär ist der persönliche KI-Begleiter, der sich wirklich an dich erinnert. Er lernt deine Ziele, verbindet sich mit deinen Tools und läuft komplett auf deiner eigenen Hardware — keine Cloud nötig. Bring deine eigenen GGUF- oder Ollama-Modelle mit.',
-      downloadMac: 'Für Mac herunterladen',
       seeHowItWorks: 'So funktioniert es',
+      downloadFreeTier: 'Free-Tier herunterladen',
     },
     highlights: {
       localInference: { title: 'Lokale Inferenz', text: 'Läuft auf deinem Gerät mit GGUF- oder Ollama-Modellen.' },
@@ -955,7 +955,7 @@ export const translations = {
     cta: {
       eyebrow: 'Bereit, Pär kennenzulernen?',
       headline: 'Lade die kostenlose Beta für macOS herunter und behalte deine KI komplett auf deinem Gerät.',
-      downloadMac: 'Für Mac herunterladen',
+      downloadMacBeta: 'Mac-Download',
       waitlistPlaceholder: 'E-Mail eingeben',
       joinWaitlist: 'Zur Warteliste',
       waitlistHint: 'Benachrichtigungen über Beta-Plätze, Updates und Launch-Notes.',

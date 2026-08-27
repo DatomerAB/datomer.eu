@@ -32,9 +32,9 @@ describe('ContactPage form submission', () => {
   it('submits the contact form to /api/contact', async () => {
     render(<App />, { wrapper: Wrapper })
 
-    fireEvent.change(screen.getByLabelText(/Name/i), { target: { value: 'Test User' } })
-    fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'test@example.com' } })
-    fireEvent.change(screen.getByLabelText(/Message/i), { target: { value: 'Hello!' } })
+    fireEvent.change(screen.getByLabelText('Name', { exact: true }), { target: { value: 'Test User' } })
+    fireEvent.change(screen.getByLabelText('Email', { exact: true }), { target: { value: 'test@example.com' } })
+    fireEvent.change(screen.getByLabelText('Message', { exact: true }), { target: { value: 'Hello!' } })
 
     fireEvent.click(screen.getByRole('button', { name: /Send message/i }))
 
