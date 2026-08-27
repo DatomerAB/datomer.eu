@@ -9,7 +9,10 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "summary:worker": "node scripts/trigger-daily-summary.js worker",
+    "summary:pages": "node scripts/trigger-daily-summary.js pages",
+    "summary": "npm run summary:worker"
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.14.0",

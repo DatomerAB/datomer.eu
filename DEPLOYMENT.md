@@ -141,6 +141,40 @@ Required Worker secrets (set via `wrangler secret put` in the Worker directory):
 
 The Worker exposes an HTTP endpoint protected by `Authorization: Bearer <DAILY_SUMMARY_SECRET>` for manual testing.
 
+### Manual invocation options
+
+There are three ways to trigger the daily summary email on demand:
+
+1. **npm script (recommended for local/staging use)**
+
+   Trigger the Worker:
+   ```bash
+   DAILY_SUMMARY_SECRET=<secret> npm run summary
+   # or explicitly
+   DAILY_SUMMARY_SECRET=<secret> npm run summary:worker
+   ```
+
+   Trigger the Pages admin endpoint:
+   ```bash
+   DAILY_SUMMARY_SECRET=<secret> npm run summary:pages -- https://<preview-url>
+   ```
+
+2. **curl the Worker endpoint**
+
+   ```bash
+   curl -X POST -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
+     https://datomer-daily-summary-preview.jay-tchinnaswamy.workers.dev/
+   ```
+
+3. **curl the Pages admin endpoint**
+
+   ```bash
+   curl -X POST -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
+     https://<preview-url>/api/admin/daily-summary
+   ```
+
+Both endpoints return JSON with `ok: true` and the number of submissions processed. Set `DAILY_SUMMARY_WORKER_URL` to override the default Worker URL in the npm script.
+
 ## Pre-flight deployment checklist
 
 Before any push or merge, verify the following:

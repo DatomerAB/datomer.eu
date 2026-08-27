@@ -61,10 +61,23 @@ Ensure every form submission is stored, counted, and included in the daily CSV s
 
 #### Steps
 1. Submit at least one form so data exists in D1.
-2. Run the Worker trigger command:
+2. Trigger the summary using any of the supported methods:
+
+   **Option A — npm script (recommended):**
    ```bash
-   curl -H "Authorization: Bearer <PREVIEW_DAILY_SUMMARY_SECRET>" \
+   DAILY_SUMMARY_SECRET=<secret> npm run summary
+   ```
+
+   **Option B — curl the Worker directly:**
+   ```bash
+   curl -X POST -H "Authorization: Bearer <PREVIEW_DAILY_SUMMARY_SECRET>" \
      https://datomer-daily-summary-preview.jay-tchinnaswamy.workers.dev/
+   ```
+
+   **Option C — curl the Pages admin endpoint:**
+   ```bash
+   curl -X POST -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
+     https://<preview-url>/api/admin/daily-summary
    ```
 3. Note the JSON response.
 
@@ -91,9 +104,13 @@ Ensure every form submission is stored, counted, and included in the daily CSV s
 
 #### Steps
 1. Find the staging preview URL in Cloudflare Pages.
-2. Run:
+2. Trigger the Pages admin endpoint. Examples:
    ```bash
-   curl -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
+   # npm script
+   DAILY_SUMMARY_SECRET=<secret> npm run summary:pages -- https://<preview-url>
+
+   # curl directly
+   curl -X POST -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
      https://<preview-url>/api/admin/daily-summary
    ```
 
