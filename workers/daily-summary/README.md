@@ -16,21 +16,21 @@ Create these in **GitHub → Settings → Secrets and variables → Actions → 
 
 | Secret | Purpose |
 |---|---|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API token with `Cloudflare Workers:Edit` and `Account:Read` permissions |
+| `CLOUDFLARE_EMAIL` | The email address of your Cloudflare account |
+| `CLOUDFLARE_API_KEY` | Your Cloudflare Global API Key |
 | `PREVIEW_RESEND_API_KEY` | Resend API key for the preview/staging Worker |
 | `PRODUCTION_RESEND_API_KEY` | Resend API key for the production Worker |
 | `PREVIEW_DAILY_SUMMARY_TO_EMAIL` | Optional override for the preview summary recipient |
 | `PRODUCTION_DAILY_SUMMARY_TO_EMAIL` | Optional override for the production summary recipient |
 
-### Creating a Cloudflare API token
+### Creating Cloudflare credentials
 
 1. Go to [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens).
-2. Click **Create Token** → **Custom token**.
-3. Permissions:
-   - **Account** → **Cloudflare Workers:Edit**
-   - **Account** → **Account:Read**
-4. Account Resources: include your account.
-5. Create the token and add it as the `CLOUDFLARE_API_TOKEN` GitHub secret.
+2. Scroll down to **API Keys**.
+3. Next to **Global API Key**, click **View** and complete the security challenge.
+4. Copy the Global API Key.
+5. Add it as the `CLOUDFLARE_API_KEY` GitHub secret.
+6. Add your Cloudflare account email as the `CLOUDFLARE_EMAIL` GitHub secret.
 
 ## Manual deployment
 
