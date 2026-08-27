@@ -13,9 +13,11 @@ Set the Resend API key as a secret for each environment:
 ```bash
 # Preview / staging
 npx wrangler secret put RESEND_API_KEY --env preview
-
-# Production
 npx wrangler secret put RESEND_API_KEY --env production
+
+# Optional: override the default summary recipient (dailysummary@datomer.eu)
+# npx wrangler secret put DAILY_SUMMARY_TO_EMAIL --env preview
+# npx wrangler secret put DAILY_SUMMARY_TO_EMAIL --env production
 ```
 
 Then deploy:

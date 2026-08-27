@@ -19,7 +19,7 @@ describe('daily-summary worker', () => {
 
     const result = await worker.scheduled(event, env, ctx)
 
-    expect(runDailySummary).toHaveBeenCalledWith(env, ctx)
+    expect(runDailySummary).toHaveBeenCalledWith(env, ctx, { scheduledTime: event.scheduledTime })
     expect(result).toEqual({ ok: true, count: 3 })
   })
 })

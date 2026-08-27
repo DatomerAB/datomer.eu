@@ -97,6 +97,25 @@ export async function getSubmissionsSince(env, isoDate) {
   }
 }
 
+export async function getSubmissionsInRange(env, startIso, endIso) {
+  const db = getDb(env)
+  if (!db) {
+    console.warn('[db] no D1 binding found; returning empty result')
+    return []
+  }
+
+  try {
+    const { results } = await db
+      .prepare('SELECT * FROM submissions WHERE created_at >= ? AND created_at < ? ORDER BY created_at DESC')
+      .bind(startIso, endIso)
+      .all()
+    return results || []
+  } catch (err) {
+    console.error('[db] getSubmissionsInRange error:', err.message || err)
+    return []
+  }
+}
+
 export async function pruneOldSubmissions(env, days = 30) {
   const db = getDb(env)
   if (!db) {

@@ -1,8 +1,14 @@
 import { sendSupportEmail } from './_email.js'
-import { getSubmissionsSince, pruneOldSubmissions } from './_db.js'
+import { getSubmissionsInRange, pruneOldSubmissions } from './_db.js'
 
-export const SUMMARY_TO_EMAIL = 'dailysummary@datomer.eu'
+export const DEFAULT_SUMMARY_TO_EMAIL = 'dailysummary@datomer.eu'
 export const RETENTION_DAYS = 30
+// Resend attachment limit is ~10 MB total; stay safely under it.
+export const MAX_ATTACHMENT_BYTES = 9 * 1024 * 1024
+
+export function getSummaryToEmail(env) {
+  return env.DAILY_SUMMARY_TO_EMAIL || DEFAULT_SUMMARY_TO_EMAIL
+}
 
 function formatLocalTime(iso) {
   try {
@@ -18,6 +24,26 @@ function escapeCsv(value) {
     return `"${str.replace(/"/g, '""')}"`
   }
   return str
+}
+
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str)
+  let binary = ''
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i])
+  }
+  return btoa(binary)
+}
+
+export function getSummaryWindow(referenceTime = new Date()) {
+  const t = new Date(referenceTime)
+  // Anchor the window at 06:00 UTC to avoid overlaps/gaps if cron timing drifts.
+  let end = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 6, 0, 0, 0))
+  if (t < end) {
+    end.setUTCDate(end.getUTCDate() - 1)
+  }
+  const start = new Date(end.getTime() - 24 * 60 * 60 * 1000)
+  return { start: start.toISOString(), end: end.toISOString() }
 }
 
 export function buildCsv(rows) {
@@ -105,43 +131,64 @@ export function buildTextSummary(rows) {
   return text
 }
 
-export async function runDailySummary(env, ctx) {
-  const now = new Date()
-  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-  const since = yesterday.toISOString()
+export async function runDailySummary(env, ctx, options = {}) {
+  const referenceTime = options.scheduledTime || options.referenceTime || new Date()
+  const { start, end } = getSummaryWindow(referenceTime)
 
-  console.log('[daily-summary] running for window', since, 'to', now.toISOString())
+  console.log('[daily-summary] running for window', start, 'to', end)
 
-  const rows = await getSubmissionsSince(env, since)
+  const rows = await getSubmissionsInRange(env, start, end)
   console.log('[daily-summary] found', rows.length, 'submission(s)')
 
   const csv = buildCsv(rows)
-  const csvBase64 = btoa(unescape(encodeURIComponent(csv)))
-  const filename = `datomer-submissions-${now.toISOString().slice(0, 10)}.csv`
+  const csvBytes = new TextEncoder().encode(csv).length
+  const csvBase64 = utf8ToBase64(csv)
+  const filename = `datomer-submissions-${end.slice(0, 10)}.csv`
 
-  const subject = `Datomer daily summary — ${rows.length} submission(s) — ${now.toISOString().slice(0, 10)}`
+  const subject = `Datomer daily summary — ${rows.length} submission(s) — ${end.slice(0, 10)}`
+
+  let html = buildHtmlSummary(rows)
+  let text = buildTextSummary(rows)
+  const attachments = []
+
+  if (csvBytes <= MAX_ATTACHMENT_BYTES) {
+    attachments.push({ filename, content: csvBase64 })
+  } else {
+    const note = `CSV attachment omitted because it exceeds size limits (${(csvBytes / 1024 / 1024).toFixed(1)} MB). Data is still shown in the body above.`
+    html += `<p><strong>Note:</strong> ${note}</p>`
+    text += `\n\nNote: ${note}`
+    console.warn('[daily-summary]', note)
+  }
 
   const result = await sendSupportEmail({
     env,
-    to: [SUMMARY_TO_EMAIL],
+    to: [getSummaryToEmail(env)],
     subject,
-    html: buildHtmlSummary(rows),
-    text: buildTextSummary(rows),
-    attachments: [
-      {
-        filename,
-        content: csvBase64,
-      },
-    ],
+    html,
+    text,
+    attachments,
   })
 
   console.log('[daily-summary] summary email result:', JSON.stringify(result))
 
-  if (ctx?.waitUntil) {
-    ctx.waitUntil(pruneOldSubmissions(env, RETENTION_DAYS))
+  // Only prune after the summary email is successfully accepted by Resend.
+  // If sending fails, the next run will still cover the same window and we
+  // avoid deleting data before it has been summarised.
+  if (result.sent) {
+    const prune = async () => {
+      const pruneResult = await pruneOldSubmissions(env, RETENTION_DAYS)
+      console.log('[daily-summary] prune result:', JSON.stringify(pruneResult))
+      return pruneResult
+    }
+
+    if (ctx?.waitUntil) {
+      ctx.waitUntil(prune())
+    } else {
+      await prune()
+    }
   } else {
-    await pruneOldSubmissions(env, RETENTION_DAYS)
+    console.error('[daily-summary] email not sent; skipping prune to avoid data loss')
   }
 
-  return { ok: true, count: rows.length, emailResult: result }
+  return { ok: result.sent, count: rows.length, emailResult: result }
 }

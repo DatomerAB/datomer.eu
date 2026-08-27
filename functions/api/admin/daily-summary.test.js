@@ -6,12 +6,12 @@ vi.mock('../_email.js', () => ({
 }))
 
 vi.mock('../_db.js', () => ({
-  getSubmissionsSince: vi.fn(() => Promise.resolve([])),
+  getSubmissionsInRange: vi.fn(() => Promise.resolve([])),
   pruneOldSubmissions: vi.fn(() => Promise.resolve({ meta: { changes: 0 } })),
 }))
 
 import { sendSupportEmail } from '../_email.js'
-import { getSubmissionsSince, pruneOldSubmissions } from '../_db.js'
+import { getSubmissionsInRange, pruneOldSubmissions } from '../_db.js'
 
 describe('daily-summary admin endpoint', () => {
   beforeEach(() => {
@@ -58,7 +58,7 @@ describe('daily-summary admin endpoint', () => {
         metadata: null,
       },
     ]
-    getSubmissionsSince.mockResolvedValueOnce(rows)
+    getSubmissionsInRange.mockResolvedValueOnce(rows)
 
     const response = await onRequestGet({
       request: makeRequest('secret'),
@@ -79,8 +79,24 @@ describe('daily-summary admin endpoint', () => {
     expect(pruneOldSubmissions).toHaveBeenCalledWith(expect.anything(), 30)
   })
 
+  it('respects DAILY_SUMMARY_TO_EMAIL override', async () => {
+    getSubmissionsInRange.mockResolvedValueOnce([])
+
+    const response = await onRequestGet({
+      request: makeRequest('secret'),
+      env: {
+        DAILY_SUMMARY_SECRET: 'secret',
+        RESEND_API_KEY: 're_123',
+        DAILY_SUMMARY_TO_EMAIL: 'other@example.com',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    expect(sendSupportEmail.mock.calls[0][0].to).toEqual(['other@example.com'])
+  })
+
   it('works with POST requests too', async () => {
-    getSubmissionsSince.mockResolvedValueOnce([])
+    getSubmissionsInRange.mockResolvedValueOnce([])
 
     const response = await onRequestGet({
       request: makeRequest('secret', 'POST'),

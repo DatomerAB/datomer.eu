@@ -1,21 +1,35 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { runDailySummary, buildCsv, buildHtmlSummary, buildTextSummary } from './_dailySummary.js'
+import { runDailySummary, buildCsv, buildHtmlSummary, buildTextSummary, getSummaryWindow, MAX_ATTACHMENT_BYTES } from './_dailySummary.js'
 
 vi.mock('./_email.js', () => ({
   sendSupportEmail: vi.fn(() => Promise.resolve({ sent: true })),
 }))
 
 vi.mock('./_db.js', () => ({
-  getSubmissionsSince: vi.fn(() => Promise.resolve([])),
+  getSubmissionsInRange: vi.fn(() => Promise.resolve([])),
   pruneOldSubmissions: vi.fn(() => Promise.resolve({ meta: { changes: 0 } })),
 }))
 
 import { sendSupportEmail } from './_email.js'
-import { getSubmissionsSince, pruneOldSubmissions } from './_db.js'
+import { getSubmissionsInRange, pruneOldSubmissions } from './_db.js'
 
 describe('daily summary logic', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+  })
+
+  it('anchors the summary window at 06:00 UTC', () => {
+    // At 06:30 UTC the window should end at 06:00 UTC today.
+    const t1 = new Date('2026-08-27T06:30:00.000Z')
+    const w1 = getSummaryWindow(t1)
+    expect(w1.end).toBe('2026-08-27T06:00:00.000Z')
+    expect(w1.start).toBe('2026-08-26T06:00:00.000Z')
+
+    // At 05:30 UTC the window should end at 06:00 UTC yesterday.
+    const t2 = new Date('2026-08-27T05:30:00.000Z')
+    const w2 = getSummaryWindow(t2)
+    expect(w2.end).toBe('2026-08-26T06:00:00.000Z')
+    expect(w2.start).toBe('2026-08-25T06:00:00.000Z')
   })
 
   it('builds a CSV with the expected columns', () => {
@@ -70,7 +84,32 @@ describe('daily summary logic', () => {
     expect(text).toContain('download (1)')
   })
 
-  it('sends the summary email and prunes old submissions', async () => {
+  it('encodes CSV attachment as UTF-8 base64', async () => {
+    const rows = [
+      {
+        id: 1,
+        source: 'contact',
+        created_at: '2026-08-27T06:00:00.000Z',
+        email: 'björn@example.com',
+        name: 'Björn Åström',
+        country: 'SE',
+        subject: 'Hej',
+        message: 'Tack!',
+        body: null,
+        metadata: null,
+      },
+    ]
+    getSubmissionsInRange.mockResolvedValueOnce(rows)
+
+    await runDailySummary({ RESEND_API_KEY: 're_123' }, { waitUntil: (p) => p })
+
+    const call = sendSupportEmail.mock.calls[0][0]
+    const csv = new TextDecoder().decode(Uint8Array.from(atob(call.attachments[0].content), (c) => c.charCodeAt(0)))
+    expect(csv).toContain('Björn Åström')
+    expect(csv).toContain('björn@example.com')
+  })
+
+  it('sends the summary email and prunes old submissions when email succeeds', async () => {
     const rows = [
       {
         id: 1,
@@ -85,7 +124,7 @@ describe('daily summary logic', () => {
         metadata: JSON.stringify({ plan: 'plus', licenseKey: 'KEY' }),
       },
     ]
-    getSubmissionsSince.mockResolvedValueOnce(rows)
+    getSubmissionsInRange.mockResolvedValueOnce(rows)
 
     const result = await runDailySummary({ RESEND_API_KEY: 're_123' }, { waitUntil: (p) => p })
 
@@ -97,5 +136,51 @@ describe('daily summary logic', () => {
     expect(call.to).toEqual(['dailysummary@datomer.eu'])
     expect(call.attachments[0].filename).toMatch(/datomer-submissions-\d{4}-\d{2}-\d{2}\.csv/)
     expect(pruneOldSubmissions).toHaveBeenCalledWith(expect.anything(), 30)
+  })
+
+  it('uses DAILY_SUMMARY_TO_EMAIL when configured', async () => {
+    getSubmissionsInRange.mockResolvedValueOnce([])
+
+    await runDailySummary(
+      { RESEND_API_KEY: 're_123', DAILY_SUMMARY_TO_EMAIL: 'custom@example.com' },
+      { waitUntil: (p) => p }
+    )
+
+    const call = sendSupportEmail.mock.calls[0][0]
+    expect(call.to).toEqual(['custom@example.com'])
+  })
+
+  it('does not prune when email sending fails', async () => {
+    sendSupportEmail.mockResolvedValueOnce({ sent: false, status: 500, body: '{}' })
+    getSubmissionsInRange.mockResolvedValueOnce([
+      { id: 1, source: 'contact', created_at: new Date().toISOString(), email: 'a@example.com' },
+    ])
+
+    const result = await runDailySummary({ RESEND_API_KEY: 're_123' }, { waitUntil: (p) => p })
+
+    expect(result.ok).toBe(false)
+    expect(pruneOldSubmissions).not.toHaveBeenCalled()
+  })
+
+  it('omits the CSV attachment when it exceeds the size limit', async () => {
+    const bigRow = {
+      id: 1,
+      source: 'contact',
+      created_at: '2026-08-27T06:00:00.000Z',
+      email: 'a@example.com',
+      name: 'A',
+      country: 'SE',
+      subject: 'S',
+      message: 'x'.repeat(MAX_ATTACHMENT_BYTES + 1000),
+      body: null,
+      metadata: null,
+    }
+    getSubmissionsInRange.mockResolvedValueOnce([bigRow])
+
+    await runDailySummary({ RESEND_API_KEY: 're_123' }, { waitUntil: (p) => p })
+
+    const call = sendSupportEmail.mock.calls[0][0]
+    expect(call.attachments).toHaveLength(0)
+    expect(call.html).toContain('CSV attachment omitted')
   })
 })

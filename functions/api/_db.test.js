@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { insertSubmission, getSubmissionsSince, pruneOldSubmissions, createSubmissionsTable } from './_db.js'
+import { insertSubmission, getSubmissionsSince, getSubmissionsInRange, pruneOldSubmissions, createSubmissionsTable } from './_db.js'
 
 function makeEnv(results = []) {
   const prepared = {
@@ -63,6 +63,17 @@ describe('D1 helpers', () => {
     const result = await getSubmissionsSince(env, '2026-08-01T00:00:00.000Z')
     expect(result).toEqual(rows)
     expect(env.prepared.bind).toHaveBeenCalledWith('2026-08-01T00:00:00.000Z')
+  })
+
+  it('returns submissions within a date range', async () => {
+    const rows = [
+      { id: 1, source: 'contact', email: 'a@example.com' },
+      { id: 2, source: 'download', email: 'b@example.com' },
+    ]
+    const env = makeEnv(rows)
+    const result = await getSubmissionsInRange(env, '2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
+    expect(result).toEqual(rows)
+    expect(env.prepared.bind).toHaveBeenCalledWith('2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
   })
 
   it('prunes submissions older than N days', async () => {
