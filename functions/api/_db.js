@@ -218,6 +218,25 @@ export async function getEventsSince(env, isoDate) {
   }
 }
 
+export async function getEventsInRange(env, startIso, endIso) {
+  const db = getDb(env)
+  if (!db) {
+    console.warn('[db] no D1 binding found; returning empty events')
+    return []
+  }
+
+  try {
+    const { results } = await db
+      .prepare('SELECT * FROM events WHERE created_at >= ? AND created_at < ? ORDER BY created_at DESC')
+      .bind(startIso, endIso)
+      .all()
+    return results || []
+  } catch (err) {
+    console.error('[db] getEventsInRange error:', err.message || err)
+    return []
+  }
+}
+
 export async function getSessionTimeOnSite(env, sessionId) {
   const db = getDb(env)
   if (!db || !sessionId) return 0

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { runDailySummary, buildCsv, getSummaryWindow, MAX_ATTACHMENT_BYTES } from './_dailySummary.js'
+import { runDailySummary, buildCsv, buildEventsCsv, getSummaryWindow, MAX_ATTACHMENT_BYTES } from './_dailySummary.js'
 import { buildDailySummaryEmail } from './_emailTemplates.js'
 
 vi.mock('./_email.js', () => ({
@@ -8,11 +8,12 @@ vi.mock('./_email.js', () => ({
 
 vi.mock('./_db.js', () => ({
   getSubmissionsInRange: vi.fn(() => Promise.resolve([])),
+  getEventsInRange: vi.fn(() => Promise.resolve([])),
   pruneOldSubmissions: vi.fn(() => Promise.resolve({ meta: { changes: 0 } })),
 }))
 
 import { sendSupportEmail } from './_email.js'
-import { getSubmissionsInRange, pruneOldSubmissions } from './_db.js'
+import { getSubmissionsInRange, getEventsInRange, pruneOldSubmissions } from './_db.js'
 
 describe('daily summary logic', () => {
   beforeEach(() => {
@@ -177,11 +178,12 @@ describe('daily summary logic', () => {
       metadata: null,
     }
     getSubmissionsInRange.mockResolvedValueOnce([bigRow])
+    getEventsInRange.mockResolvedValueOnce([])
 
     await runDailySummary({ RESEND_API_KEY: 're_123' }, { waitUntil: (p) => p })
 
     const call = sendSupportEmail.mock.calls[0][0]
     expect(call.attachments).toHaveLength(0)
-    expect(call.html).toContain('CSV attachment omitted')
+    expect(call.html).toContain('CSV attachment(s) omitted')
   })
 })

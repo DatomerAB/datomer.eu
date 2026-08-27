@@ -1,5 +1,5 @@
 import { sendSupportEmail } from './_email.js'
-import { getSubmissionsInRange, pruneOldSubmissions } from './_db.js'
+import { getSubmissionsInRange, getEventsInRange, pruneOldSubmissions } from './_db.js'
 import { buildDailySummaryEmail } from './_emailTemplates.js'
 
 export const DEFAULT_SUMMARY_TO_EMAIL = 'dailysummary@datomer.eu'
@@ -85,6 +85,23 @@ export function buildCsv(rows) {
   return lines.join('\n')
 }
 
+export function buildEventsCsv(rows) {
+  const headers = ['session_id', 'time', 'type', 'page_path', 'metadata']
+  const lines = [headers.join(',')]
+  for (const row of rows) {
+    const metadata = parseMetadata(row)
+    const values = [
+      row.session_id || '',
+      formatLocalTime(row.created_at),
+      row.type || '',
+      row.page_path || '',
+      JSON.stringify(metadata),
+    ]
+    lines.push(values.map(escapeCsv).join(','))
+  }
+  return lines.join('\n')
+}
+
 export async function runDailySummary(env, ctx, options = {}) {
   const referenceTime = options.scheduledTime || options.referenceTime || new Date()
   const { start, end } = getSummaryWindow(referenceTime)
@@ -92,22 +109,32 @@ export async function runDailySummary(env, ctx, options = {}) {
   console.log('[daily-summary] running for window', start, 'to', end)
 
   const rows = await getSubmissionsInRange(env, start, end)
-  console.log('[daily-summary] found', rows.length, 'submission(s)')
+  const events = await getEventsInRange(env, start, end)
+  console.log('[daily-summary] found', rows.length, 'submission(s) and', events.length, 'event(s)')
 
   const csv = buildCsv(rows)
   const csvBytes = new TextEncoder().encode(csv).length
   const csvBase64 = utf8ToBase64(csv)
   const filename = `datomer-submissions-${end.slice(0, 10)}.csv`
 
-  const { subject, html: summaryHtml, text: summaryText } = buildDailySummaryEmail({ rows, dateLabel: end.slice(0, 10) })
+  const eventsCsv = buildEventsCsv(events)
+  const eventsCsvBytes = new TextEncoder().encode(eventsCsv).length
+  const eventsCsvBase64 = utf8ToBase64(eventsCsv)
+  const eventsFilename = `datomer-events-${end.slice(0, 10)}.csv`
+
+  const { subject, html: summaryHtml, text: summaryText } = buildDailySummaryEmail({ rows, events, dateLabel: end.slice(0, 10) })
   let html = summaryHtml
   let text = summaryText
   const attachments = []
 
-  if (csvBytes <= MAX_ATTACHMENT_BYTES) {
+  const totalAttachmentBytes = csvBytes + eventsCsvBytes
+  if (totalAttachmentBytes <= MAX_ATTACHMENT_BYTES) {
     attachments.push({ filename, content: csvBase64 })
+    if (events.length > 0) {
+      attachments.push({ filename: eventsFilename, content: eventsCsvBase64 })
+    }
   } else {
-    const note = `CSV attachment omitted because it exceeds size limits (${(csvBytes / 1024 / 1024).toFixed(1)} MB). Data is still shown in the body above.`
+    const note = `CSV attachment(s) omitted because total size exceeds limits (${(totalAttachmentBytes / 1024 / 1024).toFixed(1)} MB). Data is still shown in the body above.`
     html += `<p><strong>Note:</strong> ${note}</p>`
     text += `\n\nNote: ${note}`
     console.warn('[daily-summary]', note)

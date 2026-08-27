@@ -102,9 +102,9 @@ describe('email templates', () => {
   })
 
   it('builds a daily summary email for an empty day', () => {
-    const { subject, html, text } = buildDailySummaryEmail({ rows: [], dateLabel: '2026-08-27' })
+    const { subject, html, text } = buildDailySummaryEmail({ rows: [], events: [], dateLabel: '2026-08-27' })
 
-    expect(subject).toBe('Datomer daily summary — 0 submissions — 2026-08-27')
+    expect(subject).toBe('Datomer daily summary — 0 submissions, 0 events — 2026-08-27')
     expect(html).toContain('No submissions in the last 24 hours')
     expect(text).toContain('No submissions in the last 24 hours')
   })
@@ -114,11 +114,18 @@ describe('email templates', () => {
       { source: 'contact', created_at: '2026-08-27T06:00:00.000Z', email: 'a@example.com', name: 'A', country: 'SE', subject: 'S', message: 'Hello', body: null, metadata: JSON.stringify({ environment: 'production', action: 'contact-page', timeOnSiteMs: 12000 }) },
       { source: 'download', created_at: '2026-08-27T07:00:00.000Z', email: 'b@example.com', name: 'B', country: 'US', subject: 'D', message: null, body: 'Body', metadata: JSON.stringify({ environment: 'preview', action: 'download-hero', timeOnSiteMs: 5000 }) },
     ]
-    const { subject, html, text } = buildDailySummaryEmail({ rows, dateLabel: '2026-08-27' })
+    const events = [
+      { session_id: 's1', created_at: '2026-08-27T06:05:00.000Z', type: 'pageview', page_path: '/', metadata: '{}' },
+      { session_id: 's2', created_at: '2026-08-27T06:06:00.000Z', type: 'heartbeat', page_path: '/pricing', metadata: '{}' },
+    ]
+    const { subject, html, text } = buildDailySummaryEmail({ rows, events, dateLabel: '2026-08-27' })
 
-    expect(subject).toBe('Datomer daily summary — 2 submissions — 2026-08-27')
+    expect(subject).toBe('Datomer daily summary — 2 submissions, 2 events — 2026-08-27')
     expect(html).toContain('production · contact · contact-page (1)')
     expect(html).toContain('preview · download · download-hero (1)')
+    expect(html).toContain('Website events (2)')
+    expect(html).toContain('Unique sessions:')
+    expect(html).toContain('>2<')
     expect(text).toContain('production · contact · contact-page (1)')
     expect(text).toContain('preview · download · download-hero (1)')
     expect(html).toContain('Average time on site')

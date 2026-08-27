@@ -7,11 +7,12 @@ vi.mock('../_email.js', () => ({
 
 vi.mock('../_db.js', () => ({
   getSubmissionsInRange: vi.fn(() => Promise.resolve([])),
+  getEventsInRange: vi.fn(() => Promise.resolve([])),
   pruneOldSubmissions: vi.fn(() => Promise.resolve({ meta: { changes: 0 } })),
 }))
 
 import { sendSupportEmail } from '../_email.js'
-import { getSubmissionsInRange, pruneOldSubmissions } from '../_db.js'
+import { getSubmissionsInRange, getEventsInRange, pruneOldSubmissions } from '../_db.js'
 
 describe('daily-summary admin endpoint', () => {
   beforeEach(() => {
@@ -41,6 +42,10 @@ describe('daily-summary admin endpoint', () => {
     const response = await onRequestGet({ request: makeRequest('wrong'), env: { DAILY_SUMMARY_SECRET: 'secret' } })
     expect(response.status).toBe(401)
     expect(sendSupportEmail).not.toHaveBeenCalled()
+  })
+
+  beforeEach(() => {
+    getEventsInRange.mockResolvedValue([])
   })
 
   it('sends the summary email and prunes old submissions when token is valid', async () => {

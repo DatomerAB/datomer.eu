@@ -625,12 +625,12 @@ export function buildPaymentConfirmationEmail({ plan, email, licenseKey, locale 
   return { subject, html, text }
 }
 
-export function buildDailySummaryEmail({ rows, dateLabel }) {
+export function buildDailySummaryEmail({ rows, events = [], dateLabel }) {
   const title = `Datomer daily summary — ${dateLabel}`
-  const subject = `Datomer daily summary — ${rows.length} submission${rows.length === 1 ? '' : 's'} — ${dateLabel}`
+  const subject = `Datomer daily summary — ${rows.length} submission${rows.length === 1 ? '' : 's'}, ${events.length} event${events.length === 1 ? '' : 's'} — ${dateLabel}`
   const strings = EMAIL_I18N.en
 
-  if (rows.length === 0) {
+  if (rows.length === 0 && events.length === 0) {
     const contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${strings.dailySummaryNoSubmissions}</h1><p style="margin: 0; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.dailySummaryNoSubmissionsBody}</p>`
     const contentText = `${strings.dailySummaryNoSubmissions}\n\n${strings.dailySummaryNoSubmissionsBody}`
     const { html, text } = emailWrapper({ title, locale: 'en', previewText: strings.dailySummaryNoSubmissions, contentHtml, contentText })
@@ -658,6 +658,21 @@ export function buildDailySummaryEmail({ rows, dateLabel }) {
     }
   }
 
+  // Event analytics
+  const sessionIds = new Set()
+  const typeCounts = {}
+  const pageCounts = {}
+  for (const event of events) {
+    if (event.session_id) sessionIds.add(event.session_id)
+    typeCounts[event.type] = (typeCounts[event.type] || 0) + 1
+    const page = event.page_path || 'unknown'
+    pageCounts[page] = (pageCounts[page] || 0) + 1
+  }
+  const uniqueSessions = sessionIds.size
+  const topPages = Object.entries(pageCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+
   const avgTime = timeCount > 0 ? Math.round(totalTimeSeconds / timeCount) : 0
   const topCountries = Object.entries(countryCounts)
     .sort((a, b) => b[1] - a[1])
@@ -668,6 +683,11 @@ export function buildDailySummaryEmail({ rows, dateLabel }) {
 
   contentHtml += `<p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 15px; line-height: 1.6;">Average time on site: <strong style="color: ${BRAND.text};">${avgTime}s</strong><br>Top countries: ${topCountries.map(([c, n]) => `${escapeHtml(c)} (${n})`).join(', ') || '—'}</p>`
   contentText += `\n\nAverage time on site: ${avgTime}s\nTop countries: ${topCountries.map(([c, n]) => `${c} (${n})`).join(', ') || '—'}`
+
+  if (events.length > 0) {
+    contentHtml += `<h2 style="margin: 28px 0 12px; font-size: 17px; font-weight: 700; color: ${BRAND.accent};">Website events (${events.length})</h2><p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 15px; line-height: 1.6;">Unique sessions: <strong style="color: ${BRAND.text};">${uniqueSessions}</strong><br>By type: ${Object.entries(typeCounts).map(([t, n]) => `${escapeHtml(t)} (${n})`).join(', ')}<br>Top pages: ${topPages.map(([p, n]) => `${escapeHtml(p)} (${n})`).join(', ') || '—'}</p>`
+    contentText += `\n\nWebsite events (${events.length})\nUnique sessions: ${uniqueSessions}\nBy type: ${Object.entries(typeCounts).map(([t, n]) => `${t} (${n})`).join(', ')}\nTop pages: ${topPages.map(([p, n]) => `${p} (${n})`).join(', ') || '—'}`
+  }
 
   for (const [key, items] of Object.entries(byKey).sort()) {
     const [environment, source, action] = key.split('::')
@@ -681,6 +701,7 @@ export function buildDailySummaryEmail({ rows, dateLabel }) {
     contentHtml += '</ul>'
   }
 
-  const { html, text } = emailWrapper({ title, locale: 'en', previewText: `${rows.length} submissions today`, contentHtml, contentText })
+  const previewText = rows.length > 0 ? `${rows.length} submissions today` : `${events.length} events today`
+  const { html, text } = emailWrapper({ title, locale: 'en', previewText, contentHtml, contentText })
   return { subject, html, text }
 }
