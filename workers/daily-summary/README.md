@@ -22,8 +22,6 @@ Create these in **GitHub → Settings → Secrets and variables → Actions → 
 | `PRODUCTION_RESEND_API_KEY` | Resend API key for the production Worker |
 | `PREVIEW_DAILY_SUMMARY_SECRET` | Secret password for the manual Worker HTTP trigger on staging |
 | `PRODUCTION_DAILY_SUMMARY_SECRET` | Secret password for the manual Worker HTTP trigger on production |
-| `PREVIEW_DAILY_SUMMARY_TO_EMAIL` | Optional override for the preview summary recipient |
-| `PRODUCTION_DAILY_SUMMARY_TO_EMAIL` | Optional override for the production summary recipient |
 
 ### Creating Cloudflare credentials
 
@@ -56,12 +54,7 @@ npx wrangler secret put DAILY_SUMMARY_SECRET --env preview
 npx wrangler secret put DAILY_SUMMARY_SECRET --env production
 ```
 
-Optional recipient override:
-
-```bash
-npx wrangler secret put DAILY_SUMMARY_TO_EMAIL --env preview
-npx wrangler secret put DAILY_SUMMARY_TO_EMAIL --env production
-```
+Optional recipient override: edit `DAILY_SUMMARY_TO_EMAIL` in `wrangler.toml` under `[env.production.vars]` or `[env.preview.vars]`.
 
 ## Manual trigger
 
