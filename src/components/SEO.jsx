@@ -64,6 +64,7 @@ export function OrganizationJsonLd() {
     },
     sameAs: [
       'https://github.com/DatomerAB',
+      'https://www.linkedin.com/company/35694620/',
     ],
   }
   return (

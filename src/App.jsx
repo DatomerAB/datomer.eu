@@ -218,6 +218,14 @@ function Footer() {
             >
               {t('footer.social.github')}
             </a>
+            <a
+              href="https://www.linkedin.com/company/35694620/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t('footer.social.linkedin')}
+            >
+              {t('footer.social.linkedin')}
+            </a>
           </nav>
 
           <div className="footer-company" aria-label="Datomer company details">

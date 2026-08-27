@@ -229,7 +229,10 @@ function organizationJsonLd() {
       addressLocality: 'Farsta',
       addressCountry: 'SE',
     },
-    sameAs: ['https://github.com/DatomerAB'],
+    sameAs: [
+      'https://github.com/DatomerAB',
+      'https://www.linkedin.com/company/35694620/',
+    ],
   }
   return `    <script type="application/ld+json">${JSON.stringify(data)}</script>`
 }
