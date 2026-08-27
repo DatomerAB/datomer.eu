@@ -2,6 +2,145 @@
 
 This document is designed for a person who is testing the site without prior product knowledge. It covers the main user journeys, the key checks, and the expected outcomes.
 
+## New feature: Daily summary subsystem
+
+This section covers the automated daily summary introduced in August 2026. Test it separately from the main site flows.
+
+### Goal
+
+Ensure every form submission is stored, counted, and included in the daily CSV summary email sent to `dailysummary@datomer.eu`.
+
+### Prerequisites
+
+- Staging site is deployed.
+- Daily-summary Worker is deployed to preview.
+- `DAILY_SUMMARY_SECRET` is configured in Cloudflare Pages preview environment.
+- `PREVIEW_DAILY_SUMMARY_SECRET` is configured in GitHub and on the Worker.
+- Resend API key is configured for both Pages and Worker preview environments.
+
+### Scenario D1: Submit a contact form
+
+#### Steps
+1. Open the staging preview URL.
+2. Scroll to the contact section.
+3. Fill in all required fields.
+4. Complete the Turnstile challenge if shown.
+5. Submit the form.
+
+#### Expected outcome
+- The user sees a success message.
+- A confirmation email is sent to the user's address.
+- The submission is stored in D1.
+
+### Scenario D2: Submit the waitlist form
+
+#### Steps
+1. Open the staging preview URL.
+2. Find the waitlist form.
+3. Enter a valid email address.
+4. Submit the form.
+
+#### Expected outcome
+- The user sees a success message.
+- A confirmation email is sent to the user.
+- The submission appears in D1 with source `waitlist`.
+
+### Scenario D3: Submit the newsletter form
+
+#### Steps
+1. Open the staging preview URL.
+2. Find the newsletter signup form.
+3. Enter a valid email address.
+4. Submit the form.
+
+#### Expected outcome
+- The user sees a success message.
+- The submission appears in D1 with source `newsletter`.
+
+### Scenario D4: Trigger the daily summary manually
+
+#### Steps
+1. Submit at least one form so data exists in D1.
+2. Run the Worker trigger command:
+   ```bash
+   curl -H "Authorization: Bearer <PREVIEW_DAILY_SUMMARY_SECRET>" \
+     https://datomer-daily-summary-preview.jay-tchinnaswamy.workers.dev/
+   ```
+3. Note the JSON response.
+
+#### Expected outcome
+- Response shows `ok: true`.
+- `count` matches the number of submissions in the last 24 hours.
+- `emailResult.sent` is `true`.
+
+### Scenario D5: Verify the summary email
+
+#### Steps
+1. Open the inbox for `dailysummary@datomer.eu`.
+2. Find the latest daily summary email.
+3. Open the email and download the CSV attachment.
+4. Open the CSV in a spreadsheet or text editor.
+
+#### Expected outcome
+- Email subject contains the date and "Daily summary".
+- CSV includes all submitted forms from the last 24 hours.
+- Each row has the correct category, time, email, name, and message.
+- The email body shows a breakdown by category.
+
+### Scenario D6: Verify the Pages admin endpoint
+
+#### Steps
+1. Find the staging preview URL in Cloudflare Pages.
+2. Run:
+   ```bash
+   curl -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
+     https://<preview-url>/api/admin/daily-summary
+   ```
+
+#### Expected outcome
+- Response shows `ok: true`.
+- The summary email is sent.
+
+### Scenario D7: Empty day behavior
+
+#### Steps
+1. Ensure no new submissions exist in the last 24 hours.
+2. Trigger the summary manually.
+
+#### Expected outcome
+- Response shows `ok: true` and `count: 0`.
+- A summary email is still sent stating there were no submissions.
+
+### Scenario D8: Unauthorized access
+
+#### Steps
+1. Trigger the Worker without a token:
+   ```bash
+   curl https://datomer-daily-summary-preview.jay-tchinnaswamy.workers.dev/
+   ```
+2. Trigger the Pages endpoint with a wrong token:
+   ```bash
+   curl -L -H "Authorization: Bearer wrong" \
+     https://<preview-url>/api/admin/daily-summary
+   ```
+
+#### Expected outcome
+- Worker returns `401 Unauthorized`.
+- Pages endpoint returns `401 Unauthorized`.
+
+### Daily summary test checklist
+
+- [ ] Contact form submission stores in D1.
+- [ ] Waitlist form submission stores in D1.
+- [ ] Newsletter form submission stores in D1.
+- [ ] User receives confirmation email after each form.
+- [ ] Worker manual trigger returns `ok: true`.
+- [ ] Summary email arrives at `dailysummary@datomer.eu`.
+- [ ] CSV attachment contains correct data.
+- [ ] Empty day still sends a "no submissions" email.
+- [ ] Pages admin endpoint works with correct token.
+- [ ] Both endpoints reject requests without valid tokens.
+
 ## Goal
 
 The tester should be able to understand the product, navigate the website, evaluate the pricing, and complete the main CTA flows without needing technical or product context.
