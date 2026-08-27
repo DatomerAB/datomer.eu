@@ -25,9 +25,6 @@ binding = "DB"
 database_name = "datomer-submissions-production"
 database_id = "65c67ab8-ca9e-4777-9b38-97989c73a7f8"
 
-[[env.production.triggers]]
-crons = ["0 6 * * *"]
-
 [env.production.vars]
 VITE_STRIPE_PLUS_MONTHLY = "price_1U7bblJjemtoqVYp32qGsxOG"
 VITE_STRIPE_PLUS_YEARLY = "price_1U7bghJjemtoqVYpBLK7UwxX"
@@ -42,9 +39,6 @@ CONTACT_TO_EMAIL = "hello@datomer.eu"
 binding = "DB"
 database_name = "datomer-submissions-preview"
 database_id = "7a83e626-0984-47bb-9235-cd65c6806813"
-
-[[env.preview.triggers]]
-crons = ["0 6 * * *"]
 
 # Test credentials for the preview / staging environment only.
 [env.preview.vars]
