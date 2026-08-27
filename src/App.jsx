@@ -7,7 +7,6 @@ import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
 import { PaymentButton } from './components/PaymentButton.jsx'
 import { WaitlistForm } from './components/WaitlistForm.jsx'
-import { NewsletterForm } from './components/NewsletterForm.jsx'
 import { CookieConsent } from './components/CookieConsent.jsx'
 import { Turnstile } from './components/Turnstile.jsx'
 import { BlogPage } from './pages/BlogPage.jsx'
@@ -203,14 +202,6 @@ function Footer() {
           <div className="footer-company" aria-label="Datomer company details">
             <DatomerLogo />
           </div>
-        </div>
-
-        <div className="footer-newsletter" aria-label="Newsletter signup">
-          <div className="footer-newsletter-copy">
-            <strong>{t('newsletter.title')}</strong>
-            <span>{t('newsletter.description')}</span>
-          </div>
-          <NewsletterForm action="newsletter-footer" source="footer" />
         </div>
 
         <div className="footer-bottom" aria-label="Datomer address details">
