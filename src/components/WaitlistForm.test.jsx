@@ -40,6 +40,8 @@ describe('WaitlistForm', () => {
     const body = JSON.parse(globalThis.fetch.mock.calls[0][1].body)
     expect(body.email).toBe('waiter@example.com')
     expect(body.type).toBe('waitlist')
+    expect(body.action).toBe('waitlist-form')
+    expect(body.source).toBe('website')
     expect(body.interests).toEqual({
       productUpdates: true,
       betaAccess: true,

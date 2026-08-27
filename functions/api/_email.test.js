@@ -31,7 +31,7 @@ describe('sendSupportEmail', () => {
     expect(url).toBe('https://api.resend.com/emails')
     const body = JSON.parse(options.body)
     expect(body).toMatchObject({
-      from: 'from@example.com',
+      from: 'Pär by Datomer <from@example.com>',
       to: ['support@example.com'],
       reply_to: 'user@example.com',
       subject: 'Test subject',

@@ -34,6 +34,10 @@ describe('email templates', () => {
       name: 'Anna Svensson',
       email: 'anna@example.com',
       message: 'Hello, I have a question.',
+      action: 'contact-page',
+      environment: 'preview',
+      country: 'SE',
+      city: 'Stockholm',
     })
 
     expect(subject).toBe('New message from Anna — Pär')
@@ -41,6 +45,8 @@ describe('email templates', () => {
     expect(html).toContain('New contact enquiry')
     expect(html).toContain('anna@example.com')
     expect(html).toContain('Hello, I have a question.')
+    expect(html).toContain('Action')
+    expect(html).toContain('Environment')
     expect(html).toContain('Datomer AB')
     expect(text).toContain('New contact enquiry')
   })
@@ -66,12 +72,17 @@ describe('email templates', () => {
       country: 'SE',
       interests: { productUpdates: true, betaAccess: true, changelog: false },
       source: 'homepage-cta',
+      action: 'waitlist-hero',
+      environment: 'production',
+      city: 'Stockholm',
     })
 
     expect(subject).toBe('Anna joined the Pär beta waitlist')
     expect(html).toContain('Anna')
     expect(html).toContain('Early beta access')
     expect(html).toContain('Product updates')
+    expect(html).toContain('Action')
+    expect(html).toContain('Environment')
     expect(text).toContain('anna@example.com')
   })
 
@@ -98,17 +109,18 @@ describe('email templates', () => {
     expect(text).toContain('No submissions in the last 24 hours')
   })
 
-  it('builds a daily summary email grouped by source', () => {
+  it('builds a daily summary email grouped by environment, source and action', () => {
     const rows = [
-      { source: 'contact', created_at: '2026-08-27T06:00:00.000Z', email: 'a@example.com', name: 'A', country: 'SE', subject: 'S', message: 'Hello', body: null, metadata: null },
-      { source: 'download', created_at: '2026-08-27T07:00:00.000Z', email: 'b@example.com', name: 'B', country: 'US', subject: 'D', message: null, body: 'Body', metadata: null },
+      { source: 'contact', created_at: '2026-08-27T06:00:00.000Z', email: 'a@example.com', name: 'A', country: 'SE', subject: 'S', message: 'Hello', body: null, metadata: JSON.stringify({ environment: 'production', action: 'contact-page', timeOnSiteMs: 12000 }) },
+      { source: 'download', created_at: '2026-08-27T07:00:00.000Z', email: 'b@example.com', name: 'B', country: 'US', subject: 'D', message: null, body: 'Body', metadata: JSON.stringify({ environment: 'preview', action: 'download-hero', timeOnSiteMs: 5000 }) },
     ]
     const { subject, html, text } = buildDailySummaryEmail({ rows, dateLabel: '2026-08-27' })
 
     expect(subject).toBe('Datomer daily summary — 2 submissions — 2026-08-27')
-    expect(html).toContain('contact (1)')
-    expect(html).toContain('download (1)')
-    expect(text).toContain('contact (1)')
-    expect(text).toContain('download (1)')
+    expect(html).toContain('production · contact · contact-page (1)')
+    expect(html).toContain('preview · download · download-hero (1)')
+    expect(text).toContain('production · contact · contact-page (1)')
+    expect(text).toContain('preview · download · download-hero (1)')
+    expect(html).toContain('Average time on site')
   })
 })

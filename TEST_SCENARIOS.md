@@ -143,6 +143,76 @@ Ensure every form submission is stored, counted, and included in the daily CSV s
 
 ---
 
+## Tracking and conversion analytics
+
+This section verifies that submissions carry enough context for internal reporting while staying privacy-first.
+
+### Goal
+
+Every form submission should record which CTA the user clicked, how long they spent on the site, and their coarse geo location. Anonymous heartbeat events should only be sent after the user accepts analytics cookies.
+
+### Scenario T1: CTA differentiation
+
+#### Steps
+1. Open the staging preview URL.
+2. Submit the waitlist form in the CTA band.
+3. Submit the download form from the top bar.
+4. Submit the download form from the hero section.
+5. Submit the download form from the pricing free-tier card.
+6. Submit the newsletter form in the footer.
+7. Submit the contact form.
+
+#### Expected outcome
+- Each submission in D1 has a distinct `metadata.action` value (e.g. `waitlist-cta-band`, `download-topbar`, `download-hero`, `download-pricing-free`).
+- The internal support email subject reflects the action.
+- The daily summary CSV groups submissions by `environment · source · action`.
+
+### Scenario T2: Geo and time-on-site context
+
+#### Steps
+1. Submit a form from a non-local network if possible.
+2. Inspect the `submissions` row in D1.
+
+#### Expected outcome
+- `country`, `city`, `region`, and `timezone` are populated from Cloudflare `request.cf` or show `unknown`.
+- `time_on_site_ms` is a positive number representing milliseconds since the page loaded.
+
+### Scenario T3: Analytics consent and events
+
+#### Steps
+1. Open the staging preview URL in an incognito window.
+2. Confirm the cookie consent banner appears.
+3. Decline analytics and wait 30 seconds.
+4. Accept analytics and wait 30 seconds.
+5. Submit the waitlist form.
+6. Inspect the `events` table in D1.
+
+#### Expected outcome
+- No events are written while analytics is declined.
+- After consent, `pageview` and `heartbeat` events appear for the session.
+- `events.session_id` matches the session ID sent with the form submission.
+
+### Scenario T4: Environment flag in internal reports only
+
+#### Steps
+1. Submit a form in staging.
+2. Check the user confirmation email.
+3. Check the internal support email and the daily summary CSV.
+
+#### Expected outcome
+- The user confirmation email does **not** mention staging or production.
+- The internal support email shows the `Environment` field.
+- The daily summary CSV contains an `environment` column and groups by it.
+
+### Tracking checklist
+
+- [ ] Each CTA has a unique `metadata.action`.
+- [ ] Country and city are captured when available.
+- [ ] Time-on-site is captured in milliseconds.
+- [ ] Events are only written after analytics consent.
+- [ ] Session ID links form submissions to event rows.
+- [ ] Environment flag appears only in internal emails and CSV.
+
 ## Email branding and messaging
 
 This section verifies that every automated email feels on-brand, professional, and privacy-respectful.
@@ -235,6 +305,8 @@ Every email sent by the site should look like it comes from Pär by Datomer, add
 - [ ] Waitlist/newsletter emails reference selected interests.
 - [ ] Privacy and transparency messaging is present.
 - [ ] Emails render correctly on mobile, tablet, and desktop.
+- [ ] Sender name is `Pär by Datomer` and from address is `hello@datomer.eu`.
+- [ ] Support/internal emails show environment, action, country, and city.
 
 ## Goal
 

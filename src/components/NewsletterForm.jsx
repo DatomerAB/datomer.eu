@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
+import { getTrackingPayload } from '../analytics/tracking.js'
 
-export function NewsletterForm({ source = 'homepage-cta' }) {
+export function NewsletterForm({ source = 'homepage-cta', action = 'newsletter-form' }) {
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [interests, setInterests] = useState({
     productUpdates: true,
@@ -31,17 +33,21 @@ export function NewsletterForm({ source = 'homepage-cta' }) {
     setError(null)
 
     try {
+      const tracking = getTrackingPayload()
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          name: name.trim() || undefined,
           email: email.trim(),
           type: 'newsletter',
           locale: lang,
           source,
+          action,
           interests,
           timestamp: new Date().toISOString(),
           turnstileToken: token,
+          ...tracking,
         }),
       })
 
@@ -51,6 +57,7 @@ export function NewsletterForm({ source = 'homepage-cta' }) {
       }
 
       setDone(true)
+      setName('')
       setEmail('')
       setInterests({
         productUpdates: true,
@@ -84,17 +91,28 @@ export function NewsletterForm({ source = 'homepage-cta' }) {
       </div>
       <form className="newsletter-form" onSubmit={handleSubmit}>
         <label>
+          <span className="sr-only">{t('newsletter.namePlaceholder')}</span>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={t('newsletter.namePlaceholder')}
+            aria-label={t('newsletter.namePlaceholder')}
+            disabled={busy}
+          />
+        </label>
+        <label>
           <span className="sr-only">{t('newsletter.emailPlaceholder')}</span>
           <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={t('newsletter.emailPlaceholder')}
-          aria-label={t('newsletter.emailPlaceholder')}
-          required
-          disabled={busy}
-        />
-      </label>
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={t('newsletter.emailPlaceholder')}
+            aria-label={t('newsletter.emailPlaceholder')}
+            required
+            disabled={busy}
+          />
+        </label>
 
       <div className="newsletter-options" aria-label={t('newsletter.title')}>
         <label className="newsletter-option">
@@ -137,7 +155,7 @@ export function NewsletterForm({ source = 'homepage-cta' }) {
         {busy ? t('newsletter.sending') : t('newsletter.submit')}
       </button>
 
-        {error && <span className="waitlist-error">{error}</span>}
+        {error && <span className="form-error">{error}</span>}
       </form>
     </div>
   )

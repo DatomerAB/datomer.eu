@@ -2,6 +2,7 @@ import { verifyTurnstileToken } from './_turnstile.js'
 import { sendSupportEmail } from './_email.js'
 import { insertSubmission } from './_db.js'
 import { buildWaitlistSupportEmail, buildWaitlistConfirmationEmail } from './_emailTemplates.js'
+import { getTrackingMeta } from './_tracking.js'
 
 export async function onRequestPost(context) {
   const { request, env, ctx } = context
@@ -53,6 +54,7 @@ export async function onRequestPost(context) {
 
   const sourceLabel = `${payload.type}-form`
   const interests = body.interests || {}
+  const tracking = getTrackingMeta({ request, env, body })
 
   const supportEmail = buildWaitlistSupportEmail({
     type: payload.type,
@@ -62,6 +64,10 @@ export async function onRequestPost(context) {
     country: payload.country,
     interests,
     source: body.source,
+    locale: payload.locale,
+    action: tracking.action,
+    environment: tracking.environment,
+    city: tracking.city,
   })
   const supportResult = await sendSupportEmail({ env, ...supportEmail })
   console.log('[waitlist] support email result:', JSON.stringify(supportResult))
@@ -71,9 +77,21 @@ export async function onRequestPost(context) {
     name: payload.name,
     email: payload.email,
     interests,
+    locale: payload.locale,
   })
   const confirmationResult = await sendSupportEmail({ env, to: [payload.email], ...confirmationEmail })
   console.log('[waitlist] confirmation email result:', JSON.stringify(confirmationResult))
+
+  const detailsText = [
+    `Form: ${payload.type}`,
+    `Name: ${payload.name}`,
+    `Email: ${payload.email}`,
+    `Phone: ${payload.phone || '-'}`,
+    `Country: ${payload.country}`,
+    `Action: ${tracking.action}`,
+    `Environment: ${tracking.environment}`,
+    `City: ${tracking.city}`,
+  ].join('\n')
 
   // Non-blocking: store submission for daily summary.
   ctx?.waitUntil?.(
@@ -83,10 +101,23 @@ export async function onRequestPost(context) {
       email: payload.email,
       name: payload.name,
       country: payload.country,
-      subject,
+      subject: supportEmail.subject,
       message: null,
       body: detailsText,
-      metadata: { type: payload.type, phone: payload.phone, locale: payload.locale, interests: body.interests },
+      metadata: {
+        type: payload.type,
+        phone: payload.phone,
+        locale: payload.locale,
+        interests: body.interests,
+        action: tracking.action,
+        environment: tracking.environment,
+        sessionId: tracking.sessionId,
+        city: tracking.city,
+        region: tracking.region,
+        timezone: tracking.timezone,
+        timeOnSiteMs: tracking.timeOnSiteMs,
+        pagePath: tracking.pagePath,
+      },
     })
   )
 

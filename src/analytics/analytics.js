@@ -3,9 +3,15 @@ function hasConsent() {
   return localStorage.getItem('par-cookie-consent') === 'accepted'
 }
 
+function setConsent(granted) {
+  if (typeof window === 'undefined' || !localStorage?.setItem) return
+  localStorage.setItem('par-cookie-consent', granted ? 'accepted' : 'declined')
+}
+
 export const analytics = {
   consent(granted) {
     if (typeof window === 'undefined') return
+    setConsent(granted)
     const mode = granted ? 'granted' : 'denied'
     if (window.gtag) {
       window.gtag('consent', 'update', { analytics_storage: mode })

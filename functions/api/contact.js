@@ -2,6 +2,7 @@ import { verifyTurnstileToken } from './_turnstile.js'
 import { sendSupportEmail } from './_email.js'
 import { insertSubmission } from './_db.js'
 import { buildContactSupportEmail, buildContactConfirmationEmail } from './_emailTemplates.js'
+import { getTrackingMeta } from './_tracking.js'
 
 export async function onRequestPost(context) {
   const { request, env, ctx } = context
@@ -37,11 +38,21 @@ export async function onRequestPost(context) {
   const cleanedEmail = String(email).trim().toLowerCase()
   const cleanedMessage = String(message).trim()
   const createdAt = new Date().toISOString()
+  const tracking = getTrackingMeta({ request, env, body })
 
-  const supportEmail = buildContactSupportEmail({ name: cleanedName, email: cleanedEmail, message: cleanedMessage })
+  const supportEmail = buildContactSupportEmail({
+    name: cleanedName,
+    email: cleanedEmail,
+    message: cleanedMessage,
+    locale,
+    action: tracking.action,
+    environment: tracking.environment,
+    country: tracking.country,
+    city: tracking.city,
+  })
   await sendSupportEmail({ env, ...supportEmail })
 
-  const confirmationEmail = buildContactConfirmationEmail({ name: cleanedName, message: cleanedMessage })
+  const confirmationEmail = buildContactConfirmationEmail({ name: cleanedName, message: cleanedMessage, locale })
   await sendSupportEmail({ env, to: [cleanedEmail], ...confirmationEmail })
 
   // Non-blocking: store submission for daily summary.
@@ -54,7 +65,18 @@ export async function onRequestPost(context) {
       subject: `Contact form: enquiry from ${cleanedName}`,
       message: cleanedMessage,
       body: `Name: ${cleanedName}\nEmail: ${cleanedEmail}\nMessage:\n${cleanedMessage}`,
-      metadata: { locale },
+      metadata: {
+        locale,
+        action: tracking.action,
+        environment: tracking.environment,
+        sessionId: tracking.sessionId,
+        country: tracking.country,
+        city: tracking.city,
+        region: tracking.region,
+        timezone: tracking.timezone,
+        timeOnSiteMs: tracking.timeOnSiteMs,
+        pagePath: tracking.pagePath,
+      },
     })
   )
 

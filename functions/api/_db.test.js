@@ -76,10 +76,14 @@ describe('D1 helpers', () => {
     expect(env.prepared.bind).toHaveBeenCalledWith('2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
   })
 
-  it('prunes submissions older than N days', async () => {
+  it('prunes submissions and events older than N days', async () => {
     const env = makeEnv()
     const result = await pruneOldSubmissions(env, 30)
-    expect(result).toEqual({ meta: { changes: 1 }, success: true })
+    expect(result).toEqual({
+      submissions: { meta: { changes: 1 }, success: true },
+      events: { meta: { changes: 1 }, success: true },
+    })
     expect(env.DB.prepare).toHaveBeenCalledWith(expect.stringContaining('DELETE FROM submissions'))
+    expect(env.DB.prepare).toHaveBeenCalledWith(expect.stringContaining('DELETE FROM events'))
   })
 })

@@ -29,6 +29,8 @@ Public variables:
 - VITE_STRIPE_PUBLISHABLE_KEY
 - VITE_TURNSTILE_SITE_KEY
 - RESEND_FROM_EMAIL
+- RESEND_FROM_NAME (`Pär by Datomer`)
+- ENVIRONMENT (`production`)
 
 Secret values:
 
@@ -36,6 +38,7 @@ Secret values:
 - STRIPE_WEBHOOK_SECRET
 - TURNSTILE_SECRET_KEY
 - RESEND_API_KEY
+- DAILY_SUMMARY_SECRET (used by `/api/admin/daily-summary`)
 
 These must be the live-mode values for the production deployment.
 
@@ -52,7 +55,9 @@ Public variables:
 - VITE_STRIPE_PUBLISHABLE_KEY
 - VITE_TURNSTILE_SITE_KEY
 - RESEND_FROM_EMAIL
+- RESEND_FROM_NAME (`Pär by Datomer`)
 - CONTACT_TO_EMAIL
+- ENVIRONMENT (`preview`)
 
 Secret values:
 
@@ -60,6 +65,7 @@ Secret values:
 - STRIPE_WEBHOOK_SECRET
 - TURNSTILE_SECRET_KEY
 - RESEND_API_KEY
+- DAILY_SUMMARY_SECRET (used by `/api/admin/daily-summary`)
 
 Optional variables:
 
@@ -85,6 +91,56 @@ vars = {
 
 The matching secret values should be created in Cloudflare as secrets, not committed into source control.
 
+## D1 schema migrations
+
+The D1 database has two tables:
+
+- `submissions` — form submissions from contact, waitlist, newsletter, and download flows.
+- `events` — anonymous page-view and heartbeat events collected after analytics consent.
+
+After cloning or before the first deployment, apply the schema:
+
+```bash
+# Preview / staging
+wrangler d1 execute datomer-submissions-preview --env preview --file functions/api/_db/schema.sql
+
+# Production
+wrangler d1 execute datomer-submissions-production --env production --file functions/api/_db/schema.sql
+```
+
+Run the same command again whenever `schema.sql` changes. Both Pages Functions and the daily-summary Worker share the same D1 binding.
+
+## Daily summary Worker deployment
+
+The daily summary runs as a separate Cloudflare Worker so it can use native cron triggers. Pages Functions do not support cron.
+
+Deploy the Worker after pushing the Pages branch:
+
+```bash
+cd workers/daily-summary
+
+# Preview / staging
+wrangler deploy --env preview
+
+# Production
+wrangler deploy --env production
+```
+
+Required Worker variables (already in `workers/daily-summary/wrangler.toml`):
+
+- RESEND_FROM_EMAIL
+- RESEND_FROM_NAME (`Pär by Datomer`)
+- CONTACT_TO_EMAIL
+- DAILY_SUMMARY_TO_EMAIL (`dailysummary@datomer.eu`)
+- ENVIRONMENT (`preview` or `production`)
+
+Required Worker secrets (set via `wrangler secret put` in the Worker directory):
+
+- RESEND_API_KEY
+- DAILY_SUMMARY_SECRET
+
+The Worker exposes an HTTP endpoint protected by `Authorization: Bearer <DAILY_SUMMARY_SECRET>` for manual testing.
+
 ## Pre-flight deployment checklist
 
 Before any push or merge, verify the following:
@@ -99,6 +155,10 @@ Before any push or merge, verify the following:
 - [ ] The live/preview environment is not mixing test and live keys.
 - [ ] The Cloudflare Pages dashboard value matches the repo/public env value for the active environment.
 - [ ] The `SITE_URL` is correct for the target host.
+- [ ] `ENVIRONMENT` is set to `preview` or `production` for the target.
+- [ ] `RESEND_FROM_NAME` is set to `Pär by Datomer`.
+- [ ] The D1 schema has been applied for the target environment.
+- [ ] The daily-summary Worker has been deployed for the target environment.
 - [ ] The site has been redeployed after any Turnstile key/secret change.
 - [ ] The pricing buttons render and have valid `priceId` values.
 - [ ] The app is not hitting the fallback `Payment is not configured yet.` path.
@@ -192,10 +252,14 @@ Use this checklist before approving a preview/staging deployment:
 - [ ] Confirm the Turnstile site key and secret match the same preview project
 - [ ] Run npm test
 - [ ] Run npm run build
+- [ ] Apply the D1 schema migration to the preview database
 - [ ] Push to the staging branch
+- [ ] Deploy the daily-summary Worker to preview
 - [ ] Check the Cloudflare build logs for success
 - [ ] Open the preview URL and confirm the homepage loads
 - [ ] Check navigation, pricing toggle, and CTA buttons
+- [ ] Submit the contact, waitlist, newsletter, and download forms and confirm branded emails arrive
+- [ ] Trigger `/api/admin/daily-summary` and verify the CSV includes environment, action, country, city, and time-on-site
 - [ ] Validate the Plus checkout flow with a Stripe test card
 - [ ] Validate the Pro checkout flow with a Stripe test card
 - [ ] Confirm no Turnstile error 110200 is present

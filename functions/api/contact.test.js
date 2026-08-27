@@ -33,7 +33,9 @@ describe('contact handler', () => {
       TURNSTILE_SECRET_KEY: 'secret',
       RESEND_API_KEY: 're_123',
       RESEND_FROM_EMAIL: 'from@example.com',
+      RESEND_FROM_NAME: 'Pär by Datomer',
       CONTACT_TO_EMAIL: 'to@example.com',
+      ENVIRONMENT: 'test',
     }
 
     const response = await onRequestPost({ request, env })
@@ -50,12 +52,14 @@ describe('contact handler', () => {
     const [, supportOptions] = resendCalls[0]
     const supportBody = JSON.parse(supportOptions.body)
     expect(supportBody.subject).toBe('New message from Test — Pär')
+    expect(supportBody.from).toBe('Pär by Datomer <from@example.com>')
     expect(supportBody.reply_to).toBe('test@example.com')
     expect(supportBody.to).toEqual(['to@example.com'])
     expect(supportBody.html).toContain('New contact enquiry')
     expect(supportBody.text).toContain('New contact enquiry')
     expect(supportBody.html).toContain('Hello')
     expect(supportBody.text).toContain('Hello')
+    expect(supportBody.html).toContain('Action')
 
     const [, confirmationOptions] = resendCalls[1]
     const confirmationBody = JSON.parse(confirmationOptions.body)

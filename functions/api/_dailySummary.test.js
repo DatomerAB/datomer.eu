@@ -44,13 +44,15 @@ describe('daily summary logic', () => {
         subject: 'S',
         message: 'M',
         body: 'B',
-        metadata: JSON.stringify({ x: 1 }),
+        metadata: JSON.stringify({ x: 1, environment: 'preview', action: 'contact-page', city: 'Stockholm', timeOnSiteMs: 12000 }),
       },
     ])
-    expect(csv).toContain('category,time,from_email,name,country,subject,message,body,metadata')
+    expect(csv).toContain('environment,action,category,time,from_email,name,country,city,time_on_site_seconds,subject,message,body,metadata')
     expect(csv).toContain('contact')
     expect(csv).toContain('a@example.com')
-    expect(csv).toContain('{""x"":1}')
+    expect(csv).toContain('preview')
+    expect(csv).toContain('contact-page')
+    expect(csv).toContain('12')
   })
 
   it('escapes CSV values containing commas and quotes', () => {
@@ -71,16 +73,16 @@ describe('daily summary logic', () => {
     expect(csv).toContain('"He said ""hello"""')
   })
 
-  it('builds HTML and text summaries grouped by source', () => {
+  it('builds HTML and text summaries grouped by environment, source and action', () => {
     const rows = [
-      { source: 'contact', created_at: '2026-08-27T06:00:00.000Z', email: 'a@example.com', name: 'A', country: 'SE', subject: 'S', message: 'Hello', body: null, metadata: null },
-      { source: 'download', created_at: '2026-08-27T07:00:00.000Z', email: 'b@example.com', name: 'B', country: 'US', subject: 'D', message: null, body: 'Body', metadata: null },
+      { source: 'contact', created_at: '2026-08-27T06:00:00.000Z', email: 'a@example.com', name: 'A', country: 'SE', subject: 'S', message: 'Hello', body: null, metadata: JSON.stringify({ environment: 'production', action: 'contact-page' }) },
+      { source: 'download', created_at: '2026-08-27T07:00:00.000Z', email: 'b@example.com', name: 'B', country: 'US', subject: 'D', message: null, body: 'Body', metadata: JSON.stringify({ environment: 'preview', action: 'download-hero' }) },
     ]
     const { html, text } = buildDailySummaryEmail({ rows, dateLabel: '2026-08-27' })
-    expect(html).toContain('contact (1)')
-    expect(html).toContain('download (1)')
-    expect(text).toContain('contact (1)')
-    expect(text).toContain('download (1)')
+    expect(html).toContain('production · contact · contact-page (1)')
+    expect(html).toContain('preview · download · download-hero (1)')
+    expect(text).toContain('production · contact · contact-page (1)')
+    expect(text).toContain('preview · download · download-hero (1)')
   })
 
   it('encodes CSV attachment as UTF-8 base64', async () => {

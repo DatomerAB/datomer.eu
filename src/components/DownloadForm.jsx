@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
+import { getTrackingPayload } from '../analytics/tracking.js'
 
 const STORAGE_KEY = 'par-download-info'
 
@@ -41,7 +42,7 @@ function readStoredForm() {
   }
 }
 
-export function DownloadForm({ downloadUrl, onClose }) {
+export function DownloadForm({ downloadUrl, onClose, action = 'download-form' }) {
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
   const [form, setForm] = useState(readStoredForm)
@@ -81,6 +82,7 @@ export function DownloadForm({ downloadUrl, onClose }) {
     setError(null)
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(form))
+      const tracking = getTrackingPayload()
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -88,8 +90,10 @@ export function DownloadForm({ downloadUrl, onClose }) {
           ...form,
           type: 'download',
           locale: lang,
+          action,
           timestamp: new Date().toISOString(),
           turnstileToken: token,
+          ...tracking,
         }),
       })
       const data = await res.json().catch(() => ({}))
@@ -150,7 +154,7 @@ export function DownloadForm({ downloadUrl, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" role="dialog" aria-modal="true" aria-labelledby="download-form-title" onClick={(e) => e.stopPropagation()}>
-        <button type="button" className="modal-close" onClick={onClose} aria-label="Close">
+        <button type="button" className="modal-close" onClick={onClose} aria-label={t('common.close', { defaultValue: 'Close' })}>
           ×
         </button>
         <h2 id="download-form-title">{t('downloadForm.title')}</h2>

@@ -7,6 +7,8 @@ const BRAND = {
   tagline: 'Your AI. On Your Device.',
   contactEmail: 'hello@datomer.eu',
   website: 'https://datomer.eu',
+  parLogoUrl: 'https://datomer.eu/par-logo.png',
+  datomerLogoUrl: 'https://datomer.eu/datomer-logo.png',
   // Aligns with the website design tokens
   bg: '#f7f6f4',
   surface: '#ffffff',
@@ -21,6 +23,139 @@ const BRAND = {
   radiusSm: '12px',
   shadow: '0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -2px rgba(15, 23, 42, 0.04)',
   fontStack: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+}
+
+const EMAIL_I18N = {
+  en: {
+    salutation: (name) => `Hi ${name}`,
+    contactSupportTitle: 'New contact enquiry',
+    contactSupportPreview: (name) => `New enquiry from ${name}`,
+    contactSupportBody: (name) => `${name} reached out through the Pär website.`,
+    labelName: 'Name',
+    labelEmail: 'Email',
+    labelMessage: 'Message',
+    labelForm: 'Form',
+    labelPhone: 'Phone',
+    labelCountry: 'Country',
+    labelSource: 'Source',
+    labelAction: 'Action',
+    labelEnvironment: 'Environment',
+    labelCity: 'City',
+    contactConfirmationTitle: (name) => `Hi ${name}, we received your message`,
+    contactConfirmationSubject: 'We received your message — Pär',
+    contactConfirmationPreview: 'We received your message',
+    contactConfirmationBody1: 'We have received your message and will get back to you as soon as possible. Most enquiries are answered within one business day.',
+    contactConfirmationBody2: 'If you need to add anything, just reply to this email or write to us at',
+    contactConfirmationPrivacy: 'We build Pär around privacy, transparency, and ownership. Your data stays under your control.',
+    waitlistSupportTitle: 'New signup notification',
+    waitlistSupportPreview: (type) => `New ${type} signup`,
+    waitlistSupportBody: (name, type) => `${name} just signed up via the ${type} form on the Pär website.`,
+    waitlistConfirmationPreview: 'Welcome to Pär',
+    waitlistConfirmationSubjectSuffix: '— Pär',
+    waitlistConfirmationTitle: (name) => `Hi ${name}`,
+    waitlistConfirmationBody1: (name) => `Hi ${name}, welcome to Pär.`,
+    waitlistConfirmationBody2: (interests) => `You selected: <strong style="color: ${BRAND.text};">${interests}</strong>. We have noted your preferences and will only send you what you asked for.`,
+    waitlistConfirmationBeta: 'Beta access is limited and rolled out in batches. We will notify you as soon as a spot opens up for you.',
+    waitlistConfirmationUpdates: 'Expect transparent, low-volume updates. No spam, no tracking pixels, no third-party data sharing.',
+    waitlistConfirmationQuestions: 'Questions? Reply to this email or contact us at',
+    downloadConfirmationBody: (name) => `Hi ${name}, thank you for downloading the <strong style="color: ${BRAND.text};">Pär beta</strong>.`,
+    downloadConfirmationBody2: 'Your download should start automatically. We will email you when updates, new features, and the public launch are ready.',
+    dailySummaryNoSubmissions: 'No submissions in the last 24 hours',
+    dailySummaryNoSubmissionsBody: 'There were no new submissions between 06:00 UTC yesterday and 06:00 UTC today. The next summary will arrive tomorrow.',
+    dailySummaryTitle: 'Daily submission summary',
+    dailySummaryBody: (count) => `There were <strong style="color: ${BRAND.text};">${count}</strong> submission${count === 1 ? '' : 's'} in the last 24 hours. The full list is attached as a CSV file.`,
+    footerCompany: `${BRAND.company} AB`,
+    footerEmail: 'Email us at',
+    footerPrivacy: `You received this because you interacted with ${BRAND.product}. Your data stays private — we never sell or share it.`,
+  },
+  sv: {
+    salutation: (name) => `Hej ${name}`,
+    contactSupportTitle: 'Nytt kontaktmeddelande',
+    contactSupportPreview: (name) => `Ny förfrågan från ${name}`,
+    contactSupportBody: (name) => `${name} kontaktade oss via Pärs webbplats.`,
+    labelName: 'Namn',
+    labelEmail: 'E-post',
+    labelMessage: 'Meddelande',
+    labelForm: 'Formulär',
+    labelPhone: 'Telefon',
+    labelCountry: 'Land',
+    labelSource: 'Källa',
+    labelAction: 'Åtgärd',
+    labelEnvironment: 'Miljö',
+    labelCity: 'Stad',
+    contactConfirmationTitle: (name) => `Hej ${name}, vi har tagit emot ditt meddelande`,
+    contactConfirmationSubject: 'Vi har tagit emot ditt meddelande — Pär',
+    contactConfirmationPreview: 'Vi har tagit emot ditt meddelande',
+    contactConfirmationBody1: 'Vi har tagit emot ditt meddelande och återkommer så snart som möjligt. De flesta frågor besvaras inom en arbetsdag.',
+    contactConfirmationBody2: 'Om du vill lägga till något kan du svara på detta e-postmeddelande eller skriva till oss på',
+    contactConfirmationPrivacy: 'Vi bygger Pär med integritet, transparens och ägande i fokus. Dina data förblir under din kontroll.',
+    waitlistSupportTitle: 'Ny anmälan',
+    waitlistSupportPreview: (type) => `Ny ${type}-anmälan`,
+    waitlistSupportBody: (name, type) => `${name} anmälde sig via ${type}-formuläret på Pärs webbplats.`,
+    waitlistConfirmationPreview: 'Välkommen till Pär',
+    waitlistConfirmationSubjectSuffix: '— Pär',
+    waitlistConfirmationTitle: (name) => `Hej ${name}`,
+    waitlistConfirmationBody1: (name) => `Hej ${name}, välkommen till Pär.`,
+    waitlistConfirmationBody2: (interests) => `Du valde: <strong style="color: ${BRAND.text};">${interests}</strong>. Vi har noterat dina preferenser och skickar bara det du bett om.`,
+    waitlistConfirmationBeta: 'Betaåtkomst är begränsad och rullas ut i omgångar. Vi meddelar dig så snart en plats öppnas för dig.',
+    waitlistConfirmationUpdates: 'Räkna med transparenta, fåtaliga uppdateringar. Ingen skräppost, inga spårningspixlar, ingen delning med tredje part.',
+    waitlistConfirmationQuestions: 'Frågor? Svara på detta e-postmeddelande eller kontakta oss på',
+    downloadConfirmationBody: (name) => `Hej ${name}, tack för att du laddar ned <strong style="color: ${BRAND.text};">Pär-beta</strong>.`,
+    downloadConfirmationBody2: 'Din nedladdning bör starta automatiskt. Vi mejlar dig när uppdateringar, nya funktioner och den offentliga lanseringen är redo.',
+    dailySummaryNoSubmissions: 'Inga inskick det senaste dygnet',
+    dailySummaryNoSubmissionsBody: 'Det kom inga nya inskick mellan 06:00 UTC igår och 06:00 UTC idag. Nästa sammanfattning kommer i morgon.',
+    dailySummaryTitle: 'Daglig sammanfattning av inskick',
+    dailySummaryBody: (count) => `Det fanns <strong style="color: ${BRAND.text};">${count}</strong> inskick det senaste dygnet. Den fullständiga listan finns bifogad som CSV.`,
+    footerCompany: `${BRAND.company} AB`,
+    footerEmail: 'Mejla oss på',
+    footerPrivacy: `Du fick detta e-postmeddelande eftersom du interagerade med ${BRAND.product}. Dina data förblir privata — vi säljer eller delar dem aldrig.`,
+  },
+  de: {
+    salutation: (name) => `Hallo ${name}`,
+    contactSupportTitle: 'Neue Kontaktanfrage',
+    contactSupportPreview: (name) => `Neue Anfrage von ${name}`,
+    contactSupportBody: (name) => `${name} hat uns über die Pär-Website kontaktiert.`,
+    labelName: 'Name',
+    labelEmail: 'E-Mail',
+    labelMessage: 'Nachricht',
+    labelForm: 'Formular',
+    labelPhone: 'Telefon',
+    labelCountry: 'Land',
+    labelSource: 'Quelle',
+    labelAction: 'Aktion',
+    labelEnvironment: 'Umgebung',
+    labelCity: 'Stadt',
+    contactConfirmationTitle: (name) => `Hallo ${name}, wir haben Ihre Nachricht erhalten`,
+    contactConfirmationSubject: 'Wir haben Ihre Nachricht erhalten — Pär',
+    contactConfirmationPreview: 'Wir haben Ihre Nachricht erhalten',
+    contactConfirmationBody1: 'Wir haben Ihre Nachricht erhalten und melden uns so schnell wie möglich bei Ihnen. Die meisten Anfragen werden innerhalb eines Werktags beantwortet.',
+    contactConfirmationBody2: 'Wenn Sie noch etwas ergänzen möchten, antworten Sie einfach auf diese E-Mail oder schreiben Sie uns an',
+    contactConfirmationPrivacy: 'Wir entwickeln Pär mit Fokus auf Datenschutz, Transparenz und Eigentum. Ihre Daten bleiben unter Ihrer Kontrolle.',
+    waitlistSupportTitle: 'Neue Anmeldung',
+    waitlistSupportPreview: (type) => `Neue ${type}-Anmeldung`,
+    waitlistSupportBody: (name, type) => `${name} hat sich über das ${type}-Formular auf der Pär-Website angemeldet.`,
+    waitlistConfirmationPreview: 'Willkommen bei Pär',
+    waitlistConfirmationSubjectSuffix: '— Pär',
+    waitlistConfirmationTitle: (name) => `Hallo ${name}`,
+    waitlistConfirmationBody1: (name) => `Hallo ${name}, willkommen bei Pär.`,
+    waitlistConfirmationBody2: (interests) => `Sie haben gewählt: <strong style="color: ${BRAND.text};">${interests}</strong>. Wir haben Ihre Präferenzen notiert und senden Ihnen nur das, worum Sie gebeten haben.`,
+    waitlistConfirmationBeta: 'Der Beta-Zugang ist begrenzt und wird schrittweise freigegeben. Wir benachrichtigen Sie, sobald ein Platz für Sie frei ist.',
+    waitlistConfirmationUpdates: 'Erwarten Sie transparente, seltene Updates. Kein Spam, keine Tracking-Pixel, keine Weitergabe an Dritte.',
+    waitlistConfirmationQuestions: 'Fragen? Antworten Sie auf diese E-Mail oder kontaktieren Sie uns unter',
+    downloadConfirmationBody: (name) => `Hallo ${name}, vielen Dank, dass Sie die <strong style="color: ${BRAND.text};">Pär-Beta</strong> herunterladen.`,
+    downloadConfirmationBody2: 'Ihr Download sollte automatisch starten. Wir schreiben Ihnen, wenn Updates, neue Funktionen und der öffentliche Start bereit sind.',
+    dailySummaryNoSubmissions: 'Keine Einsendungen in den letzten 24 Stunden',
+    dailySummaryNoSubmissionsBody: 'Es gab keine neuen Einsendungen zwischen 06:00 UTC gestern und 06:00 UTC heute. Die nächste Zusammenfassung kommt morgen.',
+    dailySummaryTitle: 'Tägliche Zusammenfassung der Einsendungen',
+    dailySummaryBody: (count) => `Es gab <strong style="color: ${BRAND.text};">${count}</strong> Einsendungen in den letzten 24 Stunden. Die vollständige Liste ist als CSV angehängt.`,
+    footerCompany: `${BRAND.company} AB`,
+    footerEmail: 'Schreiben Sie uns an',
+    footerPrivacy: `Sie haben diese E-Mail erhalten, weil Sie mit ${BRAND.product} interagiert haben. Ihre Daten bleiben privat — wir verkaufen oder teilen sie nie.`,
+  },
+}
+
+function i18n(locale) {
+  return EMAIL_I18N[locale] || EMAIL_I18N.en
 }
 
 export function getFirstName(name) {
@@ -45,7 +180,7 @@ function emailButton(href, label) {
   return `<a href="${href}" style="display: inline-block; padding: 12px 24px; background-color: ${BRAND.accent}; color: #ffffff; text-decoration: none; border-radius: 999px; font-weight: 600; font-size: 15px;">${escapeHtml(label)}</a>`
 }
 
-export function emailWrapper({ title, previewText, contentHtml, contentText, footerExtra = '' }) {
+export function emailWrapper({ title, previewText, contentHtml, contentText, footerExtra = '', locale = 'en' }) {
   const preview = previewText ? escapeHtml(previewText) : `${BRAND.product} by ${BRAND.company}`
   const footerHtml = footerExtra
     ? `<tr><td style="padding: 0 32px 16px; color: ${BRAND.textSecondary}; font-size: 14px; line-height: 1.5; text-align: center;">${footerExtra}</td></tr>`
@@ -92,8 +227,12 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
           <tr>
             <td align="center" style="padding-bottom: 28px;">
               <a href="${BRAND.website}" style="text-decoration: none; display: inline-block;">
-                <span style="font-size: 26px; font-weight: 800; letter-spacing: -0.04em; color: ${BRAND.text};">${BRAND.product}</span>
-                <span style="display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: ${BRAND.textMuted}; margin-top: 2px;">by ${BRAND.company}</span>
+                <img
+                  src="${BRAND.parLogoUrl}"
+                  alt="Pär by Datomer"
+                  width="180"
+                  style="display: block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 180px; height: auto; font-family: ${BRAND.fontStack}; font-size: 26px; font-weight: 800; color: ${BRAND.text};"
+                />
               </a>
             </td>
           </tr>
@@ -113,10 +252,18 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
           ${footerHtml}
           <tr>
             <td style="padding: 28px 32px 0; text-align: center; color: ${BRAND.textMuted}; font-size: 13px; line-height: 1.6;">
+              <p style="margin: 0 0 12px;">
+                <img
+                  src="${BRAND.datomerLogoUrl}"
+                  alt="Datomer"
+                  width="120"
+                  style="display: inline-block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 120px; height: auto; font-family: ${BRAND.fontStack}; font-size: 14px; font-weight: 700; color: ${BRAND.text};"
+                />
+              </p>
               <p style="margin: 0 0 8px;"><strong style="color: ${BRAND.text};">${BRAND.company} AB</strong></p>
-              <p style="margin: 0 0 4px;">Email us at <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a></p>
+              <p style="margin: 0 0 4px;">${i18n(locale).footerEmail} <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a></p>
               <p style="margin: 0 0 16px;"><a href="${BRAND.website}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.website.replace(/^https:\/\//, '')}</a></p>
-              <p style="margin: 0; font-size: 12px;">You received this because you interacted with ${BRAND.product}. Your data stays private — we never sell or share it.</p>
+              <p style="margin: 0; font-size: 12px;">${i18n(locale).footerPrivacy}</p>
             </td>
           </tr>
         </table>
@@ -126,7 +273,7 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
 </body>
 </html>`
 
-  const text = `${title}\n${'='.repeat(title.length)}\n\n${contentText}\n\n${footerText}---\n${BRAND.product} by ${BRAND.company} AB\nEmail: ${BRAND.contactEmail}\nWebsite: ${BRAND.website}\n\nYou received this because you interacted with ${BRAND.product}. Your data stays private — we never sell or share it.`
+  const text = `${title}\n${'='.repeat(title.length)}\n\n${contentText}\n\n${footerText}---\n${BRAND.product} by ${BRAND.company} AB\n${i18n(locale).footerEmail}: ${BRAND.contactEmail}\nWebsite: ${BRAND.website}\n\n${i18n(locale).footerPrivacy}`
 
   return { html, text }
 }
@@ -153,49 +300,57 @@ function interestsSentence(interests) {
 
 // --- Contact form ---
 
-export function buildContactSupportEmail({ name, email, message }) {
+export function buildContactSupportEmail({ name, email, message, locale = 'en', action, environment, country, city }) {
   const firstName = getFirstName(name)
-  const title = 'New contact enquiry'
+  const strings = i18n(locale)
+  const title = strings.contactSupportTitle
   const subject = `New message from ${firstName} — ${BRAND.product}`
 
+  const fields = [
+    { label: strings.labelName, value: escapeHtml(name) },
+    { label: strings.labelEmail, value: `<a href="mailto:${escapeHtml(email)}" style="color: ${BRAND.accent}; text-decoration: none;">${escapeHtml(email)}</a>` },
+    { label: strings.labelEnvironment, value: escapeHtml(environment || 'unknown') },
+    { label: strings.labelAction, value: escapeHtml(action || 'unspecified') },
+    { label: strings.labelCountry, value: escapeHtml(country || '-') },
+    { label: strings.labelCity, value: escapeHtml(city || '-') },
+    { label: strings.labelMessage, value: lineBreaksToHtml(message) },
+  ]
+
   const contentHtml = `
-    <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">New contact enquiry</h1>
-    <p style="margin: 0 0 20px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${escapeHtml(name)} reached out through the ${BRAND.product} website.</p>
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 16px;">
-      <tr><td style="padding: 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">Name</div><div style="font-size: 15px; color: ${BRAND.text};">${escapeHtml(name)}</div></td></tr>
-    </table>
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 16px;">
-      <tr><td style="padding: 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">Email</div><div style="font-size: 15px; color: ${BRAND.text};"><a href="mailto:${escapeHtml(email)}" style="color: ${BRAND.accent}; text-decoration: none;">${escapeHtml(email)}</a></div></td></tr>
-    </table>
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 16px;">
-      <tr><td style="padding: 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">Message</div><div style="font-size: 15px; color: ${BRAND.text}; line-height: 1.6;">${lineBreaksToHtml(message)}</div></td></tr>
-    </table>
+    <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>
+    <p style="margin: 0 0 20px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.contactSupportBody(escapeHtml(name))}</p>
+    ${fields.map((f) => `
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 12px;">
+        <tr><td style="padding: 14px 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">${escapeHtml(f.label)}</div><div style="font-size: 15px; color: ${BRAND.text}; line-height: 1.5;">${f.value}</div></td></tr>
+      </table>
+    `).join('')}
   `
 
-  const contentText = `New contact enquiry\n\n${name} reached out through the ${BRAND.product} website.\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+  const contentText = `${title}\n\n${strings.contactSupportBody(name)}\n\n${fields.map((f) => `${f.label}: ${f.value.replace(/<[^>]+>/g, '')}`).join('\n')}`
 
-  const { html, text } = emailWrapper({ title, previewText: `New enquiry from ${firstName}`, contentHtml, contentText })
+  const { html, text } = emailWrapper({ title, locale, previewText: strings.contactSupportPreview(firstName), contentHtml, contentText })
   return { subject, html, text, replyTo: email }
 }
 
-export function buildContactConfirmationEmail({ name, message }) {
+export function buildContactConfirmationEmail({ name, message, locale = 'en' }) {
   const firstName = getFirstName(name)
-  const title = `Hi ${firstName}, we received your message`
-  const subject = `We received your message — ${BRAND.product}`
+  const strings = i18n(locale)
+  const title = strings.contactConfirmationTitle(firstName)
+  const subject = strings.contactConfirmationSubject
 
   const contentHtml = `
-    <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">Hi ${escapeHtml(firstName)}, thank you for reaching out</h1>
-    <p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">We have received your message and will get back to you as soon as possible. Most enquiries are answered within one business day.</p>
-    <p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">If you need to add anything, just reply to this email or write to us at <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a>.</p>
+    <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>
+    <p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.contactConfirmationBody1}</p>
+    <p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.contactConfirmationBody2} <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a>.</p>
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 16px;">
-      <tr><td style="padding: 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">Your message</div><div style="font-size: 15px; color: ${BRAND.text}; line-height: 1.6;">${lineBreaksToHtml(message)}</div></td></tr>
+      <tr><td style="padding: 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">${strings.labelMessage}</div><div style="font-size: 15px; color: ${BRAND.text}; line-height: 1.6;">${lineBreaksToHtml(message)}</div></td></tr>
     </table>
-    <p style="margin: 24px 0 0; color: ${BRAND.textMuted}; font-size: 14px; line-height: 1.5;">We build ${BRAND.product} around privacy, transparency, and ownership. Your data stays under your control.</p>
+    <p style="margin: 24px 0 0; color: ${BRAND.textMuted}; font-size: 14px; line-height: 1.5;">${strings.contactConfirmationPrivacy}</p>
   `
 
-  const contentText = `Hi ${firstName}, thank you for reaching out\n\nWe have received your message and will get back to you as soon as possible. Most enquiries are answered within one business day.\n\nIf you need to add anything, just reply to this email or write to us at ${BRAND.contactEmail}.\n\nYour message:\n${message}\n\nWe build ${BRAND.product} around privacy, transparency, and ownership. Your data stays under your control.`
+  const contentText = `${title}\n\n${strings.contactConfirmationBody1}\n\n${strings.contactConfirmationBody2} ${BRAND.contactEmail}.\n\n${strings.labelMessage}:\n${message}\n\n${strings.contactConfirmationPrivacy}`
 
-  const { html, text } = emailWrapper({ title, previewText: 'We received your message', contentHtml, contentText })
+  const { html, text } = emailWrapper({ title, locale, previewText: strings.contactConfirmationPreview, contentHtml, contentText })
   return { subject, html, text }
 }
 
@@ -244,8 +399,9 @@ function waitlistConfirmationSubject({ type, interests }) {
   return 'Welcome — Pär'
 }
 
-function waitlistConfirmationBody({ type, interests, name }) {
+function waitlistConfirmationBody({ type, interests, name, locale = 'en' }) {
   const firstName = getFirstName(name)
+  const strings = i18n(locale)
   const list = formatInterests(interests)
   const sentence = interestsSentence(interests)
   const wantsBeta = list.includes('Early beta access')
@@ -254,54 +410,58 @@ function waitlistConfirmationBody({ type, interests, name }) {
 
   if (type === 'download') {
     return {
-      html: `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">Hi ${escapeHtml(firstName)}, thank you for downloading the <strong style="color: ${BRAND.text};">${BRAND.product} beta</strong>.</p><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">Your download should start automatically. We will email you when updates, new features, and the public launch are ready.</p>`,
-      text: `Hi ${firstName}, thank you for downloading the ${BRAND.product} beta. Your download should start automatically. We will email you when updates, new features, and the public launch are ready.`,
+      html: `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody(escapeHtml(firstName))}</p><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody2}</p>`,
+      text: `${strings.salutation(firstName)}, ${strings.downloadConfirmationBody(firstName).replace(/<[^>]+>/g, '')} ${strings.downloadConfirmationBody2}`,
     }
   }
 
-  let html = `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">Hi ${escapeHtml(firstName)}, welcome to ${BRAND.product}.</p>`
-  let text = `Hi ${firstName}, welcome to ${BRAND.product}.`
+  let html = `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistConfirmationBody1(escapeHtml(firstName))}</p>`
+  let text = strings.waitlistConfirmationBody1(firstName)
 
   if (sentence) {
-    html += `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">You selected: <strong style="color: ${BRAND.text};">${escapeHtml(sentence)}</strong>. We have noted your preferences and will only send you what you asked for.</p>`
-    text += ` You selected: ${sentence}. We have noted your preferences and will only send you what you asked for.`
+    html += `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistConfirmationBody2(escapeHtml(sentence))}</p>`
+    text += ` ${strings.waitlistConfirmationBody2(sentence).replace(/<[^>]+>/g, '')}`
   }
 
   if (wantsBeta) {
-    html += `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">Beta access is limited and rolled out in batches. We will notify you as soon as a spot opens up for you.</p>`
-    text += ` Beta access is limited and rolled out in batches. We will notify you as soon as a spot opens up for you.`
+    html += `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistConfirmationBeta}</p>`
+    text += ` ${strings.waitlistConfirmationBeta}`
   }
 
   if (wantsUpdates || wantsChangelog) {
-    html += `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">Expect transparent, low-volume updates. No spam, no tracking pixels, no third-party data sharing.</p>`
-    text += ` Expect transparent, low-volume updates. No spam, no tracking pixels, no third-party data sharing.`
+    html += `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistConfirmationUpdates}</p>`
+    text += ` ${strings.waitlistConfirmationUpdates}`
   }
 
-  html += `<p style="margin: 0; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">Questions? Reply to this email or contact us at <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a>.</p>`
-  text += ` Questions? Reply to this email or contact us at ${BRAND.contactEmail}.`
+  html += `<p style="margin: 0; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistConfirmationQuestions} <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a>.</p>`
+  text += ` ${strings.waitlistConfirmationQuestions} ${BRAND.contactEmail}.`
 
   return { html, text }
 }
 
-export function buildWaitlistSupportEmail({ type, name, email, phone, country, interests, source }) {
+export function buildWaitlistSupportEmail({ type, name, email, phone, country, interests, source, locale = 'en', action, environment, city }) {
   const firstName = getFirstName(name)
   const subject = waitlistSupportSubject({ type, interests, name, email })
-  const title = 'New signup notification'
+  const strings = i18n(locale)
+  const title = strings.waitlistSupportTitle
   const interestList = formatInterests(interests)
 
   const fields = [
-    { label: 'Form', value: type },
-    { label: 'Name', value: name || '-' },
-    { label: 'Email', value: `<a href="mailto:${escapeHtml(email)}" style="color: ${BRAND.accent}; text-decoration: none;">${escapeHtml(email)}</a>` },
-    { label: 'Phone', value: phone || '-' },
-    { label: 'Country', value: country || '-' },
-    { label: 'Source', value: source || 'website' },
-    { label: 'Interests', value: interestList.length > 0 ? interestList.join(', ') : 'None selected' },
+    { label: strings.labelForm, value: type },
+    { label: strings.labelName, value: name || '-' },
+    { label: strings.labelEmail, value: `<a href="mailto:${escapeHtml(email)}" style="color: ${BRAND.accent}; text-decoration: none;">${escapeHtml(email)}</a>` },
+    { label: strings.labelPhone, value: phone || '-' },
+    { label: strings.labelCountry, value: country || '-' },
+    { label: strings.labelSource, value: source || 'website' },
+    { label: strings.labelAction, value: action || 'unspecified' },
+    { label: strings.labelEnvironment, value: environment || 'unknown' },
+    { label: strings.labelCity, value: city || '-' },
+    { label: strings.labelName === 'Namn' ? 'Intressen' : 'Interests', value: interestList.length > 0 ? interestList.join(', ') : 'None selected' },
   ]
 
   const contentHtml = `
-    <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">New signup notification</h1>
-    <p style="margin: 0 0 20px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${escapeHtml(firstName)} just signed up via the <strong style="color: ${BRAND.text};">${escapeHtml(type)}</strong> form on the ${BRAND.product} website.</p>
+    <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>
+    <p style="margin: 0 0 20px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistSupportBody(escapeHtml(firstName), escapeHtml(type))}</p>
     ${fields.map((f) => `
       <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 12px;">
         <tr><td style="padding: 14px 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">${escapeHtml(f.label)}</div><div style="font-size: 15px; color: ${BRAND.text}; line-height: 1.5;">${f.value}</div></td></tr>
@@ -309,50 +469,89 @@ export function buildWaitlistSupportEmail({ type, name, email, phone, country, i
     `).join('')}
   `
 
-  const text = `New signup notification\n\n${firstName} just signed up via the ${type} form on the ${BRAND.product} website.\n\n${fields.map((f) => `${f.label}: ${f.value.replace(/<[^>]+>/g, '')}`).join('\n')}`
+  const text = `${title}\n\n${strings.waitlistSupportBody(firstName, type)}\n\n${fields.map((f) => `${f.label}: ${f.value.replace(/<[^>]+>/g, '')}`).join('\n')}`
 
-  const { html, text: wrappedText } = emailWrapper({ title, previewText: `New ${type} signup`, contentHtml, contentText: text })
+  const { html, text: wrappedText } = emailWrapper({ title, locale, previewText: strings.waitlistSupportPreview(type), contentHtml, contentText: text })
   return { subject, html, text: wrappedText, replyTo: email }
 }
 
-export function buildWaitlistConfirmationEmail({ type, name, email, interests }) {
+export function buildWaitlistConfirmationEmail({ type, name, email, interests, locale = 'en' }) {
   const firstName = getFirstName(name)
-  const subject = `${waitlistConfirmationSubject({ type, interests })} — ${BRAND.product}`
-  const title = subject
-  const { html: bodyHtml, text: bodyText } = waitlistConfirmationBody({ type, interests, name })
+  const strings = i18n(locale)
+  const subject = `${waitlistConfirmationSubject({ type, interests })} ${strings.waitlistConfirmationSubjectSuffix}`
+  const title = `${strings.salutation(firstName)}`
+  const { html: bodyHtml, text: bodyText } = waitlistConfirmationBody({ type, interests, name, locale })
 
-  const contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">Hi ${escapeHtml(firstName)}</h1>${bodyHtml}`
-  const contentText = `Hi ${firstName}\n\n${bodyText}`
+  const contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>${bodyHtml}`
+  const contentText = `${title}\n\n${bodyText}`
 
-  const { html, text } = emailWrapper({ title, previewText: 'Welcome to Pär', contentHtml, contentText })
+  const { html, text } = emailWrapper({ title, locale, previewText: strings.waitlistConfirmationPreview, contentHtml, contentText })
   return { subject, html, text }
 }
 
 // --- Daily summary ---
 
+function parseMetadata(row) {
+  try {
+    return row.metadata ? JSON.parse(row.metadata) : {}
+  } catch {
+    return {}
+  }
+}
+
+function seconds(ms) {
+  if (ms == null || Number.isNaN(ms)) return 0
+  return Math.round(Number(ms) / 1000)
+}
+
 export function buildDailySummaryEmail({ rows, dateLabel }) {
   const title = `Datomer daily summary — ${dateLabel}`
   const subject = `Datomer daily summary — ${rows.length} submission${rows.length === 1 ? '' : 's'} — ${dateLabel}`
+  const strings = EMAIL_I18N.en
 
   if (rows.length === 0) {
-    const contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">No submissions in the last 24 hours</h1><p style="margin: 0; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">There were no new submissions between 06:00 UTC yesterday and 06:00 UTC today. The next summary will arrive tomorrow.</p>`
-    const contentText = `No submissions in the last 24 hours\n\nThere were no new submissions between 06:00 UTC yesterday and 06:00 UTC today. The next summary will arrive tomorrow.`
-    const { html, text } = emailWrapper({ title, previewText: 'No submissions today', contentHtml, contentText })
+    const contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${strings.dailySummaryNoSubmissions}</h1><p style="margin: 0; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.dailySummaryNoSubmissionsBody}</p>`
+    const contentText = `${strings.dailySummaryNoSubmissions}\n\n${strings.dailySummaryNoSubmissionsBody}`
+    const { html, text } = emailWrapper({ title, locale: 'en', previewText: strings.dailySummaryNoSubmissions, contentHtml, contentText })
     return { subject, html, text }
   }
 
-  const bySource = {}
+  const byKey = {}
+  const countryCounts = {}
+  let totalTimeSeconds = 0
+  let timeCount = 0
+
   for (const row of rows) {
-    bySource[row.source] = bySource[row.source] || []
-    bySource[row.source].push(row)
+    const meta = parseMetadata(row)
+    const key = `${meta.environment || 'unknown'}::${row.source}::${meta.action || 'unspecified'}`
+    byKey[key] = byKey[key] || []
+    byKey[key].push(row)
+
+    const country = row.country || meta.country || 'unknown'
+    countryCounts[country] = (countryCounts[country] || 0) + 1
+
+    const timeSec = seconds(meta.timeOnSiteMs)
+    if (timeSec > 0) {
+      totalTimeSeconds += timeSec
+      timeCount += 1
+    }
   }
 
-  let contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">Daily submission summary</h1><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">There were <strong style="color: ${BRAND.text};">${rows.length}</strong> submission${rows.length === 1 ? '' : 's'} in the last 24 hours. The full list is attached as a CSV file.</p>`
-  let contentText = `Daily submission summary\n\nThere were ${rows.length} submission${rows.length === 1 ? '' : 's'} in the last 24 hours. The full list is attached as a CSV file.`
+  const avgTime = timeCount > 0 ? Math.round(totalTimeSeconds / timeCount) : 0
+  const topCountries = Object.entries(countryCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
 
-  for (const [source, items] of Object.entries(bySource)) {
-    contentHtml += `<h2 style="margin: 28px 0 12px; font-size: 17px; font-weight: 700; color: ${BRAND.accent}; text-transform: capitalize;">${escapeHtml(source)} (${items.length})</h2><ul style="margin: 0; padding-left: 20px;">`
-    contentText += `\n\n${source} (${items.length})\n${'='.repeat(`${source} (${items.length})`.length)}\n`
+  let contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${strings.dailySummaryTitle}</h1><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.dailySummaryBody(rows.length)}</p>`
+  let contentText = `${strings.dailySummaryTitle}\n\n${strings.dailySummaryBody(rows.length).replace(/<[^>]+>/g, '')}`
+
+  contentHtml += `<p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 15px; line-height: 1.6;">Average time on site: <strong style="color: ${BRAND.text};">${avgTime}s</strong><br>Top countries: ${topCountries.map(([c, n]) => `${escapeHtml(c)} (${n})`).join(', ') || '—'}</p>`
+  contentText += `\n\nAverage time on site: ${avgTime}s\nTop countries: ${topCountries.map(([c, n]) => `${c} (${n})`).join(', ') || '—'}`
+
+  for (const [key, items] of Object.entries(byKey).sort()) {
+    const [environment, source, action] = key.split('::')
+    contentHtml += `<h2 style="margin: 28px 0 12px; font-size: 17px; font-weight: 700; color: ${BRAND.accent};">${escapeHtml(environment)} · ${escapeHtml(source)} · ${escapeHtml(action)} (${items.length})</h2><ul style="margin: 0; padding-left: 20px;">`
+    contentText += `\n\n${environment} · ${source} · ${action} (${items.length})\n${'='.repeat(`${environment} · ${source} · ${action} (${items.length})`.length)}\n`
     for (const row of items) {
       const snippet = (row.message || row.body || '-').slice(0, 160).replace(/\n/g, ' ')
       contentHtml += `<li style="color: ${BRAND.textSecondary}; font-size: 15px; line-height: 1.6; margin-bottom: 10px;"><strong style="color: ${BRAND.text};">${escapeHtml(row.name || 'Anonymous')}</strong> (${escapeHtml(row.email || '-')}) — ${escapeHtml(snippet)}</li>`
@@ -361,6 +560,6 @@ export function buildDailySummaryEmail({ rows, dateLabel }) {
     contentHtml += '</ul>'
   }
 
-  const { html, text } = emailWrapper({ title, previewText: `${rows.length} submissions today`, contentHtml, contentText })
+  const { html, text } = emailWrapper({ title, locale: 'en', previewText: `${rows.length} submissions today`, contentHtml, contentText })
   return { subject, html, text }
 }

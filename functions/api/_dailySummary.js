@@ -47,17 +47,34 @@ export function getSummaryWindow(referenceTime = new Date()) {
   return { start: start.toISOString(), end: end.toISOString() }
 }
 
+function parseMetadata(row) {
+  try {
+    return row.metadata ? JSON.parse(row.metadata) : {}
+  } catch {
+    return {}
+  }
+}
+
+function seconds(ms) {
+  if (ms == null || Number.isNaN(ms)) return 0
+  return Math.round(Number(ms) / 1000)
+}
+
 export function buildCsv(rows) {
-  const headers = ['category', 'time', 'from_email', 'name', 'country', 'subject', 'message', 'body', 'metadata']
+  const headers = ['environment', 'action', 'category', 'time', 'from_email', 'name', 'country', 'city', 'time_on_site_seconds', 'subject', 'message', 'body', 'metadata']
   const lines = [headers.join(',')]
   for (const row of rows) {
-    const metadata = row.metadata ? JSON.parse(row.metadata) : {}
+    const metadata = parseMetadata(row)
     const values = [
+      metadata.environment || 'unknown',
+      metadata.action || 'unspecified',
       row.source,
       formatLocalTime(row.created_at),
       row.email || '',
       row.name || '',
-      row.country || '',
+      row.country || metadata.country || '',
+      metadata.city || '',
+      seconds(metadata.timeOnSiteMs),
       row.subject || '',
       row.message || '',
       row.body || '',

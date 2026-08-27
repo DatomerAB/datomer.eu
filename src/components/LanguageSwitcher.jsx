@@ -21,6 +21,14 @@ export function LanguageSwitcher() {
       >
         SV
       </button>
+      <button
+        type="button"
+        className={lang === 'de' ? 'active' : ''}
+        onClick={() => setLang('de')}
+        aria-pressed={lang === 'de'}
+      >
+        DE
+      </button>
     </div>
   )
 }

@@ -104,17 +104,18 @@ function CompanyAddress({ compact = false }) {
   if (compact) {
     return (
       <address className="company-address company-address-compact">
-        {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · Org. nr: {COMPANY.orgNumber}
+        {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · {t('common.orgNumber')}: {COMPANY.orgNumber}
       </address>
     )
   }
+    const { t } = useLanguage()
   return (
     <address className="company-address">
       <strong>{COMPANY.name}</strong>
       <br />
       {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country}
       <br />
-      Org. nr: {COMPANY.orgNumber}
+      {t('common.orgNumber')}: {COMPANY.orgNumber}
     </address>
   )
 }
@@ -165,7 +166,7 @@ function TopBar({ onDownload }) {
 
         <div className="header-right" aria-label="Datomer brand group">
           <LanguageSwitcher />
-          <button type="button" className="button button-primary" onClick={onDownload}>
+          <button type="button" className="button button-primary" onClick={() => onDownload('download-topbar')}>
             {t('nav.download')}
           </button>
         </div>
@@ -178,7 +179,7 @@ function Footer() {
   const { t } = useLanguage()
 
   return (
-    <footer className="footer">
+    <footer className="footer" id="footer">
       <div className="container footer-inner">
         <div className="footer-main">
           <div className="footer-brand-group">
@@ -206,7 +207,7 @@ function Footer() {
 
         <div className="footer-bottom" aria-label="Datomer address details">
           <p className="footer-legal-line">
-            © {new Date().getFullYear()} {COMPANY.name} · {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · Org. nr: {COMPANY.orgNumber}
+            © {new Date().getFullYear()} {COMPANY.name} · {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · {t('common.orgNumber')}: {COMPANY.orgNumber}
           </p>
         </div>
       </div>
@@ -365,7 +366,7 @@ function HomePage({ onDownload }) {
             </p>
 
             <div className="cta-row">
-              <button type="button" className="button button-primary" onClick={onDownload}>
+              <button type="button" className="button button-primary" onClick={() => onDownload('download-hero')}>
                 {t('hero.downloadMac')}
               </button>
               <a href="#product" className="button button-secondary">
@@ -545,7 +546,7 @@ function HomePage({ onDownload }) {
                     <button
                       type="button"
                       className="button button-primary"
-                      onClick={onDownload}
+                      onClick={() => onDownload('download-pricing-free')}
                     >
                       {plan.cta}
                     </button>
@@ -620,7 +621,7 @@ function HomePage({ onDownload }) {
               <div className="cta-action-card cta-signup-card">
                 <p className="cta-action-label">{t('cta.joinWaitlist')}</p>
                 <p className="cta-action-hint">{t('cta.waitlistHint')}</p>
-                <WaitlistForm />
+                <WaitlistForm action="waitlist-cta-band" source="cta-band" />
               </div>
             </div>
           </div>
@@ -889,14 +890,20 @@ function PaymentSuccessPage() {
 
 function App() {
   const [showDownloadForm, setShowDownloadForm] = useState(false)
+  const [downloadAction, setDownloadAction] = useState('download-form')
   const downloadUrl = useDownloadUrl()
+
+  const openDownload = (action) => {
+    setDownloadAction(action)
+    setShowDownloadForm(true)
+  }
 
   return (
     <div className="page-shell">
       <ScrollToTop />
-      <TopBar onDownload={() => setShowDownloadForm(true)} />
+      <TopBar onDownload={openDownload} />
       <Routes>
-        <Route path="/" element={<HomePage onDownload={() => setShowDownloadForm(true)} />} />
+        <Route path="/" element={<HomePage onDownload={openDownload} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/blog" element={<BlogPage />} />
@@ -907,7 +914,7 @@ function App() {
       </Routes>
       <Footer />
       {showDownloadForm && (
-        <DownloadForm downloadUrl={downloadUrl} onClose={() => setShowDownloadForm(false)} />
+        <DownloadForm downloadUrl={downloadUrl} action={downloadAction} onClose={() => setShowDownloadForm(false)} />
       )}
       <CookieConsent />
     </div>

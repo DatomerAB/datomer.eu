@@ -1,27 +1,8 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
-
-Staging deployment refresh: 2026-08-24.
-
----
-
 # datomer.eu
 
-Public website for Datomer — a subscription-based AI data product. Built with React, Vite, Cloudflare Pages, D1, and Resend.
+Public website for **Pär by Datomer** — a subscription-based AI data product for privacy-first data ownership. Built with React, Vite, Cloudflare Pages, D1, and Resend.
+
+Staging deployment refresh: 2026-08-27.
 
 ## Tech stack
 
@@ -65,9 +46,11 @@ npm run build
 ## Project structure
 
 ```
-functions/api/        # Pages Function handlers (forms, checkout, email)
-functions/api/admin/  # Protected admin endpoints
-src/                  # React application
+functions/api/          # Pages Function handlers (forms, checkout, email)
+functions/api/admin/    # Protected admin endpoints
+functions/api/_db/      # D1 schema and helpers
+src/                    # React application
+src/analytics/          # Consent-aware session and event tracking
 workers/daily-summary/  # Separate Cloudflare Worker for daily summary cron
 ```
 
@@ -75,9 +58,10 @@ workers/daily-summary/  # Separate Cloudflare Worker for daily summary cron
 
 - Multi-language landing page (EN / SV / DE)
 - Contact, waitlist, download, newsletter, and payment flows
-- Form submissions stored in D1
-- Confirmation emails to users and internal notifications
-- **Daily summary email** at 06:00 UTC with a CSV attachment of the previous 24 hours of submissions
+- Form submissions stored in D1 with action, geo, and time-on-site context
+- Branded, localized confirmation emails to users and internal notifications
+- Privacy-first analytics: session ID, page path, and heartbeat only after consent
+- **Daily summary email** at 06:00 UTC with a categorized CSV attachment of the previous 24 hours of submissions and events
 
 ## Daily summary
 
@@ -97,4 +81,8 @@ curl -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
   https://<preview-url>/api/admin/daily-summary
 ```
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for full setup, secrets, and testing instructions.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for full setup, secrets, D1 migrations, and testing instructions.
+
+## Environment and branding
+
+Public `ENVIRONMENT` and `RESEND_FROM_NAME` variables ensure the site knows whether it is running in `preview` or `production`, and every email is sent as `Pär by Datomer <hello@datomer.eu>`.

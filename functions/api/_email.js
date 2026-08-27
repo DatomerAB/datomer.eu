@@ -1,6 +1,13 @@
 const RESEND_ENDPOINT = 'https://api.resend.com/emails'
-const DEFAULT_FROM_EMAIL = 'onboarding@resend.dev'
+const DEFAULT_FROM_EMAIL = 'hello@datomer.eu'
+const DEFAULT_FROM_NAME = 'Pär by Datomer'
 const DEFAULT_TO_EMAIL = 'hello@datomer.eu'
+
+function buildFromAddress(email, name) {
+  const address = email || DEFAULT_FROM_EMAIL
+  const displayName = name || DEFAULT_FROM_NAME
+  return `${displayName} <${address}>`
+}
 
 export async function sendSupportEmail({ env, to, subject, html, text, replyTo, attachments }) {
   if (!env.RESEND_API_KEY) {
@@ -10,8 +17,10 @@ export async function sendSupportEmail({ env, to, subject, html, text, replyTo, 
 
   const recipients = Array.isArray(to) && to.length > 0 ? to : [env.CONTACT_TO_EMAIL || DEFAULT_TO_EMAIL]
   const fromEmail = env.RESEND_FROM_EMAIL || DEFAULT_FROM_EMAIL
+  const fromName = env.RESEND_FROM_NAME || DEFAULT_FROM_NAME
+  const from = buildFromAddress(fromEmail, fromName)
 
-  console.log('[sendSupportEmail] sending from', fromEmail, 'to', recipients, 'subject:', subject)
+  console.log('[sendSupportEmail] sending from', from, 'to', recipients, 'subject:', subject)
 
   try {
     const response = await fetch(RESEND_ENDPOINT, {
@@ -21,7 +30,7 @@ export async function sendSupportEmail({ env, to, subject, html, text, replyTo, 
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: fromEmail,
+        from,
         to: recipients,
         ...(replyTo ? { reply_to: replyTo } : {}),
         subject,

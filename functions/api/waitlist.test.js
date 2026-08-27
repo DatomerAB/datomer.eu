@@ -10,7 +10,9 @@ describe('waitlist handler', () => {
     TURNSTILE_SECRET_KEY: 'secret',
     RESEND_API_KEY: 're_123',
     RESEND_FROM_EMAIL: 'from@example.com',
+    RESEND_FROM_NAME: 'Pär by Datomer',
     CONTACT_TO_EMAIL: 'support@example.com',
+    ENVIRONMENT: 'test',
   }
 
   let fetchSpy
@@ -57,8 +59,10 @@ describe('waitlist handler', () => {
     expect(supportBody.subject).toBe('Subscriber joined the Pär beta waitlist')
     expect(supportBody.reply_to).toBe('waitlist@example.com')
     expect(supportBody.to).toEqual(['support@example.com'])
+    expect(supportBody.from).toBe('Pär by Datomer <from@example.com>')
     expect(supportBody.html).toContain('New signup notification')
     expect(supportBody.html).toContain('Early beta access')
+    expect(supportBody.html).toContain('Action')
 
     const [, confirmationOptions] = resendCalls[1]
     const confirmationBody = JSON.parse(confirmationOptions.body)

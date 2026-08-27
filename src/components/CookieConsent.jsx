@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
+import { analytics } from '../analytics/analytics.js'
+import { startTracking } from '../analytics/tracking.js'
 
 const STORAGE_KEY = 'par-cookie-consent'
 
@@ -10,27 +12,28 @@ export function CookieConsent() {
     return !localStorage.getItem(STORAGE_KEY)
   })
 
-  const handleAccept = () => {
-    localStorage.setItem(STORAGE_KEY, 'accepted')
-    setVisible(false)
-    // Enable GA4 cookies only after consent
-    if (window.gtag) {
-      window.gtag('consent', 'update', { analytics_storage: 'granted' })
+  useEffect(() => {
+    if (analytics.hasConsent()) {
+      return startTracking()
     }
+    return () => {}
+  }, [])
+
+  const handleAccept = () => {
+    analytics.consent(true)
+    setVisible(false)
+    startTracking()
   }
 
   const handleDecline = () => {
-    localStorage.setItem(STORAGE_KEY, 'declined')
+    analytics.consent(false)
     setVisible(false)
-    if (window.gtag) {
-      window.gtag('consent', 'update', { analytics_storage: 'denied' })
-    }
   }
 
   if (!visible) return null
 
   return (
-    <div className="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+    <div className="cookie-banner" role="dialog" aria-live="polite" aria-label={t('cookieConsent.ariaLabel', { defaultValue: 'Cookie consent' })}>
       <div className="cookie-banner-inner">
         <p>{t('cookieConsent.text')}</p>
         <div className="cookie-banner-actions">
