@@ -6,7 +6,8 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "deploy:preview": "wrangler deploy --env preview",
-    "deploy:production": "wrangler deploy --env production"
+    "deploy:production": "wrangler deploy --env production",
+    "test": "vitest run"
   },
   "devDependencies": {
     "wrangler": "^4.125.0"
