@@ -225,3 +225,183 @@ For production, prefer a revert on main. For preview, revert on staging.
 - staging branch = preview deployment
 - GitHub push triggers the deployment automatically in Cloudflare Pages
 - build and payment verification must be completed before promoting to production
+
+---
+
+# Daily summary subsystem
+
+The site stores every form submission in a Cloudflare D1 database and sends a daily summary email at 06:00 UTC with a CSV attachment.
+
+## Components
+
+| Component | File / location | Purpose |
+|---|---|---|
+| Form storage | `functions/api/_db.js` | Inserts submissions into D1 |
+| Summary logic | `functions/api/_dailySummary.js` | Builds CSV/HTML, sends email via Resend |
+| Pages admin endpoint | `functions/api/admin/daily-summary.js` | Protected HTTP trigger inside Pages |
+| Cron Worker | `workers/daily-summary/` | Separate Cloudflare Worker with a cron trigger |
+| Worker source | `workers/daily-summary/src/index.js` | `scheduled` + `fetch` handlers |
+| Worker config | `workers/daily-summary/wrangler.toml` | D1 bindings, cron schedule, public vars |
+| CI/CD | `.github/workflows/deploy-daily-summary.yml` | Deploys the Worker on pushes to `staging`/`main` |
+
+## Why a separate Worker?
+
+Cloudflare Pages Functions do **not** support cron triggers or `scheduled` handlers. The Worker shares the same D1 database as the Pages project and runs independently.
+
+## Variables and secrets
+
+### Public variables (in `wrangler.toml`)
+
+| Variable | Location | Purpose |
+|---|---|---|
+| `RESEND_FROM_EMAIL` | `[env.production.vars]` / `[env.preview.vars]` | Sender address for all emails |
+| `CONTACT_TO_EMAIL` | `[env.production.vars]` / `[env.preview.vars]` | Internal recipient for contact forms |
+| `DAILY_SUMMARY_TO_EMAIL` | `[env.production.vars]` / `[env.preview.vars]` | Recipient of the daily CSV summary |
+
+These are safe to keep in `wrangler.toml` because they are not secret.
+
+### Secrets
+
+Secrets are never committed. They are set via `wrangler secret put` or automatically by GitHub Actions.
+
+| Secret | Where it is used | How to get / create it |
+|---|---|---|
+| `RESEND_API_KEY` | Worker + Pages Functions | [resend.com/api-keys](https://resend.com/api-keys) |
+| `DAILY_SUMMARY_SECRET` | Pages admin endpoint + Worker `fetch` handler | Generate with `openssl rand -hex 32` |
+
+### Cloudflare Pages secrets
+
+Set these in **Cloudflare dashboard → Pages → datomer → Settings → Environment variables** for both **Production** and **Preview**:
+
+- `RESEND_API_KEY`
+- `DAILY_SUMMARY_SECRET`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `TURNSTILE_SECRET_KEY`
+
+### Cloudflare Worker secrets
+
+The GitHub Actions workflow sets these automatically. If you prefer to set them manually:
+
+```bash
+cd workers/daily-summary
+
+# Preview
+npx wrangler secret put RESEND_API_KEY --env preview
+npx wrangler secret put DAILY_SUMMARY_SECRET --env preview
+
+# Production
+npx wrangler secret put RESEND_API_KEY --env production
+npx wrangler secret put DAILY_SUMMARY_SECRET --env production
+```
+
+## GitHub Actions secrets for the Worker
+
+Create these in **GitHub → Settings → Secrets and variables → Actions → Repository secrets**:
+
+| Secret | Purpose |
+|---|---|
+| `CLOUDFLARE_EMAIL` | Cloudflare account email |
+| `CLOUDFLARE_API_KEY` | Cloudflare Global API Key |
+| `PREVIEW_RESEND_API_KEY` | Resend key for the preview Worker |
+| `PRODUCTION_RESEND_API_KEY` | Resend key for the production Worker |
+| `PREVIEW_DAILY_SUMMARY_SECRET` | Manual-trigger password for the preview Worker |
+| `PRODUCTION_DAILY_SUMMARY_SECRET` | Manual-trigger password for the production Worker |
+
+### How to get the Cloudflare Global API Key
+
+1. Go to [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens).
+2. Scroll to **API Keys**.
+3. Next to **Global API Key**, click **View** and complete the security challenge.
+4. Copy the key and add it as `CLOUDFLARE_API_KEY` in GitHub.
+5. Add the matching Cloudflare account email as `CLOUDFLARE_EMAIL`.
+
+## Manual deployment
+
+If GitHub Actions is not available:
+
+```bash
+cd workers/daily-summary
+
+# Preview
+npx wrangler secret put RESEND_API_KEY --env preview
+npx wrangler secret put DAILY_SUMMARY_SECRET --env preview
+npx wrangler deploy --env preview
+
+# Production
+npx wrangler secret put RESEND_API_KEY --env production
+npx wrangler secret put DAILY_SUMMARY_SECRET --env production
+npx wrangler deploy --env production
+```
+
+## How to trigger the daily summary manually
+
+### Trigger the Worker directly
+
+```bash
+curl -H "Authorization: Bearer <PREVIEW_DAILY_SUMMARY_SECRET>" \
+  https://datomer-daily-summary-preview.jay-tchinnaswamy.workers.dev/
+```
+
+For production:
+
+```bash
+curl -H "Authorization: Bearer <PRODUCTION_DAILY_SUMMARY_SECRET>" \
+  https://datomer-daily-summary-production.jay-tchinnaswamy.workers.dev/
+```
+
+### Trigger via the Pages admin endpoint
+
+First find the staging preview URL in **Cloudflare Pages → datomer → Deployments**. Then:
+
+```bash
+curl -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
+  https://<preview-url>/api/admin/daily-summary
+```
+
+For production:
+
+```bash
+curl -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
+  https://datomer.eu/api/admin/daily-summary
+```
+
+## Expected responses
+
+A successful run returns JSON like:
+
+```json
+{"ok":true,"count":3,"emailResult":{"sent":true,"status":200,"body":"{\"id\":\"...\"}"}}
+```
+
+- `ok`: whether the run completed without errors
+- `count`: number of submissions in the last 24 hours
+- `emailResult.sent`: whether Resend accepted the email
+
+If `count` is `0`, an email is still sent saying there were no submissions.
+
+## How to check Cloudflare Workers logs
+
+```bash
+cd workers/daily-summary
+npx wrangler tail --env preview
+```
+
+Then trigger the Worker with `curl`. Logs appear in the terminal.
+
+## Testing the full daily summary flow
+
+1. Open the staging site and submit a form.
+2. Confirm the user receives a confirmation email.
+3. Trigger the daily summary with `curl`.
+4. Check `dailysummary@datomer.eu` for the summary email with CSV attachment.
+5. Open the CSV and verify the submitted data is present.
+6. Check that the D1 table is pruned to the last 30 days after a successful email.
+
+## Daily summary edge cases handled
+
+- Anchored 06:00 UTC window to avoid overlaps/gaps.
+- Exclusive end range in the database query.
+- CSV attachment capped at 9 MB to stay under Resend limits.
+- Submissions are pruned only after the email succeeds.
+- Failures are logged via `console.error`.
