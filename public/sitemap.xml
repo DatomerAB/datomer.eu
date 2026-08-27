@@ -63,4 +63,13 @@
     <lastmod>2026-08-23</lastmod>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://datomer.eu/press</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/press" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/press?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://datomer.eu/press?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/press" />
+    <lastmod>2026-08-27</lastmod>
+    <priority>0.5</priority>
+  </url>
 </urlset>

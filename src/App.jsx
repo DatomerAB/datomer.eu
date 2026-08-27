@@ -10,6 +10,7 @@ import { WaitlistForm } from './components/WaitlistForm.jsx'
 import { CookieConsent } from './components/CookieConsent.jsx'
 import { Turnstile } from './components/Turnstile.jsx'
 import { BlogPage } from './pages/BlogPage.jsx'
+import { PressPage } from './pages/PressPage.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
 import {
@@ -160,6 +161,7 @@ function TopBar({ onDownload }) {
               <a href="#pricing">{t('nav.pricing')}</a>
               <a href="#faq">{t('nav.faq')}</a>
               <Link to="/blog">{t('nav.blog')}</Link>
+              <Link to="/press">{t('nav.press')}</Link>
             </>
           ) : (
             <>
@@ -167,6 +169,7 @@ function TopBar({ onDownload }) {
               <Link to="/about">{t('nav.about')}</Link>
               <Link to="/contact">{t('nav.contact')}</Link>
               <Link to="/blog">{t('nav.blog')}</Link>
+              <Link to="/press">{t('nav.press')}</Link>
             </>
           )}
         </div>
@@ -201,6 +204,7 @@ function Footer() {
             <Link to="/about">{t('nav.about')}</Link>
             <Link to="/contact">{t('nav.contact')}</Link>
             <Link to="/blog">{t('nav.blog')}</Link>
+            <Link to="/press">{t('nav.press')}</Link>
             <span className="footer-links-separator" aria-hidden="true" />
             <Link to="/privacy">{t('footer.legal.privacy')}</Link>
             <Link to="/terms">{t('footer.legal.terms')}</Link>
@@ -994,6 +998,7 @@ function App() {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/cookies" element={<CookiesPage />} />
+        <Route path="/press" element={<PressPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
       </Routes>
       <Footer />
