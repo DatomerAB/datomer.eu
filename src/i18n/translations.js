@@ -285,6 +285,7 @@ export const translations = {
     footer: {
       managedBy: 'Managed and operated by Datomer AB',
       legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies' },
+      social: { github: 'GitHub' },
     },
     about: {
       title: 'About Pär',
@@ -630,6 +631,7 @@ export const translations = {
     footer: {
       managedBy: 'Hanteras och drivs av Datomer AB',
       legal: { privacy: 'Integritet', terms: 'Villkor', cookies: 'Cookies' },
+      social: { github: 'GitHub' },
     },
     language: {
       label: 'Språk',
@@ -1001,6 +1003,7 @@ export const translations = {
     footer: {
       managedBy: 'Verwaltet und betrieben von Datomer AB',
       legal: { privacy: 'Datenschutz', terms: 'AGB', cookies: 'Cookies' },
+      social: { github: 'GitHub' },
     },
     language: {
       label: 'Sprache',

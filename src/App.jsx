@@ -12,6 +12,12 @@ import { Turnstile } from './components/Turnstile.jsx'
 import { BlogPage } from './pages/BlogPage.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
+import {
+  SEO,
+  OrganizationJsonLd,
+  SoftwareApplicationJsonLd,
+  FAQPageJsonLd,
+} from './components/SEO.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -198,6 +204,15 @@ function Footer() {
             <Link to="/privacy">{t('footer.legal.privacy')}</Link>
             <Link to="/terms">{t('footer.legal.terms')}</Link>
             <Link to="/cookies">{t('footer.legal.cookies')}</Link>
+            <span className="footer-links-separator" aria-hidden="true" />
+            <a
+              href="https://github.com/DatomerAB"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t('footer.social.github')}
+            >
+              {t('footer.social.github')}
+            </a>
           </nav>
 
           <div className="footer-company" aria-label="Datomer company details">
@@ -216,7 +231,7 @@ function Footer() {
 }
 
 function HomePage({ onDownload }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
   const heroVariant = useExperiment('hero-cta-copy', ['control', 'social-proof'])
 
@@ -353,7 +368,16 @@ function HomePage({ onDownload }) {
   ]
 
   return (
-    <main id="top">
+    <>
+      <SEO
+        title="Pär by Datomer — Your AI. On your device."
+        description="Pär is the personal AI companion that actually remembers you. Local-first, private by design, running on your own hardware with GGUF or Ollama models."
+        pathname="/"
+        lang={lang}
+      />
+      <SoftwareApplicationJsonLd />
+      <FAQPageJsonLd faqs={faqs} />
+      <main id="top">
       <section className="hero" id="about">
           <div className="container hero-inner">
             <div className="hero-badge">
@@ -630,16 +654,24 @@ function HomePage({ onDownload }) {
             {t('cta.disclaimer')}
           </p>
         </section>
-    </main>
+      </main>
+    </>
   )
 }
 
 function AboutPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <main className="section container legal-page">
+    <>
+      <SEO
+        title="About Pär"
+        description="Learn about Pär, the local-first personal AI companion built by Datomer AB, and our mission to keep your data under your control."
+        pathname="/about"
+        lang={lang}
+      />
+      <main className="section container legal-page">
       <h1>{formatHeading(t('about.title'))}</h1>
       <p>{t('about.intro')}</p>
       <p>{t('about.mission')}</p>
@@ -651,12 +683,13 @@ function AboutPage() {
       <p>
         {t('about.emailLabel')}: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
       </p>
-    </main>
+      </main>
+    </>
   )
 }
 
 function ContactPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -715,7 +748,14 @@ function ContactPage() {
   }
 
   return (
-    <main className="section container legal-page">
+    <>
+      <SEO
+        title="Contact Pär"
+        description="Get in touch with the Pär team. Questions, feedback, or enterprise inquiries are welcome."
+        pathname="/contact"
+        lang={lang}
+      />
+      <main className="section container legal-page">
       <h1>{formatHeading(t('contact.title'))}</h1>
       <p>
         {t('contact.intro')}{' '}
@@ -752,16 +792,24 @@ function ContactPage() {
       </form>
 
       <CompanyAddress />
-    </main>
+      </main>
+    </>
   )
 }
 
 function PrivacyPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <main className="section container legal-page">
+    <>
+      <SEO
+        title="Privacy Policy"
+        description="Read the Pär privacy policy. Your data stays on your device in an encrypted vault."
+        pathname="/privacy"
+        lang={lang}
+      />
+      <main className="section container legal-page">
       <h1>{formatHeading(t('privacy.title'))}</h1>
       <p>
         <strong>{t('privacy.updated')}:</strong> 23 August 2026
@@ -800,16 +848,24 @@ function PrivacyPage() {
         {t('privacy.rightsText')}{' '}
         <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
       </p>
-    </main>
+      </main>
+    </>
   )
 }
 
 function TermsPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <main className="section container legal-page">
+    <>
+      <SEO
+        title="Terms of Service"
+        description="Pär terms of service, beta software notice, and user responsibilities."
+        pathname="/terms"
+        lang={lang}
+      />
+      <main className="section container legal-page">
       <h1>{formatHeading(t('terms.title'))}</h1>
       <p>
         <strong>{t('terms.updated')}:</strong> 23 August 2026
@@ -832,16 +888,24 @@ function TermsPage() {
 
       <h2>{t('terms.lawTitle')}</h2>
       <p>{t('terms.lawText')}</p>
-    </main>
+      </main>
+    </>
   )
 }
 
 function CookiesPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <main className="section container legal-page">
+    <>
+      <SEO
+        title="Cookie Policy"
+        description="Learn how Pär uses cookies and how you can manage your preferences."
+        pathname="/cookies"
+        lang={lang}
+      />
+      <main className="section container legal-page">
       <h1>{formatHeading(t('cookies.title'))}</h1>
       <p>
         <strong>{t('cookies.updated')}:</strong> 23 August 2026
@@ -860,7 +924,8 @@ function CookiesPage() {
 
       <h2>{t('cookies.manageTitle')}</h2>
       <p>{t('cookies.manageText')}</p>
-    </main>
+      </main>
+    </>
   )
 }
 
@@ -873,11 +938,19 @@ function ScrollToTop() {
 }
 
 function PaymentSuccessPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <main className="section container legal-page">
+    <>
+      <SEO
+        title="Payment Successful"
+        description="Thank you for supporting Pär. Your payment was received successfully."
+        pathname="/payment-success"
+        noindex
+        lang={lang}
+      />
+      <main className="section container legal-page">
       <h1>{formatHeading(t('payment.successTitle', { defaultValue: 'Thank you!' }))}</h1>
       <p>{t('payment.successText', { defaultValue: 'Your payment was received. We have sent a confirmation email with next steps.' })}</p>
       <p>
@@ -885,7 +958,8 @@ function PaymentSuccessPage() {
           {t('nav.home')}
         </Link>
       </p>
-    </main>
+      </main>
+    </>
   )
 }
 
@@ -901,6 +975,7 @@ function App() {
 
   return (
     <div className="page-shell">
+      <OrganizationJsonLd />
       <ScrollToTop />
       <TopBar onDownload={openDownload} />
       <Routes>

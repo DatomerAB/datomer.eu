@@ -15,7 +15,11 @@ export default {
       return new Response('Unauthorized', { status: 401 })
     }
     console.log('[worker:daily-summary] manual http trigger')
-    const result = await runDailySummary(env, ctx, { scheduledTime: Date.now() })
+    const url = new URL(request.url)
+    const scheduledTime = url.searchParams.has('scheduledTime')
+      ? Number(url.searchParams.get('scheduledTime'))
+      : Date.now()
+    const result = await runDailySummary(env, ctx, { scheduledTime })
     console.log('[worker:daily-summary] result:', JSON.stringify(result))
     return new Response(JSON.stringify(result), {
       status: result.ok ? 200 : 500,

@@ -38,11 +38,7 @@ function utf8ToBase64(str) {
 
 export function getSummaryWindow(referenceTime = new Date()) {
   const t = new Date(referenceTime)
-  // Anchor the window at 06:00 UTC to avoid overlaps/gaps if cron timing drifts.
-  let end = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), 6, 0, 0, 0))
-  if (t < end) {
-    end.setUTCDate(end.getUTCDate() - 1)
-  }
+  const end = t
   const start = new Date(end.getTime() - 24 * 60 * 60 * 1000)
   return { start: start.toISOString(), end: end.toISOString() }
 }

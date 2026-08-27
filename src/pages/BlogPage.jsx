@@ -1,12 +1,20 @@
 import { useLanguage } from '../i18n/useLanguage.js'
 import { getChangelogPosts } from '../content/changelog/index.js'
+import { SEO } from '../components/SEO.jsx'
 
 export function BlogPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const posts = getChangelogPosts()
 
   return (
-    <main className="legal-page">
+    <>
+      <SEO
+        title="Changelog & Updates"
+        description="The latest Pär product updates, release notes, beta news, and launch milestones."
+        pathname="/blog"
+        lang={lang}
+      />
+      <main className="legal-page">
       <div className="container section">
         <header className="page-header">
           <h1>{t('changelog.title')}</h1>
@@ -28,6 +36,7 @@ export function BlogPage() {
           ))}
         </div>
       </div>
-    </main>
+      </main>
+    </>
   )
 }
