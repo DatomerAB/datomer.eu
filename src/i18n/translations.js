@@ -12,6 +12,10 @@ export const translations = {
       contact: 'Contact',
       downloadFreeVersion: 'Download free version',
     },
+    notFound: {
+      title: 'Page not found',
+      text: 'The page you are looking for does not exist or has been moved.',
+    },
     hero: {
       badge: 'Private by Design',
       variantBadge: 'Built for Repeat Users',
@@ -416,6 +420,10 @@ export const translations = {
       contact: 'Kontakt',
       downloadFreeVersion: 'Ladda ner gratisversion',
     },
+    notFound: {
+      title: 'Sidan hittades inte',
+      text: 'Sidan du letar efter finns inte eller har flyttats.',
+    },
     hero: {
       badge: 'Privat Från Grunden',
       variantBadge: 'Byggt För Återkommande Användare',
@@ -819,6 +827,10 @@ export const translations = {
       about: 'Über uns',
       contact: 'Kontakt',
       downloadFreeVersion: 'Kostenlose Version herunterladen',
+    },
+    notFound: {
+      title: 'Seite nicht gefunden',
+      text: 'Die gesuchte Seite existiert nicht oder wurde verschoben.',
     },
     hero: {
       badge: 'Von Grund auf privat',

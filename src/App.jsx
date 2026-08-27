@@ -975,6 +975,32 @@ function PaymentSuccessPage() {
   )
 }
 
+function NotFoundPage() {
+  const { t, lang } = useLanguage()
+  const formatHeading = useLocalizedHeading()
+
+  return (
+    <>
+      <SEO
+        title="Page not found"
+        description="The page you are looking for does not exist. Return to Pär by Datomer."
+        pathname=""
+        noindex
+        lang={lang}
+      />
+      <main className="section container legal-page">
+        <h1>{formatHeading(t('notFound.title', { defaultValue: 'Page not found' }))}</h1>
+        <p>{t('notFound.text', { defaultValue: 'The page you are looking for does not exist or has been moved.' })}</p>
+        <p>
+          <Link to="/" className="button button-primary">
+            {t('nav.home')}
+          </Link>
+        </p>
+      </main>
+    </>
+  )
+}
+
 function App() {
   const [showDownloadForm, setShowDownloadForm] = useState(false)
   const [downloadAction, setDownloadAction] = useState('download-form')
@@ -1000,6 +1026,7 @@ function App() {
         <Route path="/cookies" element={<CookiesPage />} />
         <Route path="/press" element={<PressPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
       {showDownloadForm && (
