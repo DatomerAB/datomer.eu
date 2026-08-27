@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import { sendSupportEmail } from './_email.js'
 import { insertSubmission } from './_db.js'
 import { buildPaymentSupportEmail, buildPaymentConfirmationEmail } from './_emailTemplates.js'
@@ -17,7 +18,6 @@ function decodeWebhookSecret(secret) {
 }
 
 function verifyStripeSignature({ signature, rawBody, webhookSecret }) {
-  const crypto = require('node:crypto')
   const key = decodeWebhookSecret(webhookSecret)
 
   const elements = signature.split(',').filter(Boolean)
