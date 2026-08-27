@@ -20,6 +20,8 @@ Create these in **GitHub → Settings → Secrets and variables → Actions → 
 | `CLOUDFLARE_API_KEY` | Your Cloudflare Global API Key |
 | `PREVIEW_RESEND_API_KEY` | Resend API key for the preview/staging Worker |
 | `PRODUCTION_RESEND_API_KEY` | Resend API key for the production Worker |
+| `PREVIEW_DAILY_SUMMARY_SECRET` | Secret password for the manual Worker HTTP trigger on staging |
+| `PRODUCTION_DAILY_SUMMARY_SECRET` | Secret password for the manual Worker HTTP trigger on production |
 | `PREVIEW_DAILY_SUMMARY_TO_EMAIL` | Optional override for the preview summary recipient |
 | `PRODUCTION_DAILY_SUMMARY_TO_EMAIL` | Optional override for the production summary recipient |
 
@@ -45,6 +47,13 @@ npm run deploy:preview
 # Production
 npx wrangler secret put RESEND_API_KEY --env production
 npm run deploy:production
+```
+
+Optional manual-trigger secret (recommended for testing):
+
+```bash
+npx wrangler secret put DAILY_SUMMARY_SECRET --env preview
+npx wrangler secret put DAILY_SUMMARY_SECRET --env production
 ```
 
 Optional recipient override:

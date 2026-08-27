@@ -45,9 +45,13 @@ jobs:
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
           RESEND_API_KEY: ${{ secrets.PREVIEW_RESEND_API_KEY }}
+          DAILY_SUMMARY_SECRET: ${{ secrets.PREVIEW_DAILY_SUMMARY_SECRET }}
           DAILY_SUMMARY_TO_EMAIL: ${{ secrets.PREVIEW_DAILY_SUMMARY_TO_EMAIL }}
         run: |
           echo "$RESEND_API_KEY" | npx wrangler secret put RESEND_API_KEY --env preview
+          if [ -n "$DAILY_SUMMARY_SECRET" ]; then
+            echo "$DAILY_SUMMARY_SECRET" | npx wrangler secret put DAILY_SUMMARY_SECRET --env preview
+          fi
           if [ -n "$DAILY_SUMMARY_TO_EMAIL" ]; then
             echo "$DAILY_SUMMARY_TO_EMAIL" | npx wrangler secret put DAILY_SUMMARY_TO_EMAIL --env preview
           fi
@@ -59,9 +63,13 @@ jobs:
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
           RESEND_API_KEY: ${{ secrets.PRODUCTION_RESEND_API_KEY }}
+          DAILY_SUMMARY_SECRET: ${{ secrets.PRODUCTION_DAILY_SUMMARY_SECRET }}
           DAILY_SUMMARY_TO_EMAIL: ${{ secrets.PRODUCTION_DAILY_SUMMARY_TO_EMAIL }}
         run: |
           echo "$RESEND_API_KEY" | npx wrangler secret put RESEND_API_KEY --env production
+          if [ -n "$DAILY_SUMMARY_SECRET" ]; then
+            echo "$DAILY_SUMMARY_SECRET" | npx wrangler secret put DAILY_SUMMARY_SECRET --env production
+          fi
           if [ -n "$DAILY_SUMMARY_TO_EMAIL" ]; then
             echo "$DAILY_SUMMARY_TO_EMAIL" | npx wrangler secret put DAILY_SUMMARY_TO_EMAIL --env production
           fi
