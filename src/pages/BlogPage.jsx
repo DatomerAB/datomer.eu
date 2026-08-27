@@ -14,6 +14,7 @@ export function BlogPage() {
         pathname="/blog"
         lang={lang}
       />
+      <HreflangLinks pathname="/blog" />
       <main className="legal-page">
       <div className="container section">
         <header className="page-header">

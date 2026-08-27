@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async'
+import { useEffect } from 'react'
 
 const SITE_URL = 'https://datomer.eu'
 const DEFAULT_TITLE = 'Pär by Datomer — Your AI. On your device.'
@@ -39,15 +40,6 @@ export function SEO({
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
-
-      {pathname && (
-        <>
-          <link rel="alternate" hrefLang="en" href={`${SITE_URL}${pathname}`} />
-          <link rel="alternate" hrefLang="sv" href={`${SITE_URL}${pathname}?lang=sv`} />
-          <link rel="alternate" hrefLang="de" href={`${SITE_URL}${pathname}?lang=de`} />
-          <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${pathname}`} />
-        </>
-      )}
 
       {jsonLd && (
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
@@ -106,6 +98,34 @@ export function SoftwareApplicationJsonLd() {
       <script type="application/ld+json">{JSON.stringify(data)}</script>
     </Helmet>
   )
+}
+
+export function HreflangLinks({ pathname }) {
+  useEffect(() => {
+    if (!pathname) return
+    const full = `${SITE_URL}${pathname}`
+    const links = [
+      { hrefLang: 'en', href: full },
+      { hrefLang: 'sv', href: `${full}?lang=sv` },
+      { hrefLang: 'de', href: `${full}?lang=de` },
+      { hrefLang: 'x-default', href: full },
+    ]
+    const created = links.map(({ hrefLang, href }) => {
+      const link = document.createElement('link')
+      link.setAttribute('rel', 'alternate')
+      link.setAttribute('hrefLang', hrefLang)
+      link.setAttribute('href', href)
+      document.head.appendChild(link)
+      return link
+    })
+    return () => {
+      created.forEach((link) => {
+        if (link.parentNode) link.parentNode.removeChild(link)
+      })
+    }
+  }, [pathname])
+
+  return null
 }
 
 export function FAQPageJsonLd({ faqs }) {

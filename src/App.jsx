@@ -17,6 +17,7 @@ import {
   OrganizationJsonLd,
   SoftwareApplicationJsonLd,
   FAQPageJsonLd,
+  HreflangLinks,
 } from './components/SEO.jsx'
 
 const COMPANY = {
@@ -375,6 +376,7 @@ function HomePage({ onDownload }) {
         pathname="/"
         lang={lang}
       />
+      <HreflangLinks pathname="/" />
       <SoftwareApplicationJsonLd />
       <FAQPageJsonLd faqs={faqs} />
       <main id="top">
@@ -671,6 +673,7 @@ function AboutPage() {
         pathname="/about"
         lang={lang}
       />
+      <HreflangLinks pathname="/about" />
       <main className="section container legal-page">
       <h1>{formatHeading(t('about.title'))}</h1>
       <p>{t('about.intro')}</p>
@@ -755,6 +758,7 @@ function ContactPage() {
         pathname="/contact"
         lang={lang}
       />
+      <HreflangLinks pathname="/contact" />
       <main className="section container legal-page">
       <h1>{formatHeading(t('contact.title'))}</h1>
       <p>
@@ -809,6 +813,7 @@ function PrivacyPage() {
         pathname="/privacy"
         lang={lang}
       />
+      <HreflangLinks pathname="/privacy" />
       <main className="section container legal-page">
       <h1>{formatHeading(t('privacy.title'))}</h1>
       <p>
@@ -865,6 +870,7 @@ function TermsPage() {
         pathname="/terms"
         lang={lang}
       />
+      <HreflangLinks pathname="/terms" />
       <main className="section container legal-page">
       <h1>{formatHeading(t('terms.title'))}</h1>
       <p>
@@ -905,6 +911,7 @@ function CookiesPage() {
         pathname="/cookies"
         lang={lang}
       />
+      <HreflangLinks pathname="/cookies" />
       <main className="section container legal-page">
       <h1>{formatHeading(t('cookies.title'))}</h1>
       <p>
@@ -950,6 +957,7 @@ function PaymentSuccessPage() {
         noindex
         lang={lang}
       />
+      <HreflangLinks pathname="/payment-success" />
       <main className="section container legal-page">
       <h1>{formatHeading(t('payment.successTitle', { defaultValue: 'Thank you!' }))}</h1>
       <p>{t('payment.successText', { defaultValue: 'Your payment was received. We have sent a confirmation email with next steps.' })}</p>
