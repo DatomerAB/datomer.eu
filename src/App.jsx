@@ -147,6 +147,7 @@ function TopBar({ onDownload }) {
         <div className="nav-links">
           {isHome ? (
             <>
+              <Link to="/">{t('nav.home')}</Link>
               <a href="#product">{t('nav.product')}</a>
               <a href="#features">{t('nav.features')}</a>
               <a href="#pricing">{t('nav.pricing')}</a>
