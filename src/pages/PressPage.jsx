@@ -61,6 +61,37 @@ export function PressPage() {
               </a>
             ))}
           </div>
+
+          <h3>{t('press.datomerBrandMaterials')}</h3>
+          <p>{t('press.datomerBrandMaterialsText')}</p>
+          <div className="press-downloads">
+            <a href="/datomer-logo-themed.png" download className="button button-secondary">
+              {t('press.downloadDatomerLogoPng')}
+            </a>
+            <a href="/datomer-banner.png" download className="button button-secondary">
+              {t('press.downloadDatomerBannerPng')}
+            </a>
+          </div>
+          <div className="press-variations">
+            {['forest', 'midnight', 'stone', 'copper', 'ink'].map((variant) => (
+              <a
+                key={`datomer-${variant}`}
+                href={`/datomer-banner-${variant}.png`}
+                download
+                className="press-variant-thumb"
+                aria-label={t('press.downloadDatomerVariant', { variant })}
+              >
+                <img
+                  src={`/datomer-banner-${variant}.png`}
+                  alt={t('press.datomerVariantAlt', { variant })}
+                  width="200"
+                  height="34"
+                  loading="lazy"
+                />
+                <span>{variant}</span>
+              </a>
+            ))}
+          </div>
         </section>
 
         <section className="press-section">
