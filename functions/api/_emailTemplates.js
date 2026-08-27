@@ -64,6 +64,15 @@ const EMAIL_I18N = {
     dailySummaryNoSubmissionsBody: 'There were no new submissions between 06:00 UTC yesterday and 06:00 UTC today. The next summary will arrive tomorrow.',
     dailySummaryTitle: 'Daily submission summary',
     dailySummaryBody: (count) => `There were <strong style="color: ${BRAND.text};">${count}</strong> submission${count === 1 ? '' : 's'} in the last 24 hours. The full list is attached as a CSV file.`,
+    paymentSupportTitle: 'New purchase',
+    paymentSupportSubject: (plan, email) => `Purchase: Pär ${plan} — ${email}`,
+    paymentSupportBody: (plan, email) => `A new Pär ${plan} subscription was purchased by ${email}.`,
+    paymentConfirmationSubject: (plan) => `Your Pär ${plan} purchase confirmation`,
+    paymentConfirmationTitle: (name) => `Thank you, ${name}`,
+    paymentConfirmationBody1: (plan) => `Your Pär <strong style="color: ${BRAND.text};">${plan}</strong> subscription is now active.`,
+    paymentConfirmationBody2: 'Your license key is below. Use it in the Pär app to activate your subscription.',
+    paymentConfirmationLicenseLabel: 'License key',
+    paymentConfirmationQuestions: 'Questions? Reply to this email or contact us at',
     footerCompany: `${BRAND.company} AB`,
     footerEmail: 'Email us at',
     footerPrivacy: `You received this because you interacted with ${BRAND.product}. Your data stays private — we never sell or share it.`,
@@ -106,6 +115,15 @@ const EMAIL_I18N = {
     dailySummaryNoSubmissionsBody: 'Det kom inga nya inskick mellan 06:00 UTC igår och 06:00 UTC idag. Nästa sammanfattning kommer i morgon.',
     dailySummaryTitle: 'Daglig sammanfattning av inskick',
     dailySummaryBody: (count) => `Det fanns <strong style="color: ${BRAND.text};">${count}</strong> inskick det senaste dygnet. Den fullständiga listan finns bifogad som CSV.`,
+    paymentSupportTitle: 'Nytt köp',
+    paymentSupportSubject: (plan, email) => `Köp: Pär ${plan} — ${email}`,
+    paymentSupportBody: (plan, email) => `En ny Pär ${plan}-prenumeration köptes av ${email}.`,
+    paymentConfirmationSubject: (plan) => `Bekräftelse av ditt Pär ${plan}-köp`,
+    paymentConfirmationTitle: (name) => `Tack, ${name}`,
+    paymentConfirmationBody1: (plan) => `Din Pär <strong style="color: ${BRAND.text};">${plan}</strong>-prenumeration är nu aktiv.`,
+    paymentConfirmationBody2: 'Din licensnyckel finns nedan. Använd den i Pär-appen för att aktivera din prenumeration.',
+    paymentConfirmationLicenseLabel: 'Licensnyckel',
+    paymentConfirmationQuestions: 'Frågor? Svara på detta e-postmeddelande eller kontakta oss på',
     footerCompany: `${BRAND.company} AB`,
     footerEmail: 'Mejla oss på',
     footerPrivacy: `Du fick detta e-postmeddelande eftersom du interagerade med ${BRAND.product}. Dina data förblir privata — vi säljer eller delar dem aldrig.`,
@@ -148,6 +166,15 @@ const EMAIL_I18N = {
     dailySummaryNoSubmissionsBody: 'Es gab keine neuen Einsendungen zwischen 06:00 UTC gestern und 06:00 UTC heute. Die nächste Zusammenfassung kommt morgen.',
     dailySummaryTitle: 'Tägliche Zusammenfassung der Einsendungen',
     dailySummaryBody: (count) => `Es gab <strong style="color: ${BRAND.text};">${count}</strong> Einsendungen in den letzten 24 Stunden. Die vollständige Liste ist als CSV angehängt.`,
+    paymentSupportTitle: 'Neuer Kauf',
+    paymentSupportSubject: (plan, email) => `Kauf: Pär ${plan} — ${email}`,
+    paymentSupportBody: (plan, email) => `Ein neues Pär ${plan}-Abonnement wurde von ${email} gekauft.`,
+    paymentConfirmationSubject: (plan) => `Bestätigung deines Pär ${plan}-Kaufs`,
+    paymentConfirmationTitle: (name) => `Danke, ${name}`,
+    paymentConfirmationBody1: (plan) => `Dein Pär <strong style="color: ${BRAND.text};">${plan}</strong>-Abonnement ist jetzt aktiv.`,
+    paymentConfirmationBody2: 'Dein Lizenzschlüssel steht unten. Verwende ihn in der Pär-App, um dein Abonnement zu aktivieren.',
+    paymentConfirmationLicenseLabel: 'Lizenzschlüssel',
+    paymentConfirmationQuestions: 'Fragen? Antworte auf diese E-Mail oder kontaktiere uns unter',
     footerCompany: `${BRAND.company} AB`,
     footerEmail: 'Schreiben Sie uns an',
     footerPrivacy: `Sie haben diese E-Mail erhalten, weil Sie mit ${BRAND.product} interagiert haben. Ihre Daten bleiben privat — wir verkaufen oder teilen sie nie.`,
@@ -502,6 +529,57 @@ function parseMetadata(row) {
 function seconds(ms) {
   if (ms == null || Number.isNaN(ms)) return 0
   return Math.round(Number(ms) / 1000)
+}
+
+export function buildPaymentSupportEmail({ plan, email, licenseKey, stripeSessionId, locale = 'en' }) {
+  const strings = i18n(locale)
+  const title = strings.paymentSupportTitle
+  const subject = strings.paymentSupportSubject(plan, email)
+
+  const fields = [
+    { label: strings.labelForm, value: 'stripe-purchase' },
+    { label: 'Plan', value: escapeHtml(plan) },
+    { label: strings.labelEmail, value: `<a href="mailto:${escapeHtml(email)}" style="color: ${BRAND.accent}; text-decoration: none;">${escapeHtml(email)}</a>` },
+    { label: strings.paymentConfirmationLicenseLabel, value: escapeHtml(licenseKey) },
+    { label: 'Session', value: escapeHtml(stripeSessionId) },
+  ]
+
+  const contentHtml = `
+    <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>
+    <p style="margin: 0 0 20px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.paymentSupportBody(escapeHtml(plan), escapeHtml(email))}</p>
+    ${fields.map((f) => `
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 12px;">
+        <tr><td style="padding: 14px 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">${escapeHtml(f.label)}</div><div style="font-size: 15px; color: ${BRAND.text}; line-height: 1.5;">${f.value}</div></td></tr>
+      </table>
+    `).join('')}
+  `
+
+  const text = `${title}\n\n${strings.paymentSupportBody(plan, email)}\n\n${fields.map((f) => `${f.label}: ${f.value.replace(/<[^>]+>/g, '')}`).join('\n')}`
+
+  const { html, text: wrappedText } = emailWrapper({ title, locale, previewText: subject, contentHtml, contentText: text })
+  return { subject, html, text: wrappedText, replyTo: email }
+}
+
+export function buildPaymentConfirmationEmail({ plan, email, licenseKey, locale = 'en' }) {
+  const strings = i18n(locale)
+  const firstName = getFirstName(email.split('@')[0])
+  const subject = strings.paymentConfirmationSubject(plan)
+  const title = strings.paymentConfirmationTitle(firstName)
+
+  const contentHtml = `
+    <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>
+    <p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.paymentConfirmationBody1(escapeHtml(plan))}</p>
+    <p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.paymentConfirmationBody2}</p>
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 16px;">
+      <tr><td style="padding: 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">${strings.paymentConfirmationLicenseLabel}</div><div style="font-size: 18px; font-weight: 700; color: ${BRAND.text}; line-height: 1.6; font-family: monospace;">${escapeHtml(licenseKey)}</div></td></tr>
+    </table>
+    <p style="margin: 0; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.paymentConfirmationQuestions} <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a>.</p>
+  `
+
+  const contentText = `${title}\n\n${strings.paymentConfirmationBody1(plan).replace(/<[^>]+>/g, '')}\n\n${strings.paymentConfirmationBody2}\n\n${strings.paymentConfirmationLicenseLabel}: ${licenseKey}\n\n${strings.paymentConfirmationQuestions} ${BRAND.contactEmail}.`
+
+  const { html, text } = emailWrapper({ title, locale, previewText: subject, contentHtml, contentText })
+  return { subject, html, text }
 }
 
 export function buildDailySummaryEmail({ rows, dateLabel }) {

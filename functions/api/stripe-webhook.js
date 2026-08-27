@@ -1,5 +1,38 @@
 import { sendSupportEmail } from './_email.js'
 import { insertSubmission } from './_db.js'
+import { buildPaymentSupportEmail, buildPaymentConfirmationEmail } from './_emailTemplates.js'
+
+// Stripe webhook secrets from the dashboard start with whsec_ and are base64-encoded.
+// The HMAC key must be the decoded secret.
+function decodeWebhookSecret(secret) {
+  if (typeof secret !== 'string' || !secret.startsWith('whsec_')) {
+    return secret
+  }
+  try {
+    return atob(secret.slice(6))
+  } catch (err) {
+    console.error('[stripe-webhook] failed to decode whsec secret:', err.message)
+    return secret
+  }
+}
+
+function verifyStripeSignature({ signature, rawBody, webhookSecret }) {
+  const crypto = require('node:crypto')
+  const key = decodeWebhookSecret(webhookSecret)
+
+  const elements = signature.split(',').filter(Boolean)
+  const signed = Object.fromEntries(elements.map((piece) => piece.split('=')))
+  const timestamp = signed.t
+  const v1 = signed.v1
+
+  if (!timestamp || !v1) {
+    throw new Error('Malformed Stripe signature header.')
+  }
+
+  const payload = `${timestamp}.${rawBody}`
+  const computed = crypto.createHmac('sha256', key).update(payload, 'utf8').digest('hex')
+  return v1 === computed
+}
 
 export async function onRequestPost(context) {
   const { request, env, ctx } = context
@@ -8,6 +41,7 @@ export async function onRequestPost(context) {
   const webhookSecret = env.STRIPE_WEBHOOK_SECRET
 
   if (!stripeSecret) {
+    console.error('[stripe-webhook] STRIPE_SECRET_KEY is missing')
     return new Response(JSON.stringify({ error: 'Stripe is not configured.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
@@ -15,6 +49,7 @@ export async function onRequestPost(context) {
   }
 
   if (!webhookSecret) {
+    console.error('[stripe-webhook] STRIPE_WEBHOOK_SECRET is missing')
     return new Response(JSON.stringify({ error: 'Stripe webhook secret is not configured.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
@@ -23,6 +58,7 @@ export async function onRequestPost(context) {
 
   const signature = request.headers.get('stripe-signature')
   if (!signature) {
+    console.error('[stripe-webhook] missing stripe-signature header')
     return new Response(JSON.stringify({ error: 'Missing Stripe signature.' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -33,20 +69,9 @@ export async function onRequestPost(context) {
   let event
 
   try {
-    const crypto = await import('node:crypto')
-    const expectedSignature = crypto
-      .createHmac('sha256', webhookSecret)
-      .update(rawBody, 'utf8')
-      .digest('hex')
-
-    const elements = signature.split(',')
-    const signed = Object.fromEntries(elements.map((piece) => piece.split('=')))
-    const timestamp = signed.t
-    const v1 = signed.v1
-    const payload = `${timestamp}.${rawBody}`
-    const computed = crypto.createHmac('sha256', webhookSecret).update(payload, 'utf8').digest('hex')
-
-    if (v1 !== computed) {
+    const valid = verifyStripeSignature({ signature, rawBody, webhookSecret })
+    if (!valid) {
+      console.error('[stripe-webhook] signature verification failed')
       return new Response(JSON.stringify({ error: 'Invalid Stripe signature.' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -55,11 +80,14 @@ export async function onRequestPost(context) {
 
     event = JSON.parse(rawBody)
   } catch (error) {
+    console.error('[stripe-webhook] payload verification error:', error.message)
     return new Response(JSON.stringify({ error: error.message || 'Invalid Stripe webhook payload.' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
     })
   }
+
+  console.log('[stripe-webhook] received event:', event.type, 'id:', event.id)
 
   if (event.type !== 'checkout.session.completed') {
     return new Response(JSON.stringify({ received: true }), {
@@ -70,10 +98,12 @@ export async function onRequestPost(context) {
 
   const session = event.data?.object
   const email = session?.customer_details?.email || session?.customer_email || ''
-  const plan = session?.metadata?.plan || session?.line_items?.data?.[0]?.price?.nickname || 'plus'
+  const plan = session?.metadata?.plan || 'plus'
   const stripeSessionId = session?.id || ''
+  const locale = session?.locale || 'en'
 
   if (!email) {
+    console.error('[stripe-webhook] missing customer email in checkout session:', stripeSessionId)
     return new Response(JSON.stringify({ error: 'Missing customer email in Stripe session.' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -89,45 +119,22 @@ export async function onRequestPost(context) {
     licenseKey,
     status: 'active',
     issuedAt: new Date().toISOString(),
-    locale: session?.locale || 'en',
+    locale,
+  }
+
+  if (!env.RESEND_API_KEY) {
+    console.error('[stripe-webhook] RESEND_API_KEY is missing; skipping purchase emails')
+  } else {
+    const supportEmail = buildPaymentSupportEmail({ plan, email, licenseKey, stripeSessionId, locale })
+    const supportResult = await sendSupportEmail({ env, ...supportEmail })
+    console.log('[stripe-webhook] support email result:', JSON.stringify(supportResult))
+
+    const confirmationEmail = buildPaymentConfirmationEmail({ plan, email, licenseKey, locale })
+    const confirmationResult = await sendSupportEmail({ env, to: [email], ...confirmationEmail })
+    console.log('[stripe-webhook] confirmation email result:', JSON.stringify(confirmationResult))
   }
 
   const supportText = `[source: stripe-purchase]\n\nNew purchase\n\nPlan: ${plan}\nEmail: ${email}\nLicense key: ${licenseKey}\nSession: ${stripeSessionId}`
-
-  if (env.RESEND_API_KEY) {
-    const supportHtml = `
-      <p><strong>[source: stripe-purchase]</strong></p>
-      <h2>New purchase</h2>
-      <p><strong>Plan:</strong> ${plan}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>License key:</strong> ${licenseKey}</p>
-      <p><strong>Session:</strong> ${stripeSessionId}</p>
-    `
-
-    await sendSupportEmail({
-      env,
-      subject: `Purchase: Pär ${plan} — ${email}`,
-      replyTo: email,
-      html: supportHtml,
-      text: supportText,
-    })
-
-    await sendSupportEmail({
-      env,
-      to: [email],
-      subject: `Your Pär ${plan} purchase confirmation`,
-      html: `
-        <h2>Thank you for your purchase</h2>
-        <p>Your Pär <strong>${plan}</strong> subscription is now active.</p>
-        <p>Your license key is:</p>
-        <p style="font-size: 1.25rem; font-weight: bold;">${licenseKey}</p>
-        <p>Use this key in the Pär app to activate your subscription.</p>
-        <hr />
-        <p><small>Datomer AB · hello@datomer.eu</small></p>
-      `,
-      text: `Thank you for your purchase.\n\nYour Pär ${plan} subscription is now active.\n\nYour license key is: ${licenseKey}\n\nUse this key in the Pär app to activate your subscription.\n\n---\nDatomer AB · hello@datomer.eu`,
-    })
-  }
 
   // Non-blocking: store submission for daily summary.
   ctx?.waitUntil?.(

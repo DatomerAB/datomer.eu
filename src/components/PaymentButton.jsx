@@ -3,7 +3,7 @@ import { useCheckout } from '../payments/useCheckout.js'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
 
-export function PaymentButton({ priceId, mode = 'subscription', children, className = 'button button-primary', disabled = false }) {
+export function PaymentButton({ priceId, mode = 'subscription', plan = 'plus', children, className = 'button button-primary', disabled = false }) {
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t } = useLanguage()
   const { checkout, loading, error: checkoutError } = useCheckout()
@@ -18,17 +18,17 @@ export function PaymentButton({ priceId, mode = 'subscription', children, classN
     if (!priceId || loading) return
     setWidgetError(null)
     if (!TURNSTILE_SITE_KEY) {
-      checkout(priceId, mode)
+      checkout(priceId, mode, null, plan)
       return
     }
     if (turnstileToken) {
-      checkout(priceId, mode, turnstileToken)
+      checkout(priceId, mode, turnstileToken, plan)
       return
     }
     const token = turnstileRef.current?.getResponse?.() || null
     if (token) {
       setTurnstileToken(token)
-      checkout(priceId, mode, token)
+      checkout(priceId, mode, token, plan)
       return
     }
     setPendingCheckout(true)
@@ -40,7 +40,7 @@ export function PaymentButton({ priceId, mode = 'subscription', children, classN
     setWidgetError(null)
     if (pendingCheckout) {
       setPendingCheckout(false)
-      checkout(priceId, mode, token)
+      checkout(priceId, mode, token, plan)
     }
   }
 

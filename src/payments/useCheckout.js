@@ -6,7 +6,7 @@ export function useCheckout() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const checkout = async (priceId, mode = 'subscription', turnstileToken = null) => {
+  const checkout = async (priceId, mode = 'subscription', turnstileToken = null, plan = 'plus') => {
     if (!priceId) {
       setError(t('payment.unavailable'))
       return
@@ -17,7 +17,7 @@ export function useCheckout() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId, mode, locale: lang, turnstileToken }),
+        body: JSON.stringify({ priceId, mode, locale: lang, turnstileToken, plan }),
       })
       const data = await res.json()
       if (!res.ok || !data.url) {

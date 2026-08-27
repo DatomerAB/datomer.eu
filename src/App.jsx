@@ -561,6 +561,7 @@ function HomePage({ onDownload }) {
                     <PaymentButton
                       priceId={plan.priceId}
                       mode={plan.mode}
+                      plan={plan.name.toLowerCase().includes('pro') ? 'pro' : 'plus'}
                       className="button button-primary"
                     >
                       {plan.cta}

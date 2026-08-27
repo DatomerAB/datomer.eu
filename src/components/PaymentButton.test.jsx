@@ -51,7 +51,7 @@ describe('PaymentButton', () => {
     vi.stubEnv('VITE_TURNSTILE_SITE_KEY', '')
     render(<PaymentButton priceId="price_123" mode="subscription">Get Plus</PaymentButton>, { wrapper: Wrapper })
     fireEvent.click(screen.getByRole('button', { name: /Get Plus/i }))
-    expect(checkout).toHaveBeenCalledWith('price_123', 'subscription')
+    expect(checkout).toHaveBeenCalledWith('price_123', 'subscription', null, 'plus')
   })
 
   it('is disabled when no priceId is provided', () => {
@@ -69,7 +69,7 @@ describe('PaymentButton', () => {
     act(() => {
       callbacks.onVerify?.('test-token')
     })
-    expect(checkout).toHaveBeenCalledWith('price_123', 'subscription', 'test-token')
+    expect(checkout).toHaveBeenCalledWith('price_123', 'subscription', 'test-token', 'plus')
   })
 
   it('displays the Turnstile error code when the challenge fails', () => {

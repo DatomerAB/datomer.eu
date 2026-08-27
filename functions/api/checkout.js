@@ -21,7 +21,7 @@ export async function onRequestPost(context) {
     })
   }
 
-  const { priceId, mode = 'subscription', locale = 'en', turnstileToken } = body
+  const { priceId, mode = 'subscription', locale = 'en', turnstileToken, plan = 'plus' } = body
   if (!priceId) {
     return new Response(JSON.stringify({ error: 'Missing priceId.' }), {
       status: 400,
@@ -52,7 +52,8 @@ export async function onRequestPost(context) {
         'line_items[0][quantity]': '1',
         'success_url': `${origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
         'cancel_url': `${origin}/#pricing`,
-        'locale': locale === 'sv' ? 'sv' : 'en',
+        'locale': locale === 'sv' ? 'sv' : locale === 'de' ? 'de' : 'en',
+        'metadata[plan]': plan,
       }).toString(),
     })
 
