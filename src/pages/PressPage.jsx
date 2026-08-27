@@ -72,8 +72,35 @@ export function PressPage() {
               {t('press.downloadDatomerBannerPng')}
             </a>
           </div>
+
+          <h4>{t('press.datomerLogoVariations')}</h4>
+          <p>{t('press.datomerLogoVariationsText')}</p>
           <div className="press-variations">
-            {['forest', 'midnight', 'stone', 'copper', 'ink'].map((variant) => (
+            {['forest', 'midnight', 'stone', 'copper', 'ink', 'aurora', 'fog', 'ember', 'moss', 'slate'].map((variant) => (
+              <a
+                key={`datomer-logo-${variant}`}
+                href={`/datomer-logo-themed-${variant}.png`}
+                download
+                className="press-variant-thumb"
+                aria-label={t('press.downloadDatomerLogoVariant', { variant })}
+              >
+                <img
+                  src={`/datomer-logo-themed-${variant}.png`}
+                  alt={t('press.datomerLogoVariantAlt', { variant })}
+                  width="100"
+                  height="100"
+                  loading="lazy"
+                  className="press-logo-thumb"
+                />
+                <span>{variant}</span>
+              </a>
+            ))}
+          </div>
+
+          <h4>{t('press.imageVariations')}</h4>
+          <p>{t('press.imageVariationsText')}</p>
+          <div className="press-variations">
+            {['forest', 'midnight', 'stone', 'copper', 'ink', 'aurora', 'fog', 'ember', 'moss', 'slate'].map((variant) => (
               <a
                 key={`datomer-${variant}`}
                 href={`/datomer-banner-${variant}.png`}

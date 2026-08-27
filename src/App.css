@@ -1618,6 +1618,11 @@
   border-radius: 8px;
 }
 
+.press-variant-thumb .press-logo-thumb {
+  background: #1a1a1e;
+  padding: 12px;
+}
+
 .press-variant-thumb span {
   font-size: 0.8rem;
   font-weight: 600;
