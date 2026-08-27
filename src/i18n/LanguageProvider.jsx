@@ -1,6 +1,25 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { translations } from './translations'
 import { LanguageContext } from './LanguageContext.js'
+
+function useSearchParamsSafe() {
+  try {
+    return useSearchParams()
+  } catch {
+    const empty = new URLSearchParams()
+    return [empty, () => {}]
+  }
+}
+
+export const SUPPORTED_LANGUAGES = ['en', 'sv', 'de']
+export const DEFAULT_LANGUAGE = 'en'
+
+export function parseLanguage(value) {
+  if (!value) return null
+  const code = String(value).toLowerCase().slice(0, 2)
+  return SUPPORTED_LANGUAGES.includes(code) ? code : null
+}
 
 function getNestedValue(obj, path) {
   return path.split('.').reduce((acc, key) => (acc == null ? undefined : acc[key]), obj)
@@ -12,20 +31,44 @@ function interpolate(template, params) {
 }
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(() => {
-    if (typeof window === 'undefined') return 'en'
+  const [searchParams, setSearchParams] = useSearchParamsSafe()
+  const [lang, setLangState] = useState(() => {
+    if (typeof window === 'undefined') {
+      return parseLanguage(searchParams.get('lang')) || DEFAULT_LANGUAGE
+    }
+    const queryLang = parseLanguage(searchParams.get('lang'))
+    if (queryLang) return queryLang
     const storage = typeof window.localStorage?.getItem === 'function' ? window.localStorage : null
-    const stored = storage?.getItem('par-language')
-    if (stored && translations[stored]) return stored
-    const browser = typeof navigator !== 'undefined' ? navigator.language?.slice(0, 2) : 'en'
-    return translations[browser] ? browser : 'en'
+    const stored = parseLanguage(storage?.getItem('par-language'))
+    if (stored) return stored
+    const browser = parseLanguage(navigator.language)
+    return browser || DEFAULT_LANGUAGE
   })
+
+  const setLang = (next) => {
+    const code = parseLanguage(next) || DEFAULT_LANGUAGE
+    setLangState(code)
+    if (typeof window !== 'undefined' && typeof window.localStorage?.setItem === 'function') {
+      window.localStorage.setItem('par-language', code)
+    }
+    const current = new URLSearchParams(searchParams)
+    if (code === DEFAULT_LANGUAGE) {
+      current.delete('lang')
+    } else {
+      current.set('lang', code)
+    }
+    setSearchParams(current, { replace: true })
+  }
+
+  useEffect(() => {
+    const queryLang = parseLanguage(searchParams.get('lang'))
+    if (queryLang && queryLang !== lang) {
+      setLangState(queryLang)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if (typeof window.localStorage?.setItem === 'function') {
-        window.localStorage.setItem('par-language', lang)
-      }
       document.documentElement.lang = lang
     }
   }, [lang])
@@ -45,7 +88,7 @@ export function LanguageProvider({ children }) {
   }
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, t, supportedLanguages: SUPPORTED_LANGUAGES }}>
       {children}
     </LanguageContext.Provider>
   )

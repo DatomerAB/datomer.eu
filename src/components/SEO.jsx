@@ -40,6 +40,15 @@ export function SEO({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
 
+      {pathname && (
+        <>
+          <link rel="alternate" hrefLang="en" href={`${SITE_URL}${pathname}`} />
+          <link rel="alternate" hrefLang="sv" href={`${SITE_URL}${pathname}?lang=sv`} />
+          <link rel="alternate" hrefLang="de" href={`${SITE_URL}${pathname}?lang=de`} />
+          <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${pathname}`} />
+        </>
+      )}
+
       {jsonLd && (
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       )}

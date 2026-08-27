@@ -1,34 +1,23 @@
 import { useLanguage } from '../i18n/useLanguage.js'
 
 export function LanguageSwitcher() {
-  const { lang, setLang, t } = useLanguage()
+  const { lang, setLang, t, supportedLanguages } = useLanguage()
+
+  const labels = { en: 'EN', sv: 'SV', de: 'DE' }
 
   return (
     <div className="language-switcher" role="group" aria-label={t('language.label')}>
-      <button
-        type="button"
-        className={lang === 'en' ? 'active' : ''}
-        onClick={() => setLang('en')}
-        aria-pressed={lang === 'en'}
-      >
-        EN
-      </button>
-      <button
-        type="button"
-        className={lang === 'sv' ? 'active' : ''}
-        onClick={() => setLang('sv')}
-        aria-pressed={lang === 'sv'}
-      >
-        SV
-      </button>
-      <button
-        type="button"
-        className={lang === 'de' ? 'active' : ''}
-        onClick={() => setLang('de')}
-        aria-pressed={lang === 'de'}
-      >
-        DE
-      </button>
+      {supportedLanguages.map((code) => (
+        <button
+          key={code}
+          type="button"
+          className={lang === code ? 'active' : ''}
+          onClick={() => setLang(code)}
+          aria-pressed={lang === code}
+        >
+          {labels[code]}
+        </button>
+      ))}
     </div>
   )
 }
