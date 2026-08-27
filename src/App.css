@@ -1524,6 +1524,127 @@
   text-decoration: underline;
 }
 
+/* Press kit */
+.press-section {
+  margin: 48px 0;
+}
+
+.press-section h3 {
+  font-size: 1.1rem;
+  margin: 28px 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.press-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0 28px;
+}
+
+.press-downloads .button {
+  font-size: 0.85rem;
+  padding: 10px 16px;
+}
+
+.press-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 24px;
+  margin: 20px 0;
+}
+
+.press-facts dt {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.press-facts dd {
+  margin: 0;
+  color: var(--text);
+}
+
+.press-quote {
+  margin: 24px 0;
+  padding: 24px;
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 12px 12px 0;
+}
+
+.press-quote p {
+  font-size: 1.1rem;
+  font-style: italic;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.press-quote footer {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.press-variations {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin: 20px 0 28px;
+}
+
+.press-variant-thumb {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.press-variant-thumb:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+.press-variant-thumb img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.press-variant-thumb span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .press-downloads {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .press-facts {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .press-facts dd {
+    margin-bottom: 12px;
+  }
+
+  .press-variations {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .company-address {
   display: block;
   font-style: normal;

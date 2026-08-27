@@ -34,6 +34,32 @@ export function PressPage() {
             <a href="/og-image.png" download className="button button-secondary">
               {t('press.downloadSocialImage')}
             </a>
+            <a href="/linkedin-banner-forest.png" download className="button button-secondary">
+              {t('press.downloadLinkedInBanner')}
+            </a>
+          </div>
+
+          <h3>{t('press.imageVariations')}</h3>
+          <p>{t('press.imageVariationsText')}</p>
+          <div className="press-variations">
+            {['forest', 'midnight', 'ember', 'aurora', 'slate'].map((variant) => (
+              <a
+                key={variant}
+                href={`/og-image-${variant}.png`}
+                download
+                className="press-variant-thumb"
+                aria-label={t('press.downloadVariant', { variant })}
+              >
+                <img
+                  src={`/og-image-${variant}.png`}
+                  alt={t('press.variantAlt', { variant })}
+                  width="200"
+                  height="105"
+                  loading="lazy"
+                />
+                <span>{variant}</span>
+              </a>
+            ))}
           </div>
         </section>
 
