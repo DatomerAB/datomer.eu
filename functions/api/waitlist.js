@@ -1,8 +1,9 @@
 import { verifyTurnstileToken } from './_turnstile.js'
 import { sendSupportEmail } from './_email.js'
+import { insertSubmission } from './_db.js'
 
 export async function onRequestPost(context) {
-  const { request, env } = context
+  const { request, env, ctx } = context
 
   let body
   try {
@@ -38,6 +39,7 @@ export async function onRequestPost(context) {
     })
   }
 
+  const createdAt = timestamp || new Date().toISOString()
   const payload = {
     name: name ? String(name).trim() : 'Subscriber',
     email: String(email).trim().toLowerCase(),
@@ -45,7 +47,7 @@ export async function onRequestPost(context) {
     country: country ? String(country).toUpperCase() : 'XX',
     type,
     locale,
-    timestamp: timestamp || new Date().toISOString(),
+    timestamp: createdAt,
   }
 
   const labelMap = {
@@ -112,6 +114,22 @@ export async function onRequestPost(context) {
   })
   console.log('[waitlist] confirmation email result:', JSON.stringify(confirmationResult))
 
+  // Non-blocking: store submission for daily summary.
+  ctx?.waitUntil?.(
+    insertSubmission(env, {
+      source: sourceLabel.replace(/-form$/, ''),
+      createdAt,
+      email: payload.email,
+      name: payload.name,
+      country: payload.country,
+      subject,
+      message: null,
+      body: detailsText,
+      metadata: { type: payload.type, phone: payload.phone, locale: payload.locale, interests: body.interests },
+    })
+  )
+
+  // 
   // If a webhook URL is configured (e.g. Zapier, Make, Slack), forward the submission.
   if (env.WAITLIST_WEBHOOK_URL) {
     try {

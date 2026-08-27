@@ -2,7 +2,7 @@ const RESEND_ENDPOINT = 'https://api.resend.com/emails'
 const DEFAULT_FROM_EMAIL = 'onboarding@resend.dev'
 const DEFAULT_TO_EMAIL = 'hello@datomer.eu'
 
-export async function sendSupportEmail({ env, to, subject, html, text, replyTo }) {
+export async function sendSupportEmail({ env, to, subject, html, text, replyTo, attachments }) {
   if (!env.RESEND_API_KEY) {
     console.error('[sendSupportEmail] missing RESEND_API_KEY')
     return { sent: false, error: 'missing_api_key' }
@@ -27,6 +27,7 @@ export async function sendSupportEmail({ env, to, subject, html, text, replyTo }
         subject,
         html,
         text,
+        ...(attachments ? { attachments } : {}),
       }),
     })
 

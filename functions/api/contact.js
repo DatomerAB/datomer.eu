@@ -1,8 +1,9 @@
 import { verifyTurnstileToken } from './_turnstile.js'
 import { sendSupportEmail } from './_email.js'
+import { insertSubmission } from './_db.js'
 
 export async function onRequestPost(context) {
-  const { request, env } = context
+  const { request, env, ctx } = context
 
   let body
   try {
@@ -34,6 +35,7 @@ export async function onRequestPost(context) {
   const cleanedName = String(name).trim()
   const cleanedEmail = String(email).trim().toLowerCase()
   const cleanedMessage = String(message).trim()
+  const createdAt = new Date().toISOString()
 
   await sendSupportEmail({
     env,
@@ -64,6 +66,20 @@ export async function onRequestPost(context) {
     `,
     text: `Thank you, ${cleanedName}.\n\nWe have received your message and will get back to you as soon as possible.\n\nYour message:\n${cleanedMessage}\n\n---\nDatomer AB · hello@datomer.eu`,
   })
+
+  // Non-blocking: store submission for daily summary.
+  ctx?.waitUntil?.(
+    insertSubmission(env, {
+      source: 'contact',
+      createdAt,
+      email: cleanedEmail,
+      name: cleanedName,
+      subject: `Contact form: enquiry from ${cleanedName}`,
+      message: cleanedMessage,
+      body: `Name: ${cleanedName}\nEmail: ${cleanedEmail}\nMessage:\n${cleanedMessage}`,
+      metadata: { locale },
+    })
+  )
 
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,

@@ -1,7 +1,8 @@
 import { sendSupportEmail } from './_email.js'
+import { insertSubmission } from './_db.js'
 
 export async function onRequestPost(context) {
-  const { request, env } = context
+  const { request, env, ctx } = context
 
   const stripeSecret = env.STRIPE_SECRET_KEY
   const webhookSecret = env.STRIPE_WEBHOOK_SECRET
@@ -91,6 +92,8 @@ export async function onRequestPost(context) {
     locale: session?.locale || 'en',
   }
 
+  const supportText = `[source: stripe-purchase]\n\nNew purchase\n\nPlan: ${plan}\nEmail: ${email}\nLicense key: ${licenseKey}\nSession: ${stripeSessionId}`
+
   if (env.RESEND_API_KEY) {
     const supportHtml = `
       <p><strong>[source: stripe-purchase]</strong></p>
@@ -100,7 +103,6 @@ export async function onRequestPost(context) {
       <p><strong>License key:</strong> ${licenseKey}</p>
       <p><strong>Session:</strong> ${stripeSessionId}</p>
     `
-    const supportText = `[source: stripe-purchase]\n\nNew purchase\n\nPlan: ${plan}\nEmail: ${email}\nLicense key: ${licenseKey}\nSession: ${stripeSessionId}`
 
     await sendSupportEmail({
       env,
@@ -126,6 +128,21 @@ export async function onRequestPost(context) {
       text: `Thank you for your purchase.\n\nYour Pär ${plan} subscription is now active.\n\nYour license key is: ${licenseKey}\n\nUse this key in the Pär app to activate your subscription.\n\n---\nDatomer AB · hello@datomer.eu`,
     })
   }
+
+  // Non-blocking: store submission for daily summary.
+  ctx?.waitUntil?.(
+    insertSubmission(env, {
+      source: 'stripe-purchase',
+      createdAt: licenseRecord.issuedAt,
+      email: licenseRecord.email,
+      name: null,
+      country: null,
+      subject: `Purchase: Pär ${plan} — ${email}`,
+      message: null,
+      body: supportText,
+      metadata: { plan: licenseRecord.plan, licenseKey, stripeSessionId, locale: licenseRecord.locale },
+    })
+  )
 
   return new Response(JSON.stringify({ received: true, license: licenseRecord }), {
     status: 200,
