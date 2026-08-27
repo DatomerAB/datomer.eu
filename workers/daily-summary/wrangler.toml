@@ -2,9 +2,16 @@ name = "datomer-daily-summary"
 main = "src/index.js"
 compatibility_date = "2026-08-27"
 
+# Observability: Cloudflare Workers logs, traces and metrics.
 [observability]
 enabled = true
 head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+
+[observability.traces]
+enabled = true
 
 # Production environment
 [[env.production.d1_databases]]
