@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { runDailySummary, buildCsv, buildHtmlSummary, buildTextSummary, getSummaryWindow, MAX_ATTACHMENT_BYTES } from './_dailySummary.js'
+import { runDailySummary, buildCsv, getSummaryWindow, MAX_ATTACHMENT_BYTES } from './_dailySummary.js'
+import { buildDailySummaryEmail } from './_emailTemplates.js'
 
 vi.mock('./_email.js', () => ({
   sendSupportEmail: vi.fn(() => Promise.resolve({ sent: true })),
@@ -75,11 +76,9 @@ describe('daily summary logic', () => {
       { source: 'contact', created_at: '2026-08-27T06:00:00.000Z', email: 'a@example.com', name: 'A', country: 'SE', subject: 'S', message: 'Hello', body: null, metadata: null },
       { source: 'download', created_at: '2026-08-27T07:00:00.000Z', email: 'b@example.com', name: 'B', country: 'US', subject: 'D', message: null, body: 'Body', metadata: null },
     ]
-    const html = buildHtmlSummary(rows)
+    const { html, text } = buildDailySummaryEmail({ rows, dateLabel: '2026-08-27' })
     expect(html).toContain('contact (1)')
     expect(html).toContain('download (1)')
-
-    const text = buildTextSummary(rows)
     expect(text).toContain('contact (1)')
     expect(text).toContain('download (1)')
   })

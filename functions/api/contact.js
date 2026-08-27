@@ -1,6 +1,7 @@
 import { verifyTurnstileToken } from './_turnstile.js'
 import { sendSupportEmail } from './_email.js'
 import { insertSubmission } from './_db.js'
+import { buildContactSupportEmail, buildContactConfirmationEmail } from './_emailTemplates.js'
 
 export async function onRequestPost(context) {
   const { request, env, ctx } = context
@@ -37,35 +38,11 @@ export async function onRequestPost(context) {
   const cleanedMessage = String(message).trim()
   const createdAt = new Date().toISOString()
 
-  await sendSupportEmail({
-    env,
-    subject: `Contact form: enquiry from ${cleanedName}`,
-    replyTo: cleanedEmail,
-    html: `
-      <p><strong>[source: contact-form]</strong></p>
-      <h2>New contact form submission</h2>
-      <p><strong>Name:</strong> ${cleanedName}</p>
-      <p><strong>Email:</strong> ${cleanedEmail}</p>
-      <p><strong>Message:</strong></p>
-      <p>${cleanedMessage.replace(/\n/g, '<br>')}</p>
-    `,
-    text: `[source: contact-form]\n\nNew contact form submission\n\nName: ${cleanedName}\nEmail: ${cleanedEmail}\n\nMessage:\n${cleanedMessage}`,
-  })
+  const supportEmail = buildContactSupportEmail({ name: cleanedName, email: cleanedEmail, message: cleanedMessage })
+  await sendSupportEmail({ env, ...supportEmail })
 
-  await sendSupportEmail({
-    env,
-    to: [cleanedEmail],
-    subject: 'We received your message',
-    html: `
-      <h2>Thank you, ${cleanedName}</h2>
-      <p>We have received your message and will get back to you as soon as possible.</p>
-      <p><strong>Your message:</strong></p>
-      <p>${cleanedMessage.replace(/\n/g, '<br>')}</p>
-      <hr />
-      <p><small>Datomer AB · hello@datomer.eu</small></p>
-    `,
-    text: `Thank you, ${cleanedName}.\n\nWe have received your message and will get back to you as soon as possible.\n\nYour message:\n${cleanedMessage}\n\n---\nDatomer AB · hello@datomer.eu`,
-  })
+  const confirmationEmail = buildContactConfirmationEmail({ name: cleanedName, message: cleanedMessage })
+  await sendSupportEmail({ env, to: [cleanedEmail], ...confirmationEmail })
 
   // Non-blocking: store submission for daily summary.
   ctx?.waitUntil?.(

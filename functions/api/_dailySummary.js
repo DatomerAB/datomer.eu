@@ -1,5 +1,6 @@
 import { sendSupportEmail } from './_email.js'
 import { getSubmissionsInRange, pruneOldSubmissions } from './_db.js'
+import { buildDailySummaryEmail } from './_emailTemplates.js'
 
 export const DEFAULT_SUMMARY_TO_EMAIL = 'dailysummary@datomer.eu'
 export const RETENTION_DAYS = 30
@@ -67,70 +68,6 @@ export function buildCsv(rows) {
   return lines.join('\n')
 }
 
-export function buildHtmlSummary(rows) {
-  if (rows.length === 0) {
-    return `<p>No submissions in the last 24 hours.</p>`
-  }
-
-  const bySource = {}
-  for (const row of rows) {
-    bySource[row.source] = bySource[row.source] || []
-    bySource[row.source].push(row)
-  }
-
-  let html = `<h2>Daily submission summary</h2>`
-  html += `<p><strong>Total:</strong> ${rows.length} submission(s)</p>`
-
-  for (const [source, items] of Object.entries(bySource)) {
-    html += `<h3>${source} (${items.length})</h3>`
-    html += `<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; margin-bottom: 24px;">`
-    html += `<tr><th>Time</th><th>Email</th><th>Name</th><th>Country</th><th>Subject</th><th>Message / Body</th></tr>`
-    for (const row of items) {
-      const snippet = (row.message || row.body || '').slice(0, 200).replace(/\n/g, '<br>')
-      html += `<tr>`
-      html += `<td>${formatLocalTime(row.created_at)}</td>`
-      html += `<td>${row.email || '-'}</td>`
-      html += `<td>${row.name || '-'}</td>`
-      html += `<td>${row.country || '-'}</td>`
-      html += `<td>${row.subject || '-'}</td>`
-      html += `<td>${snippet || '-'}${(row.message || row.body || '').length > 200 ? '…' : ''}</td>`
-      html += `</tr>`
-    }
-    html += `</table>`
-  }
-
-  html += `<hr /><p><small>Datomer AB · hello@datomer.eu</small></p>`
-  return html
-}
-
-export function buildTextSummary(rows) {
-  if (rows.length === 0) {
-    return 'No submissions in the last 24 hours.'
-  }
-
-  const bySource = {}
-  for (const row of rows) {
-    bySource[row.source] = bySource[row.source] || []
-    bySource[row.source].push(row)
-  }
-
-  let text = `Daily submission summary\nTotal: ${rows.length} submission(s)\n\n`
-  for (const [source, items] of Object.entries(bySource)) {
-    text += `${source} (${items.length})\n${'='.repeat(source.length + ` (${items.length})`.length)}\n`
-    for (const row of items) {
-      text += `- Time: ${formatLocalTime(row.created_at)}\n`
-      text += `  Email: ${row.email || '-'}\n`
-      text += `  Name: ${row.name || '-'}\n`
-      text += `  Country: ${row.country || '-'}\n`
-      text += `  Subject: ${row.subject || '-'}\n`
-      text += `  Message/Body: ${(row.message || row.body || '-').slice(0, 200)}\n\n`
-    }
-  }
-
-  text += `---\nDatomer AB · hello@datomer.eu`
-  return text
-}
-
 export async function runDailySummary(env, ctx, options = {}) {
   const referenceTime = options.scheduledTime || options.referenceTime || new Date()
   const { start, end } = getSummaryWindow(referenceTime)
@@ -145,10 +82,9 @@ export async function runDailySummary(env, ctx, options = {}) {
   const csvBase64 = utf8ToBase64(csv)
   const filename = `datomer-submissions-${end.slice(0, 10)}.csv`
 
-  const subject = `Datomer daily summary — ${rows.length} submission(s) — ${end.slice(0, 10)}`
-
-  let html = buildHtmlSummary(rows)
-  let text = buildTextSummary(rows)
+  const { subject, html: summaryHtml, text: summaryText } = buildDailySummaryEmail({ rows, dateLabel: end.slice(0, 10) })
+  let html = summaryHtml
+  let text = summaryText
   const attachments = []
 
   if (csvBytes <= MAX_ATTACHMENT_BYTES) {

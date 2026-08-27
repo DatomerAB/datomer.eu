@@ -1,6 +1,7 @@
 import { verifyTurnstileToken } from './_turnstile.js'
 import { sendSupportEmail } from './_email.js'
 import { insertSubmission } from './_db.js'
+import { buildWaitlistSupportEmail, buildWaitlistConfirmationEmail } from './_emailTemplates.js'
 
 export async function onRequestPost(context) {
   const { request, env, ctx } = context
@@ -50,68 +51,28 @@ export async function onRequestPost(context) {
     timestamp: createdAt,
   }
 
-  const labelMap = {
-    waitlist: 'waitlist-form',
-    newsletter: 'newsletter-form',
-    download: 'download-form',
-  }
-  const sourceLabel = labelMap[payload.type] || payload.type
+  const sourceLabel = `${payload.type}-form`
+  const interests = body.interests || {}
 
-  const subjectMap = {
-    waitlist: `Waitlist signup: ${payload.email}`,
-    newsletter: `Newsletter signup: ${payload.email}`,
-    download: `Download request: ${payload.name} (${payload.email})`,
-  }
-  const subject = subjectMap[payload.type] || `Form submission: ${payload.email}`
-
-  const detailsHtml = Object.entries(payload)
-    .map(([key, value]) => `<p><strong>${key}:</strong> ${String(value).replace(/\n/g, '<br>')}</p>`)
-    .join('\n')
-
-  const detailsText = Object.entries(payload)
-    .map(([key, value]) => `${key}: ${value}`)
-    .join('\n')
-
-  const supportResult = await sendSupportEmail({
-    env,
-    subject,
-    replyTo: payload.email,
-    html: `
-      <p><strong>[source: ${sourceLabel}]</strong></p>
-      <h2>New ${sourceLabel.replace(/-/g, ' ')} submission</h2>
-      ${detailsHtml}
-    `,
-    text: `[source: ${sourceLabel}]\n\nNew ${sourceLabel.replace(/-/g, ' ')} submission\n\n${detailsText}`,
+  const supportEmail = buildWaitlistSupportEmail({
+    type: payload.type,
+    name: payload.name,
+    email: payload.email,
+    phone: payload.phone,
+    country: payload.country,
+    interests,
+    source: body.source,
   })
+  const supportResult = await sendSupportEmail({ env, ...supportEmail })
   console.log('[waitlist] support email result:', JSON.stringify(supportResult))
 
-  const confirmationSubjectMap = {
-    waitlist: 'You are on the Pär waitlist',
-    newsletter: 'You are subscribed to Pär updates',
-    download: 'Thank you for downloading Pär beta',
-  }
-  const confirmationSubject = confirmationSubjectMap[payload.type] || 'Thank you for signing up'
-
-  const confirmationBodyMap = {
-    waitlist: '<p>Thank you for joining the waitlist. We will email you with beta spots, updates, and launch notes.</p>',
-    newsletter: '<p>Thank you for subscribing. You will receive product updates, release notes, and early access announcements.</p>',
-    download: '<p>Thank you for your interest in the Pär beta. Your download should start automatically. We will email you when updates are available.</p>',
-  }
-  const confirmationBodyHtml = confirmationBodyMap[payload.type] || '<p>Thank you for signing up.</p>'
-  const confirmationBodyText = confirmationBodyHtml.replace(/<[^>]+>/g, '')
-
-  const confirmationResult = await sendSupportEmail({
-    env,
-    to: [payload.email],
-    subject: confirmationSubject,
-    html: `
-      <h2>Thank you, ${payload.name}</h2>
-      ${confirmationBodyHtml}
-      <hr />
-      <p><small>Datomer AB · hello@datomer.eu</small></p>
-    `,
-    text: `Thank you, ${payload.name}.\n\n${confirmationBodyText}\n\n---\nDatomer AB · hello@datomer.eu`,
+  const confirmationEmail = buildWaitlistConfirmationEmail({
+    type: payload.type,
+    name: payload.name,
+    email: payload.email,
+    interests,
   })
+  const confirmationResult = await sendSupportEmail({ env, to: [payload.email], ...confirmationEmail })
   console.log('[waitlist] confirmation email result:', JSON.stringify(confirmationResult))
 
   // Non-blocking: store submission for daily summary.
