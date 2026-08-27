@@ -260,16 +260,16 @@ export async function onRequest(context) {
   const { request, env, next } = context
   const url = new URL(request.url)
 
-  // Only rewrite HTML document requests (ignore static files, API, Functions)
-  const accept = request.headers.get('accept') || ''
-  const isHtmlRequest = accept.includes('text/html') || url.pathname === '/'
+  // Only rewrite HTML document responses. Skip API routes, Functions, and
+  // static assets by file extension. The actual content-type check below
+  // ensures we only transform HTML.
   const isAsset =
     /\.(png|jpg|jpeg|gif|svg|webp|ico|css|js|json|xml|txt|pdf|zip|woff2?|ttf|eot|otf|mp4|webm|ogg)$/i.test(
       url.pathname
     )
   const isApi = url.pathname.startsWith('/api/')
 
-  if (!isHtmlRequest || isAsset || isApi || request.method !== 'GET') {
+  if (isAsset || isApi || request.method !== 'GET') {
     return next()
   }
 

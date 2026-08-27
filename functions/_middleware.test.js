@@ -103,6 +103,17 @@ describe('meta middleware', () => {
     expect(text).toBe('image')
   })
 
+  it('works without an explicit text/html accept header', async () => {
+    const req = new Request('https://datomer.eu/press', {
+      headers: { accept: '*/*' },
+      method: 'GET',
+    })
+    const ctx = makeContext(req, SHELL)
+    const res = await onRequest(ctx)
+    const text = await res.text()
+    expect(text).toContain('<title>Press Kit — Pär by Datomer</title>')
+  })
+
   it('skips /api routes', async () => {
     const req = makeRequest('/api/contact')
     const nextResponse = new Response('{}', {
