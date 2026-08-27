@@ -1,37 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://datomer.eu/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://datomer.eu/?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/" />
     <lastmod>2026-08-27</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://datomer.eu/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/about" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/about?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://datomer.eu/about?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/about" />
     <lastmod>2026-08-27</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://datomer.eu/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/contact" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/contact?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://datomer.eu/contact?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/contact" />
     <lastmod>2026-08-27</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://datomer.eu/blog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/blog" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/blog?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://datomer.eu/blog?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/blog" />
     <lastmod>2026-08-23</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://datomer.eu/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/privacy" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/privacy?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://datomer.eu/privacy?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/privacy" />
     <lastmod>2026-08-23</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://datomer.eu/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/terms" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/terms?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://datomer.eu/terms?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/terms" />
     <lastmod>2026-08-23</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://datomer.eu/cookies</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/cookies" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/cookies?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://datomer.eu/cookies?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/cookies" />
     <lastmod>2026-08-23</lastmod>
     <priority>0.3</priority>
   </url>
