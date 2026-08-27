@@ -8,14 +8,15 @@
 
 const USAGE = `Usage:
   node scripts/trigger-daily-summary.js worker
-  node scripts/trigger-daily-summary.js pages <preview-host>
+  node scripts/trigger-daily-summary.js pages <host>
 
 Examples:
   node scripts/trigger-daily-summary.js worker
+  node scripts/trigger-daily-summary.js pages https://datomer.eu
   node scripts/trigger-daily-summary.js pages https://451ff362.datomer-eu.pages.dev
 
 Set DAILY_SUMMARY_SECRET as an environment variable. For the worker target you
-can also set DAILY_SUMMARY_WORKER_URL (defaults to the preview Worker).`
+can also set DAILY_SUMMARY_WORKER_URL (defaults to the production Worker).`
 
 const target = process.argv[2]
 const host = process.argv[3]
@@ -33,7 +34,7 @@ if (!secret) {
 
 let url
 if (target === 'worker') {
-  url = process.env.DAILY_SUMMARY_WORKER_URL || 'https://datomer-daily-summary-preview.jay-tchinnaswamy.workers.dev/'
+  url = process.env.DAILY_SUMMARY_WORKER_URL || 'https://datomer-daily-summary-production.jay-tchinnaswamy.workers.dev/'
 } else {
   if (!host) {
     console.error('Error: pages target requires a host argument.\n')
