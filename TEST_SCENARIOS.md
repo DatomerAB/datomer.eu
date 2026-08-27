@@ -272,19 +272,84 @@ Every email sent by the site should look like it comes from Pär by Datomer, add
 - Support subject: `<First name> wants Pär beta access and product updates`.
 - Confirmation subject: `Beta access + product updates confirmed — Pär`.
 
-### Scenario E5: Download form
+### Scenario E5: Download from the top bar
 
 #### Steps
-1. Open the download form.
+1. Click **Download free version** in the top navigation bar.
 2. Fill in name, email, and country.
 3. Submit.
 
 #### Expected outcome
-- Support subject: `<First name> downloaded the Pär beta`.
-- Confirmation subject: `Your Pär beta download — Pär`.
-- Confirmation thanks the user and explains the next steps.
+- Support subject: `<First name> downloaded the free version of Pär`.
+- Confirmation subject: `Your Pär free version download — Pär`.
+- Confirmation body says: "Hi <First name>, thank you for downloading the free version of Pär."
 
-### Scenario E6: Responsive email rendering
+### Scenario E6: Download from the hero section
+
+#### Steps
+1. Click **Free tier download** in the hero section.
+2. Fill in name, email, and country.
+3. Submit.
+
+#### Expected outcome
+- Support subject: `<First name> downloaded Pär for Mac`.
+- Confirmation subject: `Your Pär for Mac download — Pär`.
+- Confirmation body says: "Hi <First name>, thank you for downloading Pär for Mac."
+
+### Scenario E7: Download from the pricing free-tier card
+
+#### Steps
+1. Scroll to the pricing section.
+2. Click **Free tier download** on the free card.
+3. Fill in name, email, and country.
+4. Submit.
+
+#### Expected outcome
+- Support subject: `<First name> downloaded the Pär free tier`.
+- Confirmation subject: `Your Pär free tier download — Pär`.
+- Confirmation body says: "Hi <First name>, thank you for downloading the Pär free tier."
+
+### Scenario E8: Download from the bottom CTA band
+
+#### Steps
+1. Scroll to the bottom CTA band.
+2. Click **Mac download**.
+3. Fill in name, email, and country.
+4. Submit.
+
+#### Expected outcome
+- Support subject: `<First name> downloaded the Pär Mac beta`.
+- Confirmation subject: `Your Pär Mac beta download — Pär`.
+- Confirmation body says: "Hi <First name>, thank you for downloading the Pär Mac beta."
+
+### Scenario E9: Newsletter in the footer
+
+#### Steps
+1. Scroll to the footer.
+2. Enter a name and email in the newsletter form.
+3. Submit.
+
+#### Expected outcome
+- Support subject reflects the selected interests, e.g. `<First name> subscribed to Pär product updates`.
+- Confirmation subject reflects the selected interests, e.g. `Product updates confirmed — Pär`.
+- Confirmation greets the user by first name and lists selected interests.
+
+### Scenario E10: Purchase Plus or Pro
+
+#### Steps
+1. Scroll to the pricing section.
+2. Click **Get Plus** or **Get Pro**.
+3. Complete the Turnstile challenge and Stripe checkout using a test card.
+4. Wait for the webhook to process.
+
+#### Expected outcome
+- Internal support subject: `Purchase: Pär Plus — <customer@email.com>` or `Purchase: Pär Pro — <customer@email.com>`.
+- User confirmation subject: `Your Pär Plus purchase confirmation` or `Your Pär Pro purchase confirmation`.
+- Confirmation title says: `Thank you, <First name>`.
+- Confirmation body says the subscription is active and shows the license key.
+- The email is clearly a purchase confirmation, not a download or waitlist message.
+
+### Scenario E11: Responsive email rendering
 
 #### Steps
 1. Open the confirmation email on a phone, tablet, and desktop client.
@@ -307,6 +372,9 @@ Every email sent by the site should look like it comes from Pär by Datomer, add
 - [ ] Emails render correctly on mobile, tablet, and desktop.
 - [ ] Sender name is `Pär by Datomer` and from address is `hello@datomer.eu`.
 - [ ] Support/internal emails show environment, action, country, and city.
+- [ ] Each download CTA sends a distinct subject and body reflecting the button that was clicked.
+- [ ] Checkout/purchase emails say "Thank you for purchasing" and show the plan name and license key.
+- [ ] Newsletter footer submissions do not reuse waitlist subject lines.
 
 ## Goal
 
