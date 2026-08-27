@@ -141,6 +141,101 @@ Ensure every form submission is stored, counted, and included in the daily CSV s
 - [ ] Pages admin endpoint works with correct token.
 - [ ] Both endpoints reject requests without valid tokens.
 
+---
+
+## Email branding and messaging
+
+This section verifies that every automated email feels on-brand, professional, and privacy-respectful.
+
+### Goal
+
+Every email sent by the site should look like it comes from Pär by Datomer, address the user by first name, use a relevant subject line, and include a clear contact email and signature.
+
+### Scenario E1: Contact form emails
+
+#### Steps
+1. Submit the contact form with the name "Anna Svensson".
+2. Check the internal support email.
+3. Check the user confirmation email.
+
+#### Expected outcome
+- Support subject: `New message from Anna — Pär`.
+- Confirmation subject: `We received your message — Pär`.
+- Both emails use the same colors, font, and rounded card layout as the website.
+- Confirmation greets the user as "Hi Anna".
+- Both emails include `hello@datomer.eu` and the Datomer AB signature.
+- Confirmation mentions privacy, transparency, and ownership.
+
+### Scenario E2: Waitlist with beta access selected
+
+#### Steps
+1. Open the waitlist form.
+2. Enter email and keep "Early beta access" checked.
+3. Submit.
+
+#### Expected outcome
+- Support subject: `<First name> joined the Pär beta waitlist`.
+- Confirmation subject: `You are on the Pär beta waitlist — Pär`.
+- Confirmation lists the selected interests.
+- Confirmation mentions that beta spots are limited and rolled out in batches.
+
+### Scenario E3: Waitlist without beta access
+
+#### Steps
+1. Open the waitlist form.
+2. Enter email and uncheck "Early beta access".
+3. Submit.
+
+#### Expected outcome
+- Support subject: `<First name> joined the Pär waitlist`.
+- Confirmation subject: `You are on the Pär waitlist — Pär`.
+- Confirmation does not mention beta access.
+
+### Scenario E4: Newsletter with beta access
+
+#### Steps
+1. Open the newsletter form.
+2. Enter email and keep "Early beta access" checked.
+3. Submit.
+
+#### Expected outcome
+- Support subject: `<First name> wants Pär beta access and product updates`.
+- Confirmation subject: `Beta access + product updates confirmed — Pär`.
+
+### Scenario E5: Download form
+
+#### Steps
+1. Open the download form.
+2. Fill in name, email, and country.
+3. Submit.
+
+#### Expected outcome
+- Support subject: `<First name> downloaded the Pär beta`.
+- Confirmation subject: `Your Pär beta download — Pär`.
+- Confirmation thanks the user and explains the next steps.
+
+### Scenario E6: Responsive email rendering
+
+#### Steps
+1. Open the confirmation email on a phone, tablet, and desktop client.
+2. Verify the layout adapts to the screen width.
+
+#### Expected outcome
+- Email card is readable without horizontal scrolling.
+- Logo, headings, body text, and footer stack correctly.
+- Buttons and links are tappable.
+
+### Email branding checklist
+
+- [ ] Subject lines are action-specific and include the user's first name.
+- [ ] Emails use the Pär/Datomer visual style.
+- [ ] Every email greets the user by first name.
+- [ ] Contact email `hello@datomer.eu` is visible.
+- [ ] Datomer AB signature and website link are present.
+- [ ] Waitlist/newsletter emails reference selected interests.
+- [ ] Privacy and transparency messaging is present.
+- [ ] Emails render correctly on mobile, tablet, and desktop.
+
 ## Goal
 
 The tester should be able to understand the product, navigate the website, evaluate the pricing, and complete the main CTA flows without needing technical or product context.
