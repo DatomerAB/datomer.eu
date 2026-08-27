@@ -1,0 +1,29 @@
+name = "datomer-daily-summary"
+main = "src/index.js"
+compatibility_date = "2026-08-27"
+
+# Production environment
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "datomer-submissions-production"
+database_id = "65c67ab8-ca9e-4777-9b38-97989c73a7f8"
+
+[env.production.triggers]
+crons = ["0 6 * * *"]
+
+[env.production.vars]
+RESEND_FROM_EMAIL = "hello@datomer.eu"
+CONTACT_TO_EMAIL = "hello@datomer.eu"
+
+# Preview / staging environment
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "datomer-submissions-preview"
+database_id = "7a83e626-0984-47bb-9235-cd65c6806813"
+
+[env.preview.triggers]
+crons = ["0 6 * * *"]
+
+[env.preview.vars]
+RESEND_FROM_EMAIL = "hello@datomer.eu"
+CONTACT_TO_EMAIL = "hello@datomer.eu"
