@@ -259,10 +259,15 @@ def prepare_par_logo(logo, scale=4):
     return out
 
 
+def lighten_rgb(rgb_tuple, amount=22):
+    return tuple(min(255, c + amount) for c in rgb_tuple)
+
+
 def create_themed_par_logo(logo_base, palette):
-    """Tint the white Pär logo with the theme text colour."""
+    """Tint the Pär logo with a brightened theme text colour for visibility."""
     text_rgb = rgb(palette['text'])
-    tinted = Image.new('RGBA', logo_base.size, text_rgb + (255,))
+    bright_rgb = lighten_rgb(text_rgb, amount=26)
+    tinted = Image.new('RGBA', logo_base.size, bright_rgb + (255,))
     return Image.composite(tinted, Image.new('RGBA', logo_base.size, (0, 0, 0, 0)), logo_base.split()[3])
 
 
@@ -292,7 +297,7 @@ def create_par_logo(palette, variant_name, themed_logo_no_shadow):
         logo_w = max_w
         logo_h = int(max_w / aspect)
     logo_resized = themed_logo_no_shadow.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
-    logo_resized = add_drop_shadow(logo_resized, offset=(4, 5), blur=14, shadow_color=(0, 0, 0, 50))
+    logo_resized = add_drop_shadow(logo_resized, offset=(4, 6), blur=18, shadow_color=(0, 0, 0, 80))
 
     x = (width - logo_resized.width) // 2
     y = (height - logo_resized.height) // 2 - 40
@@ -322,7 +327,7 @@ def create_par_banner(palette, variant_name, themed_logo_no_shadow):
     aspect = sw / sh
     logo_w = int(logo_h * aspect)
     logo_resized = themed_logo_no_shadow.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
-    logo_resized = add_drop_shadow(logo_resized, offset=(3, 3), blur=8, shadow_color=(0, 0, 0, 50))
+    logo_resized = add_drop_shadow(logo_resized, offset=(3, 4), blur=10, shadow_color=(0, 0, 0, 80))
 
     logo_x = 60
     logo_y = (height - logo_resized.height) // 2
@@ -330,7 +335,7 @@ def create_par_banner(palette, variant_name, themed_logo_no_shadow):
 
     divider_x = logo_x + logo_resized.width + 40
     accent_rgb = rgb(palette['accent'])
-    draw.line([(divider_x, 45), (divider_x, height - 45)], fill=accent_rgb + (100,), width=1)
+    draw.line([(divider_x, 45), (divider_x, height - 45)], fill=accent_rgb + (140,), width=1)
 
     tagline = "Your AI. On your device."
     tag_font = load_font(18)
@@ -358,7 +363,7 @@ def create_par_social_post(palette, variant_name, themed_logo_no_shadow):
         logo_w = max_w
         logo_h = int(max_w / aspect)
     logo_resized = themed_logo_no_shadow.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
-    logo_resized = add_drop_shadow(logo_resized, offset=(5, 6), blur=16, shadow_color=(0, 0, 0, 50))
+    logo_resized = add_drop_shadow(logo_resized, offset=(5, 7), blur=20, shadow_color=(0, 0, 0, 80))
 
     x = (width - logo_resized.width) // 2
     y = (height - logo_resized.height) // 2 - 80
