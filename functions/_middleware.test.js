@@ -51,7 +51,7 @@ describe('meta middleware', () => {
     )
     expect(text).toContain('<link rel="canonical" href="https://datomer.eu/press" />')
     expect(text).toContain('<meta property="og:url" content="https://datomer.eu/press" />')
-    expect(text).toContain('<meta property="og:image" content="https://datomer.eu/og-image.png" />')
+    expect(text).toContain('<meta property="og:image" content="https://datomer.eu/og-image-aurora.png" />')
   })
 
   it('uses Swedish translation with ?lang=sv', async () => {

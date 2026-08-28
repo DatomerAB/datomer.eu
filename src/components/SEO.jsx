@@ -4,7 +4,7 @@ const SITE_URL = 'https://datomer.eu'
 const DEFAULT_TITLE = 'Pär by Datomer — Your AI. On your device.'
 const DEFAULT_DESCRIPTION =
   'Pär is the personal AI companion that actually remembers you. Local-first, private by design, running on your own hardware with GGUF or Ollama models.'
-const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`
+const DEFAULT_IMAGE = `${SITE_URL}/og-image-aurora.png`
 
 export function SEO({
   title = DEFAULT_TITLE,
@@ -53,7 +53,7 @@ export function OrganizationJsonLd() {
     '@type': 'Organization',
     name: 'Datomer AB',
     url: SITE_URL,
-    logo: `${SITE_URL}/par-logo.png`,
+    logo: `${SITE_URL}/datomer-linkedin-logo.png`,
     email: 'hello@datomer.eu',
     address: {
       '@type': 'PostalAddress',

@@ -25,16 +25,29 @@ export function PressPage() {
           <h2>{formatHeading(t('press.brandMaterials'))}</h2>
           <p>{t('press.brandMaterialsText')}</p>
           <div className="press-downloads">
+            <a href="/datomer-press-kit.zip" download className="button">
+              {t('press.downloadKit')}
+            </a>
+            <a href="/press-kit/README.md" download className="button button-secondary">
+              README / Factsheet
+            </a>
+          </div>
+          <p className="press-note">{t('press.kitDescription')}</p>
+
+          <div className="press-downloads">
             <a href="/par-logo.png" download className="button button-secondary">
               {t('press.downloadLogoPng')}
             </a>
             <a href="/datomer-logo.png" download className="button button-secondary">
               {t('press.downloadCompanyLogoPng')}
             </a>
+            <a href="/datomer-logo.svg" download className="button button-secondary">
+              {t('press.downloadSvg')}
+            </a>
             <a href="/og-image.png" download className="button button-secondary">
               {t('press.downloadSocialImage')}
             </a>
-            <a href="/linkedin-banner-forest.png" download className="button button-secondary">
+            <a href="/par-banner.png" download className="button button-secondary">
               {t('press.downloadLinkedInBanner')}
             </a>
           </div>

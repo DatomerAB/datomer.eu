@@ -7,19 +7,12 @@ import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
 import { PaymentButton } from './components/PaymentButton.jsx'
 import { WaitlistForm } from './components/WaitlistForm.jsx'
+import { NewsletterForm } from './components/NewsletterForm.jsx'
 import { CookieConsent } from './components/CookieConsent.jsx'
 import { Turnstile } from './components/Turnstile.jsx'
 import { BlogPage } from './pages/BlogPage.jsx'
-import { PressPage } from './pages/PressPage.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
-import {
-  SEO,
-  OrganizationJsonLd,
-  SoftwareApplicationJsonLd,
-  FAQPageJsonLd,
-  HreflangLinks,
-} from './components/SEO.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -111,18 +104,17 @@ function CompanyAddress({ compact = false }) {
   if (compact) {
     return (
       <address className="company-address company-address-compact">
-        {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · {t('common.orgNumber')}: {COMPANY.orgNumber}
+        {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · Org. nr: {COMPANY.orgNumber}
       </address>
     )
   }
-    const { t } = useLanguage()
   return (
     <address className="company-address">
       <strong>{COMPANY.name}</strong>
       <br />
       {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country}
       <br />
-      {t('common.orgNumber')}: {COMPANY.orgNumber}
+      Org. nr: {COMPANY.orgNumber}
     </address>
   )
 }
@@ -130,7 +122,7 @@ function CompanyAddress({ compact = false }) {
 function DatomerLogo() {
   return (
     <img
-      src="/datomer-logo.png"
+      src="/datomer-logo-themed.png"
       alt="Datomer"
       className="datomer-logo"
       width="140"
@@ -148,20 +140,24 @@ function TopBar({ onDownload }) {
     <header className="topbar">
       <nav className="nav container" aria-label="Main navigation">
         <Link to="/" className="par-brand" aria-label="Pär home">
-          <ParLogo />
+          <img
+            src="/par-logo-themed.png"
+            alt=""
+            className="brand-symbol"
+            width="44"
+            height="44"
+          />
           <span className="par-wordmark">Pär</span>
         </Link>
 
         <div className="nav-links">
           {isHome ? (
             <>
-              <Link to="/">{t('nav.home')}</Link>
               <a href="#product">{t('nav.product')}</a>
               <a href="#features">{t('nav.features')}</a>
               <a href="#pricing">{t('nav.pricing')}</a>
               <a href="#faq">{t('nav.faq')}</a>
               <Link to="/blog">{t('nav.blog')}</Link>
-              <Link to="/press">{t('nav.press')}</Link>
             </>
           ) : (
             <>
@@ -169,15 +165,14 @@ function TopBar({ onDownload }) {
               <Link to="/about">{t('nav.about')}</Link>
               <Link to="/contact">{t('nav.contact')}</Link>
               <Link to="/blog">{t('nav.blog')}</Link>
-              <Link to="/press">{t('nav.press')}</Link>
             </>
           )}
         </div>
 
         <div className="header-right" aria-label="Datomer brand group">
           <LanguageSwitcher />
-          <button type="button" className="button button-primary" onClick={() => onDownload('download-topbar')}>
-            {t('nav.downloadFreeVersion')}
+          <button type="button" className="button button-primary" onClick={onDownload}>
+            {t('nav.download')}
           </button>
         </div>
       </nav>
@@ -189,7 +184,7 @@ function Footer() {
   const { t } = useLanguage()
 
   return (
-    <footer className="footer" id="footer">
+    <footer className="footer">
       <div className="container footer-inner">
         <div className="footer-main">
           <div className="footer-brand-group">
@@ -204,28 +199,10 @@ function Footer() {
             <Link to="/about">{t('nav.about')}</Link>
             <Link to="/contact">{t('nav.contact')}</Link>
             <Link to="/blog">{t('nav.blog')}</Link>
-            <Link to="/press">{t('nav.press')}</Link>
             <span className="footer-links-separator" aria-hidden="true" />
             <Link to="/privacy">{t('footer.legal.privacy')}</Link>
             <Link to="/terms">{t('footer.legal.terms')}</Link>
             <Link to="/cookies">{t('footer.legal.cookies')}</Link>
-            <span className="footer-links-separator" aria-hidden="true" />
-            <a
-              href="https://github.com/DatomerAB"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={t('footer.social.github')}
-            >
-              {t('footer.social.github')}
-            </a>
-            <a
-              href="https://www.linkedin.com/company/35694620/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={t('footer.social.linkedin')}
-            >
-              {t('footer.social.linkedin')}
-            </a>
           </nav>
 
           <div className="footer-company" aria-label="Datomer company details">
@@ -235,7 +212,7 @@ function Footer() {
 
         <div className="footer-bottom" aria-label="Datomer address details">
           <p className="footer-legal-line">
-            © {new Date().getFullYear()} {COMPANY.name} · {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · {t('common.orgNumber')}: {COMPANY.orgNumber}
+            © {new Date().getFullYear()} {COMPANY.name} · {COMPANY.address}, {COMPANY.postcode} {COMPANY.city}, {COMPANY.country} · Org. nr: {COMPANY.orgNumber}
           </p>
         </div>
       </div>
@@ -244,7 +221,7 @@ function Footer() {
 }
 
 function HomePage({ onDownload }) {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
   const heroVariant = useExperiment('hero-cta-copy', ['control', 'social-proof'])
 
@@ -381,17 +358,7 @@ function HomePage({ onDownload }) {
   ]
 
   return (
-    <>
-      <SEO
-        title="Pär by Datomer — Your AI. On your device."
-        description="Pär is the personal AI companion that actually remembers you. Local-first, private by design, running on your own hardware with GGUF or Ollama models."
-        pathname="/"
-        lang={lang}
-      />
-      <HreflangLinks pathname="/" />
-      <SoftwareApplicationJsonLd />
-      <FAQPageJsonLd faqs={faqs} />
-      <main id="top">
+    <main id="top">
       <section className="hero" id="about">
           <div className="container hero-inner">
             <div className="hero-badge">
@@ -404,8 +371,8 @@ function HomePage({ onDownload }) {
             </p>
 
             <div className="cta-row">
-              <button type="button" className="button button-primary" onClick={() => onDownload('download-hero')}>
-                {t('hero.downloadFreeTier')}
+              <button type="button" className="button button-primary" onClick={onDownload}>
+                {t('hero.downloadMac')}
               </button>
               <a href="#product" className="button button-secondary">
                 {t('hero.seeHowItWorks')}
@@ -584,7 +551,7 @@ function HomePage({ onDownload }) {
                     <button
                       type="button"
                       className="button button-primary"
-                      onClick={() => onDownload('download-pricing-free')}
+                      onClick={onDownload}
                     >
                       {plan.cta}
                     </button>
@@ -599,7 +566,6 @@ function HomePage({ onDownload }) {
                     <PaymentButton
                       priceId={plan.priceId}
                       mode={plan.mode}
-                      plan={plan.name.toLowerCase().includes('pro') ? 'pro' : 'plus'}
                       className="button button-primary"
                     >
                       {plan.cta}
@@ -652,15 +618,15 @@ function HomePage({ onDownload }) {
               <div className="cta-download-card">
                 <p className="eyebrow">{formatHeading(t('cta.eyebrow'))}</p>
                 <h2>{formatHeading(t('cta.headline'))}</h2>
-                <button type="button" className="button button-primary cta-download" onClick={() => onDownload('download-cta-band')}>
-                  {t('cta.downloadMacBeta')}
+                <button type="button" className="button button-primary cta-download" onClick={onDownload}>
+                  {t('cta.downloadMac')}
                 </button>
               </div>
 
               <div className="cta-action-card cta-signup-card">
                 <p className="cta-action-label">{t('cta.joinWaitlist')}</p>
                 <p className="cta-action-hint">{t('cta.waitlistHint')}</p>
-                <WaitlistForm action="waitlist-cta-band" source="cta-band" />
+                <WaitlistForm />
               </div>
             </div>
           </div>
@@ -668,25 +634,16 @@ function HomePage({ onDownload }) {
             {t('cta.disclaimer')}
           </p>
         </section>
-      </main>
-    </>
+    </main>
   )
 }
 
 function AboutPage() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <>
-      <SEO
-        title="About Pär"
-        description="Learn about Pär, the local-first personal AI companion built by Datomer AB, and our mission to keep your data under your control."
-        pathname="/about"
-        lang={lang}
-      />
-      <HreflangLinks pathname="/about" />
-      <main className="section container legal-page">
+    <main className="section container legal-page">
       <h1>{formatHeading(t('about.title'))}</h1>
       <p>{t('about.intro')}</p>
       <p>{t('about.mission')}</p>
@@ -698,13 +655,12 @@ function AboutPage() {
       <p>
         {t('about.emailLabel')}: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
       </p>
-      </main>
-    </>
+    </main>
   )
 }
 
 function ContactPage() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -745,7 +701,7 @@ function ContactPage() {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, turnstileToken: token, action: 'contact-page' }),
+        body: JSON.stringify({ ...form, turnstileToken: token }),
       })
       const data = await response.json().catch(() => ({}))
 
@@ -763,22 +719,14 @@ function ContactPage() {
   }
 
   return (
-    <>
-      <SEO
-        title="Contact Pär"
-        description="Get in touch with the Pär team. Questions, feedback, or enterprise inquiries are welcome."
-        pathname="/contact"
-        lang={lang}
-      />
-      <HreflangLinks pathname="/contact" />
-      <main className="section container legal-page">
+    <main className="section container legal-page">
       <h1>{formatHeading(t('contact.title'))}</h1>
       <p>
         {t('contact.intro')}{' '}
         <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
       </p>
 
-      <form className="contact-form" onSubmit={handleSubmit} aria-label={t('contact.title')}>
+      <form className="contact-form" onSubmit={handleSubmit}>
         <label>
           <span>{t('contact.name')}</span>
           <input name="name" value={form.name} onChange={handleChange} required autoComplete="name" />
@@ -808,25 +756,16 @@ function ContactPage() {
       </form>
 
       <CompanyAddress />
-      </main>
-    </>
+    </main>
   )
 }
 
 function PrivacyPage() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <>
-      <SEO
-        title="Privacy Policy"
-        description="Read the Pär privacy policy. Your data stays on your device in an encrypted vault."
-        pathname="/privacy"
-        lang={lang}
-      />
-      <HreflangLinks pathname="/privacy" />
-      <main className="section container legal-page">
+    <main className="section container legal-page">
       <h1>{formatHeading(t('privacy.title'))}</h1>
       <p>
         <strong>{t('privacy.updated')}:</strong> 23 August 2026
@@ -865,25 +804,16 @@ function PrivacyPage() {
         {t('privacy.rightsText')}{' '}
         <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
       </p>
-      </main>
-    </>
+    </main>
   )
 }
 
 function TermsPage() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <>
-      <SEO
-        title="Terms of Service"
-        description="Pär terms of service, beta software notice, and user responsibilities."
-        pathname="/terms"
-        lang={lang}
-      />
-      <HreflangLinks pathname="/terms" />
-      <main className="section container legal-page">
+    <main className="section container legal-page">
       <h1>{formatHeading(t('terms.title'))}</h1>
       <p>
         <strong>{t('terms.updated')}:</strong> 23 August 2026
@@ -906,25 +836,16 @@ function TermsPage() {
 
       <h2>{t('terms.lawTitle')}</h2>
       <p>{t('terms.lawText')}</p>
-      </main>
-    </>
+    </main>
   )
 }
 
 function CookiesPage() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <>
-      <SEO
-        title="Cookie Policy"
-        description="Learn how Pär uses cookies and how you can manage your preferences."
-        pathname="/cookies"
-        lang={lang}
-      />
-      <HreflangLinks pathname="/cookies" />
-      <main className="section container legal-page">
+    <main className="section container legal-page">
       <h1>{formatHeading(t('cookies.title'))}</h1>
       <p>
         <strong>{t('cookies.updated')}:</strong> 23 August 2026
@@ -943,8 +864,7 @@ function CookiesPage() {
 
       <h2>{t('cookies.manageTitle')}</h2>
       <p>{t('cookies.manageText')}</p>
-      </main>
-    </>
+    </main>
   )
 }
 
@@ -957,20 +877,11 @@ function ScrollToTop() {
 }
 
 function PaymentSuccessPage() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
-    <>
-      <SEO
-        title="Payment Successful"
-        description="Thank you for supporting Pär. Your payment was received successfully."
-        pathname="/payment-success"
-        noindex
-        lang={lang}
-      />
-      <HreflangLinks pathname="/payment-success" />
-      <main className="section container legal-page">
+    <main className="section container legal-page">
       <h1>{formatHeading(t('payment.successTitle', { defaultValue: 'Thank you!' }))}</h1>
       <p>{t('payment.successText', { defaultValue: 'Your payment was received. We have sent a confirmation email with next steps.' })}</p>
       <p>
@@ -978,67 +889,31 @@ function PaymentSuccessPage() {
           {t('nav.home')}
         </Link>
       </p>
-      </main>
-    </>
-  )
-}
-
-function NotFoundPage() {
-  const { t, lang } = useLanguage()
-  const formatHeading = useLocalizedHeading()
-
-  return (
-    <>
-      <SEO
-        title="Page not found"
-        description="The page you are looking for does not exist. Return to Pär by Datomer."
-        pathname=""
-        noindex
-        lang={lang}
-      />
-      <main className="section container legal-page">
-        <h1>{formatHeading(t('notFound.title', { defaultValue: 'Page not found' }))}</h1>
-        <p>{t('notFound.text', { defaultValue: 'The page you are looking for does not exist or has been moved.' })}</p>
-        <p>
-          <Link to="/" className="button button-primary">
-            {t('nav.home')}
-          </Link>
-        </p>
-      </main>
-    </>
+    </main>
   )
 }
 
 function App() {
   const [showDownloadForm, setShowDownloadForm] = useState(false)
-  const [downloadAction, setDownloadAction] = useState('download-form')
   const downloadUrl = useDownloadUrl()
-
-  const openDownload = (action) => {
-    setDownloadAction(action)
-    setShowDownloadForm(true)
-  }
 
   return (
     <div className="page-shell">
-      <OrganizationJsonLd />
       <ScrollToTop />
-      <TopBar onDownload={openDownload} />
+      <TopBar onDownload={() => setShowDownloadForm(true)} />
       <Routes>
-        <Route path="/" element={<HomePage onDownload={openDownload} />} />
+        <Route path="/" element={<HomePage onDownload={() => setShowDownloadForm(true)} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/cookies" element={<CookiesPage />} />
-        <Route path="/press" element={<PressPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
-        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
       {showDownloadForm && (
-        <DownloadForm downloadUrl={downloadUrl} action={downloadAction} onClose={() => setShowDownloadForm(false)} />
+        <DownloadForm downloadUrl={downloadUrl} onClose={() => setShowDownloadForm(false)} />
       )}
       <CookieConsent />
     </div>
