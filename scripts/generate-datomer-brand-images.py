@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate themed Datomer logo and banner variations aligned with Pär brand assets."""
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 import os
 import math
 import random
@@ -233,38 +233,44 @@ def themed_background(size, palette, rings=4, pattern_count=20, noise=5):
     return img
 
 
-def extract_datomer_logo_masks(logo, scale=4):
-    """Extract text and accent masks from the original Datomer logo.
+def extract_datomer_logo_masks(logo, scale=8):
+    """Extract crisp text and accent masks from the original Datomer logo.
 
-    The original logo is a rectangular badge with light background, dark text,
-    and red accent dots inside the 'O'. We upscale it first so later resizes
-    stay sharp and professional, then separate these into masks so we can
-    recolor them per theme.
+    The source wordmark is small (443x166), so we upscale aggressively and
+    contrast-stretch the grayscale so anti-aliased edges become solid. This
+    produces a much sharper mask than a simple RGB threshold when later
+    resized to large outputs.
     """
     if scale > 1:
         logo = logo.resize((logo.width * scale, logo.height * scale), Image.Resampling.LANCZOS)
 
+    # Grayscale + autocontrast makes every edge pop.
+    gray = logo.convert('L')
+    gray = ImageOps.autocontrast(gray, cutoff=1)
+    # Invert so dark text becomes the bright mask.
+    inv = ImageOps.invert(gray)
+    # Threshold to a solid foreground mask.
+    text_mask = inv.point(lambda x: 255 if x > 160 else 0)
+    # Small dilation ensures thin strokes are fully captured, then a tiny
+    # Gaussian blur preserves sub-pixel detail when downscaled.
+    text_mask = text_mask.filter(ImageFilter.MaxFilter(size=3))
+    text_mask = text_mask.filter(ImageFilter.GaussianBlur(radius=0.7))
+
+    # Accent mask: the red dots inside the O.
     data = list(logo.getdata())
-    text_mask = []
     accent_mask = []
     for p in data:
         r, g, b = p[:3]
-        # Red accent pixels (the two dots inside the O)
         if r > 150 and g < 100 and b < 100:
-            text_mask.append(0)
             accent_mask.append(255)
-        # Dark text pixels
-        elif r < 80 and g < 80 and b < 80:
-            text_mask.append(255)
-            accent_mask.append(0)
         else:
-            text_mask.append(0)
             accent_mask.append(0)
-    text_img = Image.new('L', logo.size)
-    text_img.putdata(text_mask)
     accent_img = Image.new('L', logo.size)
     accent_img.putdata(accent_mask)
-    return text_img, accent_img
+    accent_img = accent_img.filter(ImageFilter.MaxFilter(size=3))
+    accent_img = accent_img.filter(ImageFilter.GaussianBlur(radius=0.5))
+
+    return text_mask, accent_img
 
 
 def create_themed_datomer_logo(logo, text_mask, accent_mask, palette, add_shadow=True, output_size=None):
@@ -272,8 +278,8 @@ def create_themed_datomer_logo(logo, text_mask, accent_mask, palette, add_shadow
 
     Text is rendered in the theme text color. The two accent dots inside the
     'O' keep the original red identity from public/datomer-logo.png so the
-    logo stays recognisable across every theme. A subtle unsharp mask keeps
-    edges crisp, and a refined drop shadow gives a premium finish.
+    logo stays recognisable across every theme. Aggressive upscaling and
+    post-resize sharpening give crisp, professional edges.
     """
     text_rgb = rgb(palette['text'])
     # Preserve the original red dot colour from the source logo.
@@ -288,11 +294,11 @@ def create_themed_datomer_logo(logo, text_mask, accent_mask, palette, add_shadow
     colored = Image.composite(text_layer, colored, text_mask)
     colored = Image.composite(accent_layer, colored, accent_mask)
 
-    # Subtle sharpening for crisp, professional edges.
-    colored = colored.filter(ImageFilter.UnsharpMask(radius=1.5, percent=80, threshold=3))
-
     if output_size:
         colored = colored.resize(output_size, Image.Resampling.LANCZOS)
+
+    # Sharpen *after* resize to counteract any softening from downscaling.
+    colored = colored.filter(ImageFilter.UnsharpMask(radius=1.0, percent=150, threshold=1))
 
     if add_shadow:
         return add_drop_shadow(colored, offset=(3, 4), blur=10, shadow_color=(0, 0, 0, 55))

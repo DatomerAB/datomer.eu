@@ -402,6 +402,32 @@ def create_par_logo_only(palette, variant_name, themed_logo_no_shadow):
     return out_path
 
 
+def create_par_logo_white_bg(palette, variant_name, themed_logo_no_shadow):
+    """Generate a square Pär logo on a clean white background."""
+    width, height = 1024, 1024
+    canvas = Image.new('RGB', (width, height), (255, 255, 255))
+
+    max_w, max_h = 720, 720
+    sw, sh = themed_logo_no_shadow.size
+    aspect = sw / sh
+    logo_w = int(max_h * aspect)
+    logo_h = max_h
+    if logo_w > max_w:
+        logo_w = max_w
+        logo_h = int(max_w / aspect)
+    logo_resized = themed_logo_no_shadow.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
+    logo_resized = add_drop_shadow(logo_resized, offset=(4, 6), blur=18, shadow_color=(0, 0, 0, 80))
+
+    x = (width - logo_resized.width) // 2
+    y = (height - logo_resized.height) // 2
+    canvas.paste(logo_resized, (x, y), logo_resized)
+
+    out_path = os.path.join(OUT_DIR, f'par-logo-white-{variant_name}.png')
+    canvas.save(out_path, 'PNG')
+    print(f"Saved {out_path}")
+    return out_path
+
+
 def main():
     original = Image.open(PAR_LOGO_PATH).convert('RGBA')
     logo_base = prepare_par_logo(original, scale=4)
@@ -413,6 +439,7 @@ def main():
         create_par_banner(palette, name, themed_no_shadow)
         create_par_social_post(palette, name, themed_no_shadow)
         create_par_logo_only(palette, name, themed_no_shadow)
+        create_par_logo_white_bg(palette, name, themed_no_shadow)
 
     # Update default Pär themed assets to forest
     default_logo = os.path.join(OUT_DIR, 'par-logo-forest.png')
@@ -424,6 +451,11 @@ def main():
     final_banner = os.path.join(OUT_DIR, 'par-banner.png')
     Image.open(default_banner).save(final_banner, 'PNG')
     print(f"Updated default {final_banner} from forest variant")
+
+    default_white = os.path.join(OUT_DIR, 'par-logo-white-forest.png')
+    final_white = os.path.join(OUT_DIR, 'par-logo-white.png')
+    Image.open(default_white).save(final_white, 'PNG')
+    print(f"Updated default {final_white} from forest variant")
 
 
 if __name__ == '__main__':
