@@ -19,11 +19,7 @@
 name = "datomer"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-08-23"
-
-[[env.production.d1_databases]]
-binding = "DB"
-database_name = "datomer-submissions-production"
-database_id = "65c67ab8-ca9e-4777-9b38-97989c73a7f8"
+compatibility_flags = ["nodejs_compat"]
 
 [env.production.vars]
 VITE_STRIPE_PLUS_MONTHLY = "price_1U7bblJjemtoqVYp32qGsxOG"
@@ -33,14 +29,7 @@ VITE_STRIPE_PRO_YEARLY = "price_1U7bkTJjemtoqVYp0z9akUpq"
 VITE_STRIPE_PUBLISHABLE_KEY = "pk_live_51U7ZY2JjemtoqVYpHTWDR1eDkKPg1fWdb8idyEh8AKmRJhvTTcz75ZoPiJrKPY4bBtiU8GJRjGO2tWHxRRL0X3nx0063i6GnuL"
 VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEZRl56VvoSHPucq"
 RESEND_FROM_EMAIL = "hello@datomer.eu"
-RESEND_FROM_NAME = "Pär by Datomer"
 CONTACT_TO_EMAIL = "hello@datomer.eu"
-ENVIRONMENT = "production"
-
-[[env.preview.d1_databases]]
-binding = "DB"
-database_name = "datomer-submissions-preview"
-database_id = "7a83e626-0984-47bb-9235-cd65c6806813"
 
 # Test credentials for the preview / staging environment only.
 [env.preview.vars]
@@ -51,6 +40,4 @@ VITE_STRIPE_PRO_YEARLY = "price_1U8FXWJjemtoqVYp1tXPWmoD"
 VITE_STRIPE_PUBLISHABLE_KEY = "pk_test_51U7ZY2JjemtoqVYpdgzC3NYr0Us9FzlE5gisBomIkjVpBXlCIziLGwV0VRzv4RyoA3DDcdl1UHRTcV0r869hFqcS00UJq0I386"
 VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEaZMJCV6o1b_ZFh"
 RESEND_FROM_EMAIL = "hello@datomer.eu"
-RESEND_FROM_NAME = "Pär by Datomer"
 CONTACT_TO_EMAIL = "hello@datomer.eu"
-ENVIRONMENT = "preview"
