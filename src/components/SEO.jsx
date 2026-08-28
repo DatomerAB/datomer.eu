@@ -53,7 +53,7 @@ export function OrganizationJsonLd() {
     '@type': 'Organization',
     name: 'Datomer AB',
     url: SITE_URL,
-    logo: `${SITE_URL}/datomer-linkedin-logo.png`,
+    logo: `${SITE_URL}/datomer-logo.png`,
     email: 'hello@datomer.eu',
     address: {
       '@type': 'PostalAddress',

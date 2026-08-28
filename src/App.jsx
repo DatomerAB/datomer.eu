@@ -126,8 +126,8 @@ function DatomerLogo() {
       src="/datomer-logo.png"
       alt="Datomer"
       className="datomer-logo"
-      width="140"
-      height="46"
+      width="160"
+      height="60"
     />
   )
 }
