@@ -55,13 +55,15 @@ palette: forest, midnight, stone, copper, moss, ink, fog, aurora, ember, slate, 
 
 | Place | Asset | Notes |
 |---|---|---|
-| LinkedIn Company Page logo | `datomer-linkedin-logo.png` | 600 × 600 px Pär symbol for LinkedIn's circular crop. |
+| LinkedIn Company Page logo | `datomer-linkedin-logo.png` | 600 × 600 px ember Pär symbol for LinkedIn's circular crop. |
 | LinkedIn Company Page banner | `par-banner.png` | Product-first 1128 × 191 banner. |
-| Website header logo | `par-logo-themed.png` | Dark themed logo on light header background. |
-| Website footer company logo | `datomer-logo-themed.png` | Themed Datomer wordmark on light footer. |
-| SEO / Schema.org logo | `datomer-linkedin-logo.png` | Square logo for structured data. |
-| Email header logo | `par-logo-themed.png` | Matches website header. |
-| Email footer logo | `datomer-logo-themed.png` | Matches website footer. |
+| Website header logo | `par-logo-ember.png` | Dark ember logo on light header background. |
+| Website footer left logo | `par-logo-ember.png` | Dark ember Pär symbol on light footer. |
+| Website footer right logo | `datomer-logo.png` | Datomer wordmark, unchanged. |
+| SEO / Schema.org logo | `datomer-linkedin-logo.png` | Square ember logo for structured data. |
+| Favicon / apple-touch-icon | `datomer-linkedin-logo.png` | Square ember logo. |
+| Email header logo | `par-logo-ember.png` | Matches website header. |
+| Email footer logo | `datomer-logo.png` | Matches website footer. |
 | Open Graph / Twitter image | `og-image-aurora.png` | 1200 × 630 social share image, aurora theme. |
 | Press kit LinkedIn banner | `par-banner.png` | Product-first banner download. |
 

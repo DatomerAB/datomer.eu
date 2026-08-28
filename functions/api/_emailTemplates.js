@@ -7,8 +7,8 @@ const BRAND = {
   tagline: 'Your AI. On Your Device.',
   contactEmail: 'hello@datomer.eu',
   website: 'https://datomer.eu',
-  parLogoUrl: 'https://datomer.eu/par-logo-themed.png',
-  datomerLogoUrl: 'https://datomer.eu/datomer-logo-themed.png',
+  parLogoUrl: 'https://datomer.eu/par-logo-ember.png',
+  datomerLogoUrl: 'https://datomer.eu/datomer-logo.png',
   // Aligns with the website design tokens
   bg: '#f7f6f4',
   surface: '#ffffff',

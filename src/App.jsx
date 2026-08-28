@@ -122,7 +122,7 @@ function CompanyAddress({ compact = false }) {
 function DatomerLogo() {
   return (
     <img
-      src="/datomer-logo-themed.png"
+      src="/datomer-logo.png"
       alt="Datomer"
       className="datomer-logo"
       width="140"
@@ -141,7 +141,7 @@ function TopBar({ onDownload }) {
       <nav className="nav container" aria-label="Main navigation">
         <Link to="/" className="par-brand" aria-label="Pär home">
           <img
-            src="/par-logo-themed.png"
+            src="/par-logo-ember.png"
             alt=""
             className="brand-symbol"
             width="44"
