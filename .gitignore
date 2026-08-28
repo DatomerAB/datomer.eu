@@ -26,3 +26,4 @@ dist-ssr
 scripts/*
 !scripts/trigger-daily-summary.js
 !scripts/generate-datomer-brand-images.py
+!scripts/generate-par-brand-images.py

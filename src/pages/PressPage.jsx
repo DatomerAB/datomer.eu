@@ -39,22 +39,57 @@ export function PressPage() {
             </a>
           </div>
 
-          <h3>{t('press.imageVariations')}</h3>
-          <p>{t('press.imageVariationsText')}</p>
+          <h3>{t('press.parBrandMaterials')}</h3>
+          <p>{t('press.parBrandMaterialsText')}</p>
+          <div className="press-downloads">
+            <a href="/par-logo-themed.png" download className="button button-secondary">
+              {t('press.downloadParLogoPng')}
+            </a>
+            <a href="/par-banner.png" download className="button button-secondary">
+              {t('press.downloadParBannerPng')}
+            </a>
+          </div>
+
+          <h4>{t('press.parLogoVariations')}</h4>
+          <p>{t('press.parLogoVariationsText')}</p>
           <div className="press-variations">
-            {['forest', 'midnight', 'ember', 'aurora', 'slate'].map((variant) => (
+            {['forest', 'midnight', 'stone', 'copper', 'ink', 'aurora', 'fog', 'ember', 'moss', 'slate', 'silver', 'platinum', 'gold'].map((variant) => (
               <a
-                key={variant}
-                href={`/og-image-${variant}.png`}
+                key={`par-logo-${variant}`}
+                href={`/par-logo-themed-${variant}.png`}
                 download
                 className="press-variant-thumb"
-                aria-label={t('press.downloadVariant', { variant })}
+                aria-label={t('press.downloadParLogoVariant', { variant })}
               >
                 <img
-                  src={`/og-image-${variant}.png`}
-                  alt={t('press.variantAlt', { variant })}
+                  src={`/par-logo-themed-${variant}.png`}
+                  alt={t('press.parLogoVariantAlt', { variant })}
+                  width="100"
+                  height="100"
+                  loading="lazy"
+                  className="press-logo-thumb"
+                />
+                <span>{variant}</span>
+              </a>
+            ))}
+          </div>
+
+          <h4>{t('press.parBannerVariations')}</h4>
+          <p>{t('press.parBannerVariationsText')}</p>
+          <div className="press-variations">
+            {['forest', 'midnight', 'stone', 'copper', 'ink', 'aurora', 'fog', 'ember', 'moss', 'slate', 'silver', 'platinum', 'gold'].map((variant) => (
+              <a
+                key={`par-${variant}`}
+                href={`/par-banner-${variant}.png`}
+                download
+                className="press-variant-thumb"
+                aria-label={t('press.downloadParVariant', { variant })}
+              >
+                <img
+                  src={`/par-banner-${variant}.png`}
+                  alt={t('press.parVariantAlt', { variant })}
                   width="200"
-                  height="105"
+                  height="34"
                   loading="lazy"
                 />
                 <span>{variant}</span>
@@ -76,7 +111,7 @@ export function PressPage() {
           <h4>{t('press.datomerLogoVariations')}</h4>
           <p>{t('press.datomerLogoVariationsText')}</p>
           <div className="press-variations">
-            {['forest', 'midnight', 'stone', 'copper', 'ink', 'aurora', 'fog', 'ember', 'moss', 'slate'].map((variant) => (
+            {['forest', 'midnight', 'stone', 'copper', 'ink', 'aurora', 'fog', 'ember', 'moss', 'slate', 'silver', 'platinum', 'gold'].map((variant) => (
               <a
                 key={`datomer-logo-${variant}`}
                 href={`/datomer-logo-themed-${variant}.png`}
@@ -97,10 +132,10 @@ export function PressPage() {
             ))}
           </div>
 
-          <h4>{t('press.imageVariations')}</h4>
-          <p>{t('press.imageVariationsText')}</p>
+          <h4>{t('press.datomerBannerVariations')}</h4>
+          <p>{t('press.datomerBannerVariationsText')}</p>
           <div className="press-variations">
-            {['forest', 'midnight', 'stone', 'copper', 'ink', 'aurora', 'fog', 'ember', 'moss', 'slate'].map((variant) => (
+            {['forest', 'midnight', 'stone', 'copper', 'ink', 'aurora', 'fog', 'ember', 'moss', 'slate', 'silver', 'platinum', 'gold'].map((variant) => (
               <a
                 key={`datomer-${variant}`}
                 href={`/datomer-banner-${variant}.png`}

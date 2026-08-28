@@ -90,6 +90,30 @@ PALETTES = {
         'text': '#f8fafc',
         'subtext': '#a8bcd4',
     },
+    'silver': {
+        'name': 'Sterling Silver',
+        'top': (140, 145, 150),
+        'bottom': (60, 64, 68),
+        'accent': (220, 225, 230),
+        'text': '#f8fafc',
+        'subtext': '#c8cdd2',
+    },
+    'platinum': {
+        'name': 'Polished Platinum',
+        'top': (185, 185, 188),
+        'bottom': (80, 80, 84),
+        'accent': (245, 245, 247),
+        'text': '#fafafa',
+        'subtext': '#d4d4d8',
+    },
+    'gold': {
+        'name': 'Royal Gold',
+        'top': (170, 135, 70),
+        'bottom': (70, 50, 20),
+        'accent': (245, 215, 140),
+        'text': '#fffbeb',
+        'subtext': '#e8d5a3',
+    },
 }
 
 
@@ -209,13 +233,17 @@ def themed_background(size, palette, rings=4, pattern_count=20, noise=5):
     return img
 
 
-def extract_datomer_logo_masks(logo):
+def extract_datomer_logo_masks(logo, scale=4):
     """Extract text and accent masks from the original Datomer logo.
 
     The original logo is a rectangular badge with light background, dark text,
-    and red accent dots inside the 'O'. We separate these into masks so we can
+    and red accent dots inside the 'O'. We upscale it first so later resizes
+    stay sharp and professional, then separate these into masks so we can
     recolor them per theme.
     """
+    if scale > 1:
+        logo = logo.resize((logo.width * scale, logo.height * scale), Image.Resampling.LANCZOS)
+
     data = list(logo.getdata())
     text_mask = []
     accent_mask = []
@@ -239,32 +267,40 @@ def extract_datomer_logo_masks(logo):
     return text_img, accent_img
 
 
-def create_themed_datomer_logo(logo, text_mask, accent_mask, palette, add_shadow=True):
+def create_themed_datomer_logo(logo, text_mask, accent_mask, palette, add_shadow=True, output_size=None):
     """Create a transparent Datomer logo using theme colors.
 
     Text is rendered in the theme text color. The two accent dots inside the
     'O' keep the original red identity from public/datomer-logo.png so the
-    logo stays recognisable across every theme. Optional soft drop shadow
-    improves legibility.
+    logo stays recognisable across every theme. A subtle unsharp mask keeps
+    edges crisp, and a refined drop shadow gives a premium finish.
     """
     text_rgb = rgb(palette['text'])
     # Preserve the original red dot colour from the source logo.
     accent_rgb = (208, 41, 68)
 
-    # Build colored logo on transparent background
-    colored = Image.new('RGBA', logo.size, (0, 0, 0, 0))
-    text_layer = Image.new('RGBA', logo.size, text_rgb + (255,))
-    accent_layer = Image.new('RGBA', logo.size, accent_rgb + (255,))
+    # Build colored logo on transparent background (use mask size because the
+    # source logo was upscaled before mask extraction).
+    layer_size = text_mask.size
+    colored = Image.new('RGBA', layer_size, (0, 0, 0, 0))
+    text_layer = Image.new('RGBA', layer_size, text_rgb + (255,))
+    accent_layer = Image.new('RGBA', layer_size, accent_rgb + (255,))
     colored = Image.composite(text_layer, colored, text_mask)
     colored = Image.composite(accent_layer, colored, accent_mask)
 
+    # Subtle sharpening for crisp, professional edges.
+    colored = colored.filter(ImageFilter.UnsharpMask(radius=1.5, percent=80, threshold=3))
+
+    if output_size:
+        colored = colored.resize(output_size, Image.Resampling.LANCZOS)
+
     if add_shadow:
-        return add_drop_shadow(colored, offset=(4, 4), blur=8, shadow_color=(0, 0, 0, 70))
+        return add_drop_shadow(colored, offset=(3, 4), blur=10, shadow_color=(0, 0, 0, 55))
     return colored
 
 
-def add_drop_shadow(logo, offset=(4, 4), blur=8, shadow_color=(0, 0, 0, 80)):
-    """Add a soft drop shadow behind an RGBA logo for legibility on any background."""
+def add_drop_shadow(logo, offset=(3, 4), blur=10, shadow_color=(0, 0, 0, 55)):
+    """Add a refined drop shadow behind an RGBA logo for a premium look."""
     w, h = logo.size
     pad = blur * 2
     shadow = Image.new('RGBA', (w + pad * 2, h + pad * 2), (0, 0, 0, 0))
@@ -275,23 +311,24 @@ def add_drop_shadow(logo, offset=(4, 4), blur=8, shadow_color=(0, 0, 0, 80)):
     return shadow
 
 
-def create_datomer_logo(palette, variant_name, themed_logo):
+def create_datomer_logo(palette, variant_name, themed_logo_no_shadow):
     """Generate a square Datomer profile logo (1024x1024) for social avatars."""
     width, height = 1024, 1024
     img = themed_background((width, height), palette, rings=5, pattern_count=30, noise=6)
 
-    max_w, max_h = 820, 360
-    sw, sh = themed_logo.size
+    max_w, max_h = 840, 380
+    sw, sh = themed_logo_no_shadow.size
     aspect = sw / sh
     logo_w = int(max_h * aspect)
     logo_h = max_h
     if logo_w > max_w:
         logo_w = max_w
         logo_h = int(max_w / aspect)
-    logo_resized = themed_logo.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
+    logo_resized = themed_logo_no_shadow.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
+    logo_resized = add_drop_shadow(logo_resized, offset=(3, 4), blur=10, shadow_color=(0, 0, 0, 55))
 
-    x = (width - logo_w) // 2
-    y = (height - logo_h) // 2 - 40
+    x = (width - logo_resized.width) // 2
+    y = (height - logo_resized.height) // 2 - 40
     img.paste(logo_resized, (x, y), logo_resized)
 
     draw = ImageDraw.Draw(img)
@@ -299,7 +336,7 @@ def create_datomer_logo(palette, variant_name, themed_logo):
     tag_font = load_font(34)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text(((width - tag_w) // 2, y + logo_h + 70), tagline, fill=palette['subtext'], font=tag_font)
+    draw.text(((width - tag_w) // 2, y + logo_resized.height + 60), tagline, fill=palette['subtext'], font=tag_font)
 
     out_path = os.path.join(OUT_DIR, f'datomer-logo-{variant_name}.png')
     img.save(out_path, 'PNG')
@@ -307,31 +344,32 @@ def create_datomer_logo(palette, variant_name, themed_logo):
     return out_path
 
 
-def create_datomer_banner(palette, variant_name, themed_logo):
+def create_datomer_banner(palette, variant_name, themed_logo_no_shadow):
     """Generate a 1128x191 LinkedIn company page banner for Datomer."""
     width, height = 1128, 191
     img = themed_background((width, height), palette, rings=4, pattern_count=10, noise=3)
     draw = ImageDraw.Draw(img)
 
-    logo_h = 78
-    sw, sh = themed_logo.size
+    logo_h = 88
+    sw, sh = themed_logo_no_shadow.size
     aspect = sw / sh
     logo_w = int(logo_h * aspect)
-    logo_resized = themed_logo.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
+    logo_resized = themed_logo_no_shadow.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
+    logo_resized = add_drop_shadow(logo_resized, offset=(3, 3), blur=8, shadow_color=(0, 0, 0, 50))
 
     logo_x = 60
-    logo_y = (height - logo_h) // 2
+    logo_y = (height - logo_resized.height) // 2
     img.paste(logo_resized, (logo_x, logo_y), logo_resized)
 
-    divider_x = logo_x + logo_w + 40
+    divider_x = logo_x + logo_resized.width + 40
     accent_rgb = rgb(palette['accent'])
-    draw.line([(divider_x, 50), (divider_x, height - 50)], fill=accent_rgb + (100,), width=1)
+    draw.line([(divider_x, 45), (divider_x, height - 45)], fill=accent_rgb + (100,), width=1)
 
     tagline = "Private AI infrastructure for the personal web."
     tag_font = load_font(18)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text((width - tag_w - 60, logo_y + 22), tagline, fill=palette['subtext'], font=tag_font)
+    draw.text((width - tag_w - 60, logo_y + 24), tagline, fill=palette['subtext'], font=tag_font)
 
     out_path = os.path.join(OUT_DIR, f'datomer-banner-{variant_name}.png')
     img.save(out_path, 'PNG')
@@ -339,23 +377,24 @@ def create_datomer_banner(palette, variant_name, themed_logo):
     return out_path
 
 
-def create_datomer_social_post(palette, variant_name, themed_logo):
+def create_datomer_social_post(palette, variant_name, themed_logo_no_shadow):
     """Generate a 1080x1080 social post with Datomer branding."""
     width, height = 1080, 1080
     img = themed_background((width, height), palette, rings=5, pattern_count=35, noise=6)
 
-    max_w, max_h = 960, 420
-    sw, sh = themed_logo.size
+    max_w, max_h = 980, 440
+    sw, sh = themed_logo_no_shadow.size
     aspect = sw / sh
     logo_w = int(max_h * aspect)
     logo_h = max_h
     if logo_w > max_w:
         logo_w = max_w
         logo_h = int(max_w / aspect)
-    logo_resized = themed_logo.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
+    logo_resized = themed_logo_no_shadow.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
+    logo_resized = add_drop_shadow(logo_resized, offset=(4, 5), blur=12, shadow_color=(0, 0, 0, 50))
 
-    x = (width - logo_w) // 2
-    y = (height - logo_h) // 2 - 80
+    x = (width - logo_resized.width) // 2
+    y = (height - logo_resized.height) // 2 - 80
     img.paste(logo_resized, (x, y), logo_resized)
 
     draw = ImageDraw.Draw(img)
@@ -363,7 +402,7 @@ def create_datomer_social_post(palette, variant_name, themed_logo):
     tag_font = load_font(36)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text(((width - tag_w) // 2, y + logo_h + 60), tagline, fill=palette['subtext'], font=tag_font)
+    draw.text(((width - tag_w) // 2, y + logo_resized.height + 50), tagline, fill=palette['subtext'], font=tag_font)
 
     out_path = os.path.join(OUT_DIR, f'datomer-social-{variant_name}.png')
     img.save(out_path, 'PNG')
@@ -376,7 +415,7 @@ def create_datomer_logo_only(palette, variant_name, themed_logo_no_shadow):
     width, height = 1024, 1024
     canvas = Image.new('RGBA', (width, height), (0, 0, 0, 0))
 
-    max_w, max_h = 880, 380
+    max_w, max_h = 900, 400
     sw, sh = themed_logo_no_shadow.size
     aspect = sw / sh
     logo_w = int(max_h * aspect)
@@ -398,15 +437,14 @@ def create_datomer_logo_only(palette, variant_name, themed_logo_no_shadow):
 
 def main():
     original = Image.open(DATOMER_LOGO_PATH).convert('RGB')
-    text_mask, accent_mask = extract_datomer_logo_masks(original)
+    text_mask, accent_mask = extract_datomer_logo_masks(original, scale=4)
 
     for name, palette in PALETTES.items():
         print(f"\nGenerating {palette['name']} Datomer variants...")
         themed_no_shadow = create_themed_datomer_logo(original, text_mask, accent_mask, palette, add_shadow=False)
-        themed = create_themed_datomer_logo(original, text_mask, accent_mask, palette, add_shadow=True)
-        create_datomer_logo(palette, name, themed)
-        create_datomer_banner(palette, name, themed)
-        create_datomer_social_post(palette, name, themed)
+        create_datomer_logo(palette, name, themed_no_shadow)
+        create_datomer_banner(palette, name, themed_no_shadow)
+        create_datomer_social_post(palette, name, themed_no_shadow)
         create_datomer_logo_only(palette, name, themed_no_shadow)
 
     # Update default Datomer themed assets to forest
