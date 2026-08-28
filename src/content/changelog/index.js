@@ -13,7 +13,7 @@ const posts = [
   {
     slug: 'beta',
     date: '2026-08-20',
-    title: 'Private beta opens',
+    title: 'Beta release',
     raw: beta,
   },
 ].sort((a, b) => b.date.localeCompare(a.date))

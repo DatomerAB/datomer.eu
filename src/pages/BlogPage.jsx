@@ -1,6 +1,6 @@
 import { useLanguage } from '../i18n/useLanguage.js'
 import { getChangelogPosts } from '../content/changelog/index.js'
-import { SEO } from '../components/SEO.jsx'
+import { SEO, HreflangLinks } from '../components/SEO.jsx'
 
 export function BlogPage() {
   const { t, lang } = useLanguage()

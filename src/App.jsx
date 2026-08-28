@@ -11,6 +11,7 @@ import { NewsletterForm } from './components/NewsletterForm.jsx'
 import { CookieConsent } from './components/CookieConsent.jsx'
 import { Turnstile } from './components/Turnstile.jsx'
 import { BlogPage } from './pages/BlogPage.jsx'
+import { PressPage } from './pages/PressPage.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
 
@@ -163,6 +164,7 @@ function TopBar({ onDownload }) {
             <>
               <Link to="/">{t('nav.home')}</Link>
               <Link to="/about">{t('nav.about')}</Link>
+              <Link to="/press">{t('nav.press')}</Link>
               <Link to="/contact">{t('nav.contact')}</Link>
               <Link to="/blog">{t('nav.blog')}</Link>
             </>
@@ -197,6 +199,7 @@ function Footer() {
 
           <nav className="footer-links" aria-label="Site and legal links">
             <Link to="/about">{t('nav.about')}</Link>
+            <Link to="/press">{t('nav.press')}</Link>
             <Link to="/contact">{t('nav.contact')}</Link>
             <Link to="/blog">{t('nav.blog')}</Link>
             <span className="footer-links-separator" aria-hidden="true" />
@@ -909,6 +912,7 @@ function App() {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/cookies" element={<CookiesPage />} />
+        <Route path="/press" element={<PressPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
       </Routes>
       <Footer />
