@@ -142,7 +142,7 @@ function TopBar({ onDownload }) {
       <nav className="nav container" aria-label="Main navigation">
         <Link to="/" className="par-brand" aria-label="Pär home">
           <img
-            src="/par-logo-ember.png"
+            src="/par-logo.png"
             alt=""
             className="brand-symbol"
             width="44"
