@@ -259,15 +259,10 @@ def prepare_par_logo(logo, scale=4):
     return out
 
 
-def lighten_rgb(rgb_tuple, amount=22):
-    return tuple(min(255, c + amount) for c in rgb_tuple)
-
-
 def create_themed_par_logo(logo_base, palette):
-    """Tint the Pär logo with a brightened theme text colour for visibility."""
-    text_rgb = rgb(palette['text'])
-    bright_rgb = lighten_rgb(text_rgb, amount=26)
-    tinted = Image.new('RGBA', logo_base.size, bright_rgb + (255,))
+    """Tint the Pär logo with the theme accent colour so each palette is distinct."""
+    accent_rgb = palette['accent']
+    tinted = Image.new('RGBA', logo_base.size, accent_rgb + (255,))
     return Image.composite(tinted, Image.new('RGBA', logo_base.size, (0, 0, 0, 0)), logo_base.split()[3])
 
 
