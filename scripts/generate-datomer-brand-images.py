@@ -242,11 +242,14 @@ def extract_datomer_logo_masks(logo):
 def create_themed_datomer_logo(logo, text_mask, accent_mask, palette, add_shadow=True):
     """Create a transparent Datomer logo using theme colors.
 
-    Text is rendered in the theme text color and the accent dots in the theme
-    accent color. Optional soft drop shadow improves legibility.
+    Text is rendered in the theme text color. The two accent dots inside the
+    'O' keep the original red identity from public/datomer-logo.png so the
+    logo stays recognisable across every theme. Optional soft drop shadow
+    improves legibility.
     """
     text_rgb = rgb(palette['text'])
-    accent_rgb = rgb(palette['accent'])
+    # Preserve the original red dot colour from the source logo.
+    accent_rgb = (208, 41, 68)
 
     # Build colored logo on transparent background
     colored = Image.new('RGBA', logo.size, (0, 0, 0, 0))
