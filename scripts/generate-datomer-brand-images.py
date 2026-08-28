@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-"""Generate themed Datomer logo and banner variations aligned with Pär brand assets."""
+"""Generate sharp, high-resolution themed Datomer brand assets.
+
+This script uses the vector-quality master logo (brand-assets/datomer-logo-hires.png)
+to produce themed logo, banner, and social-post variations. Taglines are rendered
+with larger, heavier type and a subtle shadow so they stay crisp and legible at
+all sizes.
+"""
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 import os
 import math
 import random
 
-OUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'public')
-DATOMER_LOGO_PATH = os.path.join(OUT_DIR, 'datomer-logo.png')
+OUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'brand-assets')
+DATOMER_LOGO_PATH = os.path.join(OUT_DIR, 'datomer-logo-hires.png')
 
 # Aligned with Pär brand image palettes.
 PALETTES = {
@@ -118,14 +124,24 @@ PALETTES = {
 
 
 def load_font(size, bold=False):
+    """Load a clean system font; prefer bold weights for sharp taglines."""
     candidates = [
         '/System/Library/Fonts/Helvetica.ttc',
         '/System/Library/Fonts/HelveticaNeue.ttc',
-        '/Library/Fonts/Arial.ttf',
+        '/System/Library/Fonts/HelveticaNeue.ttc',
         '/Library/Fonts/Arial Bold.ttf',
+        '/Library/Fonts/Arial.ttf',
         '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
         '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
     ]
+    if not bold:
+        # Insert lighter weights first when bold is not requested.
+        candidates = [
+            '/System/Library/Fonts/HelveticaNeue.ttc',
+            '/System/Library/Fonts/Helvetica.ttc',
+            '/Library/Fonts/Arial.ttf',
+            '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+        ] + candidates
     for path in candidates:
         try:
             return ImageFont.truetype(path, size)
@@ -233,35 +249,24 @@ def themed_background(size, palette, rings=4, pattern_count=20, noise=5):
     return img
 
 
-def extract_datomer_logo_masks(logo, scale=8):
-    """Extract crisp text and accent masks from the original Datomer logo.
+def extract_datomer_logo_masks(logo):
+    """Extract crisp text and accent masks from the high-res master logo.
 
-    The source wordmark is small (443x166), so we upscale aggressively and
-    contrast-stretch the grayscale so anti-aliased edges become solid. This
-    produces a much sharper mask than a simple RGB threshold when later
-    resized to large outputs.
+    The master logo is already vector-quality, so we simply use the alpha channel
+    for the text shape and isolate the red accent dots for their own mask.
     """
-    if scale > 1:
-        logo = logo.resize((logo.width * scale, logo.height * scale), Image.Resampling.LANCZOS)
+    logo = logo.convert('RGBA')
 
-    # Grayscale + autocontrast makes every edge pop.
-    gray = logo.convert('L')
-    gray = ImageOps.autocontrast(gray, cutoff=1)
-    # Invert so dark text becomes the bright mask.
-    inv = ImageOps.invert(gray)
-    # Threshold to a solid foreground mask.
-    text_mask = inv.point(lambda x: 255 if x > 160 else 0)
-    # Small dilation ensures thin strokes are fully captured, then a tiny
-    # Gaussian blur preserves sub-pixel detail when downscaled.
-    text_mask = text_mask.filter(ImageFilter.MaxFilter(size=3))
-    text_mask = text_mask.filter(ImageFilter.GaussianBlur(radius=0.7))
+    # Text mask: everything that is not transparent.
+    text_mask = logo.split()[3]
+    # Slight autocontrast keeps anti-aliased edges clean without turning soft.
+    text_mask = ImageOps.autocontrast(text_mask, cutoff=0)
 
-    # Accent mask: the red dots inside the O.
+    # Accent mask: the red dots inside the 'o'.
     data = list(logo.getdata())
     accent_mask = []
-    for p in data:
-        r, g, b = p[:3]
-        if r > 150 and g < 100 and b < 100:
+    for r, g, b, a in data:
+        if a > 30 and r > 150 and g < 100 and b < 100 and r > g + 40 and r > b + 40:
             accent_mask.append(255)
         else:
             accent_mask.append(0)
@@ -276,17 +281,13 @@ def extract_datomer_logo_masks(logo, scale=8):
 def create_themed_datomer_logo(logo, text_mask, accent_mask, palette, add_shadow=True, output_size=None):
     """Create a transparent Datomer logo using theme colors.
 
-    Text is rendered in the theme text color. The two accent dots inside the
-    'O' keep the original red identity from public/datomer-logo.png so the
-    logo stays recognisable across every theme. Aggressive upscaling and
-    post-resize sharpening give crisp, professional edges.
+    Text is rendered in the theme text color. The two red accent dots inside the
+    'o' keep the original identity from the master logo so the logo stays
+    recognisable across every theme.
     """
     text_rgb = rgb(palette['text'])
-    # Preserve the original red dot colour from the source logo.
     accent_rgb = (208, 41, 68)
 
-    # Build colored logo on transparent background (use mask size because the
-    # source logo was upscaled before mask extraction).
     layer_size = text_mask.size
     colored = Image.new('RGBA', layer_size, (0, 0, 0, 0))
     text_layer = Image.new('RGBA', layer_size, text_rgb + (255,))
@@ -296,9 +297,8 @@ def create_themed_datomer_logo(logo, text_mask, accent_mask, palette, add_shadow
 
     if output_size:
         colored = colored.resize(output_size, Image.Resampling.LANCZOS)
-
-    # Sharpen *after* resize to counteract any softening from downscaling.
-    colored = colored.filter(ImageFilter.UnsharpMask(radius=1.0, percent=150, threshold=1))
+        # A gentle unsharp mask after downscale keeps edges crisp.
+        colored = colored.filter(ImageFilter.UnsharpMask(radius=0.8, percent=80, threshold=1))
 
     if add_shadow:
         return add_drop_shadow(colored, offset=(3, 4), blur=10, shadow_color=(0, 0, 0, 55))
@@ -315,6 +315,14 @@ def add_drop_shadow(logo, offset=(3, 4), blur=10, shadow_color=(0, 0, 0, 55)):
     shadow = shadow.filter(ImageFilter.GaussianBlur(radius=blur))
     shadow.paste(logo, (pad, pad), logo)
     return shadow
+
+
+def draw_sharp_text(draw, position, text, font, fill, shadow_color=(0, 0, 0, 90), shadow_offset=(1, 2)):
+    """Draw text with a subtle shadow for extra sharpness and contrast."""
+    x, y = position
+    # Slight shadow behind.
+    draw.text((x + shadow_offset[0], y + shadow_offset[1]), text, fill=shadow_color, font=font)
+    draw.text((x, y), text, fill=fill, font=font)
 
 
 def create_datomer_logo(palette, variant_name, themed_logo_no_shadow):
@@ -339,10 +347,12 @@ def create_datomer_logo(palette, variant_name, themed_logo_no_shadow):
 
     draw = ImageDraw.Draw(img)
     tagline = "Datomer AB"
-    tag_font = load_font(34)
+    tag_font = load_font(38, bold=True)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text(((width - tag_w) // 2, y + logo_resized.height + 60), tagline, fill=palette['subtext'], font=tag_font)
+    tag_x = (width - tag_w) // 2
+    tag_y = y + logo_resized.height + 60
+    draw_sharp_text(draw, (tag_x, tag_y), tagline, tag_font, palette['subtext'])
 
     out_path = os.path.join(OUT_DIR, f'datomer-logo-{variant_name}.png')
     img.save(out_path, 'PNG')
@@ -372,10 +382,12 @@ def create_datomer_banner(palette, variant_name, themed_logo_no_shadow):
     draw.line([(divider_x, 45), (divider_x, height - 45)], fill=accent_rgb + (100,), width=1)
 
     tagline = "Private AI infrastructure for the personal web."
-    tag_font = load_font(18)
+    tag_font = load_font(22, bold=True)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text((width - tag_w - 60, logo_y + 24), tagline, fill=palette['subtext'], font=tag_font)
+    tag_x = width - tag_w - 60
+    tag_y = logo_y + 22
+    draw_sharp_text(draw, (tag_x, tag_y), tagline, tag_font, palette['subtext'])
 
     out_path = os.path.join(OUT_DIR, f'datomer-banner-{variant_name}.png')
     img.save(out_path, 'PNG')
@@ -405,10 +417,12 @@ def create_datomer_social_post(palette, variant_name, themed_logo_no_shadow):
 
     draw = ImageDraw.Draw(img)
     tagline = "Building Pär — your AI on your device."
-    tag_font = load_font(36)
+    tag_font = load_font(42, bold=True)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text(((width - tag_w) // 2, y + logo_resized.height + 50), tagline, fill=palette['subtext'], font=tag_font)
+    tag_x = (width - tag_w) // 2
+    tag_y = y + logo_resized.height + 50
+    draw_sharp_text(draw, (tag_x, tag_y), tagline, tag_font, palette['subtext'])
 
     out_path = os.path.join(OUT_DIR, f'datomer-social-{variant_name}.png')
     img.save(out_path, 'PNG')
@@ -442,8 +456,8 @@ def create_datomer_logo_only(palette, variant_name, themed_logo_no_shadow):
 
 
 def main():
-    original = Image.open(DATOMER_LOGO_PATH).convert('RGB')
-    text_mask, accent_mask = extract_datomer_logo_masks(original, scale=4)
+    original = Image.open(DATOMER_LOGO_PATH)
+    text_mask, accent_mask = extract_datomer_logo_masks(original)
 
     for name, palette in PALETTES.items():
         print(f"\nGenerating {palette['name']} Datomer variants...")

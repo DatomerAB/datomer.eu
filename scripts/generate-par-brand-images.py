@@ -5,7 +5,7 @@ import os
 import math
 import random
 
-OUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'public')
+OUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'brand-assets')
 PAR_LOGO_PATH = os.path.join(OUT_DIR, 'par-logo.png')
 
 # Aligned with Datomer brand image palettes, plus premium metallic themes.
@@ -118,14 +118,24 @@ PALETTES = {
 
 
 def load_font(size, bold=False):
+    """Load a clean system font; prefer bold weights for sharp taglines."""
     candidates = [
         '/System/Library/Fonts/Helvetica.ttc',
         '/System/Library/Fonts/HelveticaNeue.ttc',
-        '/Library/Fonts/Arial.ttf',
+        '/System/Library/Fonts/HelveticaNeue.ttc',
         '/Library/Fonts/Arial Bold.ttf',
+        '/Library/Fonts/Arial.ttf',
         '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
         '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
     ]
+    if not bold:
+        # Insert lighter weights first when bold is not requested.
+        candidates = [
+            '/System/Library/Fonts/HelveticaNeue.ttc',
+            '/System/Library/Fonts/Helvetica.ttc',
+            '/Library/Fonts/Arial.ttf',
+            '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+        ] + candidates
     for path in candidates:
         try:
             return ImageFont.truetype(path, size)
@@ -266,6 +276,14 @@ def create_themed_par_logo(logo_base, palette):
     return Image.composite(tinted, Image.new('RGBA', logo_base.size, (0, 0, 0, 0)), logo_base.split()[3])
 
 
+def draw_sharp_text(draw, position, text, font, fill, shadow_color=(0, 0, 0, 90), shadow_offset=(1, 2)):
+    """Draw text with a subtle shadow for extra sharpness and contrast."""
+    x, y = position
+    # Slight shadow behind.
+    draw.text((x + shadow_offset[0], y + shadow_offset[1]), text, fill=shadow_color, font=font)
+    draw.text((x, y), text, fill=fill, font=font)
+
+
 def add_drop_shadow(logo, offset=(3, 4), blur=10, shadow_color=(0, 0, 0, 55)):
     """Add a refined drop shadow behind an RGBA logo for a premium look."""
     w, h = logo.size
@@ -300,10 +318,12 @@ def create_par_logo(palette, variant_name, themed_logo_no_shadow):
 
     draw = ImageDraw.Draw(img)
     tagline = "Pär by Datomer"
-    tag_font = load_font(34)
+    tag_font = load_font(38, bold=True)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text(((width - tag_w) // 2, y + logo_resized.height + 60), tagline, fill=palette['subtext'], font=tag_font)
+    tag_x = (width - tag_w) // 2
+    tag_y = y + logo_resized.height + 60
+    draw_sharp_text(draw, (tag_x, tag_y), tagline, tag_font, palette['subtext'])
 
     out_path = os.path.join(OUT_DIR, f'par-logo-{variant_name}.png')
     img.save(out_path, 'PNG')
@@ -333,10 +353,12 @@ def create_par_banner(palette, variant_name, themed_logo_no_shadow):
     draw.line([(divider_x, 45), (divider_x, height - 45)], fill=accent_rgb + (140,), width=1)
 
     tagline = "Your AI. On your device."
-    tag_font = load_font(18)
+    tag_font = load_font(22, bold=True)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text((width - tag_w - 60, logo_y + 36), tagline, fill=palette['subtext'], font=tag_font)
+    tag_x = width - tag_w - 60
+    tag_y = logo_y + 32
+    draw_sharp_text(draw, (tag_x, tag_y), tagline, tag_font, palette['subtext'])
 
     out_path = os.path.join(OUT_DIR, f'par-banner-{variant_name}.png')
     img.save(out_path, 'PNG')
@@ -366,10 +388,12 @@ def create_par_social_post(palette, variant_name, themed_logo_no_shadow):
 
     draw = ImageDraw.Draw(img)
     tagline = "Private AI for macOS."
-    tag_font = load_font(36)
+    tag_font = load_font(42, bold=True)
     tb = draw.textbbox((0, 0), tagline, font=tag_font)
     tag_w = tb[2] - tb[0]
-    draw.text(((width - tag_w) // 2, y + logo_resized.height + 50), tagline, fill=palette['subtext'], font=tag_font)
+    tag_x = (width - tag_w) // 2
+    tag_y = y + logo_resized.height + 50
+    draw_sharp_text(draw, (tag_x, tag_y), tagline, tag_font, palette['subtext'])
 
     out_path = os.path.join(OUT_DIR, f'par-social-{variant_name}.png')
     img.save(out_path, 'PNG')
