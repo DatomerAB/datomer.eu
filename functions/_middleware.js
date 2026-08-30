@@ -160,6 +160,23 @@ function metaForRoute(pathname, searchParams) {
           'Cookie-Richtlinie von Pär by Datomer. Erfahre mehr über die Cookies und Analyse-Tools, die wir auf unserer Website verwenden.',
       },
     },
+    '/models': {
+      en: {
+        title: pageTitle('Models & Licenses'),
+        description:
+          'Open-source AI models used by Pär: Qwen, Mistral, Phi, Nomic, and optional Ollama models. Authors, licenses, and sources.',
+      },
+      sv: {
+        title: pageTitle('Modeller & Licenser'),
+        description:
+          'AI-modeller med öppen källkod som används av Pär: Qwen, Mistral, Phi, Nomic och valfria Ollama-modeller. Upphovsmän, licenser och källor.',
+      },
+      de: {
+        title: pageTitle('Modelle & Lizenzen'),
+        description:
+          'Open-Source-KI-Modelle, die von Pär verwendet werden: Qwen, Mistral, Phi, Nomic und optionale Ollama-Modelle. Autoren, Lizenzen und Quellen.',
+      },
+    },
     '/payment-success': {
       en: {
         title: pageTitle('Payment Successful'),

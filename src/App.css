@@ -1490,6 +1490,114 @@
   padding-bottom: 100px;
 }
 
+/* Model attribution page */
+.model-attribution-page {
+  max-width: 980px;
+}
+
+.model-attribution-page .eyebrow {
+  margin-bottom: 20px;
+}
+
+.model-table-wrap {
+  overflow-x: auto;
+  margin: 18px 0 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.model-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  min-width: 640px;
+}
+
+.model-table th,
+.model-table td {
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.model-table th {
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: var(--surface-soft);
+}
+
+.model-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.model-table td {
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.model-table td strong {
+  display: block;
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.model-table td a {
+  color: var(--accent);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.model-table td a:hover {
+  text-decoration: underline;
+}
+
+.model-use-case {
+  display: block;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+
+.license-badge a {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.license-badge a:hover {
+  text-decoration: none;
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+.ollama-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: -10px;
+  margin-bottom: 18px;
+}
+
+.attribution-closing {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
 .legal-page h1 {
   font-size: clamp(2rem, 5vw, 2.8rem);
   letter-spacing: -0.04em;

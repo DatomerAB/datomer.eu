@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "generated_by": "agent/license_attribution_agent.py",
+  "bundled": [
+    {
+      "short_name": "Qwen 3B",
+      "authors": "Alibaba Cloud",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF",
+      "filename": "Qwen2.5-3B-Instruct-Q4_K_M.gguf",
+      "use_case": "Quick Q&A, summarisation, low-RAM devices (4 GB+)"
+    },
+    {
+      "short_name": "Qwen 7B",
+      "authors": "Alibaba Cloud",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF",
+      "filename": "Qwen2.5-7B-Instruct-Q4_K_M.gguf",
+      "use_case": "Writing, research, coding — best starting point for most users"
+    },
+    {
+      "short_name": "Qwen 14B",
+      "authors": "Alibaba Cloud",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/Qwen/Qwen2.5-14B-Instruct/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-14B-Instruct-GGUF",
+      "filename": "Qwen2.5-14B-Instruct-Q4_K_M.gguf",
+      "use_case": "Complex reasoning, long documents, detailed analysis"
+    },
+    {
+      "short_name": "Qwen 32B",
+      "authors": "Alibaba Cloud",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/Qwen/Qwen2.5-32B-Instruct/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-32B-Instruct-GGUF",
+      "filename": "Qwen2.5-32B-Instruct-Q4_K_M.gguf",
+      "use_case": "Expert-level reasoning, creative writing, deep research"
+    },
+    {
+      "short_name": "Mistral Nemo 12B",
+      "authors": "Mistral AI",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/bartowski/Mistral-Nemo-Instruct-2407-GGUF/blob/main/README.md",
+      "source_url": "https://huggingface.co/bartowski/Mistral-Nemo-Instruct-2407-GGUF",
+      "filename": "Mistral-Nemo-Instruct-2407-Q4_K_M.gguf",
+      "use_case": "Multilingual tasks, instruction following, 128K context"
+    },
+    {
+      "short_name": "Qwen Coder 7B",
+      "authors": "Alibaba Cloud",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF",
+      "filename": "Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf",
+      "use_case": "Code generation, debugging, SQL, shell scripting"
+    },
+    {
+      "short_name": "Phi-4 Mini",
+      "authors": "Microsoft Corporation",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/bartowski/Phi-4-mini-instruct-GGUF/blob/main/README.md",
+      "source_url": "https://huggingface.co/bartowski/Phi-4-mini-instruct-GGUF",
+      "filename": "Phi-4-mini-instruct-Q4_K_M.gguf",
+      "use_case": "Quick reasoning, maths, concise answers on low-RAM devices"
+    },
+    {
+      "short_name": "Qwen 0.5B",
+      "authors": "Alibaba Cloud",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/Qwen/Qwen2-0.5B-Instruct/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Qwen/Qwen2-0.5B-Instruct-GGUF",
+      "filename": "qwen2-0_5b-instruct-q4_k_m.gguf",
+      "use_case": "Ultra-low RAM devices, autocomplete, simple Q&A"
+    }
+  ],
+  "embedding": [
+    {
+      "short_name": "Nomic Embed v1.5",
+      "authors": "Nomic, Inc.",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/nomic-ai/nomic-embed-text-v1.5/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF",
+      "filename": "nomic-embed-text-v1.5.Q8_0.gguf"
+    }
+  ],
+  "optional": [
+    {
+      "short_name": "Qwen 3 8B (Ollama)",
+      "authors": "Alibaba Cloud",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/Qwen/Qwen3-8B/blob/main/LICENSE",
+      "source_url": "https://ollama.com/library/qwen3"
+    },
+    {
+      "short_name": "mxbai-embed-large (Ollama)",
+      "authors": "mixedbread.ai",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/mixedbread-ai/mxbai-embed-large-v1/blob/main/LICENSE",
+      "source_url": "https://ollama.com/library/mxbai-embed-large"
+    },
+    {
+      "short_name": "Qwen2.5-VL 7B (Ollama)",
+      "authors": "Alibaba Cloud",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct/blob/main/LICENSE",
+      "source_url": "https://ollama.com/library/qwen2.5vl"
+    },
+    {
+      "short_name": "Gemma 3 12B (Ollama)",
+      "authors": "Google DeepMind",
+      "license": "Gemma",
+      "license_url": "https://ai.google.dev/gemma/terms",
+      "source_url": "https://ollama.com/library/gemma3"
+    }
+  ],
+  "software": [
+    {
+      "name": "llama.cpp",
+      "license": "MIT / Business Source License 1.1",
+      "url": "https://github.com/ggerganov/llama.cpp"
+    },
+    {
+      "name": "huggingface_hub",
+      "license": "Apache-2.0",
+      "url": "https://github.com/huggingface/huggingface_hub"
+    },
+    {
+      "name": "Ollama",
+      "license": "Terms of Service",
+      "url": "https://ollama.com/legal/terms"
+    }
+  ]
+}

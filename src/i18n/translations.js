@@ -11,6 +11,7 @@ export const translations = {
       about: 'About',
       contact: 'Contact',
       download: 'Download',
+      models: 'Models & Licenses',
     },
     common: {
       close: 'Close',
@@ -284,7 +285,33 @@ export const translations = {
     },
     footer: {
       managedBy: 'Managed and operated by Datomer AB',
-      legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies' },
+      legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies', models: 'Models & Licenses' },
+    },
+    modelAttribution: {
+      eyebrow: 'Open-source models',
+      title: 'Models & Licenses',
+      intro:
+        'Pär is proprietary software, but it runs open-source AI models locally on your device. This page lists the models Pär can download or connect to, their authors, and the licenses that apply to each of them.',
+      bundledTitle: 'Models bundled or downloadable by Pär',
+      bundledText:
+        'These GGUF models are curated by Pär and downloaded to your device. Each model remains under its own license.',
+      embedTitle: 'Embedding models',
+      embedText:
+        'Embedding models convert text into vectors so Pär can search your local knowledge base.',
+      optionalTitle: 'Optional Ollama integration',
+      optionalText:
+        'When Ollama is enabled, Pär connects to a local Ollama server. The models below are pulled and executed by Ollama on your device.',
+      ollamaNote:
+        'Pär does not distribute Ollama or Ollama models. Their use is governed by Ollama terms and the license of each individual model.',
+      softwareTitle: 'Third-party model software',
+      softwareText:
+        'Pär uses the following open-source software to load and run models on your device.',
+      modelColumn: 'Model',
+      authorsColumn: 'Authors',
+      licenseColumn: 'License',
+      sourceColumn: 'Source',
+      closing: 'For the full legal notice included with the application, see',
+      noticeLink: 'NOTICE.md',
     },
     about: {
       title: 'About Pär',
@@ -414,6 +441,7 @@ export const translations = {
       about: 'Om oss',
       contact: 'Kontakt',
       download: 'Ladda ner',
+      models: 'Modeller & Licenser',
     },
     common: {
       close: 'Stäng',
@@ -661,7 +689,33 @@ export const translations = {
     },
     footer: {
       managedBy: 'Hanteras och drivs av Datomer AB',
-      legal: { privacy: 'Integritet', terms: 'Villkor', cookies: 'Cookies' },
+      legal: { privacy: 'Integritet', terms: 'Villkor', cookies: 'Cookies', models: 'Modeller & Licenser' },
+    },
+    modelAttribution: {
+      eyebrow: 'Öppen källkodsmodeller',
+      title: 'Modeller & Licenser',
+      intro:
+        'Pär är proprietär programvara, men kör AI-modeller med öppen källkod lokalt på din enhet. Denna sida listar de modeller Pär kan ladda ner eller ansluta till, deras upphovsmän och de licenser som gäller för var och en.',
+      bundledTitle: 'Modeller som medföljer eller kan laddas ner av Pär',
+      bundledText:
+        'Dessa GGUF-modeller är kurerade av Pär och laddas ner till din enhet. Varje modell förblir under sin egen licens.',
+      embedTitle: 'Inbäddningsmodeller',
+      embedText:
+        'Inbäddningsmodeller omvandlar text till vektorer så att Pär kan söka i din lokala kunskapsbas.',
+      optionalTitle: 'Valfri Ollama-integration',
+      optionalText:
+        'När Ollama är aktiverat ansluter Pär till en lokal Ollama-server. Modellerna nedan hämtas och körs av Ollama på din enhet.',
+      ollamaNote:
+        'Pär distribuerar inte Ollama eller Ollama-modeller. Deras användning regleras av Ollamas villkor och licensen för varje enskild modell.',
+      softwareTitle: 'Tredjepartsprogramvara för modeller',
+      softwareText:
+        'Pär använder följande programvara med öppen källkod för att ladda och köra modeller på din enhet.',
+      modelColumn: 'Modell',
+      authorsColumn: 'Upphovsmän',
+      licenseColumn: 'Licens',
+      sourceColumn: 'Källa',
+      closing: 'För den fullständiga juridiska notis som medföljer applikationen, se',
+      noticeLink: 'NOTICE.md',
     },
     language: {
       label: 'Språk',

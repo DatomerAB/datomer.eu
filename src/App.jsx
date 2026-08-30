@@ -12,6 +12,7 @@ import { CookieConsent } from './components/CookieConsent.jsx'
 import { Turnstile } from './components/Turnstile.jsx'
 import { BlogPage } from './pages/BlogPage.jsx'
 import { PressPage } from './pages/PressPage.jsx'
+import { ModelAttributionPage } from './pages/ModelAttributionPage.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
 
@@ -159,6 +160,7 @@ function TopBar({ onDownload }) {
               <a href="#pricing">{t('nav.pricing')}</a>
               <a href="#faq">{t('nav.faq')}</a>
               <Link to="/blog">{t('nav.blog')}</Link>
+              <Link to="/models">{t('nav.models')}</Link>
             </>
           ) : (
             <>
@@ -167,6 +169,7 @@ function TopBar({ onDownload }) {
               <Link to="/press">{t('nav.press')}</Link>
               <Link to="/contact">{t('nav.contact')}</Link>
               <Link to="/blog">{t('nav.blog')}</Link>
+              <Link to="/models">{t('nav.models')}</Link>
             </>
           )}
         </div>
@@ -206,6 +209,7 @@ function Footer() {
             <Link to="/privacy">{t('footer.legal.privacy')}</Link>
             <Link to="/terms">{t('footer.legal.terms')}</Link>
             <Link to="/cookies">{t('footer.legal.cookies')}</Link>
+            <Link to="/models">{t('footer.legal.models')}</Link>
           </nav>
 
           <div className="footer-company" aria-label="Datomer company details">
@@ -913,6 +917,7 @@ function App() {
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/cookies" element={<CookiesPage />} />
         <Route path="/press" element={<PressPage />} />
+        <Route path="/models" element={<ModelAttributionPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
       </Routes>
       <Footer />

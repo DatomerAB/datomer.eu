@@ -83,6 +83,15 @@ curl -L -H "Authorization: Bearer <DAILY_SUMMARY_SECRET>" \
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for full setup, secrets, D1 migrations, and testing instructions.
 
+## Model attribution
+
+The `/models` page is kept in sync with the canonical model catalog in the private `Pär` repository (`config/routing.yaml`). When models change:
+
+1. In the `Pär` repository, run `python scripts/sync_attribution.py --write` to regenerate `config/website_models.json`.
+2. Copy `config/website_models.json` to this repository as `src/data/models.json`.
+3. Add or update translations in `src/i18n/translations.js` if new model categories are introduced.
+4. Commit and push to redeploy the site.
+
 ## Environment and branding
 
 Public `ENVIRONMENT` and `RESEND_FROM_NAME` variables ensure the site knows whether it is running in `preview` or `production`, and every email is sent as `Pär by Datomer <hello@datomer.eu>`.
