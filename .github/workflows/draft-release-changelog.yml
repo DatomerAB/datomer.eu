@@ -78,7 +78,8 @@ jobs:
           git checkout -b "$BRANCH"
           git add "$FILE"
           git commit -m "chore: draft changelog for ${TAG}"
-          git push origin "$BRANCH"
+          # Force-push so re-dispatches overwrite the previous draft branch.
+          git push --force origin "$BRANCH"
 
           gh pr create \
             --title "Release notes: Pär ${TAG}" \
