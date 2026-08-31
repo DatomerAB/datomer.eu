@@ -64,7 +64,7 @@ jobs:
             echo ""
             echo "## Download"
             echo ""
-            echo "Get the latest DMG at [par-public](https://datomerab.github.io/par-public/)."
+            echo "Get the latest DMG at [datomer.eu](https://datomer.eu/)."
           } > "$FILE"
 
           echo "Created ${FILE}:"
