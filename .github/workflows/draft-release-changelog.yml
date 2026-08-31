@@ -1,0 +1,84 @@
+name: Draft release changelog post
+
+# This workflow is triggered by a repository_dispatch event from the private
+# DatomerAB/Par repo after a release has been published.  It opens a draft PR
+# on DatomerAB/datomer.eu with a new changelog post for human review.
+#
+# No secrets are required beyond the default GITHUB_TOKEN.
+
+on:
+  repository_dispatch:
+    types: [release-published]
+
+jobs:
+  draft-changelog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate changelog post
+        id: generate
+        env:
+          TAG: ${{ github.event.client_payload.tag }}
+          RELEASE_TITLE: ${{ github.event.client_payload.release_title }}
+          RELEASE_BODY: ${{ github.event.client_payload.release_body }}
+        run: |
+          VERSION="${TAG#v}"
+          SLUG_VERSION="${VERSION//./-}"
+          DATE="$(date -u +%Y-%m-%d)"
+          FILE="src/content/changelog/${DATE}-par-${SLUG_VERSION}.md"
+
+          mkdir -p "$(dirname "$FILE")"
+
+          {
+            echo "# Pär ${VERSION}"
+            echo ""
+            if [[ -n "${RELEASE_TITLE}" && "${RELEASE_TITLE}" != "Pär ${TAG}" ]]; then
+              echo "${RELEASE_TITLE}."
+              echo ""
+            fi
+            echo "## What's new"
+            echo ""
+            if [[ -n "${RELEASE_BODY}" && "${RELEASE_BODY}" != "Release ${TAG}" ]]; then
+              echo "${RELEASE_BODY}"
+            else
+              echo "A new Pär release is available. Download the latest macOS build from the landing page."
+            fi
+            echo ""
+            echo "## Download"
+            echo ""
+            echo "Get the latest DMG at [par-public](https://datomerab.github.io/par-public/)."
+          } > "$FILE"
+
+          echo "Created ${FILE}:"
+          cat "$FILE"
+
+          echo "file=${FILE}" >> "$GITHUB_OUTPUT"
+
+      - name: Create draft PR
+        env:
+          TAG: ${{ github.event.client_payload.tag }}
+          SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="release-notes/${TAG}"
+          FILE="${{ steps.generate.outputs.file }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "$BRANCH"
+          git add "$FILE"
+          git commit -m "chore: draft changelog for ${TAG}"
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --title "Release notes: Pär ${TAG}" \
+            --body "Draft changelog post for **${TAG}**. Source release: ${SOURCE_REPO}/releases/tag/${TAG}.\n\nPlease review, edit, and merge when ready." \
+            --base main \
+            --draft
+
+          echo "Opened draft PR for ${TAG}"
