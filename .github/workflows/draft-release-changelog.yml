@@ -2,7 +2,10 @@ name: Draft release changelog post
 
 # This workflow is triggered by a repository_dispatch event from the private
 # DatomerAB/Par repo after a release has been published.  It opens a draft PR
-# on DatomerAB/datomer.eu with a new changelog post for human review.
+# on DatomerAB/datomer.eu with:
+#   - a new changelog post
+#   - an updated fallback download URL in src/App.jsx
+# for human review before merging.
 #
 # Required repo secret:
 #   CROSS_REPO_DISPATCH_TOKEN - PAT that can push branches and create pull
@@ -22,10 +25,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate changelog post
+      - name: Generate changelog post and update fallback URL
         id: generate
         env:
           TAG: ${{ github.event.client_payload.tag }}
+          DMG_URL: ${{ github.event.client_payload.dmg_url }}
           RELEASE_TITLE: ${{ github.event.client_payload.release_title }}
           RELEASE_BODY: ${{ github.event.client_payload.release_body }}
         run: |
@@ -33,6 +37,13 @@ jobs:
           SLUG_VERSION="${VERSION//./-}"
           DATE="$(date -u +%Y-%m-%d)"
           FILE="src/content/changelog/${DATE}-par-${SLUG_VERSION}.md"
+
+          # Use the provided DMG URL, or build the canonical one from the tag.
+          if [[ -n "${DMG_URL}" ]]; then
+            FINAL_DMG_URL="${DMG_URL}"
+          else
+            FINAL_DMG_URL="https://github.com/DatomerAB/par-releases/releases/download/${TAG}/Par_${VERSION}_aarch64.dmg"
+          fi
 
           mkdir -p "$(dirname "$FILE")"
 
@@ -59,6 +70,12 @@ jobs:
           echo "Created ${FILE}:"
           cat "$FILE"
 
+          # Update fallback URL in App.jsx so the site still works if latest.json fails.
+          sed -i "s|const FALLBACK_DOWNLOAD_URL =.*|const FALLBACK_DOWNLOAD_URL =\n  '${FINAL_DMG_URL}'|" src/App.jsx
+
+          echo "Updated src/App.jsx fallback URL to:"
+          grep -A1 "const FALLBACK_DOWNLOAD_URL" src/App.jsx
+
           echo "file=${FILE}" >> "$GITHUB_OUTPUT"
 
       - name: Create draft PR
@@ -76,14 +93,14 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git checkout -b "$BRANCH"
-          git add "$FILE"
-          git commit -m "chore: draft changelog for ${TAG}"
+          git add "$FILE" src/App.jsx
+          git commit -m "chore: draft changelog and fallback URL for ${TAG}"
           # Force-push so re-dispatches overwrite the previous draft branch.
           git push --force origin "$BRANCH"
 
           gh pr create \
             --title "Release notes: Pär ${TAG}" \
-            --body "Draft changelog post for **${TAG}**. Source release: ${SOURCE_REPO}/releases/tag/${TAG}.\n\nPlease review, edit, and merge when ready." \
+            --body "Draft changelog post and updated fallback download URL for **${TAG}**.\n\nSource release: ${SOURCE_REPO}/releases/tag/${TAG}.\n\n### Review checklist\n- [ ] Changelog post is business-focused and accurate\n- [ ] Fallback download URL in \`src/App.jsx\` points to the correct DMG\n- [ ] No broken links or formatting issues\n\nMerge when ready to deploy." \
             --base main \
             --draft
 
