@@ -1,107 +1,189 @@
-name: Draft release changelog post
-
-# This workflow is triggered by a repository_dispatch event from the private
-# DatomerAB/Par repo after a release has been published.  It opens a draft PR
-# on DatomerAB/datomer.eu with:
-#   - a new changelog post
-#   - an updated fallback download URL in src/App.jsx
-# for human review before merging.
-#
-# Required repo secret:
-#   CROSS_REPO_DISPATCH_TOKEN - PAT that can push branches and create pull
-#                               requests in this repo. The same token used by
-#                               DatomerAB/Par to dispatch the event works here.
+name: Draft release changelog PR
 
 on:
   repository_dispatch:
-    types: [release-published]
+    types:
+      - release-published
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v0.1.0-beta.2026083101)"
+        required: true
+        type: string
+      dmg_url:
+        description: "Direct download URL for the macOS DMG"
+        required: true
+        type: string
+      release_title:
+        description: "Release title"
+        required: false
+        type: string
+      release_body:
+        description: "Release body / notes"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  draft-changelog:
+  draft:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Generate changelog post and update fallback URL
-        id: generate
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Create changelog post and update fallback URL
+        id: create
+        shell: bash
         env:
-          TAG: ${{ github.event.client_payload.tag }}
-          DMG_URL: ${{ github.event.client_payload.dmg_url }}
-          RELEASE_TITLE: ${{ github.event.client_payload.release_title }}
-          RELEASE_BODY: ${{ github.event.client_payload.release_body }}
+          TAG: ${{ github.event.client_payload.tag || inputs.tag }}
+          DMG_URL: ${{ github.event.client_payload.dmg_url || inputs.dmg_url }}
+          RELEASE_TITLE: ${{ github.event.client_payload.release_title || inputs.release_title || '' }}
+          RELEASE_BODY: ${{ github.event.client_payload.release_body || inputs.release_body || '' }}
         run: |
-          VERSION="${TAG#v}"
-          SLUG_VERSION="${VERSION//./-}"
-          DATE="$(date -u +%Y-%m-%d)"
-          FILE="src/content/changelog/${DATE}-par-${SLUG_VERSION}.md"
+          set -euo pipefail
 
-          # Use the provided DMG URL, or build the canonical one from the tag.
-          if [[ -n "${DMG_URL}" ]]; then
-            FINAL_DMG_URL="${DMG_URL}"
-          else
-            FINAL_DMG_URL="https://github.com/DatomerAB/par-releases/releases/download/${TAG}/Par_${VERSION}_aarch64.dmg"
+          if [[ -z "$TAG" ]]; then
+            echo "❌ Missing required input: tag"
+            exit 1
           fi
 
-          mkdir -p "$(dirname "$FILE")"
+          if [[ -z "$DMG_URL" ]]; then
+            echo "❌ Missing required input: dmg_url"
+            exit 1
+          fi
 
+          VERSION="${TAG#v}"
+          TODAY=$(date -u +%Y-%m-%d)
+          SAFE_VERSION=$(echo "$VERSION" | sed 's/[^a-zA-Z0-9.-]/-/g')
+          SLUG="par-${SAFE_VERSION}"
+          FILENAME="${TODAY}-${SLUG}.md"
+          FILEPATH="src/content/changelog/${FILENAME}"
+
+          # Verify the DMG URL is reachable.
+          HTTP_STATUS=$(curl -sSL -o /dev/null -w '%{http_code}' --max-time 30 "$DMG_URL" || true)
+          if [[ "$HTTP_STATUS" != "200" && "$HTTP_STATUS" != "302" && "$HTTP_STATUS" != "307" ]]; then
+            echo "❌ DMG URL is not reachable (HTTP $HTTP_STATUS): $DMG_URL"
+            exit 1
+          fi
+
+          # Generate the changelog headline.
+          if [[ -n "$RELEASE_TITLE" ]]; then
+            HEADLINE="$RELEASE_TITLE"
+          else
+            HEADLINE="Pär ${VERSION} released"
+          fi
+
+          # Generate the changelog body.
           {
-            echo "# Pär ${VERSION}"
+            echo "# ${HEADLINE}"
             echo ""
-            if [[ -n "${RELEASE_TITLE}" && "${RELEASE_TITLE}" != "Pär ${TAG}" ]]; then
-              echo "${RELEASE_TITLE}."
-              echo ""
-            fi
-            echo "## What's new"
-            echo ""
-            if [[ -n "${RELEASE_BODY}" && "${RELEASE_BODY}" != "Release ${TAG}" ]]; then
-              echo "${RELEASE_BODY}"
+            if [[ -n "$RELEASE_BODY" ]]; then
+              echo "$RELEASE_BODY"
             else
-              echo "A new Pär release is available. Download the latest macOS build from the landing page."
+              echo "Pär ${VERSION} is now available."
+              echo ""
+              echo "## Download"
+              echo ""
+              echo "- [Download Pär ${VERSION} for macOS](${DMG_URL})"
             fi
-            echo ""
-            echo "## Download"
-            echo ""
-            echo "Get the latest DMG at [datomer.eu](https://datomer.eu/)."
-          } > "$FILE"
+          } > "$FILEPATH"
 
-          echo "Created ${FILE}:"
-          cat "$FILE"
+          echo "✅ Created $FILEPATH"
+          cat "$FILEPATH"
 
-          # Update fallback URL in App.jsx so the site still works if latest.json fails.
-          sed -i "s|const FALLBACK_DOWNLOAD_URL =.*|const FALLBACK_DOWNLOAD_URL =\n  '${FINAL_DMG_URL}'|" src/App.jsx
+          # Update the changelog index to import and expose the new post.
+          node - "$TAG" "$TODAY" "$SLUG" "$FILENAME" "$HEADLINE" <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
 
-          echo "Updated src/App.jsx fallback URL to:"
-          grep -A1 "const FALLBACK_DOWNLOAD_URL" src/App.jsx
+          const [tag, today, slug, filename, headline] = process.argv.slice(2);
+          const indexPath = path.join('src', 'content', 'changelog', 'index.js');
+          let index = fs.readFileSync(indexPath, 'utf8');
 
-          echo "file=${FILE}" >> "$GITHUB_OUTPUT"
+          const importName = slug.replace(/[^a-zA-Z0-9_]/g, '_');
+          const importLine = `import ${importName} from './${filename}?raw'`;
 
-      - name: Create draft PR
-        env:
-          TAG: ${{ github.event.client_payload.tag }}
-          SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
-          # GITHUB_TOKEN cannot create PRs in this repo, so use the PAT that
-          # dispatched the event. It already has write access here.
-          GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
+          if (index.includes(importLine)) {
+            console.log('Import already present in index.js');
+            process.exit(0);
+          }
+
+          // Insert the new import after the marked import.
+          index = index.replace(
+            /(import \{ marked \} from 'marked'\n)/,
+            `$1${importLine}\n`
+          );
+
+          // Insert the new post object at the top of the posts array.
+          const safeHeadline = JSON.stringify(headline).slice(1, -1);
+          const postObject = `  {\n    slug: '${slug}',\n    date: '${today}',\n    title: '${safeHeadline}',\n    raw: ${importName},\n  },`;
+
+          const postsMatch = index.match(/const posts = \[\n/);
+          if (!postsMatch) {
+            console.error('Could not find posts array in index.js');
+            process.exit(1);
+          }
+          const insertPos = postsMatch.index + postsMatch[0].length;
+          index = index.slice(0, insertPos) + postObject + '\n' + index.slice(insertPos);
+
+          fs.writeFileSync(indexPath, index);
+          console.log('✅ Updated src/content/changelog/index.js');
+          NODE
+
+          # Update the fallback download URL in App.jsx.
+          node - "$DMG_URL" <<'NODE'
+          const fs = require('fs');
+          const appPath = 'src/App.jsx';
+          let app = fs.readFileSync(appPath, 'utf8');
+          const dmgUrl = process.argv[2];
+          // Match the multi-line const declaration and replace the URL value.
+          app = app.replace(
+            /(const FALLBACK_DOWNLOAD_URL =\n\s+')([^']+)(')/,
+            `$1${dmgUrl}$3`
+          );
+          fs.writeFileSync(appPath, app);
+          console.log('✅ Updated fallback download URL in src/App.jsx');
+          NODE
+
+          echo "branch=release/${SLUG}" >> "$GITHUB_OUTPUT"
+          echo "filename=${FILENAME}" >> "$GITHUB_OUTPUT"
+          echo "slug=${SLUG}" >> "$GITHUB_OUTPUT"
+          echo "headline=${HEADLINE}" >> "$GITHUB_OUTPUT"
+
+      - name: Run checks
         run: |
-          BRANCH="release-notes/${TAG}"
-          FILE="${{ steps.generate.outputs.file }}"
+          npm ci
+          npm test
+          npm run build
+
+      - name: Create pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.create.outputs.branch }}
+          HEADLINE: ${{ steps.create.outputs.headline }}
+        run: |
+          set -euo pipefail
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git checkout -b "$BRANCH"
-          git add "$FILE" src/App.jsx
-          git commit -m "chore: draft changelog and fallback URL for ${TAG}"
-          # Force-push so re-dispatches overwrite the previous draft branch.
-          git push --force origin "$BRANCH"
+          git add src/content/changelog/ src/App.jsx
+          git commit -m "chore: draft changelog for ${HEADLINE}"
+          git push origin "$BRANCH"
 
           gh pr create \
-            --title "Release notes: Pär ${TAG}" \
-            --body "Draft changelog post and updated fallback download URL for **${TAG}**.\n\nSource release: ${SOURCE_REPO}/releases/tag/${TAG}.\n\n### Review checklist\n- [ ] Changelog post is business-focused and accurate\n- [ ] Fallback download URL in \`src/App.jsx\` points to the correct DMG\n- [ ] No broken links or formatting issues\n\nMerge when ready to deploy." \
+            --title "chore: ${HEADLINE}" \
+            --body "Auto-generated changelog entry for the latest Pär release." \
             --base main \
+            --head "$BRANCH" \
             --draft
-
-          echo "Opened draft PR for ${TAG}"
