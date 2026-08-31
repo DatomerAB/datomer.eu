@@ -78,6 +78,54 @@ jobs:
 
           echo "file=${FILE}" >> "$GITHUB_OUTPUT"
 
+      - name: Register changelog post in index
+        env:
+          TAG: ${{ github.event.client_payload.tag }}
+          FILE: ${{ steps.generate.outputs.file }}
+        run: |
+          python3 - <<'PY'
+          import os
+
+          tag = os.environ["TAG"]
+          file_path = os.environ["FILE"]
+          filename = os.path.basename(file_path)
+          basename = filename[:-3] if filename.endswith(".md") else filename
+          import_name = "post_" + basename.replace("-", "_")
+          version = tag.lstrip("v")
+          slug = "par-" + version.replace(".", "-")
+          date = basename[:10]
+          title = f"Pär {version}"
+          index_path = "src/content/changelog/index.js"
+
+          with open(index_path, "r") as f:
+              lines = f.readlines()
+
+          # Insert import after the last ?raw import line.
+          last_import_idx = max(
+              i
+              for i, line in enumerate(lines)
+              if line.strip().startswith("import ") and "?raw" in line
+          )
+          lines.insert(last_import_idx + 1, f"import {import_name} from './{filename}?raw'\n")
+
+          content = "".join(lines)
+
+          # Insert post entry right after the posts array opening.
+          post_entry = f"""  {{
+    slug: '{slug}',
+    date: '{date}',
+    title: '{title}',
+    raw: {import_name},
+  }},
+"""
+          content = content.replace("const posts = [", "const posts = [\n" + post_entry)
+
+          with open(index_path, "w") as f:
+              f.write(content)
+
+          print(f"Updated {index_path} with import {import_name} and slug {slug}")
+          PY
+
       - name: Create draft PR
         env:
           TAG: ${{ github.event.client_payload.tag }}
@@ -93,14 +141,14 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git checkout -b "$BRANCH"
-          git add "$FILE" src/App.jsx
-          git commit -m "chore: draft changelog and fallback URL for ${TAG}"
+          git add "$FILE" src/App.jsx src/content/changelog/index.js
+          git commit -m "chore: draft changelog, fallback URL, and index registration for ${TAG}"
           # Force-push so re-dispatches overwrite the previous draft branch.
           git push --force origin "$BRANCH"
 
           gh pr create \
             --title "Release notes: Pär ${TAG}" \
-            --body "Draft changelog post and updated fallback download URL for **${TAG}**.\n\nSource release: ${SOURCE_REPO}/releases/tag/${TAG}.\n\n### Review checklist\n- [ ] Changelog post is business-focused and accurate\n- [ ] Fallback download URL in \`src/App.jsx\` points to the correct DMG\n- [ ] No broken links or formatting issues\n\nMerge when ready to deploy." \
+            --body "Draft changelog post, updated fallback download URL, and index registration for **${TAG}**.\n\nSource release: ${SOURCE_REPO}/releases/tag/${TAG}.\n\n### Review checklist\n- [ ] Changelog post is business-focused and accurate\n- [ ] Fallback download URL in \`src/App.jsx\` points to the correct DMG\n- [ ] New post is registered in \`src/content/changelog/index.js\`\n- [ ] No broken links or formatting issues\n\nMerge when ready to deploy." \
             --base main \
             --draft
 
