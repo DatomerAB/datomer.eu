@@ -4,7 +4,10 @@ name: Draft release changelog post
 # DatomerAB/Par repo after a release has been published.  It opens a draft PR
 # on DatomerAB/datomer.eu with a new changelog post for human review.
 #
-# No secrets are required beyond the default GITHUB_TOKEN.
+# Required repo secret:
+#   CROSS_REPO_DISPATCH_TOKEN - PAT that can push branches and create pull
+#                               requests in this repo. The same token used by
+#                               DatomerAB/Par to dispatch the event works here.
 
 on:
   repository_dispatch:
@@ -62,7 +65,9 @@ jobs:
         env:
           TAG: ${{ github.event.client_payload.tag }}
           SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GITHUB_TOKEN cannot create PRs in this repo, so use the PAT that
+          # dispatched the event. It already has write access here.
+          GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
         run: |
           BRANCH="release-notes/${TAG}"
           FILE="${{ steps.generate.outputs.file }}"
