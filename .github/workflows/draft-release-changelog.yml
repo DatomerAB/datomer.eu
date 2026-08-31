@@ -71,7 +71,18 @@ jobs:
           cat "$FILE"
 
           # Update fallback URL in App.jsx so the site still works if latest.json fails.
-          sed -i "s|const FALLBACK_DOWNLOAD_URL =.*|const FALLBACK_DOWNLOAD_URL =\n  '${FINAL_DMG_URL}'|" src/App.jsx
+          python3 - "$FINAL_DMG_URL" <<'PY'
+          import re, sys
+          url = sys.argv[1]
+          path = 'src/App.jsx'
+          content = open(path).read()
+          content = re.sub(
+              r"(const FALLBACK_DOWNLOAD_URL =\n\s+')([^']+)(')",
+              rf"\g<1>{url}\g<3>",
+              content,
+          )
+          open(path, 'w').write(content)
+          PY
 
           echo "Updated src/App.jsx fallback URL to:"
           grep -A1 "const FALLBACK_DOWNLOAD_URL" src/App.jsx
@@ -111,13 +122,14 @@ jobs:
           content = "".join(lines)
 
           # Insert post entry right after the posts array opening.
-          post_entry = f"""  {{
-    slug: '{slug}',
-    date: '{date}',
-    title: '{title}',
-    raw: {import_name},
-  }},
-"""
+          post_entry = (
+              f"  {{\n"
+              f"    slug: '{slug}',\n"
+              f"    date: '{date}',\n"
+              f"    title: '{title}',\n"
+              f"    raw: {import_name},\n"
+              f"  }},\n"
+          )
           content = content.replace("const posts = [", "const posts = [\n" + post_entry)
 
           with open(index_path, "w") as f:
