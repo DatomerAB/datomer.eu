@@ -34,6 +34,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -42,122 +47,15 @@ jobs:
 
       - name: Create changelog post and update fallback URL
         id: create
-        shell: bash
         env:
           TAG: ${{ github.event.client_payload.tag || inputs.tag }}
           DMG_URL: ${{ github.event.client_payload.dmg_url || inputs.dmg_url }}
           RELEASE_TITLE: ${{ github.event.client_payload.release_title || inputs.release_title || '' }}
           RELEASE_BODY: ${{ github.event.client_payload.release_body || inputs.release_body || '' }}
+          SOURCE_REPO: ${{ github.event.client_payload.source_repo || 'DatomerAB/Par' }}
         run: |
           set -euo pipefail
-
-          if [[ -z "$TAG" ]]; then
-            echo "❌ Missing required input: tag"
-            exit 1
-          fi
-
-          if [[ -z "$DMG_URL" ]]; then
-            echo "❌ Missing required input: dmg_url"
-            exit 1
-          fi
-
-          VERSION="${TAG#v}"
-          TODAY=$(date -u +%Y-%m-%d)
-          SAFE_VERSION=$(echo "$VERSION" | sed 's/[^a-zA-Z0-9.-]/-/g')
-          SLUG="par-${SAFE_VERSION}"
-          FILENAME="${TODAY}-${SLUG}.md"
-          FILEPATH="src/content/changelog/${FILENAME}"
-
-          # Verify the DMG URL is reachable.
-          HTTP_STATUS=$(curl -sSL -o /dev/null -w '%{http_code}' --max-time 30 "$DMG_URL" || true)
-          if [[ "$HTTP_STATUS" != "200" && "$HTTP_STATUS" != "302" && "$HTTP_STATUS" != "307" ]]; then
-            echo "❌ DMG URL is not reachable (HTTP $HTTP_STATUS): $DMG_URL"
-            exit 1
-          fi
-
-          # Generate the changelog headline.
-          if [[ -n "$RELEASE_TITLE" ]]; then
-            HEADLINE="$RELEASE_TITLE"
-          else
-            HEADLINE="Pär ${VERSION} released"
-          fi
-
-          # Generate the changelog body.
-          {
-            echo "# ${HEADLINE}"
-            echo ""
-            if [[ -n "$RELEASE_BODY" ]]; then
-              echo "$RELEASE_BODY"
-            else
-              echo "Pär ${VERSION} is now available."
-              echo ""
-              echo "## Download"
-              echo ""
-              echo "- [Download Pär ${VERSION} for macOS](${DMG_URL})"
-            fi
-          } > "$FILEPATH"
-
-          echo "✅ Created $FILEPATH"
-          cat "$FILEPATH"
-
-          # Update the changelog index to import and expose the new post.
-          node - "$TAG" "$TODAY" "$SLUG" "$FILENAME" "$HEADLINE" <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-
-          const [tag, today, slug, filename, headline] = process.argv.slice(2);
-          const indexPath = path.join('src', 'content', 'changelog', 'index.js');
-          let index = fs.readFileSync(indexPath, 'utf8');
-
-          const importName = slug.replace(/[^a-zA-Z0-9_]/g, '_');
-          const importLine = `import ${importName} from './${filename}?raw'`;
-
-          if (index.includes(importLine)) {
-            console.log('Import already present in index.js');
-            process.exit(0);
-          }
-
-          // Insert the new import after the marked import.
-          index = index.replace(
-            /(import \{ marked \} from 'marked'\n)/,
-            `$1${importLine}\n`
-          );
-
-          // Insert the new post object at the top of the posts array.
-          const safeHeadline = JSON.stringify(headline).slice(1, -1);
-          const postObject = `  {\n    slug: '${slug}',\n    date: '${today}',\n    title: '${safeHeadline}',\n    raw: ${importName},\n  },`;
-
-          const postsMatch = index.match(/const posts = \[\n/);
-          if (!postsMatch) {
-            console.error('Could not find posts array in index.js');
-            process.exit(1);
-          }
-          const insertPos = postsMatch.index + postsMatch[0].length;
-          index = index.slice(0, insertPos) + postObject + '\n' + index.slice(insertPos);
-
-          fs.writeFileSync(indexPath, index);
-          console.log('✅ Updated src/content/changelog/index.js');
-          NODE
-
-          # Update the fallback download URL in App.jsx.
-          node - "$DMG_URL" <<'NODE'
-          const fs = require('fs');
-          const appPath = 'src/App.jsx';
-          let app = fs.readFileSync(appPath, 'utf8');
-          const dmgUrl = process.argv[2];
-          // Match the multi-line const declaration and replace the URL value.
-          app = app.replace(
-            /(const FALLBACK_DOWNLOAD_URL =\n\s+')([^']+)(')/,
-            `$1${dmgUrl}$3`
-          );
-          fs.writeFileSync(appPath, app);
-          console.log('✅ Updated fallback download URL in src/App.jsx');
-          NODE
-
-          echo "branch=release/${SLUG}" >> "$GITHUB_OUTPUT"
-          echo "filename=${FILENAME}" >> "$GITHUB_OUTPUT"
-          echo "slug=${SLUG}" >> "$GITHUB_OUTPUT"
-          echo "headline=${HEADLINE}" >> "$GITHUB_OUTPUT"
+          python3 scripts/draft_changelog.py
 
       - name: Run checks
         run: |
@@ -167,9 +65,10 @@ jobs:
 
       - name: Create pull request
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
           BRANCH: ${{ steps.create.outputs.branch }}
           HEADLINE: ${{ steps.create.outputs.headline }}
+          PR_BODY_FILE: ${{ steps.create.outputs.pr_body_file }}
         run: |
           set -euo pipefail
 
@@ -179,11 +78,12 @@ jobs:
           git checkout -b "$BRANCH"
           git add src/content/changelog/ src/App.jsx
           git commit -m "chore: draft changelog for ${HEADLINE}"
-          git push origin "$BRANCH"
+          # Force-push so re-dispatches overwrite the previous draft branch.
+          git push --force origin "$BRANCH"
 
           gh pr create \
             --title "chore: ${HEADLINE}" \
-            --body "Auto-generated changelog entry for the latest Pär release." \
+            --body-file "${PR_BODY_FILE}" \
             --base main \
             --head "$BRANCH" \
             --draft
