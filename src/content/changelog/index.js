@@ -1,9 +1,16 @@
 import { marked } from 'marked'
+import par_0_1_0_beta_2026090101 from './2026-09-01-par-0.1.0-beta.2026090101.md?raw'
 
 import launch from './2026-08-23-launch.md?raw'
 import beta from './2026-08-20-beta.md?raw'
 
 const posts = [
+  {
+    slug: 'par-0.1.0-beta.2026090101',
+    date: '2026-09-01',
+    title: 'Pär v0.1.0-beta.2026090101',
+    raw: par_0_1_0_beta_2026090101,
+  },
   {
     slug: 'launch',
     date: '2026-08-23',
