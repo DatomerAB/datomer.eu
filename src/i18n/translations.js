@@ -284,7 +284,7 @@ export const translations = {
       intro: 'The latest product updates, release notes, and launch milestones.',
     },
     footer: {
-      managedBy: 'Managed and operated by Datomer AB',
+      managedBy: 'Pär is a product of Datomer AB',
       legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies', models: 'Models & Licenses' },
     },
     modelAttribution: {
@@ -688,7 +688,7 @@ export const translations = {
       intro: 'Senaste Produktuppdateringarna, Betanoteringarna Och Lanseringsmilstolparna.',
     },
     footer: {
-      managedBy: 'Hanteras och drivs av Datomer AB',
+      managedBy: 'Pär är en produkt från Datomer AB',
       legal: { privacy: 'Integritet', terms: 'Villkor', cookies: 'Cookies', models: 'Modeller & Licenser' },
     },
     modelAttribution: {
