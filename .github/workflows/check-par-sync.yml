@@ -1,0 +1,38 @@
+name: Check Pär content sync
+
+# Validates that datomer.eu's product metadata remains identical to the
+# canonical payload generated in the private DatomerAB/Par repository.
+# This is a safety net in case a manual edit bypasses the automated sync.
+
+on:
+  pull_request:
+    paths:
+      - "src/data/models.json"
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  check-models:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout datomer.eu
+        uses: actions/checkout@v4
+
+      - name: Fetch canonical models from Pär
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/par-canonical
+          gh api repos/DatomerAB/Par/contents/config/website_models.json \
+            --jq '.content' \
+            | base64 -d > /tmp/par-canonical/website_models.json
+
+      - name: Compare models.json
+        run: |
+          set -euo pipefail
+          diff -u /tmp/par-canonical/website_models.json src/data/models.json
+          echo "✅ datomer.eu/src/data/models.json matches Pär/config/website_models.json"
