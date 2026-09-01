@@ -57,6 +57,22 @@ jobs:
           set -euo pipefail
           python3 scripts/draft_changelog.py
 
+      - name: Sync model attribution from Pär
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh api repos/DatomerAB/Par/contents/config/website_models.json \
+            --jq '.content' \
+            | base64 -d > /tmp/website_models.json
+
+          if diff -q /tmp/website_models.json src/data/models.json >/dev/null 2>&1; then
+            echo "✅ src/data/models.json is already up to date"
+          else
+            cp /tmp/website_models.json src/data/models.json
+            echo "✅ Updated src/data/models.json from Pär"
+          fi
+
       - name: Run checks
         run: |
           npm ci
@@ -76,7 +92,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git checkout -b "$BRANCH"
-          git add src/content/changelog/ src/App.jsx
+          git add src/content/changelog/ src/App.jsx src/data/models.json
           git commit -m "chore: draft changelog for ${HEADLINE}"
           # Force-push so re-dispatches overwrite the previous draft branch.
           git push --force origin "$BRANCH"
