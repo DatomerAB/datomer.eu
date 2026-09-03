@@ -43,7 +43,10 @@ function useDownloadUrl() {
 
   useEffect(() => {
     let cancelled = false
-    fetch('https://raw.githubusercontent.com/DatomerAB/par-releases/main/latest.json')
+    // Cache-busted per release so GitHub's CDN serves the fresh latest.json
+    // immediately after a new release is published. The RELEASE_TAG placeholder
+    // is rewritten by scripts/draft_changelog.py.
+    fetch('https://raw.githubusercontent.com/DatomerAB/par-releases/main/latest.json?tag={{RELEASE_TAG}}')
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (cancelled || !data?.version) return

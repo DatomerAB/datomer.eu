@@ -167,22 +167,32 @@ def _register_in_index(filename: str, slug: str, headline: str) -> None:
     print("✅ Updated src/content/changelog/index.js")
 
 
-def _update_fallback_url(dmg_url: str) -> None:
-    """Update the fallback download URL in src/App.jsx."""
+def _update_download_urls(dmg_url: str, tag: str) -> None:
+    """Update the fallback download URL and latest.json cache-buster in src/App.jsx."""
     if not APP_PATH.exists():
         print(f"❌ App file not found: {APP_PATH}")
         sys.exit(1)
 
     app = APP_PATH.read_text(encoding="utf-8")
-    pattern = r"(const FALLBACK_DOWNLOAD_URL =\n\s+')([^']+)(')"
 
-    if not re.search(pattern, app):
+    fallback_pattern = r"(const FALLBACK_DOWNLOAD_URL =\n\s+')([^']+)(')"
+    if re.search(fallback_pattern, app):
+        app = re.sub(fallback_pattern, rf"\g<1>{dmg_url}\g<3>", app)
+        print("✅ Updated fallback download URL in src/App.jsx")
+    else:
         print("⚠️ Fallback download URL pattern not found; no change made")
-        return
 
-    updated = re.sub(pattern, rf"\g<1>{dmg_url}\g<3>", app)
-    APP_PATH.write_text(updated, encoding="utf-8")
-    print("✅ Updated fallback download URL in src/App.jsx")
+    # Bust GitHub's CDN cache for latest.json by rewriting the release tag in
+    # the fetch path. This guarantees visitors see the latest download URL
+    # immediately after a release.
+    cache_buster_pattern = r"(latest\.json\?tag=)\{\{RELEASE_TAG\}\}"
+    if re.search(cache_buster_pattern, app):
+        app = re.sub(cache_buster_pattern, rf"\g<1>{tag}", app)
+        print(f"✅ Busted latest.json cache-buster to {tag} in src/App.jsx")
+    else:
+        print("⚠️ latest.json cache-buster placeholder not found; no change made")
+
+    APP_PATH.write_text(app, encoding="utf-8")
 
 
 def main() -> int:
@@ -205,7 +215,7 @@ def main() -> int:
         tag, dmg_url, release_title, release_body
     )
     _register_in_index(filename, slug, headline)
-    _update_fallback_url(dmg_url)
+    _update_download_urls(dmg_url, tag)
 
     source_repo = os.environ.get("SOURCE_REPO", "DatomerAB/Par").strip() or "DatomerAB/Par"
     pr_body_path = _write_pr_body(tag, source_repo, headline, dmg_url)
