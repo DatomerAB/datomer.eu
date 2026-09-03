@@ -36,7 +36,7 @@ const STRIPE_PRICE_IDS = {
 }
 
 const FALLBACK_DOWNLOAD_URL =
-  'https://github.com/DatomerAB/par-releases/releases/download/v0.1.0-beta.2026090102/Par_0.1.0-beta.2026090102_aarch64.dmg'
+  'https://github.com/DatomerAB/par-releases/releases/download/v0.1.1-beta.2026090301/Par_0.1.1-beta.2026090301_aarch64.dmg'
 
 function useDownloadUrl() {
   const [url, setUrl] = useState(FALLBACK_DOWNLOAD_URL)
@@ -46,7 +46,7 @@ function useDownloadUrl() {
     // Cache-busted per release so GitHub's CDN serves the fresh latest.json
     // immediately after a new release is published. The RELEASE_TAG placeholder
     // is rewritten by scripts/draft_changelog.py.
-    fetch('https://raw.githubusercontent.com/DatomerAB/par-releases/main/latest.json?tag={{RELEASE_TAG}}')
+    fetch('https://raw.githubusercontent.com/DatomerAB/par-releases/main/latest.json?tag=v0.1.1-beta.2026090301')
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (cancelled || !data?.version) return
