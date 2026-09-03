@@ -30,9 +30,10 @@ describe('Models & Licenses page', () => {
       wrapper: ({ children }) => <Wrapper initialEntries={['/models']}>{children}</Wrapper>,
     })
     await new Promise((resolve) => setTimeout(resolve, 0))
-    expect(screen.getByText('Qwen 7B')).toBeTruthy()
-    expect(screen.getByText('Mistral Nemo 12B')).toBeTruthy()
+    // These assertions must match the current models bundled in src/data/models.json.
+    expect(screen.getByText('Qwen3 14B')).toBeTruthy()
     expect(screen.getByText('Nomic Embed v1.5')).toBeTruthy()
     expect(screen.getByText('Gemma 3 12B (Ollama)')).toBeTruthy()
+    expect(screen.getByText('llama.cpp')).toBeTruthy()
   })
 })
