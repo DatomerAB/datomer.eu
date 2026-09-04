@@ -80,6 +80,7 @@ jobs:
           npm run build
 
       - name: Create pull request
+        id: pr
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
           BRANCH: ${{ steps.create.outputs.branch }}
@@ -97,9 +98,76 @@ jobs:
           # Force-push so re-dispatches overwrite the previous draft branch.
           git push --force origin "$BRANCH"
 
-          gh pr create \
+          pr_url=$(gh pr create \
             --title "chore: ${HEADLINE}" \
             --body-file "${PR_BODY_FILE}" \
             --base main \
             --head "$BRANCH" \
-            --draft
+            --draft)
+
+          echo "pr_url=${pr_url}" >> "$GITHUB_OUTPUT"
+          echo "✅ Created draft PR: ${pr_url}"
+
+      - name: Notify Slack — changelog ready for review
+        if: ${{ success() }}
+        continue-on-error: true
+        uses: slackapi/slack-github-action@v4.0.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "Changelog draft ready for review",
+              "attachments": [
+                {
+                  "color": "2f80ed",
+                  "author_name": "Pär Release Bot",
+                  "author_icon": "https://datomerab.github.io/par-public/assets/landing/icon.png",
+                  "title": "Changelog draft ready for review",
+                  "title_link": "${{ steps.pr.outputs.pr_url }}",
+                  "text": "A draft changelog PR for ${{ github.event.client_payload.tag || inputs.tag }} has been opened. Please review and edit before merging.",
+                  "fields": [
+                    {
+                      "title": "Release",
+                      "value": "${{ github.event.client_payload.tag || inputs.tag }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Source",
+                      "value": "${{ github.event.client_payload.source_repo || 'DatomerAB/Par' }}",
+                      "short": true
+                    }
+                  ],
+                  "footer": "Pär by Datomer",
+                  "footer_icon": "https://datomerab.github.io/par-public/assets/landing/datomer-logo.png"
+                }
+              ]
+            }
+
+      - name: Notify Slack — changelog draft failed
+        if: ${{ failure() }}
+        continue-on-error: true
+        uses: slackapi/slack-github-action@v4.0.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "Changelog draft failed",
+              "attachments": [
+                {
+                  "color": "ff4d4f",
+                  "author_name": "Pär Release Bot",
+                  "author_icon": "https://datomerab.github.io/par-public/assets/landing/icon.png",
+                  "title": "Changelog draft failed",
+                  "title_link": "https://github.com/DatomerAB/datomer.eu/actions/workflows/draft-release-changelog.yml",
+                  "text": "Failed to create the draft changelog PR for ${{ github.event.client_payload.tag || inputs.tag }}.",
+                  "footer": "Pär by Datomer",
+                  "footer_icon": "https://datomerab.github.io/par-public/assets/landing/datomer-logo.png"
+                }
+              ]
+            }

@@ -58,10 +58,15 @@ def _write_pr_body(tag: str, source_repo: str, headline: str, dmg_url: str) -> P
     path = Path(os.environ.get("PR_BODY_FILE", "/tmp/pr-body.md"))
     body = (
         f"Auto-generated changelog entry for **{tag}**.\n\n"
+        f"**This is a draft PR and must be reviewed before merging.**\n"
+        f"Edit the release notes in `src/content/changelog/` to remove any\n"
+        f"internal workflow or process improvements that should not appear on\n"
+        f"the public website.\n\n"
         f"Source release: https://github.com/{source_repo}/releases/tag/{tag}\n\n"
         f"### Review checklist\n"
         f"- [ ] Changelog headline and business angle are correct\n"
-        f"- [ ] Release notes are accurate\n"
+        f"- [ ] Release notes are accurate and customer-facing only\n"
+        f"- [ ] Workflow/infrastructure improvements are in Engineering notes, not the public post\n"
         f"- [ ] Fallback download URL in `src/App.jsx` points to the new DMG\n"
         f"- [ ] New post is registered in `src/content/changelog/index.js`\n"
         f"- [ ] No broken links or formatting issues\n\n"
