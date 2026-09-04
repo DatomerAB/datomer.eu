@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .wrangler/
-scripts/
+# scripts/ is tracked for the changelog drafter workflow.
+# If you need to ignore local helper scripts, add them explicitly.
+# scripts/

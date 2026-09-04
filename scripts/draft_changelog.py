@@ -102,16 +102,37 @@ def _generate_post(tag: str, dmg_url: str, title: str | None, body: str | None) 
 
     headline = title.strip() if title else f"Pär {version} released"
 
+    # Link to the website download form so visitors hit the polished landing
+    # page (and its analytics/waitlist fallback) instead of a raw GitHub asset.
+    download_url = "https://datomer.eu/#download"
+
     lines = [f"# {headline}", ""]
     if body and body.strip():
-        lines.append(body.strip())
-        lines.append("")
+        # Strip the engineering notes section if present; it should not appear
+        # on the public blog.
+        public_body = re.split(r"\n## Engineering notes\n", body.strip(), maxsplit=1)[0]
+        # If the body already ends with its own Download section, reuse it but
+        # rewrite any direct GitHub DMG link to the website form.
+        if re.search(r"\n## Download\s*\n", public_body):
+            public_body = re.sub(
+                r"\[([^\]]+)\]\(https?://github\.com/[^\)]+\.dmg\)",
+                rf"[\1]({download_url})",
+                public_body,
+            )
+            lines.append(public_body.strip())
+            lines.append("")
+        else:
+            lines.append(public_body.strip())
+            lines.append("")
+            lines.append("## Download")
+            lines.append("")
+            lines.append(f"- [Download Pär {version} for macOS]({download_url})")
     else:
         lines.append(f"Pär {version} is now available.")
         lines.append("")
         lines.append("## Download")
         lines.append("")
-        lines.append(f"- [Download Pär {version} for macOS]({dmg_url})")
+        lines.append(f"- [Download Pär {version} for macOS]({download_url})")
 
     filepath.parent.mkdir(parents=True, exist_ok=True)
     filepath.write_text("\n".join(lines) + "\n", encoding="utf-8")
