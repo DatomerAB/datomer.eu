@@ -79,7 +79,7 @@ jobs:
           npm test
           npm run build
 
-      - name: Create pull request
+            - name: Create or update pull request
         id: pr
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
@@ -98,12 +98,27 @@ jobs:
           # Force-push so re-dispatches overwrite the previous draft branch.
           git push --force origin "$BRANCH"
 
-          pr_url=$(gh pr create \
-            --title "chore: ${HEADLINE}" \
-            --body-file "${PR_BODY_FILE}" \
-            --base main \
+          existing_pr=$(gh pr list \
             --head "$BRANCH" \
-            --draft)
+            --base main \
+            --json url \
+            --jq '.[0].url' 2>/dev/null || true)
+
+          if [[ -n "$existing_pr" ]]; then
+            gh pr edit "$existing_pr" \
+              --title "chore: ${HEADLINE}" \
+              --body-file "${PR_BODY_FILE}"
+            pr_url="$existing_pr"
+            echo "✅ Updated existing draft PR: ${pr_url}"
+          else
+            pr_url=$(gh pr create \
+              --title "chore: ${HEADLINE}" \
+              --body-file "${PR_BODY_FILE}" \
+              --base main \
+              --head "$BRANCH" \
+              --draft)
+            echo "✅ Created draft PR: ${pr_url}"
+          fi
 
           echo "pr_url=${pr_url}" >> "$GITHUB_OUTPUT"
           echo "✅ Created draft PR: ${pr_url}"
