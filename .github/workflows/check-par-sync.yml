@@ -23,7 +23,7 @@ jobs:
 
       - name: Fetch canonical models from Pär
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
         run: |
           set -euo pipefail
           mkdir -p /tmp/par-canonical
