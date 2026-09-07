@@ -3,15 +3,6 @@
   "generated_by": "agent/license_attribution_agent.py",
   "bundled": [
     {
-      "short_name": "VibeThinker 3B.Q4 K M",
-      "authors": "prithivMLmods",
-      "license": "mit",
-      "license_url": "https://huggingface.co/prithivMLmods/VibeThinker-3B-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/prithivMLmods/VibeThinker-3B-GGUF",
-      "filename": "VibeThinker-3B.Q4_K_M.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
       "short_name": "nanbeige4.1 3b q4 k m",
       "authors": "Edge-Quant",
       "license": "apache-2.0",
@@ -39,21 +30,12 @@
       "use_case": "General instruction-following and chat"
     },
     {
-      "short_name": "qwen2.5 coder 1.5b q8 0",
-      "authors": "ggml-org",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-1.5B-Q8_0-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-1.5B-Q8_0-GGUF",
-      "filename": "qwen2.5-coder-1.5b-q8_0.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "lfm25 26b thinkingcap distiller q4 k m",
-      "authors": "osk-arr00",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/osk-arr00/lfm2.5-2.6B-thinkingcap-distiller/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/osk-arr00/lfm2.5-2.6B-thinkingcap-distiller",
-      "filename": "lfm25-26b-thinkingcap-distiller-q4_k_m.gguf",
+      "short_name": "VibeThinker 3B.Q4 K M",
+      "authors": "prithivMLmods",
+      "license": "mit",
+      "license_url": "https://huggingface.co/prithivMLmods/VibeThinker-3B-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/prithivMLmods/VibeThinker-3B-GGUF",
+      "filename": "VibeThinker-3B.Q4_K_M.gguf",
       "use_case": "General instruction-following and chat"
     },
     {
@@ -66,120 +48,57 @@
       "use_case": "General instruction-following and chat"
     },
     {
-      "short_name": "LFM2.5 2.6B.Q4 K M",
-      "authors": "prithivMLmods",
+      "short_name": "Qwen3.6 27B Claude Opus Reasoning Distilled",
+      "authors": "rico03",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/rico03/Qwen3.6-27B-Claude-Opus-Reasoning-Distilled-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/rico03/Qwen3.6-27B-Claude-Opus-Reasoning-Distilled-GGUF",
+      "filename": "Qwen3.6-27B-Claude-Opus-Reasoning-Distilled-Q4_K_M.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "Fable Therapy 4B",
+      "authors": "Verdugie",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Verdugie/Fable-Therapy-4B/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Verdugie/Fable-Therapy-4B",
+      "filename": "Fable-Therapy-4B-Q4_K_M.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "nanbeige4.1 3b q8 0",
+      "authors": "Edge-Quant",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q8_0-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q8_0-GGUF",
+      "filename": "nanbeige4.1-3b-q8_0.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 7b instruct q4 k m",
+      "authors": "paultimothymooney",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/paultimothymooney/Qwen2.5-7B-Instruct-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/paultimothymooney/Qwen2.5-7B-Instruct-Q4_K_M-GGUF",
+      "filename": "qwen2.5-7b-instruct-q4_k_m.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "Marco DeepResearch 8B i1",
+      "authors": "ATH-MaaS",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ATH-MaaS/Marco-DeepResearch-8B-i1-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/ATH-MaaS/Marco-DeepResearch-8B-i1-GGUF",
+      "filename": "Marco-DeepResearch-8B-i1-Q4_K_M.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "Ornstein Hermes 3.6 27b SABER",
+      "authors": "GestaltLabs",
       "license": "other",
-      "license_url": "https://huggingface.co/prithivMLmods/LFM2.5-2.6B-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/prithivMLmods/LFM2.5-2.6B-GGUF",
-      "filename": "LFM2.5-2.6B.Q4_K_M.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "qwen2.5 coder 7b instruct q4 k m",
-      "authors": "stefancosma",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/stefancosma/Qwen2.5-Coder-7B-Instruct-Q4_K_M-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/stefancosma/Qwen2.5-Coder-7B-Instruct-Q4_K_M-GGUF",
-      "filename": "qwen2.5-coder-7b-instruct-q4_k_m.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "gemma4 e4b opus",
-      "authors": "deadbydawn101",
-      "license": "gemma",
-      "license_url": "https://huggingface.co/deadbydawn101/gemma-4-E4B-Agentic-Opus-Reasoning-GeminiCLI-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/deadbydawn101/gemma-4-E4B-Agentic-Opus-Reasoning-GeminiCLI-GGUF",
-      "filename": "gemma4-e4b-opus-Q4_K_M.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "phi 3.5 mini instruct q4 k m",
-      "authors": "cowoho",
-      "license": "mit",
-      "license_url": "https://huggingface.co/cowoho/Phi-3.5-mini-instruct-Q4_K_M-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/cowoho/Phi-3.5-mini-instruct-Q4_K_M-GGUF",
-      "filename": "phi-3.5-mini-instruct-q4_k_m.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "ling 3.0 tiny",
-      "authors": "WhiskyAKM",
-      "license": "mit",
-      "license_url": "https://huggingface.co/WhiskyAKM/Ling-3.0-Tiny-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/WhiskyAKM/Ling-3.0-Tiny-GGUF",
-      "filename": "ling-3.0-tiny-Q4_K_M.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "qwen2.5 coder 7b q8 0",
-      "authors": "ggml-org",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-7B-Q8_0-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-7B-Q8_0-GGUF",
-      "filename": "qwen2.5-coder-7b-q8_0.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "acereason nemotron 14b q4 k m",
-      "authors": "akpsahan",
-      "license": "other",
-      "license_url": "https://huggingface.co/akpsahan/AceReason-Nemotron-14B-Q4_K_M-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/akpsahan/AceReason-Nemotron-14B-Q4_K_M-GGUF",
-      "filename": "acereason-nemotron-14b-q4_k_m.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "apertus v1.5 8b text q8 0",
-      "authors": "andreasmartin",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/andreasmartin/apertus-v1.5-8b-text-Q8_0-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/andreasmartin/apertus-v1.5-8b-text-Q8_0-GGUF",
-      "filename": "apertus-v1.5-8b-text-q8_0.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "Qwen3 14B",
-      "authors": "ggfox00000",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/ggfox00000/Qwen3-14B-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/ggfox00000/Qwen3-14B-GGUF",
-      "filename": "Qwen3-14B-Q4_K_M.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "qwen3 coder 30b a3b instruct q4 k m",
-      "authors": "n00b001",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/n00b001/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/n00b001/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M-GGUF",
-      "filename": "qwen3-coder-30b-a3b-instruct-q4_k_m.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "gpt oss 9b bf16",
-      "authors": "squ11z1",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/squ11z1/gpt-oss-nano/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/squ11z1/gpt-oss-nano",
-      "filename": "gpt-oss-9b-bf16.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "gpt oss 20b function calling.Q4 K M",
-      "authors": "cuijian0819",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/cuijian0819/gpt-oss-20b-function-calling-gguf/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/cuijian0819/gpt-oss-20b-function-calling-gguf",
-      "filename": "gpt-oss-20b-function-calling.Q4_K_M.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "gpt oss 20b",
-      "authors": "ggfox00000",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/ggfox00000/gpt-oss-20b-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/ggfox00000/gpt-oss-20b-GGUF",
-      "filename": "gpt-oss-20b-Q4_K_M.gguf",
+      "license_url": "https://huggingface.co/GestaltLabs/Ornstein-Hermes-3.6-27B-SABER-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/GestaltLabs/Ornstein-Hermes-3.6-27B-SABER-GGUF",
+      "filename": "Ornstein-Hermes-3.6-27b-SABER-Q4_K_M.gguf",
       "use_case": "General instruction-following and chat"
     }
   ],
