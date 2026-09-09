@@ -8,6 +8,8 @@ on:
   pull_request:
     paths:
       - "src/data/models.json"
+      - "src/data/ai_disclaimers.json"
+      - "src/data/eu_ai_act_exclude_list.yaml"
   schedule:
     - cron: "0 6 * * 1"
   workflow_dispatch:
@@ -36,3 +38,31 @@ jobs:
           set -euo pipefail
           diff -u /tmp/par-canonical/website_models.json src/data/models.json
           echo "✅ datomer.eu/src/data/models.json matches Pär/config/website_models.json"
+
+      - name: Fetch canonical AI disclaimers from Pär
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/par-canonical
+          gh api repos/DatomerAB/Par/contents/config/eu_ai_act_exclude_list.yaml \
+            --jq '.content' \
+            | base64 -d > /tmp/par-canonical/eu_ai_act_exclude_list.yaml
+
+      - name: Generate canonical ai_disclaimers.json
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, yaml, pathlib
+          src = pathlib.Path('/tmp/par-canonical/eu_ai_act_exclude_list.yaml')
+          out = pathlib.Path('/tmp/par-canonical/ai_disclaimers.json')
+          data = yaml.safe_load(src.read_text())
+          disclaimers = data.get('required_disclaimers', {})
+          out.write_text(json.dumps(disclaimers, indent=2, ensure_ascii=False) + '\n')
+          PY
+
+      - name: Compare ai_disclaimers.json
+        run: |
+          set -euo pipefail
+          diff -u /tmp/par-canonical/ai_disclaimers.json src/data/ai_disclaimers.json
+          echo "✅ datomer.eu/src/data/ai_disclaimers.json matches Pär/config/eu_ai_act_exclude_list.yaml"

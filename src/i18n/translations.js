@@ -286,6 +286,9 @@ export const translations = {
     footer: {
       managedBy: 'Pär is a product of Datomer AB',
       legal: { privacy: 'Privacy', terms: 'Terms', cookies: 'Cookies', models: 'Models & Licenses' },
+      aiDisclaimerLabel: 'AI notice:',
+      aiDisclaimerLink: 'Learn more',
+      aiDisclaimerFallback: 'Pär is an AI assistant. Outputs may be inaccurate and are not professional advice.',
     },
     modelAttribution: {
       eyebrow: 'Open-source models',
@@ -399,6 +402,9 @@ export const translations = {
       intro:
         'These Terms of Service govern your use of the Pär website and beta software provided by {{company}} ({{orgNumber}}).',
       introParams: { company: 'Datomer AB', orgNumber: '559199-6540' },
+      aiDisclaimerTitle: 'AI-Generated Content and EU AI Act Notice',
+      aiDisclaimerIntro:
+        'Pär is an AI assistant. The outputs it produces may be inaccurate, incomplete, or outdated. By using Pär you agree to the following disclaimers:',
       betaTitle: '1. Beta Software',
       betaText:
         'Pär is currently in beta. Features may change, break, or be removed. Do not rely on the beta for critical workflows.',
@@ -690,6 +696,9 @@ export const translations = {
     footer: {
       managedBy: 'Pär är en produkt från Datomer AB',
       legal: { privacy: 'Integritet', terms: 'Villkor', cookies: 'Cookies', models: 'Modeller & Licenser' },
+      aiDisclaimerLabel: 'AI-notis:',
+      aiDisclaimerLink: 'Läs mer',
+      aiDisclaimerFallback: 'Pär är en AI-assistent. Svaren kan vara felaktiga och utgör inte professionell rådgivning.',
     },
     modelAttribution: {
       eyebrow: 'Öppen källkodsmodeller',
@@ -829,6 +838,9 @@ export const translations = {
       intro:
         'Dessa användarvillkor reglerar din användning av Pärs webbplats och betaversion som tillhandahålls av {{company}} ({{orgNumber}}).',
       introParams: { company: 'Datomer AB', orgNumber: '559199-6540' },
+      aiDisclaimerTitle: 'AI-genererat innehåll och EU AI Act-notis',
+      aiDisclaimerIntro:
+        'Pär är en AI-assistent. De svar den producerar kan vara felaktiga, ofullständiga eller föråldrade. Genom att använda Pär godkänner du följande ansvarsfriskrivningar:',
       betaTitle: '1. Betaversion',
       betaText:
         'Pär är för närvarande i beta. Funktioner kan ändras, sluta fungera eller tas bort. Lita inte på betaversionen för kritiska arbetsflöden.',

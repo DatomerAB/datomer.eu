@@ -29,4 +29,19 @@ describe('App renders without raw translation keys', () => {
     expect(screen.getByText('Privacy Policy')).toBeTruthy()
     expect(screen.getByText(/Data controller/i)).toBeTruthy()
   })
+
+  it('home page renders AI disclaimer banner in footer', async () => {
+    globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false }))
+    render(<App />, { wrapper: Wrapper })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.getByText(/Pär is an AI assistant/i)).toBeTruthy()
+    expect(screen.getByText(/Learn more/i)).toBeTruthy()
+  })
+
+  it('terms page renders AI disclaimer section', () => {
+    globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false }))
+    render(<App />, { wrapper: ({ children }) => <Wrapper initialEntries={['/terms']}>{children}</Wrapper> })
+    expect(screen.getByText('AI-Generated Content and EU AI Act Notice')).toBeTruthy()
+    expect(screen.getByText(/The outputs it produces may be inaccurate/i)).toBeTruthy()
+  })
 })

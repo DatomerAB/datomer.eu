@@ -10,9 +10,11 @@ import { WaitlistForm } from './components/WaitlistForm.jsx'
 import { NewsletterForm } from './components/NewsletterForm.jsx'
 import { CookieConsent } from './components/CookieConsent.jsx'
 import { Turnstile } from './components/Turnstile.jsx'
+import aiDisclaimers from './data/ai_disclaimers.json'
 import { BlogPage } from './pages/BlogPage.jsx'
 import { PressPage } from './pages/PressPage.jsx'
 import { ModelAttributionPage } from './pages/ModelAttributionPage.jsx'
+import { AiDisclaimerBanner } from './components/AiDisclaimerBanner.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
 
@@ -219,6 +221,8 @@ function Footer() {
             <DatomerLogo />
           </div>
         </div>
+
+        <AiDisclaimerBanner />
 
         <div className="footer-bottom" aria-label="Datomer address details">
           <p className="footer-legal-line">
@@ -831,6 +835,14 @@ function TermsPage() {
       <p>
         {t('terms.intro')}
       </p>
+
+      <h2 id="ai-disclaimer">{t('terms.aiDisclaimerTitle')}</h2>
+      <p>{t('terms.aiDisclaimerIntro')}</p>
+      <ul>
+        {Object.entries(aiDisclaimers).map(([key, text]) => (
+          <li key={key}>{text}</li>
+        ))}
+      </ul>
 
       <h2>{t('terms.betaTitle')}</h2>
       <p>{t('terms.betaText')}</p>
