@@ -57,15 +57,6 @@
       "use_case": "General instruction-following and chat"
     },
     {
-      "short_name": "Fable Therapy 4B",
-      "authors": "Verdugie",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/Verdugie/Fable-Therapy-4B/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/Verdugie/Fable-Therapy-4B",
-      "filename": "Fable-Therapy-4B-Q4_K_M.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
       "short_name": "nanbeige4.1 3b q8 0",
       "authors": "Edge-Quant",
       "license": "apache-2.0",

@@ -1,0 +1,114 @@
+# EU AI Act exclusion list — single source of truth.
+#
+# This file centralises:
+#   - model tags/keywords that must never appear in the Pär catalog
+#     (therapy/health + Annex III high-risk use cases)
+#   - description/use_case keywords that disqualify a model
+#   - required disclaimers shown in the app, system prompt, and public sites
+#   - human-readable Annex III high-risk categories for Terms / Acceptable Use
+#
+# Consumers:
+#   - admin/model_discovery/builder.py
+#   - scripts/discover_models.py
+#   - agent/model_curation_agent.py
+#   - agent/peer_agent.py (system prompt)
+#   - api/routes/system.py (disclaimers endpoint)
+#   - scripts/check_ai_act_compliance.py
+#   - docs/TERMS_OF_SERVICE.md and docs/ACCEPTABLE_USE.md
+#   - DatomerAB/datomer.eu (synced via sync-public-content.yml)
+#   - DatomerAB/par-public (synced via sync-public-content.yml)
+
+# Model tags that automatically disqualify a model from the catalog.
+denied_model_tags:
+  # Therapy / mental-health / medical
+  - therapy
+  - therapeutic
+  - counseling
+  - counselling
+  - psychotherapy
+  - mental-health
+  - mental_health
+  - therapist
+  - clinical
+  - diagnosis
+  - diagnostic
+  - treatment
+  - medical-advice
+  - medical_advice
+  # Annex III high-risk categories
+  - biometric
+  - biometrics
+  - face-recognition
+  - facial-recognition
+  - emotion-recognition
+  - remote-biometric-identification
+  - critical-infrastructure
+  - recruitment
+  - hiring
+  - candidate-screening
+  - credit-scoring
+  - credit_score
+  - loan-approval
+  - education
+  - student-assessment
+  - proctoring
+  - law-enforcement
+  - police
+  - border-control
+  - migration
+  - asylum
+  - judge
+  - judicial
+  - election
+  - voting
+  - political-advertising
+
+# Keywords scanned in model description / use_case.  A match here blocks the
+# model even if the upstream tags do not include an exact denied tag.
+denied_description_keywords:
+  # Therapy / health
+  - therapy
+  - therapeutic
+  - counselor
+  - counsellor
+  - psychotherapist
+  - diagnose
+  - diagnosis
+  - diagnosing
+  - medical device
+  - mental health
+  - mental-health
+  # Annex III high-risk
+  - recruitment
+  - recruiting
+  - hiring
+  - credit score
+  - credit scoring
+  - loan approval
+  - proctor
+  - proctoring
+  - law enforcement
+  - border control
+  - judicial
+  - election interference
+  - critical infrastructure
+
+# Required disclaimers.  Keep text concise and translatable.
+required_disclaimers:
+  ai_identity: "Pär is an AI assistant. Responses may be inaccurate or outdated."
+  not_professional: "Pär is not a medical, legal, or mental-health professional."
+  crisis: "If you are in crisis or need medical or mental-health support, contact a qualified professional or emergency service."
+  annex_iii_notice: "Pär must not be used for high-risk purposes such as biometrics, critical infrastructure, recruitment, credit scoring, education assessment, law enforcement, migration control, judicial decision-making, or democratic processes."
+
+# Human-readable Annex III categories.  Used in Terms of Service and
+# Acceptable Use documents.
+annex_iii_categories:
+  - Biometrics and remote biometric identification
+  - Critical infrastructure management
+  - Education and vocational training
+  - Employment and workers management
+  - Access to essential public and private services
+  - Law enforcement
+  - Migration, asylum, and border control
+  - Administration of justice
+  - Democratic processes
