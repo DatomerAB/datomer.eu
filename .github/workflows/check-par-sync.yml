@@ -57,8 +57,23 @@ jobs:
           src = pathlib.Path('/tmp/par-canonical/eu_ai_act_exclude_list.yaml')
           out = pathlib.Path('/tmp/par-canonical/ai_disclaimers.json')
           data = yaml.safe_load(src.read_text())
-          disclaimers = data.get('required_disclaimers', {})
-          out.write_text(json.dumps(disclaimers, indent=2, ensure_ascii=False) + '\n')
+          en = data.get('required_disclaimers', {})
+          localized = {
+              'en': en,
+              'sv': {
+                  'ai_identity': 'Pär är en AI-assistent. Svaren kan vara felaktiga eller föråldrade.',
+                  'not_professional': 'Pär är inte en medicinsk, juridisk eller psykisk-hälsoprofessionell.',
+                  'crisis': 'Om du befinner dig i kris eller behöver medicinsk eller psykisk-hälsostöd, kontakta en kvalificerad professionell eller en nödtjänst.',
+                  'annex_iii_notice': 'Pär får inte användas för högriskändamål som biometri, kritisk infrastruktur, rekrytering, kreditbedömning, utbildningsbedömning, polisiärt arbete, migrationskontroll, rättsligt beslutsfattande eller demokratiska processer.',
+              },
+              'de': {
+                  'ai_identity': 'Pär ist ein KI-Assistent. Antworten können ungenau oder veraltet sein.',
+                  'not_professional': 'Pär ist kein medizinischer, juristischer oder psychischer Gesundheitsfachmann.',
+                  'crisis': 'Wenn Sie sich in einer Krise befinden oder medizinische oder psychische Unterstützung benötigen, wenden Sie sich an einen qualifizierten Fachmann oder einen Notdienst.',
+                  'annex_iii_notice': 'Pär darf nicht für Hochrisikozwecke wie Biometrie, kritische Infrastruktur, Personalrekrutierung, Kreditscoring, Bildungsbewertung, Polizeiarbeit, Migrationskontrolle, richterliche Entscheidungsfindung oder demokratische Prozesse verwendet werden.',
+              },
+          }
+          out.write_text(json.dumps(localized, indent=2, ensure_ascii=False) + '\n')
           PY
 
       - name: Compare ai_disclaimers.json

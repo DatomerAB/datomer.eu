@@ -823,8 +823,10 @@ function PrivacyPage() {
 }
 
 function TermsPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
+
+  const localized = aiDisclaimers[lang] || aiDisclaimers.en || {}
 
   return (
     <main className="section container legal-page">
@@ -839,7 +841,7 @@ function TermsPage() {
       <h2 id="ai-disclaimer">{t('terms.aiDisclaimerTitle')}</h2>
       <p>{t('terms.aiDisclaimerIntro')}</p>
       <ul>
-        {Object.entries(aiDisclaimers).map(([key, text]) => (
+        {Object.entries(localized).map(([key, text]) => (
           <li key={key}>{text}</li>
         ))}
       </ul>

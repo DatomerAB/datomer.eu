@@ -3,10 +3,11 @@ import { useLanguage } from '../i18n/useLanguage.js'
 import aiDisclaimers from '../data/ai_disclaimers.json'
 
 export function AiDisclaimerBanner() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
-  const identity = aiDisclaimers.ai_identity || t('footer.aiDisclaimerFallback', { defaultValue: '' })
-  const professional = aiDisclaimers.not_professional || ''
+  const localized = aiDisclaimers[lang] || aiDisclaimers.en || {}
+  const identity = localized.ai_identity || t('footer.aiDisclaimerFallback', { defaultValue: '' })
+  const professional = localized.not_professional || ''
 
   if (!identity) return null
 
