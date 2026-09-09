@@ -26,3 +26,4 @@ dist-ssr
 # scripts/ is tracked for the changelog drafter workflow.
 # If you need to ignore local helper scripts, add them explicitly.
 # scripts/
+__pycache__/
