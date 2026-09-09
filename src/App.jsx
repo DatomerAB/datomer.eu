@@ -36,7 +36,7 @@ const STRIPE_PRICE_IDS = {
 }
 
 const FALLBACK_DOWNLOAD_URL =
-  'https://github.com/DatomerAB/par-releases/releases/download/v0.1.3-beta.2026090601/Par_0.1.3-beta.2026090601_aarch64.dmg'
+  'https://github.com/DatomerAB/par-releases/releases/download/v0.1.5-beta.2026090807/Par_0.1.5-beta.2026090807_aarch64.dmg'
 
 function useDownloadUrl() {
   const [url, setUrl] = useState(FALLBACK_DOWNLOAD_URL)
