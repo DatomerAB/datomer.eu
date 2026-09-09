@@ -31,9 +31,9 @@ describe('Models & Licenses page', () => {
     })
     await new Promise((resolve) => setTimeout(resolve, 0))
     // These assertions must match the current models bundled in src/data/models.json.
-    expect(screen.getByText('Qwen3 14B')).toBeTruthy()
+    expect(screen.getByText('qwen3 14b q4 k m')).toBeTruthy()
     expect(screen.getByText('Nomic Embed v1.5')).toBeTruthy()
-    expect(screen.getByText('Gemma 3 12B (Ollama)')).toBeTruthy()
+    expect(screen.getByText('Qwen 3 8B (Ollama)')).toBeTruthy()
     expect(screen.getByText('llama.cpp')).toBeTruthy()
   })
 })
