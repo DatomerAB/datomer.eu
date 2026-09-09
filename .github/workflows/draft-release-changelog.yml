@@ -79,7 +79,7 @@ jobs:
           npm test
           npm run build
 
-            - name: Create or update pull request
+      - name: Create or update pull request
         id: pr
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
