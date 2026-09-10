@@ -45,6 +45,12 @@ jobs:
           node-version: "22"
           cache: npm
 
+      - name: Test changelog script
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet pytest
+          python3 -m pytest scripts/test_draft_changelog.py -q
+
       - name: Create changelog post and update fallback URL
         id: create
         env:
