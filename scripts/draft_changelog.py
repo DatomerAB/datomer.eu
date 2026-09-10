@@ -211,12 +211,16 @@ def _update_download_urls(dmg_url: str, tag: str) -> None:
     # Bust GitHub's CDN cache for latest.json by rewriting the release tag in
     # the fetch path. This guarantees visitors see the latest download URL
     # immediately after a release.
-    cache_buster_pattern = r"(latest\.json\?tag=)\{\{RELEASE_TAG\}\}"
-    if re.search(cache_buster_pattern, app):
-        app = re.sub(cache_buster_pattern, rf"\g<1>{tag}", app)
-        print(f"✅ Busted latest.json cache-buster to {tag} in src/App.jsx")
-    else:
-        print("⚠️ latest.json cache-buster placeholder not found; no change made")
+    # Matches whatever tag is currently there rather than a one-shot
+    # {{RELEASE_TAG}} placeholder, which is consumed on the first run.
+    cache_buster_pattern = r"(latest\.json\?tag=)[^'\"]*"
+    if not re.search(cache_buster_pattern, app):
+        print("❌ latest.json cache-buster not found in src/App.jsx")
+        print("   Expected a 'latest.json?tag=' fetch path to rewrite.")
+        sys.exit(1)
+
+    app = re.sub(cache_buster_pattern, rf"\g<1>{tag}", app)
+    print(f"✅ Busted latest.json cache-buster to {tag} in src/App.jsx")
 
     APP_PATH.write_text(app, encoding="utf-8")
 
