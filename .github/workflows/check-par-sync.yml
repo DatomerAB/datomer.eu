@@ -41,7 +41,8 @@ jobs:
 
       - name: Fetch canonical AI disclaimers from Pär
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # DatomerAB/Par is private, so the repo-scoped GITHUB_TOKEN cannot read it.
+          GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
         run: |
           set -euo pipefail
           mkdir -p /tmp/par-canonical
@@ -49,32 +50,21 @@ jobs:
             --jq '.content' \
             | base64 -d > /tmp/par-canonical/eu_ai_act_exclude_list.yaml
 
+          # Fetch the generator too, rather than reimplementing it here. The
+          # Swedish and German literals used to be duplicated in this file, so
+          # editing one repo and not the other produced a diff that looked like
+          # drift from Pär when it was really drift between two copies.
+          gh api repos/DatomerAB/Par/contents/scripts/build_ai_disclaimers.py \
+            --jq '.content' \
+            | base64 -d > /tmp/par-canonical/build_ai_disclaimers.py
+
       - name: Generate canonical ai_disclaimers.json
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import json, yaml, pathlib
-          src = pathlib.Path('/tmp/par-canonical/eu_ai_act_exclude_list.yaml')
-          out = pathlib.Path('/tmp/par-canonical/ai_disclaimers.json')
-          data = yaml.safe_load(src.read_text())
-          en = data.get('required_disclaimers', {})
-          localized = {
-              'en': en,
-              'sv': {
-                  'ai_identity': 'Pär är en AI-assistent. Svaren kan vara felaktiga eller föråldrade.',
-                  'not_professional': 'Pär är inte en medicinsk, juridisk eller psykisk-hälsoprofessionell.',
-                  'crisis': 'Om du befinner dig i kris eller behöver medicinsk eller psykisk-hälsostöd, kontakta en kvalificerad professionell eller en nödtjänst.',
-                  'annex_iii_notice': 'Pär får inte användas för högriskändamål som biometri, kritisk infrastruktur, rekrytering, kreditbedömning, utbildningsbedömning, polisiärt arbete, migrationskontroll, rättsligt beslutsfattande eller demokratiska processer.',
-              },
-              'de': {
-                  'ai_identity': 'Pär ist ein KI-Assistent. Antworten können ungenau oder veraltet sein.',
-                  'not_professional': 'Pär ist kein medizinischer, juristischer oder psychischer Gesundheitsfachmann.',
-                  'crisis': 'Wenn Sie sich in einer Krise befinden oder medizinische oder psychische Unterstützung benötigen, wenden Sie sich an einen qualifizierten Fachmann oder einen Notdienst.',
-                  'annex_iii_notice': 'Pär darf nicht für Hochrisikozwecke wie Biometrie, kritische Infrastruktur, Personalrekrutierung, Kreditscoring, Bildungsbewertung, Polizeiarbeit, Migrationskontrolle, richterliche Entscheidungsfindung oder demokratische Prozesse verwendet werden.',
-              },
-          }
-          out.write_text(json.dumps(localized, indent=2, ensure_ascii=False) + '\n')
-          PY
+          python3 -m pip install --quiet pyyaml
+          python3 /tmp/par-canonical/build_ai_disclaimers.py \
+            --config /tmp/par-canonical/eu_ai_act_exclude_list.yaml \
+            --output /tmp/par-canonical/ai_disclaimers.json
 
       - name: Compare ai_disclaimers.json
         run: |
