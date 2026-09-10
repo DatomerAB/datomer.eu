@@ -129,66 +129,64 @@ jobs:
           echo "pr_url=${pr_url}" >> "$GITHUB_OUTPUT"
           echo "✅ Created draft PR: ${pr_url}"
 
-      - name: Notify Slack — changelog ready for review
-        if: ${{ success() }}
+      - name: Notify Slack
+        if: always()
         continue-on-error: true
-        uses: slackapi/slack-github-action@v4.0.0
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "text": "Changelog draft ready for review",
-              "attachments": [
-                {
-                  "color": "2f80ed",
-                  "author_name": "Pär Release Bot",
-                  "author_icon": "https://datomerab.github.io/par-public/assets/landing/icon.png",
-                  "title": "Changelog draft ready for review",
-                  "title_link": "${{ steps.pr.outputs.pr_url }}",
-                  "text": "A draft changelog PR for ${{ github.event.client_payload.tag || inputs.tag }} has been opened. Please review and edit before merging.",
-                  "fields": [
-                    {
-                      "title": "Release",
-                      "value": "${{ github.event.client_payload.tag || inputs.tag }}",
-                      "short": true
-                    },
-                    {
-                      "title": "Source",
-                      "value": "${{ github.event.client_payload.source_repo || 'DatomerAB/Par' }}",
-                      "short": true
-                    }
-                  ],
-                  "footer": "Pär by Datomer",
-                  "footer_icon": "https://datomerab.github.io/par-public/assets/landing/datomer-logo.png"
-                }
-              ]
-            }
+          WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK_URL }}
+          OUTCOME: ${{ job.status }}
+          TAG: ${{ github.event.client_payload.tag || inputs.tag }}
+          SOURCE_REPO: ${{ github.event.client_payload.source_repo || 'DatomerAB/Par' }}
+          PR_URL: ${{ steps.pr.outputs.pr_url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
 
-      - name: Notify Slack — changelog draft failed
-        if: ${{ failure() }}
-        continue-on-error: true
-        uses: slackapi/slack-github-action@v4.0.0
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "text": "Changelog draft failed",
-              "attachments": [
-                {
-                  "color": "ff4d4f",
-                  "author_name": "Pär Release Bot",
-                  "author_icon": "https://datomerab.github.io/par-public/assets/landing/icon.png",
-                  "title": "Changelog draft failed",
-                  "title_link": "https://github.com/DatomerAB/datomer.eu/actions/workflows/draft-release-changelog.yml",
-                  "text": "Failed to create the draft changelog PR for ${{ github.event.client_payload.tag || inputs.tag }}.",
-                  "footer": "Pär by Datomer",
-                  "footer_icon": "https://datomerab.github.io/par-public/assets/landing/datomer-logo.png"
-                }
-              ]
-            }
+          if [[ -z "${WEBHOOK_URL}" ]]; then
+            echo "::warning::SLACK_RELEASE_WEBHOOK_URL is not set; skipping."
+            exit 0
+          fi
+
+          if [[ "${OUTCOME}" == "success" ]]; then
+            COLOR="2f80ed"
+            TITLE="Changelog draft ready for review"
+            LINK="${PR_URL}"
+            TEXT="A draft changelog PR for ${TAG} has been opened. Please review and edit before merging."
+          else
+            COLOR="ff4d4f"
+            TITLE="Changelog draft failed"
+            LINK="${RUN_URL}"
+            TEXT="Failed to create the draft changelog PR for ${TAG}."
+          fi
+
+          # Values go through jq --arg so a release tag containing a double
+          # quote cannot break or inject into the payload.
+          jq -n \
+            --arg title "$TITLE" \
+            --arg link "$LINK" \
+            --arg text "$TEXT" \
+            --arg color "$COLOR" \
+            --arg tag "$TAG" \
+            --arg source "$SOURCE_REPO" \
+            '{
+              text: $title,
+              attachments: [{
+                color: $color,
+                author_name: "Pär Release Bot",
+                author_icon: "https://datomerab.github.io/par-public/assets/landing/icon.png",
+                title: $title,
+                title_link: $link,
+                text: $text,
+                fields: [
+                  { title: "Release", value: $tag, short: true },
+                  { title: "Source", value: $source, short: true }
+                ],
+                footer: "Pär by Datomer",
+                footer_icon: "https://datomerab.github.io/par-public/assets/landing/datomer-logo.png"
+              }]
+            }' > "${RUNNER_TEMP}/slack.json"
+
+          curl -sSf -X POST \
+            -H 'Content-Type: application/json' \
+            --data "@${RUNNER_TEMP}/slack.json" \
+            "${WEBHOOK_URL}"

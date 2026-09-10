@@ -1,0 +1,59 @@
+name: Notify Slack on PR
+
+# Announces new pull requests to #pär-releases so cross-repo remediation PRs
+# are not missed. Fork PRs do not receive secrets, so the step skips cleanly.
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Post to Slack
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK_URL }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${WEBHOOK_URL}" ]]; then
+            echo "::warning::SLACK_RELEASE_WEBHOOK_URL is not available (fork PR?); skipping."
+            exit 0
+          fi
+
+          # Values go through jq --arg so a title containing quotes, backticks
+          # or braces cannot break or inject into the JSON payload.
+          jq -n \
+            --arg text "Pull request opened in ${REPO}" \
+            --arg title "#${PR_NUMBER} ${PR_TITLE}" \
+            --arg url "${PR_URL}" \
+            --arg author "${PR_AUTHOR}" \
+            --arg repo "${REPO}" \
+            '{
+              text: $text,
+              attachments: [{
+                color: "2f80ed",
+                title: $title,
+                title_link: $url,
+                fields: [
+                  { title: "Repository", value: $repo, short: true },
+                  { title: "Author", value: $author, short: true }
+                ],
+                footer: "Pär by Datomer"
+              }]
+            }' > "${RUNNER_TEMP}/slack.json"
+
+          curl -sSf -X POST \
+            -H 'Content-Type: application/json' \
+            --data "@${RUNNER_TEMP}/slack.json" \
+            "${WEBHOOK_URL}"
