@@ -78,6 +78,18 @@ function metaForRoute(pathname, searchParams) {
           'Kontaktiere das Team von Pär by Datomer. Fragen, Feedback, Presse, Partnerschaften und Support.',
       },
     },
+    '/get-started': {
+      en: {
+        title: pageTitle('Get Started'),
+        description:
+          'Install Pär on your Mac and start chatting privately in about 10 minutes. Step-by-step setup, model downloads, and troubleshooting.',
+      },
+      sv: {
+        title: pageTitle('Kom igång'),
+        description:
+          'Installera Pär på din Mac och börja chatta privat på cirka 10 minuter. Steg-för-steg-guide, modellnedladdningar och felsökning.',
+      },
+    },
     '/blog': {
       en: {
         title: pageTitle('Blog'),

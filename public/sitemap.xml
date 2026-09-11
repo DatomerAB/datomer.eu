@@ -25,6 +25,14 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://datomer.eu/get-started</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/get-started" />
+    <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/get-started?lang=sv" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://datomer.eu/get-started" />
+    <lastmod>2026-09-11</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://datomer.eu/blog</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://datomer.eu/blog" />
     <xhtml:link rel="alternate" hreflang="sv" href="https://datomer.eu/blog?lang=sv" />

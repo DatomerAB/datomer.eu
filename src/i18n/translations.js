@@ -24,6 +24,7 @@ export const translations = {
         'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware, no cloud required. Bring your own GGUF models or Ollama models.',
       downloadMac: 'Download for Mac',
       seeHowItWorks: 'See How It Works',
+      setupGuide: 'New to Pär? Read the setup guide',
     },
     highlights: {
       localInference: { title: 'Local Inference', text: 'Runs on your device using GGUF or Ollama models.' },
@@ -120,6 +121,7 @@ export const translations = {
       submit: 'Download for Mac',
       success: 'Thanks! Your download should start automatically.',
       downloadAgain: 'Download again',
+      nextStep: 'Next: set up Pär in about 10 minutes →',
       consent: 'By downloading, you agree to receive occasional product updates. You can unsubscribe anytime.',
       turnstileError: 'Security check failed. Please try again.',
     },
@@ -282,6 +284,15 @@ export const translations = {
     changelog: {
       title: 'Changelog',
       intro: 'The latest product updates, release notes, and launch milestones.',
+    },
+    getStarted: {
+      title: 'Get Started With Pär',
+      intro:
+        'Download Pär, install it, and start chatting privately on your Mac in about 10 minutes. Most of that is just waiting for a download.',
+      downloadMac: 'Download for Mac',
+      requirementsNote: 'Requires macOS 11 or later on an Apple Silicon Mac, and about 10 GB of free disk space.',
+      readyTitle: 'Ready To Try Pär?',
+      readyText: 'Download the free beta and keep your AI entirely on your device.',
     },
     footer: {
       managedBy: 'Pär is a product of Datomer AB',
@@ -460,6 +471,7 @@ export const translations = {
         'Pär är den personliga AI-kompisen som faktiskt kommer ihåg dig. Den lär sig dina mål, kopplar ihop sig med dina verktyg och körs helt på din egen hårdvara — inget moln behövs. Använd dina egna GGUF-modeller eller Ollama-modeller.',
       downloadMac: 'Ladda ner för Mac',
       seeHowItWorks: 'Se hur det fungerar',
+      setupGuide: 'Ny med Pär? Läs installationsguiden',
     },
     highlights: {
       localInference: { title: 'Lokal Inferens', text: 'Körs på din enhet med GGUF- eller Ollama-modeller.' },
@@ -693,6 +705,15 @@ export const translations = {
       title: 'Ändringslogg',
       intro: 'Senaste Produktuppdateringarna, Betanoteringarna Och Lanseringsmilstolparna.',
     },
+    getStarted: {
+      title: 'Kom Igång Med Pär',
+      intro:
+        'Ladda ner Pär, installera appen och börja chatta privat på din Mac på cirka 10 minuter. Det mesta av tiden går åt till att vänta på nedladdningen.',
+      downloadMac: 'Ladda ner för Mac',
+      requirementsNote: 'Kräver macOS 11 eller senare på en Mac med Apple Silicon, samt cirka 10 GB ledigt diskutrymme.',
+      readyTitle: 'Redo Att Testa Pär?',
+      readyText: 'Ladda ner den kostnadsfria betaversionen och behåll din AI helt på din enhet.',
+    },
     footer: {
       managedBy: 'Pär är en produkt från Datomer AB',
       legal: { privacy: 'Integritet', terms: 'Villkor', cookies: 'Cookies', models: 'Modeller & Licenser' },
@@ -741,6 +762,7 @@ export const translations = {
       submit: 'Ladda ner för Mac',
       success: 'Tack! Din nedladdning bör starta automatiskt.',
       downloadAgain: 'Ladda ner igen',
+      nextStep: 'Nästa steg: kom igång med Pär på cirka 10 minuter →',
       consent: 'Genom att ladda ner godkänner du att få produktuppdateringar. Du kan avanmäla dig när som helst.',
       turnstileError: 'Säkerhetskontrollen misslyckades. Försök igen.',
     },

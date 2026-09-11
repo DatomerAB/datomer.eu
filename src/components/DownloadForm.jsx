@@ -169,6 +169,10 @@ export function DownloadForm({ downloadUrl, onClose, action = 'download-form' })
                 </a>
               </p>
             )}
+            {/* Plain anchor keeps this modal usable outside a router context. */}
+            <p className="form-next-step">
+              <a href="/get-started">{t('downloadForm.nextStep')}</a>
+            </p>
           </div>
         ) : (
           <form className="download-form" onSubmit={handleSubmit}>

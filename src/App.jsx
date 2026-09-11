@@ -13,6 +13,7 @@ import { Turnstile } from './components/Turnstile.jsx'
 import aiDisclaimers from './data/ai_disclaimers.json'
 import { BlogPage } from './pages/BlogPage.jsx'
 import { PressPage } from './pages/PressPage.jsx'
+import { GetStartedPage } from './pages/GetStartedPage.jsx'
 import { ModelAttributionPage } from './pages/ModelAttributionPage.jsx'
 import { AiDisclaimerBanner } from './components/AiDisclaimerBanner.jsx'
 import { useExperiment } from './experiments/experiments.js'
@@ -392,6 +393,10 @@ function HomePage({ onDownload }) {
                 {t('hero.seeHowItWorks')}
               </a>
             </div>
+
+            <p className="hero-setup-link">
+              <Link to="/get-started">{t('hero.setupGuide')}</Link>
+            </p>
 
             <div className="hero-highlights" aria-label="Core promises">
               {highlights.map((item) => (
@@ -929,6 +934,7 @@ function App() {
         <Route path="/" element={<HomePage onDownload={() => setShowDownloadForm(true)} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/get-started" element={<GetStartedPage onDownload={() => setShowDownloadForm(true)} />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />

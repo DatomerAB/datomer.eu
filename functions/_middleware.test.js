@@ -100,6 +100,24 @@ describe('meta middleware', () => {
     )
   })
 
+  it('rewrites title and description for /get-started', async () => {
+    const req = makeRequest('/get-started')
+    const ctx = makeContext(req, SHELL)
+    const res = await onRequest(ctx)
+    const text = await res.text()
+    expect(text).toContain('<title>Get Started — Pär by Datomer</title>')
+    expect(text).toContain('<link rel="canonical" href="https://datomer.eu/get-started" />')
+  })
+
+  it('serves Swedish meta for /get-started?lang=sv', async () => {
+    const req = makeRequest('/get-started?lang=sv')
+    const ctx = makeContext(req, SHELL)
+    const res = await onRequest(ctx)
+    const text = await res.text()
+    expect(text).toContain('<html lang="sv">')
+    expect(text).toContain('<title>Kom igång — Pär by Datomer</title>')
+  })
+
   it('injects JSON-LD structured data', async () => {
     const req = makeRequest('/')
     const ctx = makeContext(req, SHELL)
