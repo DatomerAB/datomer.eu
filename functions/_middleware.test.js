@@ -78,6 +78,28 @@ describe('meta middleware', () => {
     )
   })
 
+  it('falls back to English meta for ?lang=de', async () => {
+    const req = makeRequest('/press?lang=de')
+    const ctx = makeContext(req, SHELL)
+    const res = await onRequest(ctx)
+    const text = await res.text()
+    expect(text).toContain('<html lang="en">')
+    expect(text).toContain('<title>Press Kit — Pär by Datomer</title>')
+    expect(text).toContain('<meta property="og:locale" content="en_US" />')
+    expect(text).not.toContain('Pressekit')
+  })
+
+  it('does not emit German hreflang links', async () => {
+    const req = makeRequest('/press')
+    const ctx = makeContext(req, SHELL)
+    const res = await onRequest(ctx)
+    const text = await res.text()
+    expect(text).not.toContain('hreflang="de"')
+    expect(text).toContain(
+      '<link rel="alternate" hreflang="sv" href="https://datomer.eu/press?lang=sv" />'
+    )
+  })
+
   it('injects JSON-LD structured data', async () => {
     const req = makeRequest('/')
     const ctx = makeContext(req, SHELL)

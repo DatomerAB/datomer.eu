@@ -18,8 +18,11 @@ function pageTitle(title) {
   return title === DEFAULT_TITLE ? title : `${title} — Pär by Datomer`
 }
 
+// Keep in sync with SUPPORTED_LANGUAGES in src/i18n/LanguageProvider.jsx.
+const ENABLED_LANGUAGES = ['en', 'sv']
+
 function metaForRoute(pathname, searchParams) {
-  const lang = ['en', 'sv', 'de'].includes(searchParams.get('lang'))
+  const lang = ENABLED_LANGUAGES.includes(searchParams.get('lang'))
     ? searchParams.get('lang')
     : 'en'
   const basePath = pathname === '' ? '/' : pathname
@@ -220,7 +223,6 @@ function hreflangLinks(pathname) {
   const urls = [
     { hrefLang: 'en', href: `${SITE_URL}${base}` },
     { hrefLang: 'sv', href: `${SITE_URL}${base}?lang=sv` },
-    { hrefLang: 'de', href: `${SITE_URL}${base}?lang=de` },
     { hrefLang: 'x-default', href: `${SITE_URL}${base}` },
   ]
   return urls

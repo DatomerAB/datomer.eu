@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { act, renderHook } from '@testing-library/react'
-import { LanguageProvider } from './LanguageProvider.jsx'
+import { LanguageProvider, SUPPORTED_LANGUAGES } from './LanguageProvider.jsx'
 import { useLanguage } from './useLanguage.js'
 import { translations } from './translations'
 
@@ -32,5 +32,18 @@ describe('LanguageProvider', () => {
   it('falls back to English for missing Swedish key', () => {
     const { result } = renderHook(() => useLanguage(), { wrapper })
     expect(result.current.t('does.not.exist')).toBe('does.not.exist')
+  })
+
+  it('does not expose German as a selectable language', () => {
+    expect(SUPPORTED_LANGUAGES).toEqual(['en', 'sv'])
+  })
+
+  it('falls back to English when German is requested', async () => {
+    const { result } = renderHook(() => useLanguage(), { wrapper })
+    await act(async () => {
+      result.current.setLang('de')
+    })
+    expect(result.current.lang).toBe('en')
+    expect(result.current.t('nav.product')).toBe(translations.en.nav.product)
   })
 })

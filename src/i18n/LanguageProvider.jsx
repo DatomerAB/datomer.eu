@@ -12,7 +12,9 @@ function useSearchParamsSafe() {
   }
 }
 
-export const SUPPORTED_LANGUAGES = ['en', 'sv', 'de']
+// 'de' stays here so translations/meta can be re-enabled without rewiring.
+export const ALL_LANGUAGES = ['en', 'sv', 'de']
+export const SUPPORTED_LANGUAGES = ['en', 'sv']
 export const DEFAULT_LANGUAGE = 'en'
 
 export function parseLanguage(value) {

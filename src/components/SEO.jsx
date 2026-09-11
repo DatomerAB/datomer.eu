@@ -108,7 +108,6 @@ export function HreflangLinks({ pathname }) {
       link={[
         { rel: 'alternate', hrefLang: 'en', href: full },
         { rel: 'alternate', hrefLang: 'sv', href: `${full}?lang=sv` },
-        { rel: 'alternate', hrefLang: 'de', href: `${full}?lang=de` },
         { rel: 'alternate', hrefLang: 'x-default', href: full },
       ]}
     />
