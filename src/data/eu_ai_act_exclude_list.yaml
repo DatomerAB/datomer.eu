@@ -100,6 +100,22 @@ required_disclaimers:
   crisis: "If you are in crisis or need medical or mental-health support, contact a qualified professional or emergency service."
   annex_iii_notice: "Pär must not be used for high-risk purposes such as biometrics, critical infrastructure, recruitment, credit scoring, education assessment, law enforcement, migration control, judicial decision-making, or democratic processes."
 
+# Translations of required_disclaimers.  These previously lived as duplicated
+# literals inside two workflows in two repositories, so an edit to one silently
+# broke datomer.eu's drift check.  Every key above must have a translation in
+# every language here; scripts/build_ai_disclaimers.py enforces that.
+required_disclaimers_i18n:
+  sv:
+    ai_identity: "Pär är en AI-assistent. Svaren kan vara felaktiga eller föråldrade."
+    not_professional: "Pär är inte en medicinsk, juridisk eller psykisk-hälsoprofessionell."
+    crisis: "Om du befinner dig i kris eller behöver medicinsk eller psykisk-hälsostöd, kontakta en kvalificerad professionell eller en nödtjänst."
+    annex_iii_notice: "Pär får inte användas för högriskändamål som biometri, kritisk infrastruktur, rekrytering, kreditbedömning, utbildningsbedömning, polisiärt arbete, migrationskontroll, rättsligt beslutsfattande eller demokratiska processer."
+  de:
+    ai_identity: "Pär ist ein KI-Assistent. Antworten können ungenau oder veraltet sein."
+    not_professional: "Pär ist kein medizinischer, juristischer oder psychischer Gesundheitsfachmann."
+    crisis: "Wenn Sie sich in einer Krise befinden oder medizinische oder psychische Unterstützung benötigen, wenden Sie sich an einen qualifizierten Fachmann oder einen Notdienst."
+    annex_iii_notice: "Pär darf nicht für Hochrisikozwecke wie Biometrie, kritische Infrastruktur, Personalrekrutierung, Kreditscoring, Bildungsbewertung, Polizeiarbeit, Migrationskontrolle, richterliche Entscheidungsfindung oder demokratische Prozesse verwendet werden."
+
 # Human-readable Annex III categories.  Used in Terms of Service and
 # Acceptable Use documents.
 annex_iii_categories:
