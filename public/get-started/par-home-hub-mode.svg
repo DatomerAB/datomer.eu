@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" height="100%" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <title>Pär Home Hub Architecture</title>
+  <desc>Simple diagram showing how mobile companion devices securely connect to your Mac over local Wi-Fi without cloud.</desc>
+  <defs>
+    <linearGradient id="macGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#f1f5f9" />
+    </linearGradient>
+    <linearGradient id="wifiGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0d9488" />
+    </linearGradient>
+    <filter id="shadow2" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="40" font-size="20" font-weight="700" fill="#0f172a">Pär Home Hub (Local Mobile Companion)</text>
+  <text x="40" y="64" font-size="14" fill="#64748b">Your phone connects to your Mac over home Wi-Fi. All thinking and data remain on your Mac.</text>
+
+  <!-- Left: Your Mac Box (Hub Server) -->
+  <rect x="40" y="94" width="340" height="260" rx="16" fill="url(#macGrad2)" stroke="#0284c7" stroke-width="2" filter="url(#shadow2)" />
+  <rect x="40" y="94" width="340" height="38" rx="16" fill="#e0f2fe" />
+  <circle cx="62" cy="113" r="5" fill="#ef4444" />
+  <circle cx="78" cy="113" r="5" fill="#f59e0b" />
+  <circle cx="94" cy="113" r="5" fill="#10b981" />
+  <text x="210" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#0369a1">💻 Your Mac (Pär Home Hub)</text>
+
+  <!-- Sub-box Mac Brain -->
+  <rect x="65" y="150" width="135" height="150" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="132" y="190" text-anchor="middle" font-size="30">🧠</text>
+  <text x="132" y="218" text-anchor="middle" font-size="14" font-weight="700" fill="#0369a1">AI Brain</text>
+  <text x="132" y="240" text-anchor="middle" font-size="12" fill="#475569">Local Model</text>
+  <text x="132" y="260" text-anchor="middle" font-size="11" fill="#64748b">Does all heavy</text>
+  <text x="132" y="276" text-anchor="middle" font-size="11" fill="#64748b">computation</text>
+
+  <!-- Sub-box Mac Vault -->
+  <rect x="220" y="150" width="135" height="150" rx="12" fill="#ffffff" stroke="#16a34a" stroke-width="1.5" />
+  <text x="287" y="190" text-anchor="middle" font-size="30">🔒</text>
+  <text x="287" y="218" text-anchor="middle" font-size="14" font-weight="700" fill="#15803d">Vault &amp; Memory</text>
+  <text x="287" y="240" text-anchor="middle" font-size="12" fill="#475569">Encrypted DB</text>
+  <text x="287" y="260" text-anchor="middle" font-size="11" fill="#64748b">Per-member</text>
+  <text x="287" y="276" text-anchor="middle" font-size="11" fill="#64748b">private storage</text>
+
+  <text x="210" y="332" text-anchor="middle" font-size="12" font-weight="600" fill="#0369a1">⚡ All thinking &amp; data stay on your Mac</text>
+
+  <!-- Middle: Local Wi-Fi Network Connection -->
+  <path d="M 390 224 L 540 224" stroke="url(#wifiGrad)" stroke-width="3" stroke-linecap="round" />
+  <!-- Security badge on the wire -->
+  <rect x="420" y="180" width="94" height="42" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" />
+  <text x="467" y="198" text-anchor="middle" font-size="10" font-weight="700" fill="#047857">🔐 PAIRING</text>
+  <text x="467" y="214" text-anchor="middle" font-size="10" font-weight="600" fill="#0f172a">6-digit PIN / QR</text>
+  <text x="467" y="244" text-anchor="middle" font-size="12" font-weight="600" fill="#0f766e">📡 Home Wi-Fi</text>
+
+  <!-- Right: Companion Devices Box -->
+  <rect x="550" y="94" width="210" height="260" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" filter="url(#shadow2)" />
+  <rect x="550" y="94" width="210" height="38" rx="16" fill="#e2e8f0" />
+  <text x="655" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">📱 Companion Devices</text>
+
+  <!-- Phone Item -->
+  <rect x="570" y="150" width="170" height="66" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+  <text x="600" y="190" text-anchor="middle" font-size="24">📱</text>
+  <text x="668" y="180" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Your Phone</text>
+  <text x="668" y="200" text-anchor="middle" font-size="11" fill="#64748b">Instant chat &amp; voice</text>
+
+  <!-- Tablet / Family Item -->
+  <rect x="570" y="228" width="170" height="66" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+  <text x="600" y="268" text-anchor="middle" font-size="24">📱</text>
+  <text x="668" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Family / Tablet</text>
+  <text x="668" y="278" text-anchor="middle" font-size="11" fill="#64748b">Isolated history (Pro)</text>
+
+  <text x="655" y="332" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">Runs as a standalone PWA</text>
+
+  <!-- Blocked Cloud -->
+  <line x1="380" y1="380" x2="420" y2="380" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4" />
+  <text x="440" y="384" font-size="16">☁️</text>
+  <text x="465" y="384" font-size="12" font-weight="700" fill="#dc2626">✕ Cloud bypassed</text>
+  <text x="590" y="384" font-size="12" fill="#64748b">— Zero internet data transfer between your devices</text>
+
+  <!-- Tier Limits Footnote -->
+  <text x="40" y="405" font-size="12" font-weight="600" fill="#0369a1">Plan capacity:</text>
+  <text x="130" y="405" font-size="12" fill="#475569">Plus = 1 paired companion device · Pro = up to 10 devices &amp; 10 private member profiles</text>
+</svg>

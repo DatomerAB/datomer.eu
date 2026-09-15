@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" width="100%" height="100%" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <title>Pär Private Mode Architecture</title>
+  <desc>Simple diagram showing how Pär runs entirely inside your Mac with no cloud connection.</desc>
+  <defs>
+    <linearGradient id="macGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#f1f5f9" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="44" font-size="20" font-weight="700" fill="#0f172a">Pär on Your Mac (Private Mode)</text>
+  <text x="40" y="68" font-size="14" fill="#64748b">Your AI companion runs 100% locally on your computer. Zero cloud dependencies.</text>
+
+  <!-- Your Mac Container -->
+  <rect x="40" y="96" width="480" height="224" rx="16" fill="url(#macGrad)" stroke="#cbd5e1" stroke-width="2" filter="url(#shadow)" />
+  <rect x="40" y="96" width="480" height="38" rx="16" fill="#e2e8f0" />
+  <!-- Window buttons decoration -->
+  <circle cx="62" cy="115" r="5" fill="#ef4444" />
+  <circle cx="78" cy="115" r="5" fill="#f59e0b" />
+  <circle cx="94" cy="115" r="5" fill="#10b981" />
+  <text x="280" y="120" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">💻 Your Mac (Offline &amp; Encrypted)</text>
+
+  <!-- Box 1: You & Desktop App -->
+  <rect x="65" y="156" width="120" height="136" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="125" y="194" text-anchor="middle" font-size="28">👤</text>
+  <text x="125" y="222" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">You</text>
+  <text x="125" y="244" text-anchor="middle" font-size="12" fill="#475569">Pär App</text>
+  <text x="125" y="262" text-anchor="middle" font-size="11" fill="#64748b">Chats &amp; Actions</text>
+
+  <!-- Arrow 1 -> 2 -->
+  <path d="M 195 224 L 215 224" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" marker-end="url(#arrow)" />
+  <polygon points="215,220 223,224 215,228" fill="#0284c7" />
+
+  <!-- Box 2: Local AI Model -->
+  <rect x="230" y="156" width="125" height="136" rx="12" fill="#ffffff" stroke="#0284c7" stroke-width="1.5" />
+  <text x="292" y="194" text-anchor="middle" font-size="28">🧠</text>
+  <text x="292" y="222" text-anchor="middle" font-size="14" font-weight="700" fill="#0369a1">AI Brain</text>
+  <text x="292" y="244" text-anchor="middle" font-size="12" fill="#475569">Local Model</text>
+  <text x="292" y="262" text-anchor="middle" font-size="11" fill="#64748b">Runs on Device</text>
+
+  <!-- Arrow 2 -> 3 -->
+  <path d="M 365 224 L 385 224" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" />
+  <polygon points="385,220 393,224 385,228" fill="#0284c7" />
+
+  <!-- Box 3: Encrypted Vault -->
+  <rect x="400" y="156" width="105" height="136" rx="12" fill="#ffffff" stroke="#16a34a" stroke-width="1.5" />
+  <text x="452" y="194" text-anchor="middle" font-size="28">🔒</text>
+  <text x="452" y="222" text-anchor="middle" font-size="14" font-weight="700" fill="#15803d">Vault</text>
+  <text x="452" y="244" text-anchor="middle" font-size="12" fill="#475569">Encrypted</text>
+  <text x="452" y="262" text-anchor="middle" font-size="11" fill="#64748b">Private DB</text>
+
+  <!-- Blocked Internet Connection -->
+  <line x1="535" y1="208" x2="615" y2="208" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5" />
+  <circle cx="575" cy="208" r="14" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
+  <text x="575" y="214" text-anchor="middle" font-size="14" font-weight="800" fill="#dc2626">✕</text>
+
+  <!-- Cloud Box -->
+  <rect x="630" y="140" width="130" height="136" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4" />
+  <text x="695" y="186" text-anchor="middle" font-size="34">☁️</text>
+  <text x="695" y="220" text-anchor="middle" font-size="14" font-weight="600" fill="#94a3b8">Cloud Servers</text>
+  <text x="695" y="242" text-anchor="middle" font-size="12" font-weight="700" fill="#dc2626">Not Contacted</text>
+
+  <!-- Bottom assurance badge -->
+  <text x="280" y="306" text-anchor="middle" font-size="12" font-weight="600" fill="#15803d">🛡️ Nothing leaves your Mac. Zero telemetry, zero uploads.</text>
+</svg>
