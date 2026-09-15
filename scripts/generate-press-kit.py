@@ -79,7 +79,7 @@ palette: {themes}.
 - **Headquarters:** Nyskogavägen 11, 123 64 Farsta, Sweden
 - **Product:** Pär — private, local-first AI companion
 - **Platform:** macOS beta; Windows/Linux/Web coming soon
-- **Pricing:** Free tier; Plus $2/mo or $20/yr; Pro $5/user/mo; Enterprise custom
+- **Pricing:** Free tier; Plus $2/mo or $24/yr; Pro $10/user/mo or $120/user/yr; Enterprise custom
 - **Contact:** hello@datomer.eu
 - **Website:** https://datomer.eu
 
