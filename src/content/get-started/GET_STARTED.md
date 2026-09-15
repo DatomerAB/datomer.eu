@@ -176,6 +176,32 @@ You'll see *"Activated — welcome to Pär…"* and your new badge appears insta
 
 ---
 
+## 5. Pär Home Hub — Connect your phone or tablet 📱
+
+With Pär Plus, you can pair **1 companion device** (like your phone) to your Mac. With Pär Pro, your Mac becomes a full **Family Home Hub** supporting up to **10 paired devices** and **10 household member profiles** with separate, private conversation histories.
+
+### Step 1: Turn on Home Hub on your Mac
+1. Open **Profile** (click your profile card at the bottom of the sidebar → **Profile** → select the **Home Hub** tab).
+2. Click **Enable Hub** (it will turn green: **Hub Active 🟢**).
+3. Under **Pair New Device**, click **Generate PIN**. A 6-digit PIN will appear on screen.
+
+### Step 2: Connect from your mobile device
+1. Connect your phone or tablet to the same home Wi-Fi as your Mac.
+2. Open Safari (iOS) or Chrome (Android) and go to:
+   ```text
+   http://par.local:7433/pair
+   ```
+   *(Or use the local IP shown in the Home Hub tab on your Mac, e.g. `http://192.168.1.xxx:7433/pair`, or scan the on-screen QR code directly with your camera)*
+3. Enter the 6-digit PIN and tap **Connect Device**.
+
+### Step 3: Install as an App
+- **iPhone (Safari)**: Tap the Share button (square with arrow pointing up) → tap **Add to Home Screen**.
+- **Android (Chrome)**: Tap the three dots menu ⋮ → tap **Install app** or **Add to Home screen**.
+
+Pär launches full-screen just like a native app, while all AI thinking and encryption stay safely on your Mac!
+
+---
+
 ## Where your stuff lives
 
 Everything Pär knows about you sits in one hidden folder on your Mac: **`~/.peer/`** — encrypted, yours, and deletable at any time.
