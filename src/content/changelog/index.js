@@ -1,5 +1,5 @@
 import { marked } from 'marked'
-import par_0_1_9_beta_2026091501 from './2026-09-15-par-0.1.9-beta.2026091501.md?raw'
+import par_0_1_9_beta_2026091401 from './2026-09-14-par-0.1.9-beta.2026091401.md?raw'
 import par_0_1_8_beta_2026091002 from './2026-09-11-par-0.1.8-beta.2026091002.md?raw'
 import par_0_1_5_beta_2026090807 from './2026-09-09-par-0.1.5-beta.2026090807.md?raw'
 import par_0_1_3_beta_2026090601 from './2026-09-06-par-0.1.3-beta.2026090601.md?raw'
@@ -13,10 +13,10 @@ import beta from './2026-08-20-beta.md?raw'
 
 const posts = [
   {
-    slug: 'par-0.1.9-beta.2026091501',
-    date: '2026-09-15',
-    title: 'Pär v0.1.9-beta.2026091501',
-    raw: par_0_1_9_beta_2026091501,
+    slug: 'par-0.1.9-beta.2026091401',
+    date: '2026-09-14',
+    title: 'Pär v0.1.9-beta.2026091401',
+    raw: par_0_1_9_beta_2026091401,
   },
   {
     slug: 'par-0.1.8-beta.2026091002',

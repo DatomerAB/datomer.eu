@@ -176,6 +176,32 @@ Du ser *"Aktiverad — välkommen till Pär…"* och ditt nya märke visas direk
 
 ---
 
+## 5. Pär Home Hub — Anslut din telefon eller surfplatta 📱
+
+Med Pär Plus kan du koppla **1 följeslagarenhet** (t.ex. din telefon) till din Mac. Med Pär Pro blir din Mac en komplett **Family Home Hub** med stöd för upp till **10 kopplade enheter** och **10 hushållsprofiler** med separata, privata konversationshistoriker.
+
+### Steg 1: Slå på Home Hub på din Mac
+1. Öppna **Profil** (klicka på ditt profilkort längst ner i sidofältet → **Profil** → välj fliken **Home Hub**).
+2. Klicka på **Aktivera Hub** (den blir grön: **Hub Aktiv 🟢**).
+3. Under **Koppla ny enhet**, klicka på **Generera PIN**. En 6-siffrig PIN-kod visas på skärmen.
+
+### Steg 2: Anslut från din mobila enhet
+1. Anslut din telefon eller surfplatta till samma hem-Wi-Fi som din Mac.
+2. Öppna Safari (iOS) eller Chrome (Android) och gå till:
+   ```text
+   http://par.local:7433/pair
+   ```
+   *(Eller använd den lokala IP-adressen som visas under fliken Home Hub på din Mac, t.ex. `http://192.168.1.xxx:7433/pair`, eller skanna QR-koden direkt med kameran)*
+3. Ange den 6-siffriga PIN-koden och tryck på **Koppla enhet**.
+
+### Steg 3: Installera som en app
+- **iPhone (Safari)**: Tryck på Dela-knappen (fyrkant med uppåtpil) → tryck på **Lägg till på hemskärmen**.
+- **Android (Chrome)**: Tryck på menyikonen med tre punkter ⋮ → tryck på **Installera app** eller **Lägg till på startskärmen**.
+
+Pär startar i helskärmsläge precis som en vanlig app, medan all AI-beräkning och kryptering sker tryggt på din Mac!
+
+---
+
 ## Var dina saker bor
 
 Allt som Pär vet om dig sparas i en dold mapp på din Mac: **`~/.peer/`** — krypterad, din och möjlig att radera när som helst.
