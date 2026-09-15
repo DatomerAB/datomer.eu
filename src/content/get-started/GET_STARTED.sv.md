@@ -176,6 +176,25 @@ Du ser *"Aktiverad — välkommen till Pär…"* och ditt nya märke visas direk
 
 ---
 
+## Hur Pär fungerar: Privat läge & Home Hub
+
+Pär skapades från grunden med en enkel princip: **din data tillhör dig**.
+
+### 1. Privat läge (på din Mac)
+Som standard körs Pär helt och hållet på din Mac. AI-hjärnan körs direkt på din processor eller Apple Silicon-chip, och alla meddelanden, minnen och inställningar sparas i ett krypterat valv (`~/.peer/`). Ingenting skickas till något moln eller extern företagsserver.
+
+![Pär Privat Läge](/get-started/par-private-mode.svg)
+
+### 2. Home Hub-läge (på din telefon eller surfplatta)
+När du aktiverar **Home Hub** fungerar din Mac som en privat, säker hemmaserver. Din mobil eller surfplatta ansluter direkt till din Mac över ditt lokala Wi-Fi med en engångs PIN-kod (6 siffror) eller QR-kod.
+- **Din Mac gör alla tunga AI-beräkningar:** AI-modellerna stannar på datorn.
+- **Mobilen är ett fönster, inte en databas:** Ingen data skickas utanför hemmet.
+- **Integritet för hela familjen:** I Pär Pro får varje hushållsmedlem sin egen isolerade konversationshistorik och personliga minne som andra inte kan se.
+
+![Pär Home Hub](/get-started/par-home-hub-mode.svg)
+
+---
+
 ## 5. Pär Home Hub — Anslut din telefon eller surfplatta 📱
 
 Med Pär Plus kan du koppla **1 följeslagarenhet** (t.ex. din telefon) till din Mac. Med Pär Pro blir din Mac en komplett **Family Home Hub** med stöd för upp till **10 kopplade enheter** och **10 hushållsprofiler** med separata, privata konversationshistoriker.

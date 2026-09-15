@@ -176,6 +176,25 @@ You'll see *"Activated — welcome to Pär…"* and your new badge appears insta
 
 ---
 
+## How Pär works: Private Mode & Home Hub
+
+Pär was designed from day one with a simple principle: **your data stays yours**.
+
+### 1. Private Mode (On Your Mac)
+By default, Pär runs entirely inside your Mac. The AI brain runs on your Apple Silicon chip or processor, and every message, memory, and setting is saved in an encrypted vault (`~/.peer/`) protected by your Mac's security. Nothing goes to any cloud or external company server.
+
+![Pär Private Mode Architecture](/get-started/par-private-mode.svg)
+
+### 2. Home Hub Mode (On Your Phone or Tablet)
+When you turn on **Home Hub**, your Mac acts as a private, secure server for your home. Your phone or tablet connects directly to your Mac over your local home Wi-Fi network using a single-use 6-digit PIN or QR code. 
+- **Your Mac does all the heavy thinking:** The AI models stay on your computer.
+- **Your phone is a window, not a storage drive:** No cloud intermediary is used, and no data is shared outside your house.
+- **Family privacy:** In Pär Pro, each family member gets their own private conversation history and memory that others cannot see.
+
+![Pär Home Hub Architecture](/get-started/par-home-hub-mode.svg)
+
+---
+
 ## 5. Pär Home Hub — Connect your phone or tablet 📱
 
 With Pär Plus, you can pair **1 companion device** (like your phone) to your Mac. With Pär Pro, your Mac becomes a full **Family Home Hub** supporting up to **10 paired devices** and **10 household member profiles** with separate, private conversation histories.
