@@ -3,13 +3,13 @@
   "generated_by": "agent/license_attribution_agent.py",
   "bundled": [
     {
-      "short_name": "nanbeige4.1 3b q4 k m",
-      "authors": "Edge-Quant",
+      "short_name": "Qwen2.5 3B Instruct",
+      "authors": "Qwen",
       "license": "apache-2.0",
-      "license_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q4_K_M-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q4_K_M-GGUF",
-      "filename": "nanbeige4.1-3b-q4_k_m.gguf",
-      "use_case": "General instruction-following and chat"
+      "license_url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF",
+      "filename": "Qwen2.5-3B-Instruct-Q4_K_M.gguf",
+      "use_case": "Fast instruction-following, multilingual chat, and structured receipt/document extraction"
     },
     {
       "short_name": "qwen3 14b q4 k m",
@@ -54,15 +54,6 @@
       "license_url": "https://huggingface.co/rico03/Qwen3.6-27B-Claude-Opus-Reasoning-Distilled-GGUF/blob/main/LICENSE",
       "source_url": "https://huggingface.co/rico03/Qwen3.6-27B-Claude-Opus-Reasoning-Distilled-GGUF",
       "filename": "Qwen3.6-27B-Claude-Opus-Reasoning-Distilled-Q4_K_M.gguf",
-      "use_case": "General instruction-following and chat"
-    },
-    {
-      "short_name": "nanbeige4.1 3b q8 0",
-      "authors": "Edge-Quant",
-      "license": "apache-2.0",
-      "license_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q8_0-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q8_0-GGUF",
-      "filename": "nanbeige4.1-3b-q8_0.gguf",
       "use_case": "General instruction-following and chat"
     },
     {
