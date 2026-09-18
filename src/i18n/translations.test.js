@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { translations } from './translations'
-import { SUPPORTED_LANGUAGES } from './LanguageProvider'
 
 function collectKeys(obj, prefix = '') {
   const keys = []
@@ -17,7 +16,7 @@ function collectKeys(obj, prefix = '') {
 }
 
 describe('translation keys', () => {
-  const langs = SUPPORTED_LANGUAGES
+  const langs = Object.keys(translations)
 
   it('every language has the same keys as English', () => {
     const enKeys = collectKeys(translations.en)

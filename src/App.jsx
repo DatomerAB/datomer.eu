@@ -263,7 +263,6 @@ function HomePage({ onDownload }) {
 
   const features = [
     { title: t('features.portability.title'), badge: t('features.portability.badge'), text: t('features.portability.text') },
-    { title: t('features.homeHub.title'), badge: t('features.homeHub.badge'), text: t('features.homeHub.text') },
     { title: t('features.persistentMemory.title'), badge: t('features.persistentMemory.badge'), text: t('features.persistentMemory.text') },
     { title: t('features.contextGraph.title'), badge: t('features.contextGraph.badge'), text: t('features.contextGraph.text') },
     { title: t('features.modelRouting.title'), badge: t('features.modelRouting.badge'), text: t('features.modelRouting.text') },
@@ -371,7 +370,6 @@ function HomePage({ onDownload }) {
     { question: t('faq.q3'), answer: t('faq.a3') },
     { question: t('faq.q4'), answer: t('faq.a4') },
     { question: t('faq.q5'), answer: t('faq.a5') },
-    { question: t('faq.q6'), answer: t('faq.a6') },
   ]
 
   return (

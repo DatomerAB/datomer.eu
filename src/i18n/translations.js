@@ -24,7 +24,7 @@ export const translations = {
         'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware, no cloud required. Bring your own GGUF models or Ollama models.',
       downloadMac: 'Download for Mac',
       seeHowItWorks: 'See How It Works',
-      setupGuide: 'Beta Download & Setup Guide',
+      setupGuide: 'New to Pär? Read the setup guide',
     },
     highlights: {
       localInference: { title: 'Local Inference', text: 'Runs on your device using GGUF or Ollama models.' },
@@ -65,7 +65,6 @@ export const translations = {
       routines: { title: 'Routines & Templates', badge: 'Plus+', text: 'Saved workflows like Morning Briefing, Weekly Review, and Inbox Zero run on your schedule.' },
       semanticCache: { title: 'Semantic Cache', badge: 'Plus+', text: 'Near-instant answers to repeated questions without re-running the model.' },
       portability: { title: 'Full Data Portability', badge: 'All Tiers', text: 'Export and import your vault, conversations, and profiles anytime. Your data is always yours.' },
-      homeHub: { title: 'Pär Home Hub & Mobile PWA', badge: 'Plus+', text: 'Turn your Mac into a private home hub over local Wi-Fi. Connect phone or tablet via 6-digit PIN or QR code with zero cloud reliance.' },
     },
     privacyHome: {
       eyebrow: 'Privacy Is Not A Feature',
@@ -74,7 +73,7 @@ export const translations = {
         'Pär runs entirely on your device using local models. Your memory, files, and profile live in an encrypted vault on your device. No silent cloud sync. No training on your data.',
       features: [
         'Native GGUF support + optional Ollama integration',
-        'SQLCipher AES-256 encrypted vault with native vector store',
+        'SQLCipher AES-256 encrypted vault',
         'Personal context stripped for any optional cloud backend',
         'App lock with PIN and optional TOTP MFA',
         'Backup integrity verification',
@@ -148,21 +147,21 @@ export const translations = {
       plus: {
         name: 'Plus',
         price: '$2',
-        yearlyPrice: '$24',
+        yearlyPrice: '$20',
         period: '/ month',
         yearlyPeriod: '/ year',
-        yearly: 'or $24/year',
+        yearly: 'or $20/year',
         monthly: 'or $2/month',
         cta: 'Get Plus',
       },
       pro: {
         name: 'Pro',
-        price: '$10',
-        yearlyPrice: '$120',
+        price: '$5',
+        yearlyPrice: '$49',
         period: '/ user / month',
         yearlyPeriod: '/ user / year',
-        yearly: 'or $120/user/year · min 3 seats',
-        monthly: 'or $10/user/month',
+        yearly: 'or $49/user/year · min 3 seats',
+        monthly: 'or $5/user/month',
         cta: 'Get Pro',
       },
       enterprise: {
@@ -192,13 +191,9 @@ export const translations = {
         'File upload & local knowledge base',
         'Live web search',
         'Routines & templates',
-        'Pär Home Hub (1 paired companion device)',
-        'App lock with PIN and TOTP MFA',
       ],
       pro: [
         'Everything in Plus',
-        'Family & Team Home Hub (up to 10 devices & 10 member profiles)',
-        'Private conversation isolation per member',
         'Centralized model server',
         'Admin dashboard & seat management',
         'SSO (OIDC)',
@@ -247,9 +242,6 @@ export const translations = {
       q5: 'How does licensing work?',
       a5:
         'Pär is one brand with one license and multiple deployment options. Start free, upgrade to Plus for persistent memory, or choose Pro / Enterprise for teams and advanced controls.',
-      q6: 'Can I use Pär on my phone or tablet?',
-      a6:
-        'Yes. With Pär Home Hub enabled on your Mac, your phone or tablet connects over your local Wi-Fi via a 6-digit PIN or QR code. Install it as a standalone app to chat on the go — all AI thinking stays on your Mac.',
     },
     cta: {
       eyebrow: 'Ready To Meet Pär?',
@@ -380,7 +372,7 @@ export const translations = {
         platform: 'Platform',
         platformValue: 'macOS beta; Windows, Linux, and Web coming soon',
         pricing: 'Pricing',
-        pricingValue: 'Free; Plus $2/mo or $24/yr; Pro $10/user/mo or $120/user/yr; Enterprise custom',
+        pricingValue: 'Free; Plus $2/mo or $20/yr; Pro $5/user/mo; Enterprise custom',
       },
       quotes: 'Quote',
       quoteText:
@@ -479,7 +471,7 @@ export const translations = {
         'Pär är den personliga AI-kompisen som faktiskt kommer ihåg dig. Den lär sig dina mål, kopplar ihop sig med dina verktyg och körs helt på din egen hårdvara — inget moln behövs. Använd dina egna GGUF-modeller eller Ollama-modeller.',
       downloadMac: 'Ladda ner för Mac',
       seeHowItWorks: 'Se hur det fungerar',
-      setupGuide: 'Beta-Nedladdning & Installationsguide',
+      setupGuide: 'Ny med Pär? Läs installationsguiden',
     },
     highlights: {
       localInference: { title: 'Lokal Inferens', text: 'Körs på din enhet med GGUF- eller Ollama-modeller.' },
@@ -520,7 +512,6 @@ export const translations = {
       routines: { title: 'Rutiner Och Mallar', badge: 'Plus+', text: 'Sparade arbetsflöden som Morgonbriefing, Veckogenomgång och Inkorg Noll körs enligt ditt schema.' },
       semanticCache: { title: 'Semantiskt Cache', badge: 'Plus+', text: 'Nästan omedelbara svar på upprepade frågor utan att köra modellen igen.' },
       portability: { title: 'Full Dataportabilitet', badge: 'Alla Nivåer', text: 'Exportera och importera ditt valv, konversationer och profiler när som helst. Dina data är alltid dina.' },
-      homeHub: { title: 'Pär Home Hub & Mobil PWA', badge: 'Plus+', text: 'Gör din Mac till en privat hemmahubb över lokalt Wi-Fi. Anslut mobil eller surfplatta via 6-siffrig PIN eller QR-kod helt utan moln.' },
     },
     privacyHome: {
       eyebrow: 'Integritet Är Inte En Funktion',
@@ -529,7 +520,7 @@ export const translations = {
         'Pär kör inferens på din enhet med lokala modeller. Ditt minne, dina filer och din profil lever i ett krypterat valv på din dator. Ingen tyst molnsynkronisering. Ingen träning på dina data.',
       features: [
         'Inbyggt GGUF-stöd + valfri Ollama-integration',
-        'SQLCipher AES-256-krypterat valv med inbyggd vektorlagring',
+        'SQLCipher AES-256-krypterat valv',
         'Personlig kontext rensas för valfritt molnbaserat backend',
         'Applås med PIN och valfri TOTP-MFA',
         'Verifiering av backupintegritet',
@@ -585,12 +576,12 @@ export const translations = {
       },
       pro: {
         name: 'Pro',
-        price: '100 kr',
-        yearlyPrice: '1 200 kr',
+        price: '50 kr',
+        yearlyPrice: '600 kr',
         period: '/ användare / månad',
         yearlyPeriod: '/ användare / år',
-        yearly: 'eller 1 200 kr/användare/år · minst 3 platser',
-        monthly: 'eller 100 kr/användare/månad',
+        yearly: 'eller 600 kr/användare/år · minst 3 platser',
+        monthly: 'eller 50 kr/användare/månad',
         cta: 'Skaffa Pro',
       },
       enterprise: {
@@ -620,13 +611,9 @@ export const translations = {
         'Filuppladdning & lokal kunskapsbas',
         'Live webbsökning',
         'Rutiner & mallar',
-        'Pär Home Hub (1 kopplad följeslagarenhet)',
-        'Applås med PIN och TOTP-MFA',
       ],
       pro: [
         'Allt i Plus',
-        'Family & Team Home Hub (upp till 10 enheter & 10 hushållsprofiler)',
-        'Privat konversationsisolering per medlem',
         'Centraliserad modellserver',
         'Adminpanel & plathantering',
         'SSO (OIDC)',
@@ -675,9 +662,6 @@ export const translations = {
       q5: 'Hur fungerar licensiering?',
       a5:
         'Pär är ett varumärke med en licens och flera distributionsalternativ. Börja gratis, uppgradera till Plus för bestående minne, eller välj Pro / Enterprise för team och avancerad kontroll.',
-      q6: 'Kan jag använda Pär på min telefon eller surfplatta?',
-      a6:
-        'Ja. Med Pär Home Hub aktiverat på din Mac ansluter din telefon eller surfplatta via ditt lokala Wi-Fi med en 6-siffrig PIN eller QR-kod. Installera den som en fristående app — all AI-beräkning stannar på din Mac.',
     },
     cta: {
       eyebrow: 'Redo Att Träffa Pär?',
@@ -835,7 +819,7 @@ export const translations = {
         platform: 'Plattform',
         platformValue: 'macOS-beta; Windows, Linux och Web kommer snart',
         pricing: 'Prissättning',
-        pricingValue: 'Gratis; Plus 20 kr/mån eller 240 kr/år; Pro 100 kr/användare/mån eller 1 200 kr/år; Företag enligt offert',
+        pricingValue: 'Gratis; Plus 22 kr/mån eller 220 kr/år; Pro 55 kr/användare/mån; Företag enligt offert',
       },
       quotes: 'Citat',
       quoteText:
