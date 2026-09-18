@@ -1,3 +1,5 @@
 https://www.datomer.eu/* https://datomer.eu/:splat 301!
 /beta /get-started 301!
+/brand-assets/press-kit/* /brand-assets/press-kit/:splat 200
+/brand-assets/* /404 404!
 /* /index.html 200
