@@ -3,13 +3,22 @@
   "generated_by": "agent/license_attribution_agent.py",
   "bundled": [
     {
-      "short_name": "Qwen2.5 3B Instruct",
-      "authors": "Qwen",
+      "short_name": "qwen2.5 coder 3b instruct q4 k m",
+      "authors": "bocalan",
+      "license": "other",
+      "license_url": "https://huggingface.co/bocalan/Qwen2.5-Coder-3B-Instruct-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/bocalan/Qwen2.5-Coder-3B-Instruct-Q4_K_M-GGUF",
+      "filename": "qwen2.5-coder-3b-instruct-q4_k_m.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "ExoMind 9B.Q4 K M",
+      "authors": "prithivMLmods",
       "license": "apache-2.0",
-      "license_url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF",
-      "filename": "Qwen2.5-3B-Instruct-Q4_K_M.gguf",
-      "use_case": "Fast instruction-following, multilingual chat, and structured receipt/document extraction"
+      "license_url": "https://huggingface.co/prithivMLmods/AI4SGI-ExoMind-9B-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/prithivMLmods/AI4SGI-ExoMind-9B-GGUF",
+      "filename": "ExoMind-9B.Q4_K_M.gguf",
+      "use_case": "General instruction-following and chat"
     },
     {
       "short_name": "qwen3 14b q4 k m",
@@ -27,6 +36,69 @@
       "license_url": "https://huggingface.co/barozp/Qwen3.6-28B-REAP20-A3B-GGUF/blob/main/LICENSE",
       "source_url": "https://huggingface.co/barozp/Qwen3.6-28B-REAP20-A3B-GGUF",
       "filename": "Qwen3.6-28B-REAP20-A3B-Q4_K_M.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen3 4b instruct 2507 q8 0",
+      "authors": "ggml-org",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ggml-org/Qwen3-4B-Instruct-2507-Q8_0-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/ggml-org/Qwen3-4B-Instruct-2507-Q8_0-GGUF",
+      "filename": "qwen3-4b-instruct-2507-q8_0.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen3 8b q4 k m",
+      "authors": "Aldaris",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Aldaris/Qwen3-8B-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Aldaris/Qwen3-8B-Q4_K_M-GGUF",
+      "filename": "qwen3-8b-q4_k_m.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 coder 7b instruct q8 0",
+      "authors": "ggml-org",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-7B-Instruct-Q8_0-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-7B-Instruct-Q8_0-GGUF",
+      "filename": "qwen2.5-coder-7b-instruct-q8_0.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 coder 7b q8 0",
+      "authors": "ggml-org",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-7B-Q8_0-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-7B-Q8_0-GGUF",
+      "filename": "qwen2.5-coder-7b-q8_0.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 coder 14b instruct q8 0",
+      "authors": "ggml-org",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-14B-Instruct-Q8_0-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-14B-Instruct-Q8_0-GGUF",
+      "filename": "qwen2.5-coder-14b-instruct-q8_0.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 coder 14b instruct q4 k m",
+      "authors": "itlwas",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/itlwas/Qwen2.5-Coder-14B-Instruct-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/itlwas/Qwen2.5-Coder-14B-Instruct-Q4_K_M-GGUF",
+      "filename": "qwen2.5-coder-14b-instruct-q4_k_m.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 32b instruct q4 k m",
+      "authors": "TheRains",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/TheRains/Qwen2.5-32B-Instruct-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/TheRains/Qwen2.5-32B-Instruct-Q4_K_M-GGUF",
+      "filename": "qwen2.5-32b-instruct-q4_k_m.gguf",
       "use_case": "General instruction-following and chat"
     },
     {
@@ -81,6 +153,51 @@
       "license_url": "https://huggingface.co/GestaltLabs/Ornstein-Hermes-3.6-27B-SABER-GGUF/blob/main/LICENSE",
       "source_url": "https://huggingface.co/GestaltLabs/Ornstein-Hermes-3.6-27B-SABER-GGUF",
       "filename": "Ornstein-Hermes-3.6-27b-SABER-Q4_K_M.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 coder 7b q4 k m",
+      "authors": "itlwas",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/itlwas/Qwen2.5-Coder-7B-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/itlwas/Qwen2.5-Coder-7B-Q4_K_M-GGUF",
+      "filename": "qwen2.5-coder-7b-q4_k_m.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "NeoHorse 1 4B.Q4 K M",
+      "authors": "prithivMLmods",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/prithivMLmods/NeoHorse-1-4B-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/prithivMLmods/NeoHorse-1-4B-GGUF",
+      "filename": "NeoHorse-1-4B.Q4_K_M.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "nanbeige4.1 3b q4 k m",
+      "authors": "Edge-Quant",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q4_K_M-GGUF",
+      "filename": "nanbeige4.1-3b-q4_k_m.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "nanbeige4.1 3b q8 0",
+      "authors": "Edge-Quant",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q8_0-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Edge-Quant/Nanbeige4.1-3B-Q8_0-GGUF",
+      "filename": "nanbeige4.1-3b-q8_0.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 coder 1.5b q8 0",
+      "authors": "ggml-org",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-1.5B-Q8_0-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-1.5B-Q8_0-GGUF",
+      "filename": "qwen2.5-coder-1.5b-q8_0.gguf",
       "use_case": "General instruction-following and chat"
     }
   ],
