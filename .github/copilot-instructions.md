@@ -1,39 +1,51 @@
 # datomer.eu Copilot Instructions
 
-datomer.eu is the marketing site and changelog for Pär. It is built with a static-site generator and deployed to Cloudflare Pages.
+Marketing site and changelog for Pär. React + Vite frontend, Cloudflare Pages Functions backend,
+deployed to Cloudflare Pages on merge to `main`.
 
-## Stack
+## Where the rules live
 
-- Static marketing site.
-- Cloudflare Worker for daily-summary emails.
-- `src/data/models.json` mirrors Pär model metadata.
+Detailed rules are in `.github/instructions/` and attach automatically to matching files. Open
+`docs/copilot-memory/PAR_SYNC.md` only when a task needs the upstream contract.
 
-## What Pär sends here
+| Scope | Instruction file |
+|---|---|
+| `functions/**`, `workers/**`, `src/payments/**` | `functions-and-payments.instructions.md` |
+| `src/data/**`, `docs/NOTICE.md`, model assertions | `par-sync.instructions.md` |
+| `src/**/*.jsx`, `*.js`, `*.css` | `frontend.instructions.md` |
 
-- `repository_dispatch` events on Pär release publish.
-- `models.json` via `sync-public-content.yml`.
-- Brand icons synced to `par-public`.
+## Non-negotiables
 
-## Change discipline
+- Secrets come from environment bindings, never from source.
+- Verify the Stripe signature before acting on a webhook event.
+- Never trust a price or amount sent from the browser.
+- Public form endpoints go through Turnstile; `functions/api/admin/**` requires auth.
+- Never hand-edit `src/data/models.json` or `docs/NOTICE.md` — they are synced from Pär and will be
+  overwritten.
+- Never hard-code a Pär download URL. Read `latest.json` at runtime, cache-busted by release tag.
 
-- Do not hard-code Pär download URLs; read `https://raw.githubusercontent.com/DatomerAB/par-releases/main/latest.json` at runtime.
-- Cache-bust `latest.json` fetches with release tag query params.
-- Keep `src/data/models.json` in sync with Pär `config/website_models.json`.
-- Keep `src/App.models.test.jsx` assertions in sync with `src/data/models.json`.
-- Ensure changelog entries are business-readable.
+## Validation before declaring done
 
-## Validation
+```bash
+npm run lint
+npm run test
+npm run build
+```
 
-- Run site build and React tests.
-- Verify `latest.json` fetch is cache-busted and handles fetch failures gracefully.
-- Validate Cloudflare Worker code before deploy.
+For the daily-summary Worker: `cd workers/daily-summary && npm run test`.
+
+For the Python helpers in `scripts/`: `python -m pytest scripts/`.
 
 ## Related repos
 
-- `DatomerAB/Par` — canonical source for model catalog, release events, and changelog drafts.
-- `DatomerAB/par-releases` — runtime source for `latest.json` and signed DMG URLs.
-- `DatomerAB/par-public` — receives brand icons and synced content from here.
+- `DatomerAB/Par` — private. Source of truth for model catalog, release events, and changelog drafts.
+- `DatomerAB/par-releases` — public mirror. Runtime source for `latest.json` and signed DMG URLs.
+- `DatomerAB/par-public` — landing site. Receives brand icons synced from here.
+
+A change spanning more than one repo means separate, linked PRs.
 
 ## When in doubt
 
-Read this repo's `docs/copilot-memory/*.md` if available, or check `DatomerAB/Par/.github/workflows/publish-to-par-releases.yml` and `sync-public-content.yml` for the upstream contract.
+Read the instruction file for the area you are changing, or `docs/copilot-memory/PAR_SYNC.md` for the
+upstream contract. Do not guess at the sync direction — getting it backwards means your change is
+silently reverted.
