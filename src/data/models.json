@@ -57,6 +57,24 @@
       "use_case": "General instruction-following and chat"
     },
     {
+      "short_name": "qwen3 4b q4 k m",
+      "authors": "Aldaris",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Aldaris/Qwen3-4B-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/Aldaris/Qwen3-4B-Q4_K_M-GGUF",
+      "filename": "qwen3-4b-q4_k_m.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 coder 1.5b instruct q8 0",
+      "authors": "ggml-org",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-1.5B-Instruct-Q8_0-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/ggml-org/Qwen2.5-Coder-1.5B-Instruct-Q8_0-GGUF",
+      "filename": "qwen2.5-coder-1.5b-instruct-q8_0.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
       "short_name": "qwen2.5 coder 7b instruct q8 0",
       "authors": "ggml-org",
       "license": "apache-2.0",
@@ -75,6 +93,15 @@
       "use_case": "General instruction-following and chat"
     },
     {
+      "short_name": "NeoHorse 1 9B.Q4 K M",
+      "authors": "prithivMLmods",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/prithivMLmods/NeoHorse-1-9B-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/prithivMLmods/NeoHorse-1-9B-GGUF",
+      "filename": "NeoHorse-1-9B.Q4_K_M.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
       "short_name": "qwen2.5 coder 14b instruct q8 0",
       "authors": "ggml-org",
       "license": "apache-2.0",
@@ -90,6 +117,15 @@
       "license_url": "https://huggingface.co/itlwas/Qwen2.5-Coder-14B-Instruct-Q4_K_M-GGUF/blob/main/LICENSE",
       "source_url": "https://huggingface.co/itlwas/Qwen2.5-Coder-14B-Instruct-Q4_K_M-GGUF",
       "filename": "qwen2.5-coder-14b-instruct-q4_k_m.gguf",
+      "use_case": "General instruction-following and chat"
+    },
+    {
+      "short_name": "qwen2.5 14b instruct q4 k m",
+      "authors": "TheRains",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/TheRains/Qwen2.5-14B-Instruct-Q4_K_M-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/TheRains/Qwen2.5-14B-Instruct-Q4_K_M-GGUF",
+      "filename": "qwen2.5-14b-instruct-q4_k_m.gguf",
       "use_case": "General instruction-following and chat"
     },
     {
