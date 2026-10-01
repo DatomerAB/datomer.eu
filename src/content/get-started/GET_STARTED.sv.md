@@ -6,7 +6,7 @@
 
 **Din AI. Din enhet. Din data.**
 
-Pär är en privat AI-kompis som bor på din Mac. Inget moln. Ingen spårning. Ingenting lämnar din dator.
+Pär är en privat AI-kompis som bor på din egen dator. Inget moln. Ingen spårning. Ingenting lämnar din maskin.
 
 Du chattar igång på ungefär **10 minuter** — det mesta av tiden går åt till att vänta på en nedladdning.
 
@@ -18,10 +18,12 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
 
 ### 1. 💬 Chatt — Mer än bara konversation
 - **Fäst dina favoritsvar och chattar** — Stjärnmärk viktiga svar eller fäst hela konversationer högst upp i listan så att du aldrig tappar bort dem.
-- **Byt tonläge** — Matcha ditt humör eller mål med ett klick: välj *Vänlig*, *Professionell*, *Koncis*, *Övertygande* eller *Verkställande*.
+- **Byt tonläge** — Matcha ditt humör eller mål med ett klick: förinställt på *Koncis* för snabba och direkta svar, eller välj *Vänlig*, *Professionell*, *Övertygande* eller *Verkställande*.
+- **Importera befintlig kontext och regler** — Dra och släpp dina befintliga `SKILL.md`-, `CLAUDE.md`-, `.cursorrules`- eller instruktionsfiler direkt i chatten eller spara dem permanent som en Persona.
 - **Live webbsökning** — Slå på webbsökning när du behöver färska nyheter, sportresultat eller fakta. När du inte gör det förblir Pär 100 % offline.
-- **Bifoga dokument och anteckningar** — Dra in anteckningar eller PDF:er och ställ frågor direkt om innehållet.
+- **Bifoga dokument och anteckningar** — Dra in anteckningar, PDF:er eller kod och ställ frågor direkt om innehållet.
 - **Smart minne** — Pär kommer ihåg ditt namn, dina mål och din stil mellan sessioner, så du slipper förklara dig varje gång.
+- **Tanke- och resonemangsprocess vid behov** — Modellens interna resonemang (`<think>`) hålls snyggt hopfällt i en expanderbar tanke-flik så att dina svar förblir rena och överskådliga.
 
 <p align="center">
   <img src="/get-started/chat-screen.webp" alt="Pär chattgränssnitt med tonlägesval och fästa chattar" width="100%" style="border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
@@ -47,12 +49,14 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
 
 ### 4. 🔗 Integrationer — Koppla ihop dina verktyg säkert
 - **Samla din värld** — Anslut populära verktyg som Google Kalender, Gmail, Notion, Todoist med flera.
-- **Allt stannar på din enhet** — Dina anslutningar och lösenord ligger säkert låsta på din Mac. Ingenting skickas till våra servrar.
+- **Allt stannar på din enhet** — Dina anslutningar och lösenord ligger säkert låsta på din egen dator. Ingenting skickas till våra servrar.
 - **Kontextmedveten hjälp** — Ställ frågor som *"Vad har jag inbokat idag?"* eller *"Sammanfatta mina senaste olästa mejl"* utan att hoppa mellan tio olika appar.
 
 ---
 
 ## Innan du börjar
+
+**På en Mac**
 
 | Du behöver | Varför |
 |---|---|
@@ -63,9 +67,22 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
 
 > **Osäker på vilken Mac du har?** Klicka på Apple-logotypen  → *Om denna Mac*. Står det "Apple M1/M2/M3/M4" är du redo.
 
+**På Windows** — *beta*
+
+| Du behöver | Varför |
+|---|---|
+| En 64-bitars PC med Windows 10 (21H2) eller Windows 11 | Pär använder din dators processor för att tänka |
+| Microsoft Visual C++ 2015–2022 Redistributable (64-bitars) | Behövs av den del av Pär som kör din AI-modell. Den laddas ner gratis från Microsoft |
+| ~10 GB ledigt diskutrymme | För appen och din AI-modell |
+| Wi-Fi — **bara för installationen** | Efter detta fungerar Pär offline för alltid |
+
+> **Windows-stödet är i beta.** Räkna med några extra säkerhetsfrågor första gången du installerar och startar Pär — stegen nedan guidar dig genom varje steg.
+
 ---
 
 ## 1. Installera — 1 minut
+
+### På en Mac
 
 1. **Dubbelklicka** på den nedladdade `.dmg`-filen. (En `.dmg` är Apples standardformat för skivavbilder).
 2. Ett fönster öppnas med **Pär-ikonen** och din **Program-mapp**:
@@ -82,11 +99,24 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
 > **Öppnar du för första gången?** macOS kan fråga *"Pär är en app som laddats ner från internet. Vill du verkligen öppna den?"*
 > Klicka på **Öppna**. Det är helt normalt — Pär är signerat och verifierat av Apple.
 
+### På Windows — *beta*
+
+1. **Avblockera nedladdningen först.** Högerklicka på filen du laddade ner → **Egenskaper** → kryssa i **Avblockera** längst ner → **OK**. Hoppar du över det för Windows vidare märkningen "nedladdad från internet" till allt du packar upp.
+2. Är nedladdningen en `.zip`, **packa upp den** och kör sedan Pär-installationsprogrammet inuti.
+3. **"Windows skyddade din dator"?** Klicka på **Mer information** → **Kör ändå**.
+   *Det här visas eftersom Windows-betainstallationen ännu inte är kodsignerad. macOS-versionen är redan det, och Windows-signering är på väg.*
+4. Följ installationsprogrammet och starta sedan **Pär** från Start-menyn.
+5. **Godkänn Windows brandväggsfråga** vid första starten. **Privata nätverk** räcker — **Offentliga nätverk** behövs bara om du tänker använda Pär Home Hub från din telefon.
+
+> **Första starten är långsam — det är normalt.** Pär packar upp sin AI-motor och Windows Defender skannar den, vilket kan ta några minuter. Ett litet konsolfönster kan dyka upp och försvinna. Ge det en stund innan du tror att något är fel.
+
+> **Om Windows Defender tar bort delar av Pär**, öppna **Windows Säkerhet** → *Virus- och hotskydd* → *Hantera inställningar* → *Undantag* → **Lägg till ett undantag** → **Mapp**, välj mappen där Pär installerades och installera om. Antivirusprogram flaggar ibland självuppackande appar som Pärs AI-motor av misstag.
+
 ---
 
 ## 2. Möt Pär — 2 minuter
 
-Öppna **Launchpad** (eller din Program-mapp) och klicka på **Pär**. En kort guide leder dig genom fyra snabba steg:
+Öppna **Pär** — från **Launchpad** eller din Program-mapp på en Mac, eller från **Start-menyn** i Windows. En kort guide leder dig genom fyra snabba steg:
 
 <p align="center">
   <img src="/get-started/welcome-screen.webp" alt="Välkommen till Pär — välkomstskärm" width="65%" style="border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
@@ -96,8 +126,9 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
 Ett kort löfte: noll telemetri, 100 % bearbetning på enheten och helt krypterad lagring. Klicka på **Fortsätt →**
 
 **2 · Berätta om dig för Pär**
-Ditt namn, språk, land och — valfritt — vad du arbetar mot.
-*Det är så här Pär gör att svaren känns anpassade för dig. Det lämnar aldrig din Mac.* Klicka på **Fortsätt →**
+Ditt namn, språk, land, mål (med snabbvalsknappar) och kommunikationsstil.
+Du kan även importera dina befintliga `SKILL.md`- eller `CLAUDE.md`-regler med ett klick direkt här.
+*Det är så här Pär gör att svaren känns anpassade för dig. Det lämnar aldrig din dator.* Klicka på **Fortsätt →**
 
 **3 · Välj din AI-modell** ← *det viktigaste steget, se nedan*
 
@@ -124,7 +155,7 @@ Du kan utforska, ladda ner och byta modeller när du vill:
 
 1. Klicka på **Profil** (längst ner till vänster i sidofältet)
 2. I popup-menyn klickar du på **⬡ Modeller**
-3. Du ser hela modellkatalogen med rekommendationer anpassade efter din Macs RAM och diskutrymme:
+3. Du ser hela modellkatalogen med rekommendationer anpassade efter din dators RAM och diskutrymme:
 
 <p align="center">
   <img src="/get-started/models-screen.webp" alt="Pär modellkatalog" width="100%" style="border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
@@ -135,14 +166,14 @@ Du kan utforska, ladda ner och byta modeller när du vill:
 
 **Tillgängliga modellstorlekar:**
 
-| Modell | Storlek | Bäst för | Din Mac behöver |
+| Modell | Storlek | Bäst för | Din dator behöver |
 |---|---|---|---|
 | **Kompakt** (t.ex. Qwen 3B) | ~2,0 GB | Snabba, lätta svar | 4 GB+ RAM |
 | **Standard** ★ (t.ex. Qwen 7B) | ~5,1 GB | Bästa balansen — skrivande och efterforskning | 8 GB+ RAM |
 | **Prestanda** (t.ex. Qwen 14B) | ~9,4 GB | Djup resonemangsförmåga, komplexa uppgifter | 16 GB+ RAM |
 | **Kodning** (t.ex. Qwen Coder 7B) | ~4,4 GB | Programmering, SQL, skript | 8 GB+ RAM |
 
-> **Nedladdningshastigheten beror på ditt Wi-Fi, inte din Mac.** Med normalt bredband tar det oftast 3–10 minuter. Du kan fortsätta använda datorn som vanligt under tiden.
+> **Nedladdningshastigheten beror på ditt Wi-Fi, inte din dator.** Med normalt bredband tar det oftast 3–10 minuter. Du kan fortsätta använda datorn som vanligt under tiden.
 >
 > **Har du redan Ollama?** Klicka på fliken **Ollama** bredvid **GGUF (lokal)** för att använda modeller du redan laddat ner.
 
@@ -180,14 +211,14 @@ Du ser *"Aktiverad — välkommen till Pär…"* och ditt nya märke visas direk
 
 Pär skapades från grunden med en enkel princip: **din data tillhör dig**.
 
-### 1. Privat läge (på din Mac)
-Som standard körs Pär helt och hållet på din Mac. AI-hjärnan körs direkt på din processor eller Apple Silicon-chip, och alla meddelanden, minnen och inställningar sparas i ett krypterat valv (`~/.peer/`). Ingenting skickas till något moln eller extern företagsserver.
+### 1. Privat läge (på din dator)
+Som standard körs Pär helt och hållet på din egen dator. AI-hjärnan körs direkt på din PC-processor eller ditt Apple Silicon-chip, och alla meddelanden, minnen och inställningar sparas i ett krypterat valv på maskinen. Ingenting skickas till något moln eller extern företagsserver.
 
 ![Pär Privat Läge](/get-started/par-private-mode.svg)
 
 ### 2. Home Hub-läge (på din telefon eller surfplatta)
-När du aktiverar **Home Hub** fungerar din Mac som en privat, säker hemmaserver. Din mobil eller surfplatta ansluter direkt till din Mac över ditt lokala Wi-Fi med en engångs PIN-kod (6 siffror) eller QR-kod.
-- **Din Mac gör alla tunga AI-beräkningar:** AI-modellerna stannar på datorn.
+När du aktiverar **Home Hub** fungerar din dator som en privat, säker hemmaserver. Din mobil eller surfplatta ansluter direkt till den över ditt lokala Wi-Fi med en engångs PIN-kod (6 siffror) eller QR-kod.
+- **Din dator gör alla tunga AI-beräkningar:** AI-modellerna lämnar den aldrig.
 - **Mobilen är ett fönster, inte en databas:** Ingen data skickas utanför hemmet.
 - **Integritet för hela familjen:** I Pär Pro får varje hushållsmedlem sin egen isolerade konversationshistorik och personliga minne som andra inte kan se.
 
@@ -197,33 +228,45 @@ När du aktiverar **Home Hub** fungerar din Mac som en privat, säker hemmaserve
 
 ## 5. Pär Home Hub — Anslut din telefon eller surfplatta 📱
 
-Med Pär Plus kan du koppla **1 följeslagarenhet** (t.ex. din telefon) till din Mac. Med Pär Pro blir din Mac en komplett **Family Home Hub** med stöd för upp till **10 kopplade enheter** och **10 hushållsprofiler** med separata, privata konversationshistoriker.
+Med Pär Plus kan du koppla **1 följeslagarenhet** (t.ex. din telefon) till din dator. Med Pär Pro blir din dator en komplett **Family Home Hub** med stöd för upp till **10 kopplade enheter** och **10 hushållsprofiler** med separata, privata konversationshistoriker.
 
-### Steg 1: Slå på Home Hub på din Mac
+### Steg 1: Slå på Home Hub på din dator
 1. Öppna **Profil** (klicka på ditt profilkort längst ner i sidofältet → **Profil** → välj fliken **Home Hub**).
 2. Klicka på **Aktivera Hub** (den blir grön: **Hub Aktiv 🟢**).
-3. Under **Koppla ny enhet**, klicka på **Generera PIN**. En 6-siffrig PIN-kod visas på skärmen.
+3. Under **Koppla ny enhet**, välj den hushållsmedlem som ska använda enheten och klicka sedan på **Generera PIN**. En 6-siffrig PIN-kod visas på skärmen. PIN-koden ansluter enheten endast till den valda medlemmens privata profil.
 
 ### Steg 2: Anslut från din mobila enhet
-1. Anslut din telefon eller surfplatta till samma hem-Wi-Fi som din Mac.
-2. Öppna Safari (iOS) eller Chrome (Android) och gå till:
+1. Anslut din telefon eller surfplatta till samma hem-Wi-Fi som datorn där Pär körs.
+2. **Skanna QR-koden** som visas på datorns skärm med mobilens kamera, eller öppna webbläsaren och ange adressen som visas i Home Hub:
    ```text
-   http://par.local:7433/pair
+   http://<din-mac-ip>:7433/pair
    ```
-   *(Eller använd den lokala IP-adressen som visas under fliken Home Hub på din Mac, t.ex. `http://192.168.1.xxx:7433/pair`, eller skanna QR-koden direkt med kameran)*
+  *(t.ex. `http://192.168.1.50:7433/pair` som visas under fliken Home Hub. Om Home Hub visar en **säker HTTPS-adress**, använd den i stället.)*
+   > **Obs för Android / Chrome-användare**: Använd alltid **QR-koden** eller den **direkta IP-adressen**. Android och Chrome stödjer inte `.local`-värdnamn och visar felkoden `DNS_PROBE_FINISHED_NXDOMAIN`.
 3. Ange den 6-siffriga PIN-koden och tryck på **Koppla enhet**.
+
+När enheten har kopplats förblir den ansluten tills du kopplar bort den från Home Hub på din dator. Du behöver inte ange PIN-koden varje gång.
+
+### Diktering och mikrofonåtkomst
+
+- På en Mac med Pär-skrivbordsappen väljer du mikrofonen bredvid meddelanderutan och godkänner macOS-behörigheten första gången du använder den. Diktering måste även vara aktiverad i macOS-inställningarna.
+- I en ansluten webbläsare godkänner du mikrofonåtkomst när du blir tillfrågad. Diktering i webbläsaren kräver den **säkra HTTPS-adress** som visas i Home Hub.
+- På iPhone och iPad använder du mikrofonen på iOS-tangentbordet för att diktera i meddelandefältet. Safari på iPhone och iPad kan inte starta systemets tangentbordsdiktering från en webbsida.
 
 ### Steg 3: Installera som en app
 - **iPhone (Safari)**: Tryck på Dela-knappen (fyrkant med uppåtpil) → tryck på **Lägg till på hemskärmen**.
 - **Android (Chrome)**: Tryck på menyikonen med tre punkter ⋮ → tryck på **Installera app** eller **Lägg till på startskärmen**.
 
-Pär startar i helskärmsläge precis som en vanlig app, medan all AI-beräkning och kryptering sker tryggt på din Mac!
+Pär startar i helskärmsläge precis som en vanlig app, medan all AI-beräkning och kryptering sker tryggt på din egen dator!
 
 ---
 
 ## Var dina saker bor
 
-Allt som Pär vet om dig sparas i en dold mapp på din Mac: **`~/.peer/`** — krypterad, din och möjlig att radera när som helst.
+Allt som Pär vet om dig sparas i en dold mapp på din dator — krypterad, din och möjlig att radera när som helst:
+
+- **Mac**: `~/.peer/`
+- **Windows**: `%USERPROFILE%\.peer\`
 
 Ingenting laddas upp. Ingenting analyseras. Det finns ingen "server" som har dina samtal, eftersom det inte finns någon server.
 
@@ -234,9 +277,11 @@ Ingenting laddas upp. Ingenting analyseras. Det finns ingen "server" som har din
 | Vad du ser | Vad du kan göra |
 |---|---|
 | Nedladdningen verkar ha stannat | Kontrollera ditt Wi-Fi och vänta lite — stora filer pausar och återupptas |
-| "Pär kan inte öppnas" | Högerklicka på appen → **Öppna** → **Öppna** |
+| "Pär kan inte öppnas" (Mac) | Högerklicka på appen → **Öppna** → **Öppna** |
+| "Windows skyddade din dator" | Klicka på **Mer information** → **Kör ändå** |
 | Svaren är långsamma | Gå till **Modeller** och byt till en mindre modell |
-| Tom skärm vid start | Avsluta Pär helt (⌘Q) och öppna igen |
+| Tom skärm vid start | Avsluta Pär helt (⌘Q på Mac) och öppna igen |
+| Installationen kan inte spara din profil (Windows) | Avsluta Pär, öppna **Aktivitetshanteraren** och avsluta kvarglomda Pär-processer, starta sedan Pär igen och ge det en minut |
 | Slut på diskutrymme | Gå till **Modeller** och ta bort en modell du inte använder |
 
 Behöver du mer hjälp? Hör av dig till **[hello@datomer.eu](mailto:hello@datomer.eu)**.
@@ -253,11 +298,11 @@ Behöver du mer hjälp? Hör av dig till **[hello@datomer.eu](mailto:hello@datom
 
 | | |
 |---|---|
-| **Installera** | Dra till Program |
+| **Installera** | Mac: dra till Program. Windows: kör installationsprogrammet |
 | **Installation** | 4 skärmar, ~2 minuter |
 | **Modell** | Ett klick, engångsnedladdning |
 | **Fungerar offline** | Alltid, efter installationen |
-| **Din data** | Stannar på din Mac. Punkt. |
+| **Din data** | Stannar på din dator. Punkt. |
 | **Hjälp** | [hello@datomer.eu](mailto:hello@datomer.eu) |
 
 ---
