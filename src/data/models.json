@@ -12,12 +12,12 @@
       "use_case": "General instruction-following and chat"
     },
     {
-      "short_name": "ExoMind 9B.Q4 K M",
+      "short_name": "Orion 9B Agentic CodeCore Merge.Q4 K M",
       "authors": "prithivMLmods",
       "license": "apache-2.0",
-      "license_url": "https://huggingface.co/prithivMLmods/AI4SGI-ExoMind-9B-GGUF/blob/main/LICENSE",
-      "source_url": "https://huggingface.co/prithivMLmods/AI4SGI-ExoMind-9B-GGUF",
-      "filename": "ExoMind-9B.Q4_K_M.gguf",
+      "license_url": "https://huggingface.co/prithivMLmods/Orion-9B-Agentic-CodeCore-Merge-GGUF/blob/main/LICENSE",
+      "source_url": "https://huggingface.co/prithivMLmods/Orion-9B-Agentic-CodeCore-Merge-GGUF",
+      "filename": "Orion-9B-Agentic-CodeCore-Merge.Q4_K_M.gguf",
       "use_case": "General instruction-following and chat"
     },
     {
