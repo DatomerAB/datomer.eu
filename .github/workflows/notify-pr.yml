@@ -26,8 +26,8 @@ jobs:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@d2839636e84e6a6816f2c7b6d8df885dbbaefbf2
     with:
       runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
-      self_hosted_labels: '["self-hosted","Windows","X64","jcwindows"]'
-      controller_labels: '["self-hosted","Windows","X64","jcwindows"]'
+      self_hosted_labels: '["self-hosted"]'
+      controller_labels: '["self-hosted"]'
       github_hosted_label: ubuntu-latest
       wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || vars.RUNNER_WAIT_MINUTES || '30') }}
     secrets:
@@ -41,6 +41,15 @@ jobs:
     runs-on: ${{ fromJSON(needs.runner-selection.outputs.runs_on) }}
     timeout-minutes: 10
     steps:
+      - name: Ensure PowerShell is available on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+          if ! command -v pwsh >/dev/null 2>&1; then
+            brew install --cask powershell
+          fi
+
       - name: Post to Slack
         shell: pwsh
         env:
