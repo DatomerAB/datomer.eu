@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { analytics } from '../analytics/analytics.js'
-import { startTracking } from '../analytics/tracking.js'
+import { resetSession, startTracking } from '../analytics/tracking.js'
 
 const STORAGE_KEY = 'par-cookie-consent'
 
 export function CookieConsent() {
   const { t } = useLanguage()
+  const trackingCleanupRef = useRef(null)
   const [visible, setVisible] = useState(() => {
     if (typeof localStorage === 'undefined' || !localStorage?.getItem) return false
     return !localStorage.getItem(STORAGE_KEY)
@@ -14,19 +15,27 @@ export function CookieConsent() {
 
   useEffect(() => {
     if (analytics.hasConsent()) {
-      return startTracking()
+      trackingCleanupRef.current = startTracking()
     }
-    return () => {}
+
+    return () => {
+      trackingCleanupRef.current?.()
+      trackingCleanupRef.current = null
+    }
   }, [])
 
   const handleAccept = () => {
     analytics.consent(true)
     setVisible(false)
-    startTracking()
+    trackingCleanupRef.current?.()
+    trackingCleanupRef.current = startTracking()
   }
 
   const handleDecline = () => {
     analytics.consent(false)
+    trackingCleanupRef.current?.()
+    trackingCleanupRef.current = null
+    resetSession()
     setVisible(false)
   }
 

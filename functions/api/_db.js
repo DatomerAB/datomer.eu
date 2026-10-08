@@ -114,8 +114,7 @@ export async function getSubmissionsSince(env, isoDate) {
 export async function getSubmissionsInRange(env, startIso, endIso) {
   const db = getDb(env)
   if (!db) {
-    console.warn('[db] no D1 binding found; returning empty result')
-    return []
+    throw new Error('[db] no D1 binding found while reading submissions')
   }
 
   try {
@@ -126,7 +125,7 @@ export async function getSubmissionsInRange(env, startIso, endIso) {
     return results || []
   } catch (err) {
     console.error('[db] getSubmissionsInRange error:', err.message || err)
-    return []
+    throw err
   }
 }
 
@@ -221,8 +220,7 @@ export async function getEventsSince(env, isoDate) {
 export async function getEventsInRange(env, startIso, endIso) {
   const db = getDb(env)
   if (!db) {
-    console.warn('[db] no D1 binding found; returning empty events')
-    return []
+    throw new Error('[db] no D1 binding found while reading events')
   }
 
   try {
@@ -233,7 +231,7 @@ export async function getEventsInRange(env, startIso, endIso) {
     return results || []
   } catch (err) {
     console.error('[db] getEventsInRange error:', err.message || err)
-    return []
+    throw err
   }
 }
 

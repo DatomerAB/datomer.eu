@@ -1,9 +1,15 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { onRequestPost } from './waitlist.js'
 
+vi.mock('./_db.js', () => ({
+  insertSubmission: vi.fn(),
+}))
+
 vi.mock('./_turnstile.js', () => ({
   verifyTurnstileToken: vi.fn(() => Promise.resolve({ success: true })),
 }))
+
+import { insertSubmission } from './_db.js'
 
 describe('waitlist handler', () => {
   const baseEnv = {
@@ -18,6 +24,8 @@ describe('waitlist handler', () => {
   let fetchSpy
 
   beforeEach(() => {
+    vi.clearAllMocks()
+    insertSubmission.mockResolvedValue({ success: true })
     fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}', { status: 200 }))
   })
 
@@ -140,6 +148,12 @@ describe('waitlist handler', () => {
 
     expect(response.status).toBe(200)
     expect(data.ok).toBe(true)
+    expect(insertSubmission).toHaveBeenCalledWith(baseEnv, expect.objectContaining({
+      source: 'download',
+      email: 'download@example.com',
+      name: 'Download User',
+      metadata: expect.objectContaining({ type: 'download' }),
+    }))
 
     const resendCalls = getResendCalls()
     expect(resendCalls).toHaveLength(2)
@@ -171,6 +185,24 @@ describe('waitlist handler', () => {
 
     expect(response.status).toBe(200)
     expect(data.ok).toBe(true)
+  })
+
+  it('does not acknowledge a download when the D1 write fails', async () => {
+    insertSubmission.mockResolvedValueOnce(null)
+
+    const response = await onRequestPost({
+      request: makeRequest({
+        name: 'Download User',
+        email: 'download@example.com',
+        country: 'SE',
+        type: 'download',
+        turnstileToken: 'token',
+      }),
+      env: baseEnv,
+    })
+
+    expect(response.status).toBe(503)
+    expect(fetchSpy).not.toHaveBeenCalled()
   })
 
   it('rejects missing email', async () => {

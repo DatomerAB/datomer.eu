@@ -39,7 +39,7 @@ function utf8ToBase64(str) {
 export function getSummaryWindow(referenceTime = new Date()) {
   const t = new Date(referenceTime)
   const end = t
-  const start = new Date(end.getTime() - 24 * 60 * 60 * 1000)
+  const start = new Date(end.getTime() - 25 * 60 * 60 * 1000)
   return { start: start.toISOString(), end: end.toISOString() }
 }
 
@@ -104,8 +104,25 @@ export async function runDailySummary(env, ctx, options = {}) {
 
   console.log('[daily-summary] running for window', start, 'to', end)
 
-  const rows = await getSubmissionsInRange(env, start, end)
-  const events = await getEventsInRange(env, start, end)
+  let rows
+  let events
+  try {
+    ;[rows, events] = await Promise.all([
+      getSubmissionsInRange(env, start, end),
+      getEventsInRange(env, start, end),
+    ])
+  } catch (error) {
+    console.error('[daily-summary] D1 read failed; skipping empty report:', error?.message || error)
+    const emailResult = await sendSupportEmail({
+      env,
+      to: [getSummaryToEmail(env)],
+      subject: `Datomer daily summary failed — ${end.slice(0, 10)}`,
+      html: '<p>The daily summary could not read website data from D1. No empty report was sent. Check the Worker logs and database binding.</p>',
+      text: 'The daily summary could not read website data from D1. No empty report was sent. Check the Worker logs and database binding.',
+    })
+    return { ok: false, error: 'database_read_failed', emailResult }
+  }
+
   console.log('[daily-summary] found', rows.length, 'submission(s) and', events.length, 'event(s)')
 
   const csv = buildCsv(rows)

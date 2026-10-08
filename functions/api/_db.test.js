@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { insertSubmission, getSubmissionsSince, getSubmissionsInRange, pruneOldSubmissions, createSubmissionsTable } from './_db.js'
+import { insertSubmission, getSubmissionsSince, getSubmissionsInRange, getEventsInRange, pruneOldSubmissions, createSubmissionsTable } from './_db.js'
 
 function makeEnv(results = []) {
   const prepared = {
@@ -74,6 +74,19 @@ describe('D1 helpers', () => {
     const result = await getSubmissionsInRange(env, '2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
     expect(result).toEqual(rows)
     expect(env.prepared.bind).toHaveBeenCalledWith('2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
+  })
+
+  it('returns events within a date range', async () => {
+    const rows = [{ id: 1, session_id: 'session-1', type: 'pageview' }]
+    const env = makeEnv(rows)
+    const result = await getEventsInRange(env, '2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
+    expect(result).toEqual(rows)
+    expect(env.prepared.bind).toHaveBeenCalledWith('2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
+  })
+
+  it('rejects summary range reads when the D1 binding is missing', async () => {
+    await expect(getSubmissionsInRange({}, 'start', 'end')).rejects.toThrow('no D1 binding')
+    await expect(getEventsInRange({}, 'start', 'end')).rejects.toThrow('no D1 binding')
   })
 
   it('prunes submissions and events older than N days', async () => {
