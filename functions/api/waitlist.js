@@ -5,7 +5,7 @@ import { buildWaitlistSupportEmail, buildWaitlistConfirmationEmail } from './_em
 import { getTrackingMeta } from './_tracking.js'
 
 export async function onRequestPost(context) {
-  const { request, env, waitUntil } = context
+  const { request, env } = context
 
   let body
   try {
@@ -56,6 +56,49 @@ export async function onRequestPost(context) {
   const interests = body.interests || {}
   const tracking = getTrackingMeta({ request, env, body })
 
+  const detailsText = [
+    `Form: ${payload.type}`,
+    `Name: ${payload.name}`,
+    `Email: ${payload.email}`,
+    `Phone: ${payload.phone || '-'}`,
+    `Country: ${payload.country}`,
+    `Action: ${tracking.action}`,
+    `Environment: ${tracking.environment}`,
+    `City: ${tracking.city}`,
+  ].join('\n')
+
+  const stored = await insertSubmission(env, {
+    source: sourceLabel.replace(/-form$/, ''),
+    createdAt,
+    email: payload.email,
+    name: payload.name,
+    country: payload.country,
+    subject: `${payload.type} form submission`,
+    message: null,
+    body: detailsText,
+    metadata: {
+      type: payload.type,
+      phone: payload.phone,
+      locale: payload.locale,
+      interests: body.interests,
+      action: tracking.action,
+      environment: tracking.environment,
+      sessionId: tracking.sessionId,
+      city: tracking.city,
+      region: tracking.region,
+      timezone: tracking.timezone,
+      timeOnSiteMs: tracking.timeOnSiteMs,
+      pagePath: tracking.pagePath,
+    },
+  })
+
+  if (!stored) {
+    return new Response(JSON.stringify({ error: 'Could not record your submission. Please try again later.' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
   const supportEmail = buildWaitlistSupportEmail({
     type: payload.type,
     name: payload.name,
@@ -82,45 +125,6 @@ export async function onRequestPost(context) {
   })
   const confirmationResult = await sendSupportEmail({ env, to: [payload.email], ...confirmationEmail })
   console.log('[waitlist] confirmation email result:', JSON.stringify(confirmationResult))
-
-  const detailsText = [
-    `Form: ${payload.type}`,
-    `Name: ${payload.name}`,
-    `Email: ${payload.email}`,
-    `Phone: ${payload.phone || '-'}`,
-    `Country: ${payload.country}`,
-    `Action: ${tracking.action}`,
-    `Environment: ${tracking.environment}`,
-    `City: ${tracking.city}`,
-  ].join('\n')
-
-  // Non-blocking: store submission for daily summary.
-  waitUntil?.(
-    insertSubmission(env, {
-      source: sourceLabel.replace(/-form$/, ''),
-      createdAt,
-      email: payload.email,
-      name: payload.name,
-      country: payload.country,
-      subject: supportEmail.subject,
-      message: null,
-      body: detailsText,
-      metadata: {
-        type: payload.type,
-        phone: payload.phone,
-        locale: payload.locale,
-        interests: body.interests,
-        action: tracking.action,
-        environment: tracking.environment,
-        sessionId: tracking.sessionId,
-        city: tracking.city,
-        region: tracking.region,
-        timezone: tracking.timezone,
-        timeOnSiteMs: tracking.timeOnSiteMs,
-        pagePath: tracking.pagePath,
-      },
-    })
-  )
 
   // 
   // If a webhook URL is configured (e.g. Zapier, Make, Slack), forward the submission.

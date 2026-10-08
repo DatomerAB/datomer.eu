@@ -20,16 +20,29 @@ describe('daily summary logic', () => {
     vi.clearAllMocks()
   })
 
-  it('uses a rolling 24-hour summary window', () => {
+  it('uses a rolling 25-hour summary window', () => {
     const t1 = new Date('2026-08-27T06:30:00.000Z')
     const w1 = getSummaryWindow(t1)
     expect(w1.end).toBe('2026-08-27T06:30:00.000Z')
-    expect(w1.start).toBe('2026-08-26T06:30:00.000Z')
+    expect(w1.start).toBe('2026-08-26T05:30:00.000Z')
 
     const t2 = new Date('2026-08-27T05:30:00.000Z')
     const w2 = getSummaryWindow(t2)
     expect(w2.end).toBe('2026-08-27T05:30:00.000Z')
-    expect(w2.start).toBe('2026-08-26T05:30:00.000Z')
+    expect(w2.start).toBe('2026-08-26T04:30:00.000Z')
+  })
+
+  it('sends a failure notice instead of a zero-count report when D1 cannot be read', async () => {
+    getSubmissionsInRange.mockRejectedValueOnce(new Error('D1 unavailable'))
+
+    const result = await runDailySummary({ RESEND_API_KEY: 're_123' })
+
+    expect(result).toMatchObject({ ok: false, error: 'database_read_failed' })
+    expect(sendSupportEmail).toHaveBeenCalledWith(expect.objectContaining({
+      subject: expect.stringContaining('daily summary failed'),
+      text: expect.stringContaining('No empty report was sent'),
+    }))
+    expect(pruneOldSubmissions).not.toHaveBeenCalled()
   })
 
   it('builds a CSV with the expected columns', () => {
