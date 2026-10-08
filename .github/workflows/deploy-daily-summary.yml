@@ -12,10 +12,33 @@ on:
       - 'functions/api/_email.js'
       - '.github/workflows/deploy-daily-summary.yml'
   workflow_dispatch:
+    inputs:
+      runner_preference:
+        description: "Runner preference"
+        type: choice
+        default: self-hosted-preferred
+        options: [self-hosted-preferred, github-hosted]
+      wait_minutes:
+        description: "Maximum availability wait (0-30 minutes)"
+        type: number
+        default: 30
 
 jobs:
+  runner-selection:
+    uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@aeee4650b4ff862003a297cec42cdbf2c17899d5
+    with:
+      runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
+      self_hosted_labels: '["self-hosted","macOS","ARM64","par"]'
+      github_hosted_label: ubuntu-latest
+      wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || vars.RUNNER_WAIT_MINUTES || '30') }}
+    secrets:
+      runner_check_token: ${{ secrets.SELF_HOSTED_RUNNER_CHECK_TOKEN }}
+    permissions:
+      actions: read
+
   deploy:
-    runs-on: ubuntu-latest
+    needs: runner-selection
+    runs-on: ${{ fromJSON(needs.runner-selection.outputs.runs_on) }}
     defaults:
       run:
         working-directory: workers/daily-summary
