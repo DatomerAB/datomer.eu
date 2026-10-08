@@ -26,7 +26,8 @@ jobs:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@599e624510ffd5dbb61e24ab9664d0b9b4f01708
     with:
       runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
-      self_hosted_labels: '["self-hosted","macOS","ARM64","par"]'
+      self_hosted_labels: '["self-hosted","Windows","X64","jcwindows"]'
+      controller_labels: '["self-hosted","Windows","X64","jcwindows"]'
       github_hosted_label: ubuntu-latest
       wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || vars.RUNNER_WAIT_MINUTES || '30') }}
     secrets:
@@ -41,6 +42,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Post to Slack
+        shell: pwsh
         env:
           WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK_URL }}
           PR_TITLE: ${{ github.event.pull_request.title }}
@@ -49,36 +51,25 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
         run: |
-          set -euo pipefail
-
-          if [[ -z "${WEBHOOK_URL}" ]]; then
-            echo "::warning::SLACK_RELEASE_WEBHOOK_URL is not available (fork PR?); skipping."
+          if ([string]::IsNullOrWhiteSpace($env:WEBHOOK_URL)) {
+            Write-Warning "SLACK_RELEASE_WEBHOOK_URL is not available (fork PR?); skipping."
             exit 0
-          fi
+          }
 
-          # Values go through jq --arg so a title containing quotes, backticks
-          # or braces cannot break or inject into the JSON payload.
-          jq -n \
-            --arg text "Pull request opened in ${REPO}" \
-            --arg title "#${PR_NUMBER} ${PR_TITLE}" \
-            --arg url "${PR_URL}" \
-            --arg author "${PR_AUTHOR}" \
-            --arg repo "${REPO}" \
-            '{
-              text: $text,
-              attachments: [{
-                color: "2f80ed",
-                title: $title,
-                title_link: $url,
-                fields: [
-                  { title: "Repository", value: $repo, short: true },
-                  { title: "Author", value: $author, short: true }
-                ],
-                footer: "Pär by Datomer"
-              }]
-            }' > "${RUNNER_TEMP}/slack.json"
+          $payload = @{
+            text = "Pull request opened in $env:REPO"
+            attachments = @(
+              @{
+                color = '2f80ed'
+                title = "#$($env:PR_NUMBER) $($env:PR_TITLE)"
+                title_link = $env:PR_URL
+                fields = @(
+                  @{ title = 'Repository'; value = $env:REPO; short = $true },
+                  @{ title = 'Author'; value = $env:PR_AUTHOR; short = $true }
+                )
+                footer = 'Pär by Datomer'
+              }
+            )
+          } | ConvertTo-Json -Depth 6 -Compress
 
-          curl -sSf -X POST \
-            -H 'Content-Type: application/json' \
-            --data "@${RUNNER_TEMP}/slack.json" \
-            "${WEBHOOK_URL}"
+          Invoke-RestMethod -Method Post -Uri $env:WEBHOOK_URL -ContentType 'application/json' -Body $payload | Out-Null

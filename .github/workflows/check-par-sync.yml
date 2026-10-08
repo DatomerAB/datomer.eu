@@ -29,7 +29,8 @@ jobs:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@599e624510ffd5dbb61e24ab9664d0b9b4f01708
     with:
       runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
-      self_hosted_labels: '["self-hosted","macOS","ARM64","par"]'
+      self_hosted_labels: '["self-hosted","Windows","X64","jcwindows"]'
+      controller_labels: '["self-hosted","Windows","X64","jcwindows"]'
       github_hosted_label: ubuntu-latest
       wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || vars.RUNNER_WAIT_MINUTES || '30') }}
     secrets:
@@ -47,51 +48,65 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Fetch canonical models from Pär
+        shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
         run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/par-canonical"
-          gh api repos/DatomerAB/Par/contents/config/website_models.json \
-            --jq '.content' \
-            | base64 -d > "$RUNNER_TEMP/par-canonical"/website_models.json
+          $PSNativeCommandUseErrorActionPreference = $true
+          $canonicalDir = Join-Path $env:RUNNER_TEMP 'par-canonical'
+          New-Item -ItemType Directory -Force -Path $canonicalDir | Out-Null
+          $encodedModels = gh api repos/DatomerAB/Par/contents/config/website_models.json --jq '.content'
+          if ($LASTEXITCODE -ne 0) { throw "Could not fetch canonical models from Pär" }
+          [IO.File]::WriteAllBytes((Join-Path $canonicalDir 'website_models.json'), [Convert]::FromBase64String($encodedModels))
 
       - name: Compare models.json
+        shell: pwsh
         run: |
-          set -euo pipefail
-          diff -u "$RUNNER_TEMP/par-canonical"/website_models.json src/data/models.json
-          echo "✅ datomer.eu/src/data/models.json matches Pär/config/website_models.json"
+          $expected = [IO.File]::ReadAllText((Join-Path $env:RUNNER_TEMP 'par-canonical/website_models.json')).Replace("`r`n", "`n")
+          $actual = [IO.File]::ReadAllText('src/data/models.json').Replace("`r`n", "`n")
+          if ($actual -cne $expected) { throw 'src/data/models.json differs from Pär/config/website_models.json' }
+          Write-Host 'datomer.eu/src/data/models.json matches Pär/config/website_models.json'
 
       - name: Fetch canonical AI disclaimers from Pär
+        shell: pwsh
         env:
           # DatomerAB/Par is private, so the repo-scoped GITHUB_TOKEN cannot read it.
           GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
         run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/par-canonical"
-          gh api repos/DatomerAB/Par/contents/config/eu_ai_act_exclude_list.yaml \
-            --jq '.content' \
-            | base64 -d > "$RUNNER_TEMP/par-canonical"/eu_ai_act_exclude_list.yaml
+          $PSNativeCommandUseErrorActionPreference = $true
+          $canonicalDir = Join-Path $env:RUNNER_TEMP 'par-canonical'
+          New-Item -ItemType Directory -Force -Path $canonicalDir | Out-Null
+          $encodedExcludeList = gh api repos/DatomerAB/Par/contents/config/eu_ai_act_exclude_list.yaml --jq '.content'
+          if ($LASTEXITCODE -ne 0) { throw 'Could not fetch canonical AI Act exclusions from Pär' }
+          [IO.File]::WriteAllBytes((Join-Path $canonicalDir 'eu_ai_act_exclude_list.yaml'), [Convert]::FromBase64String($encodedExcludeList))
 
           # Fetch the generator too, rather than reimplementing it here. The
           # Swedish and German literals used to be duplicated in this file, so
           # editing one repo and not the other produced a diff that looked like
           # drift from Pär when it was really drift between two copies.
-          gh api repos/DatomerAB/Par/contents/scripts/build_ai_disclaimers.py \
-            --jq '.content' \
-            | base64 -d > "$RUNNER_TEMP/par-canonical"/build_ai_disclaimers.py
+          $encodedGenerator = gh api repos/DatomerAB/Par/contents/scripts/build_ai_disclaimers.py --jq '.content'
+          if ($LASTEXITCODE -ne 0) { throw 'Could not fetch the canonical disclaimer generator from Pär' }
+          [IO.File]::WriteAllBytes((Join-Path $canonicalDir 'build_ai_disclaimers.py'), [Convert]::FromBase64String($encodedGenerator))
 
       - name: Generate canonical ai_disclaimers.json
+        shell: pwsh
         run: |
-          set -euo pipefail
-          python3 -m venv "$RUNNER_TEMP/sync-python"
-          "$RUNNER_TEMP/sync-python/bin/python" -m pip install --quiet pyyaml
-          "$RUNNER_TEMP/sync-python/bin/python" "$RUNNER_TEMP/par-canonical"/build_ai_disclaimers.py \
-            --config "$RUNNER_TEMP/par-canonical"/eu_ai_act_exclude_list.yaml \
-            --output "$RUNNER_TEMP/par-canonical"/ai_disclaimers.json
+          $PSNativeCommandUseErrorActionPreference = $true
+          $venv = Join-Path $env:RUNNER_TEMP 'sync-python'
+          py -3.11 -m venv $venv
+          if ($LASTEXITCODE -ne 0) { throw 'Python 3.11 is required on jcwindows' }
+          $python = Join-Path $venv 'Scripts/python.exe'
+          & $python -m pip install --quiet pyyaml
+          if ($LASTEXITCODE -ne 0) { throw 'Could not install PyYAML' }
+          & $python (Join-Path $env:RUNNER_TEMP 'par-canonical/build_ai_disclaimers.py') `
+            --config (Join-Path $env:RUNNER_TEMP 'par-canonical/eu_ai_act_exclude_list.yaml') `
+            --output (Join-Path $env:RUNNER_TEMP 'par-canonical/ai_disclaimers.json')
+          if ($LASTEXITCODE -ne 0) { throw 'Could not generate canonical AI disclaimers' }
 
       - name: Compare ai_disclaimers.json
+        shell: pwsh
         run: |
-          set -euo pipefail
-          diff -u "$RUNNER_TEMP/par-canonical"/ai_disclaimers.json src/data/ai_disclaimers.json
-          echo "✅ datomer.eu/src/data/ai_disclaimers.json matches Pär/config/eu_ai_act_exclude_list.yaml"
+          $expected = [IO.File]::ReadAllText((Join-Path $env:RUNNER_TEMP 'par-canonical/ai_disclaimers.json')).Replace("`r`n", "`n")
+          $actual = [IO.File]::ReadAllText('src/data/ai_disclaimers.json').Replace("`r`n", "`n")
+          if ($actual -cne $expected) { throw 'src/data/ai_disclaimers.json differs from the canonical generator output' }
+          Write-Host 'datomer.eu/src/data/ai_disclaimers.json matches Pär/config/eu_ai_act_exclude_list.yaml'
