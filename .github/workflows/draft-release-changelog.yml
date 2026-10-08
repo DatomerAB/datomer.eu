@@ -38,7 +38,7 @@ permissions:
 
 jobs:
   runner-selection:
-    uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@599e624510ffd5dbb61e24ab9664d0b9b4f01708
+    uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@d2839636e84e6a6816f2c7b6d8df885dbbaefbf2
     with:
       runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
       self_hosted_labels: '["self-hosted","macOS","ARM64","par"]'
