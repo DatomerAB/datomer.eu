@@ -36,6 +36,11 @@ permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: workflow-${{ github.workflow }}
+  cancel-in-progress: false
+  queue: max
+
 jobs:
   runner-selection:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@599e624510ffd5dbb61e24ab9664d0b9b4f01708
