@@ -21,6 +21,11 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: workflow-${{ github.workflow }}
+  cancel-in-progress: false
+  queue: max
+
 jobs:
   runner-selection:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@d2839636e84e6a6816f2c7b6d8df885dbbaefbf2
