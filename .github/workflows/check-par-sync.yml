@@ -34,8 +34,8 @@ jobs:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@d2839636e84e6a6816f2c7b6d8df885dbbaefbf2
     with:
       runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
-      self_hosted_labels: '["self-hosted","Windows","X64","jcwindows"]'
-      controller_labels: '["self-hosted","Windows","X64","jcwindows"]'
+      self_hosted_labels: '["self-hosted"]'
+      controller_labels: '["self-hosted"]'
       github_hosted_label: ubuntu-latest
       wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || vars.RUNNER_WAIT_MINUTES || '30') }}
     secrets:
@@ -51,6 +51,15 @@ jobs:
     steps:
       - name: Checkout datomer.eu
         uses: actions/checkout@v4
+
+      - name: Ensure PowerShell is available on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+          if ! command -v pwsh >/dev/null 2>&1; then
+            brew install --cask powershell
+          fi
 
       - name: Fetch canonical models from Pär
         shell: pwsh
@@ -93,14 +102,19 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Could not fetch the canonical disclaimer generator from Pär' }
           [IO.File]::WriteAllBytes((Join-Path $canonicalDir 'build_ai_disclaimers.py'), [Convert]::FromBase64String($encodedGenerator))
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Generate canonical ai_disclaimers.json
         shell: pwsh
         run: |
           $PSNativeCommandUseErrorActionPreference = $true
           $venv = Join-Path $env:RUNNER_TEMP 'sync-python'
-          py -3.11 -m venv $venv
-          if ($LASTEXITCODE -ne 0) { throw 'Python 3.11 is required on jcwindows' }
-          $python = Join-Path $venv 'Scripts/python.exe'
+          python -m venv $venv
+          if ($LASTEXITCODE -ne 0) { throw 'Could not create the Python virtual environment' }
+          $python = if ($IsWindows) { Join-Path $venv 'Scripts/python.exe' } else { Join-Path $venv 'bin/python' }
           & $python -m pip install --quiet pyyaml
           if ($LASTEXITCODE -ne 0) { throw 'Could not install PyYAML' }
           & $python (Join-Path $env:RUNNER_TEMP 'par-canonical/build_ai_disclaimers.py') `

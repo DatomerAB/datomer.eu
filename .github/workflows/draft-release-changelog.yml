@@ -46,8 +46,8 @@ jobs:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@d2839636e84e6a6816f2c7b6d8df885dbbaefbf2
     with:
       runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
-      self_hosted_labels: '["self-hosted","Windows","X64","jcwindows"]'
-      controller_labels: '["self-hosted","Windows","X64","jcwindows"]'
+      self_hosted_labels: '["self-hosted"]'
+      controller_labels: '["self-hosted"]'
       github_hosted_label: ubuntu-latest
       wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || vars.RUNNER_WAIT_MINUTES || '30') }}
     secrets:
@@ -62,6 +62,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Ensure PowerShell is available on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+          if ! command -v pwsh >/dev/null 2>&1; then
+            brew install --cask powershell
+          fi
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -70,9 +79,11 @@ jobs:
       - name: Isolate Python 3.12 dependencies
         shell: pwsh
         run: |
-          py -3.12 -m venv (Join-Path $env:RUNNER_TEMP 'changelog-python')
+          $venv = Join-Path $env:RUNNER_TEMP 'changelog-python'
+          python -m venv $venv
           if ($LASTEXITCODE -ne 0) { throw 'Could not create Python 3.12 virtual environment' }
-          Join-Path $env:RUNNER_TEMP 'changelog-python/Scripts' | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8NoBOM
+          $venvScripts = if ($IsWindows) { Join-Path $venv 'Scripts' } else { Join-Path $venv 'bin' }
+          $venvScripts | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8NoBOM
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
