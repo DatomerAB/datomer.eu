@@ -41,7 +41,8 @@ jobs:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@599e624510ffd5dbb61e24ab9664d0b9b4f01708
     with:
       runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
-      self_hosted_labels: '["self-hosted","macOS","ARM64","par"]'
+      self_hosted_labels: '["self-hosted","Windows","X64","jcwindows"]'
+      controller_labels: '["self-hosted","Windows","X64","jcwindows"]'
       github_hosted_label: ubuntu-latest
       wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || vars.RUNNER_WAIT_MINUTES || '30') }}
     secrets:
@@ -58,16 +59,15 @@ jobs:
 
       - name: Setup Python
         uses: actions/setup-python@v5
-        if: runner.environment == 'github-hosted'
         with:
           python-version: "3.12"
 
       - name: Isolate Python 3.12 dependencies
+        shell: pwsh
         run: |
-          set -euo pipefail
-          export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
-          python3.12 -m venv "$RUNNER_TEMP/changelog-python"
-          echo "$RUNNER_TEMP/changelog-python/bin" >> "$GITHUB_PATH"
+          py -3.12 -m venv (Join-Path $env:RUNNER_TEMP 'changelog-python')
+          if ($LASTEXITCODE -ne 0) { throw 'Could not create Python 3.12 virtual environment' }
+          Join-Path $env:RUNNER_TEMP 'changelog-python/Scripts' | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8NoBOM
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -76,13 +76,17 @@ jobs:
           cache: npm
 
       - name: Test changelog script
+        shell: pwsh
         run: |
-          set -euo pipefail
-          python3 -m pip install --quiet pytest
-          python3 -m pytest scripts/test_draft_changelog.py -q
+          $PSNativeCommandUseErrorActionPreference = $true
+          python -m pip install --quiet pytest
+          if ($LASTEXITCODE -ne 0) { throw 'Could not install pytest' }
+          python -m pytest scripts/test_draft_changelog.py -q
+          if ($LASTEXITCODE -ne 0) { throw 'Changelog tests failed' }
 
       - name: Create changelog post and update fallback URL
         id: create
+        shell: pwsh
         env:
           TAG: ${{ github.event.client_payload.tag || inputs.tag }}
           DMG_URL: ${{ github.event.client_payload.dmg_url || inputs.dmg_url }}
@@ -90,78 +94,87 @@ jobs:
           RELEASE_BODY: ${{ github.event.client_payload.release_body || inputs.release_body || '' }}
           SOURCE_REPO: ${{ github.event.client_payload.source_repo || 'DatomerAB/Par' }}
         run: |
-          set -euo pipefail
-          python3 scripts/draft_changelog.py
+          $PSNativeCommandUseErrorActionPreference = $true
+          python scripts/draft_changelog.py
+          if ($LASTEXITCODE -ne 0) { throw 'Could not draft changelog' }
 
       - name: Sync model attribution from Pär
+        shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
         run: |
-          set -euo pipefail
-          gh api repos/DatomerAB/Par/contents/config/website_models.json \
-            --jq '.content' \
-            | base64 -d > /tmp/website_models.json
-
-          if diff -q /tmp/website_models.json src/data/models.json >/dev/null 2>&1; then
-            echo "✅ src/data/models.json is already up to date"
-          else
-            cp /tmp/website_models.json src/data/models.json
-            echo "✅ Updated src/data/models.json from Pär"
-          fi
+          $PSNativeCommandUseErrorActionPreference = $true
+          $encodedModels = gh api repos/DatomerAB/Par/contents/config/website_models.json --jq '.content'
+          if ($LASTEXITCODE -ne 0) { throw 'Could not fetch canonical models from Pär' }
+          $canonicalModels = Join-Path $env:RUNNER_TEMP 'website_models.json'
+          [IO.File]::WriteAllBytes($canonicalModels, [Convert]::FromBase64String($encodedModels))
+          $currentModels = [IO.File]::ReadAllText('src/data/models.json').Replace("`r`n", "`n")
+          $expectedModels = [IO.File]::ReadAllText($canonicalModels).Replace("`r`n", "`n")
+          if ($currentModels -ceq $expectedModels) {
+            Write-Host 'src/data/models.json is already up to date'
+          } else {
+            Copy-Item $canonicalModels 'src/data/models.json' -Force
+            Write-Host 'Updated src/data/models.json from Pär'
+          }
 
       - name: Run checks
+        shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $true
           npm ci
+          if ($LASTEXITCODE -ne 0) { throw 'npm ci failed' }
           npm test
+          if ($LASTEXITCODE -ne 0) { throw 'Website tests failed' }
           npm run build
+          if ($LASTEXITCODE -ne 0) { throw 'Website build failed' }
 
       - name: Create or update pull request
         id: pr
+        shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
           BRANCH: ${{ steps.create.outputs.branch }}
           HEADLINE: ${{ steps.create.outputs.headline }}
           PR_BODY_FILE: ${{ steps.create.outputs.pr_body_file }}
         run: |
-          set -euo pipefail
+          $PSNativeCommandUseErrorActionPreference = $true
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          if ($LASTEXITCODE -ne 0) { throw 'Could not configure git author' }
 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git checkout -b "$BRANCH"
+          git checkout -b $env:BRANCH
+          if ($LASTEXITCODE -ne 0) { throw 'Could not create changelog branch' }
           git add src/content/changelog/ src/App.jsx src/data/models.json
-          git commit -m "chore: draft changelog for ${HEADLINE}"
+          if ($LASTEXITCODE -ne 0) { throw 'Could not stage changelog files' }
+          git commit -m "chore: draft changelog for $env:HEADLINE"
+          if ($LASTEXITCODE -ne 0) { throw 'Could not commit changelog files' }
           # Force-push so re-dispatches overwrite the previous draft branch.
-          git push --force origin "$BRANCH"
+          git push --force origin $env:BRANCH
+          if ($LASTEXITCODE -ne 0) { throw 'Could not push changelog branch' }
 
-          existing_pr=$(gh pr list \
-            --head "$BRANCH" \
-            --base main \
-            --json url \
-            --jq '.[0].url' 2>/dev/null || true)
+          $PSNativeCommandUseErrorActionPreference = $false
+          $existingPr = gh pr list --head $env:BRANCH --base main --json url --jq '.[0].url' 2>$null
+          $prListExitCode = $LASTEXITCODE
+          $PSNativeCommandUseErrorActionPreference = $true
+          if ($prListExitCode -ne 0) { $existingPr = '' }
 
-          if [[ -n "$existing_pr" ]]; then
-            gh pr edit "$existing_pr" \
-              --title "chore: ${HEADLINE}" \
-              --body-file "${PR_BODY_FILE}"
-            pr_url="$existing_pr"
-            echo "✅ Updated existing draft PR: ${pr_url}"
-          else
-            pr_url=$(gh pr create \
-              --title "chore: ${HEADLINE}" \
-              --body-file "${PR_BODY_FILE}" \
-              --base main \
-              --head "$BRANCH" \
-              --draft)
-            echo "✅ Created draft PR: ${pr_url}"
-          fi
+          if (-not [string]::IsNullOrWhiteSpace($existingPr)) {
+            gh pr edit $existingPr --title "chore: $env:HEADLINE" --body-file $env:PR_BODY_FILE
+            if ($LASTEXITCODE -ne 0) { throw 'Could not update existing changelog PR' }
+            $prUrl = $existingPr
+            Write-Host "Updated existing draft PR: $prUrl"
+          } else {
+            $prUrl = gh pr create --title "chore: $env:HEADLINE" --body-file $env:PR_BODY_FILE --base main --head $env:BRANCH --draft
+            if ($LASTEXITCODE -ne 0) { throw 'Could not create changelog PR' }
+            Write-Host "Created draft PR: $prUrl"
+          }
 
-          echo "pr_url=${pr_url}" >> "$GITHUB_OUTPUT"
-          echo "✅ Created draft PR: ${pr_url}"
+          "pr_url=$prUrl" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8NoBOM
 
       - name: Notify Slack
         if: always()
         continue-on-error: true
+        shell: pwsh
         env:
           WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK_URL }}
           OUTCOME: ${{ job.status }}
@@ -170,53 +183,40 @@ jobs:
           PR_URL: ${{ steps.pr.outputs.pr_url }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          set -euo pipefail
-
-          if [[ -z "${WEBHOOK_URL}" ]]; then
-            echo "::warning::SLACK_RELEASE_WEBHOOK_URL is not set; skipping."
+          if ([string]::IsNullOrWhiteSpace($env:WEBHOOK_URL)) {
+            Write-Output '::warning::SLACK_RELEASE_WEBHOOK_URL is not set; skipping.'
             exit 0
-          fi
+          }
 
-          if [[ "${OUTCOME}" == "success" ]]; then
-            COLOR="2f80ed"
-            TITLE="Changelog draft ready for review"
-            LINK="${PR_URL}"
-            TEXT="A draft changelog PR for ${TAG} has been opened. Please review and edit before merging."
-          else
-            COLOR="ff4d4f"
-            TITLE="Changelog draft failed"
-            LINK="${RUN_URL}"
-            TEXT="Failed to create the draft changelog PR for ${TAG}."
-          fi
+          if ($env:OUTCOME -eq 'success') {
+            $color = '2f80ed'
+            $title = 'Changelog draft ready for review'
+            $link = $env:PR_URL
+            $text = "A draft changelog PR for $env:TAG has been opened. Please review and edit before merging."
+          } else {
+            $color = 'ff4d4f'
+            $title = 'Changelog draft failed'
+            $link = $env:RUN_URL
+            $text = "Failed to create the draft changelog PR for $env:TAG."
+          }
 
-          # Values go through jq --arg so a release tag containing a double
-          # quote cannot break or inject into the payload.
-          jq -n \
-            --arg title "$TITLE" \
-            --arg link "$LINK" \
-            --arg text "$TEXT" \
-            --arg color "$COLOR" \
-            --arg tag "$TAG" \
-            --arg source "$SOURCE_REPO" \
-            '{
-              text: $title,
-              attachments: [{
-                color: $color,
-                author_name: "Pär Release Bot",
-                author_icon: "https://datomerab.github.io/par-public/assets/landing/icon.png",
-                title: $title,
-                title_link: $link,
-                text: $text,
-                fields: [
-                  { title: "Release", value: $tag, short: true },
-                  { title: "Source", value: $source, short: true }
-                ],
-                footer: "Pär by Datomer",
-                footer_icon: "https://datomerab.github.io/par-public/assets/landing/datomer-logo.png"
-              }]
-            }' > "${RUNNER_TEMP}/slack.json"
-
-          curl -sSf -X POST \
-            -H 'Content-Type: application/json' \
-            --data "@${RUNNER_TEMP}/slack.json" \
-            "${WEBHOOK_URL}"
+          $payload = @{
+            text = $title
+            attachments = @(
+              @{
+                color = $color
+                author_name = 'Pär Release Bot'
+                author_icon = 'https://datomerab.github.io/par-public/assets/landing/icon.png'
+                title = $title
+                title_link = $link
+                text = $text
+                fields = @(
+                  @{ title = 'Release'; value = $env:TAG; short = $true },
+                  @{ title = 'Source'; value = $env:SOURCE_REPO; short = $true }
+                )
+                footer = 'Pär by Datomer'
+                footer_icon = 'https://datomerab.github.io/par-public/assets/landing/datomer-logo.png'
+              }
+            )
+          } | ConvertTo-Json -Depth 8 -Compress
+          Invoke-RestMethod -Method Post -Uri $env:WEBHOOK_URL -ContentType 'application/json' -Body $payload | Out-Null

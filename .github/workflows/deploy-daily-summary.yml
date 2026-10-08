@@ -28,7 +28,8 @@ jobs:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@599e624510ffd5dbb61e24ab9664d0b9b4f01708
     with:
       runner_preference: ${{ inputs.runner_preference || vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
-      self_hosted_labels: '["self-hosted","macOS","ARM64","par"]'
+      self_hosted_labels: '["self-hosted","Windows","X64","jcwindows"]'
+      controller_labels: '["self-hosted","Windows","X64","jcwindows"]'
       github_hosted_label: ubuntu-latest
       wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || vars.RUNNER_WAIT_MINUTES || '30') }}
     secrets:
@@ -64,28 +65,38 @@ jobs:
 
       - name: Deploy to preview
         if: github.ref == 'refs/heads/staging'
+        shell: pwsh
         env:
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
           RESEND_API_KEY: ${{ secrets.PREVIEW_RESEND_API_KEY }}
           DAILY_SUMMARY_SECRET: ${{ secrets.PREVIEW_DAILY_SUMMARY_SECRET }}
         run: |
-          echo "$RESEND_API_KEY" | npx wrangler secret put RESEND_API_KEY --env preview
-          if [ -n "$DAILY_SUMMARY_SECRET" ]; then
-            echo "$DAILY_SUMMARY_SECRET" | npx wrangler secret put DAILY_SUMMARY_SECRET --env preview
-          fi
+          $PSNativeCommandUseErrorActionPreference = $true
+          $env:RESEND_API_KEY | npx wrangler secret put RESEND_API_KEY --env preview
+          if ($LASTEXITCODE -ne 0) { throw "Could not update preview Resend secret" }
+          if (-not [string]::IsNullOrWhiteSpace($env:DAILY_SUMMARY_SECRET)) {
+            $env:DAILY_SUMMARY_SECRET | npx wrangler secret put DAILY_SUMMARY_SECRET --env preview
+            if ($LASTEXITCODE -ne 0) { throw "Could not update preview summary secret" }
+          }
           npx wrangler deploy --env preview
+          if ($LASTEXITCODE -ne 0) { throw "Preview Worker deployment failed" }
 
       - name: Deploy to production
         if: github.ref == 'refs/heads/main'
+        shell: pwsh
         env:
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
           RESEND_API_KEY: ${{ secrets.PRODUCTION_RESEND_API_KEY }}
           DAILY_SUMMARY_SECRET: ${{ secrets.PRODUCTION_DAILY_SUMMARY_SECRET }}
         run: |
-          echo "$RESEND_API_KEY" | npx wrangler secret put RESEND_API_KEY --env production
-          if [ -n "$DAILY_SUMMARY_SECRET" ]; then
-            echo "$DAILY_SUMMARY_SECRET" | npx wrangler secret put DAILY_SUMMARY_SECRET --env production
-          fi
+          $PSNativeCommandUseErrorActionPreference = $true
+          $env:RESEND_API_KEY | npx wrangler secret put RESEND_API_KEY --env production
+          if ($LASTEXITCODE -ne 0) { throw "Could not update production Resend secret" }
+          if (-not [string]::IsNullOrWhiteSpace($env:DAILY_SUMMARY_SECRET)) {
+            $env:DAILY_SUMMARY_SECRET | npx wrangler secret put DAILY_SUMMARY_SECRET --env production
+            if ($LASTEXITCODE -ne 0) { throw "Could not update production summary secret" }
+          }
           npx wrangler deploy --env production
+          if ($LASTEXITCODE -ne 0) { throw "Production Worker deployment failed" }
