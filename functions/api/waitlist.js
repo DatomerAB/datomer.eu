@@ -17,7 +17,7 @@ export async function onRequestPost(context) {
     })
   }
 
-  const { name, email, phone, country, type = 'download', locale = 'en', timestamp, turnstileToken } = body
+  const { name, email, phone, country, type = 'download', locale = 'en', turnstileToken } = body
 
   if (!email) {
     return new Response(JSON.stringify({ error: 'Email is required.' }), {
@@ -41,7 +41,7 @@ export async function onRequestPost(context) {
     })
   }
 
-  const createdAt = timestamp || new Date().toISOString()
+  const createdAt = new Date().toISOString()
   const payload = {
     name: name ? String(name).trim() : 'Subscriber',
     email: String(email).trim().toLowerCase(),

@@ -31,6 +31,11 @@ VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEZRl56VvoSHPucq"
 RESEND_FROM_EMAIL = "hello@datomer.eu"
 CONTACT_TO_EMAIL = "hello@datomer.eu"
 
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "datomer-submissions-production"
+database_id = "65c67ab8-ca9e-4777-9b38-97989c73a7f8"
+
 # Test credentials for the preview / staging environment only.
 [env.preview.vars]
 VITE_STRIPE_PLUS_MONTHLY = "price_1U8FVMJjemtoqVYpBROqsZRz"
@@ -41,3 +46,8 @@ VITE_STRIPE_PUBLISHABLE_KEY = "pk_test_51U7ZY2JjemtoqVYpdgzC3NYr0Us9FzlE5gisBomI
 VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEaZMJCV6o1b_ZFh"
 RESEND_FROM_EMAIL = "hello@datomer.eu"
 CONTACT_TO_EMAIL = "hello@datomer.eu"
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "datomer-submissions-preview"
+database_id = "7a83e626-0984-47bb-9235-cd65c6806813"

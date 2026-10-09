@@ -35,6 +35,7 @@ describe('DownloadForm', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals()
+    vi.restoreAllMocks()
   })
 
   it('renders the form and prefills the country from ipapi', async () => {
@@ -46,6 +47,7 @@ describe('DownloadForm', () => {
   })
 
   it('submits the form and stores the data', async () => {
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
     const onClose = vi.fn()
     render(<DownloadForm downloadUrl={downloadUrl} onClose={onClose} />, { wrapper: Wrapper })
 
@@ -74,5 +76,35 @@ describe('DownloadForm', () => {
       expect.stringContaining('anna@example.com')
     )
     expect(screen.getByText(/Thanks! Your download should start automatically./i)).toBeTruthy()
+    expect(clickSpy).toHaveBeenCalledTimes(1)
+    expect(clickSpy.mock.instances[0].href).toBe(downloadUrl)
+  })
+
+  it('shows storage failures without downloading and allows a successful retry', async () => {
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+    render(<DownloadForm downloadUrl={downloadUrl} onClose={() => {}} />, { wrapper: Wrapper })
+    fireEvent.change(screen.getByRole('textbox', { name: /Full name/i }), {
+      target: { value: 'Download User' },
+    })
+    fireEvent.change(screen.getByRole('textbox', { name: /Email address/i }), {
+      target: { value: 'download@example.com' },
+    })
+    await waitFor(() => expect(screen.getByRole('combobox')).toHaveValue('SE'))
+    const error = 'Could not record your submission. Please try again later.'
+    globalThis.fetch.mockResolvedValueOnce({
+      ok: false, status: 503, json: () => Promise.resolve({ error }),
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /Download for Mac/i }))
+
+    expect(await screen.findByText(error)).toBeTruthy()
+    expect(clickSpy).not.toHaveBeenCalled()
+    expect(screen.queryByText(/Thanks! Your download should start automatically./i)).toBeNull()
+
+    fireEvent.click(screen.getByRole('button', { name: /Download for Mac/i }))
+
+    expect(await screen.findByText(/Thanks! Your download should start automatically./i)).toBeTruthy()
+    expect(clickSpy).toHaveBeenCalledTimes(1)
+    expect(screen.queryByText(error)).toBeNull()
   })
 })
