@@ -243,7 +243,7 @@ function HomePage({ onDownload }) {
   const highlights = [
     { icon: 'device', title: t('highlights.localInference.title'), text: t('highlights.localInference.text') },
     { icon: 'lock', title: t('highlights.encryptedVault.title'), text: t('highlights.encryptedVault.text') },
-    { icon: 'arrowRight', title: t('highlights.ownTheKeys.title'), text: t('highlights.ownTheKeys.text') },
+    { icon: 'key', title: t('highlights.ownTheKeys.title'), text: t('highlights.ownTheKeys.text') },
   ]
 
   const capabilities = [

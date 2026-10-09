@@ -1,4 +1,18 @@
 const icons = {
+  device: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="3" width="16" height="12" rx="2" />
+      <path d="M4 15l-2 4a1 1 0 0 0 1 2h18a1 1 0 0 0 1-2l-2-4" />
+      <path d="M10 18h4" />
+    </svg>
+  ),
+  key: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="8" cy="8" r="5" />
+      <path d="M11.5 11.5L21 21M17 17l3-3M14 14l3-3" />
+      <circle cx="7" cy="7" r="1" />
+    </svg>
+  ),
   chip: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 12h2" />
