@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import App from './App'
 import { LanguageProvider } from './i18n/LanguageProvider.jsx'
@@ -13,6 +13,18 @@ function Wrapper({ children, initialEntries = ['/'] }) {
 }
 
 describe('App renders without raw translation keys', () => {
+  it('renders an icon for every home page highlight', () => {
+    globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false }))
+    render(<App />, { wrapper: Wrapper })
+    const highlights = within(screen.getByLabelText('Core promises'))
+
+    for (const title of ['Local Inference', 'Encrypted Vault', 'You Own the Keys']) {
+      const highlight = highlights.getByText(title).closest('.hero-highlight')
+      expect(highlight).not.toBeNull()
+      expect(highlight.querySelector('.icon svg')).not.toBeNull()
+    }
+  })
+
   it('home page does not show dotted translation placeholders', async () => {
     globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false }))
     render(<App />, { wrapper: Wrapper })
