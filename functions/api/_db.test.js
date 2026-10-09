@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { insertSubmission, getSubmissionsSince, getSubmissionsInRange, getEventsInRange, pruneOldSubmissions, createSubmissionsTable } from './_db.js'
 
 function makeEnv(results = []) {
@@ -17,6 +17,11 @@ function makeEnv(results = []) {
 describe('D1 helpers', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   it('creates the submissions table', async () => {
@@ -65,6 +70,15 @@ describe('D1 helpers', () => {
     expect(env.prepared.bind).toHaveBeenCalledWith('2026-08-01T00:00:00.000Z')
   })
 
+  it('returns null when a submission write rejects', async () => {
+    const env = makeEnv()
+    env.prepared.run.mockRejectedValueOnce(new Error('D1 unavailable'))
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    await expect(insertSubmission(env, { source: 'download' })).resolves.toBeNull()
+    expect(consoleSpy).toHaveBeenCalledWith('[db] insertSubmission error:', 'D1 unavailable')
+  })
+
   it('returns submissions within a date range', async () => {
     const rows = [
       { id: 1, source: 'contact', email: 'a@example.com' },
@@ -73,6 +87,7 @@ describe('D1 helpers', () => {
     const env = makeEnv(rows)
     const result = await getSubmissionsInRange(env, '2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
     expect(result).toEqual(rows)
+    expect(env.DB.prepare).toHaveBeenCalledWith(expect.stringContaining('created_at >= ? AND created_at < ?'))
     expect(env.prepared.bind).toHaveBeenCalledWith('2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
   })
 
@@ -81,6 +96,7 @@ describe('D1 helpers', () => {
     const env = makeEnv(rows)
     const result = await getEventsInRange(env, '2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
     expect(result).toEqual(rows)
+    expect(env.DB.prepare).toHaveBeenCalledWith(expect.stringContaining('created_at >= ? AND created_at < ?'))
     expect(env.prepared.bind).toHaveBeenCalledWith('2026-08-01T00:00:00.000Z', '2026-08-02T00:00:00.000Z')
   })
 
@@ -90,13 +106,17 @@ describe('D1 helpers', () => {
   })
 
   it('prunes submissions and events older than N days', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-10-09T09:00:00.000Z'))
     const env = makeEnv()
     const result = await pruneOldSubmissions(env, 30)
     expect(result).toEqual({
       submissions: { meta: { changes: 1 }, success: true },
       events: { meta: { changes: 1 }, success: true },
     })
-    expect(env.DB.prepare).toHaveBeenCalledWith(expect.stringContaining('DELETE FROM submissions'))
-    expect(env.DB.prepare).toHaveBeenCalledWith(expect.stringContaining('DELETE FROM events'))
+    expect(env.DB.prepare).toHaveBeenCalledWith('DELETE FROM submissions WHERE created_at < ?')
+    expect(env.DB.prepare).toHaveBeenCalledWith('DELETE FROM events WHERE created_at < ?')
+    expect(env.prepared.bind).toHaveBeenNthCalledWith(1, '2026-09-09T09:00:00.000Z')
+    expect(env.prepared.bind).toHaveBeenNthCalledWith(2, '2026-09-09T09:00:00.000Z')
   })
 })

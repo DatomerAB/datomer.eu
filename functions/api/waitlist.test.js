@@ -31,6 +31,8 @@ describe('waitlist handler', () => {
 
   afterEach(() => {
     fetchSpy.mockRestore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   function makeRequest(body) {
@@ -202,7 +204,43 @@ describe('waitlist handler', () => {
     })
 
     expect(response.status).toBe(503)
+    expect((await response.json()).error).toBe('Could not record your submission. Please try again later.')
     expect(fetchSpy).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    '2020-01-01T00:00:00.000Z',
+    '2099-01-01T00:00:00.000Z',
+    'invalid-date',
+    undefined,
+  ])('stores downloads with server time instead of client timestamp %s', async (timestamp) => {
+    vi.useFakeTimers()
+    const serverTime = '2026-10-09T09:00:00.000Z'
+    vi.setSystemTime(new Date(serverTime))
+    const env = {
+      ...baseEnv,
+      WAITLIST_WEBHOOK_URL: 'https://example.com/webhook',
+    }
+    const request = makeRequest({
+      name: 'Download User',
+      email: 'DOWNLOAD@example.com',
+      country: 'se',
+      type: 'download',
+      timestamp,
+      turnstileToken: 'token',
+    })
+
+    const response = await onRequestPost({ request, env })
+    const data = await response.json()
+
+    expect(response.status).toBe(200)
+    expect(data.payload.timestamp).toBe(serverTime)
+    expect(insertSubmission).toHaveBeenCalledWith(env, expect.objectContaining({
+      source: 'download', createdAt: serverTime, email: 'download@example.com',
+      name: 'Download User', country: 'SE',
+    }))
+    const webhookCall = fetchSpy.mock.calls.find(([url]) => url === env.WAITLIST_WEBHOOK_URL)
+    expect(JSON.parse(webhookCall[1].body).timestamp).toBe(serverTime)
   })
 
   it('rejects missing email', async () => {

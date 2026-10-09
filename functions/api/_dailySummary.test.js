@@ -163,6 +163,56 @@ describe('daily summary logic', () => {
     expect(call.to).toEqual(['custom@example.com'])
   })
 
+  it('includes recent downloads and website events in the same report window', async () => {
+    const env = { RESEND_API_KEY: 're_123' }
+    const end = '2026-10-09T10:00:00.000Z'
+    const start = '2026-10-08T09:00:00.000Z'
+    const rows = [{
+      source: 'download', created_at: '2026-10-09T09:00:00.000Z',
+      email: 'download@example.com', name: 'Download User', country: 'SE',
+      metadata: JSON.stringify({ environment: 'preview', action: 'download-hero' }),
+    }]
+    const events = [{
+      session_id: 'download-session', created_at: '2026-10-09T09:01:00.000Z',
+      type: 'pageview', page_path: '/get-started', metadata: '{}',
+    }]
+    getSubmissionsInRange.mockResolvedValueOnce(rows)
+    getEventsInRange.mockResolvedValueOnce(events)
+
+    const result = await runDailySummary(env, undefined, { referenceTime: end })
+
+    expect(result).toMatchObject({ ok: true, count: 1 })
+    expect(getSubmissionsInRange).toHaveBeenCalledWith(env, start, end)
+    expect(getEventsInRange).toHaveBeenCalledWith(env, start, end)
+    const call = sendSupportEmail.mock.calls[0][0]
+    expect(call.subject).toContain('1 submission, 1 event')
+    expect(call.html).toContain('Website events (1)')
+    expect(call.text).toContain('Website events (1)')
+    expect(call.text).toContain('preview · download · download-hero (1)')
+    expect(call.text).toContain('/get-started (1)')
+    expect(call.attachments.map(({ filename }) => filename)).toEqual([
+      'datomer-submissions-2026-10-09.csv', 'datomer-events-2026-10-09.csv',
+    ])
+    const decode = (content) => new TextDecoder().decode(
+      Uint8Array.from(atob(content), (character) => character.charCodeAt(0))
+    )
+    expect(decode(call.attachments[0].content)).toContain('download@example.com')
+    expect(decode(call.attachments[1].content)).toContain('download-session,2026-10-09 09:01:00,pageview,/get-started')
+    expect(pruneOldSubmissions).toHaveBeenCalledWith(env, 30)
+  })
+
+  it('does not hide website-event read failures or prune data', async () => {
+    getEventsInRange.mockRejectedValueOnce(new Error('events unavailable'))
+
+    const result = await runDailySummary({ RESEND_API_KEY: 're_123' })
+
+    expect(result).toMatchObject({ ok: false, error: 'database_read_failed' })
+    expect(sendSupportEmail).toHaveBeenCalledWith(expect.objectContaining({
+      subject: expect.stringContaining('daily summary failed'),
+    }))
+    expect(pruneOldSubmissions).not.toHaveBeenCalled()
+  })
+
   it('does not prune when email sending fails', async () => {
     sendSupportEmail.mockResolvedValueOnce({ sent: false, status: 500, body: '{}' })
     getSubmissionsInRange.mockResolvedValueOnce([
