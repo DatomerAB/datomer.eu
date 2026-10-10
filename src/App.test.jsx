@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import App from './App'
 import { LanguageProvider } from './i18n/LanguageProvider.jsx'
@@ -13,6 +13,27 @@ function Wrapper({ children, initialEntries = ['/'] }) {
 }
 
 describe('App renders without raw translation keys', () => {
+  it('keeps the selected Windows installer through the existing download form', async () => {
+    vi.stubGlobal('localStorage', { getItem: vi.fn(() => null), setItem: vi.fn(), removeItem: vi.fn() })
+    const url = 'https://github.com/DatomerAB/par-releases/releases/download/v1.0.0-beta.10/Par-cpu.exe'
+    const catalog = { schema_version: 1, platforms: { 'windows-x64-cpu': [{ tag: 'v1.0.0-beta.10', name: 'Par-cpu.exe', url }] } }
+    globalThis.fetch = vi.fn((request) => Promise.resolve({
+      ok: String(request).includes('downloads.json') || request === '/api/waitlist',
+      json: () => Promise.resolve(String(request).includes('downloads.json') ? catalog : { ok: true }),
+    }))
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+    render(<App />, { wrapper: Wrapper })
+    fireEvent.click(await screen.findByRole('link', { name: 'Download EXE' }))
+    fireEvent.change(screen.getByRole('textbox', { name: /Full name/ }), { target: { value: 'Beta Tester' } })
+    fireEvent.change(screen.getByRole('textbox', { name: /Email address/ }), { target: { value: 'beta@example.com' } })
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'SE' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Download for Windows' }))
+    await waitFor(() => expect(clickSpy).toHaveBeenCalledTimes(1))
+    expect(clickSpy.mock.instances[0].href).toBe(url)
+    clickSpy.mockRestore()
+    vi.unstubAllGlobals()
+  })
+
   it('renders an icon for every home page highlight', () => {
     globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false }))
     render(<App />, { wrapper: Wrapper })

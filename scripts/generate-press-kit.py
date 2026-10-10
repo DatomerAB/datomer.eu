@@ -6,10 +6,12 @@ assets, and a factsheet, organised in a flat ZIP archive and an explorable
 public/press-kit/ folder.
 """
 from PIL import Image
+import base64
 import os
 import shutil
 import zipfile
 from datetime import datetime
+from xml.etree import ElementTree
 
 SOURCE_DIR = os.path.join(os.path.dirname(__file__), '..', 'brand-assets')
 OUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'public')
@@ -53,9 +55,9 @@ All files are high-resolution and ready for print or web use.
 
 ### Logos
 
-- `datomer-logo.svg` — Vector Datomer wordmark (preferred)
-- `datomer-logo-hires.png` — 3544 × 504 px transparent PNG
-- `datomer-logo.png` — 1772 × 252 px transparent PNG
+- `datomer-logo.svg` — SVG compatibility wrapper containing the approved PNG artwork
+- `datomer-logo-hires.png` — Compatibility alias of the approved artwork, without artificial upscaling
+- `datomer-logo.png` — Approved Datomer wordmark and tagline at its original resolution
 - `par-logo.png` — Pär symbol on transparent background
 - `par-logo-themed.png` — Pär themed profile logo
 - `par-logo-white.png` — Pär logo on white background
@@ -94,8 +96,7 @@ palette: {themes}.
 - Keep clear space around the Datomer wordmark and Pär symbol equal to the
   height of the letter "D".
 - Do not distort, recolour, or add effects to the logo without approval.
-- The red dots inside the "o" of Datomer are part of the wordmark and should
-  not be removed.
+- Keep the red circle and its two white dots exactly as supplied.
 """
 
 
@@ -106,6 +107,25 @@ def ensure_dir(path):
 
 
 def copy_asset(src, dst):
+    if src.startswith('datomer-logo') and src.endswith(('.png', '.svg')):
+        approved = os.path.join(OUT_DIR, 'datomer-logo.png')
+        if src.endswith('.png'):
+            shutil.copy2(approved, dst)
+        else:
+            with Image.open(approved) as image:
+                width, height = image.size
+            with open(approved, 'rb') as image:
+                encoded = base64.b64encode(image.read()).decode('ascii')
+            root = ElementTree.Element('svg', {
+                'xmlns': 'http://www.w3.org/2000/svg',
+                'viewBox': f'0 0 {width} {height}',
+            })
+            ElementTree.SubElement(root, 'image', {
+                'width': str(width), 'height': str(height),
+                'href': f'data:image/png;base64,{encoded}',
+            })
+            ElementTree.ElementTree(root).write(dst, encoding='utf-8', xml_declaration=True)
+        return True
     src_path = os.path.join(SOURCE_DIR, src)
     if os.path.exists(src_path):
         shutil.copy2(src_path, dst)

@@ -42,7 +42,7 @@ function readStoredForm() {
   }
 }
 
-export function DownloadForm({ downloadUrl, onClose, action = 'download-form' }) {
+export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', onClose, action = 'download-form' }) {
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
   const [form, setForm] = useState(readStoredForm)
@@ -150,6 +150,8 @@ export function DownloadForm({ downloadUrl, onClose, action = 'download-form' })
   }
 
   const countryName = (c) => (lang === 'sv' ? c.nameSv : c.nameEn)
+  const submitLabel = downloadPlatform.startsWith('windows') ? t('betaDownloads.downloadWindows') :
+    downloadPlatform.startsWith('linux') ? t('betaDownloads.downloadLinux') : t('downloadForm.submit')
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -210,7 +212,7 @@ export function DownloadForm({ downloadUrl, onClose, action = 'download-form' })
               onExpire={() => setTurnstileToken(null)}
             />
             <button type="submit" className="button button-primary" disabled={busy}>
-              {busy ? t('downloadForm.sending') : t('downloadForm.submit')}
+              {busy ? t('downloadForm.sending') : submitLabel}
             </button>
             <p className="form-consent">{t('downloadForm.consent')}</p>
           </form>

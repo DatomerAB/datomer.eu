@@ -8,7 +8,7 @@ const BRAND = {
   contactEmail: 'hello@datomer.eu',
   website: 'https://datomer.eu',
   parLogoUrl: 'https://datomer.eu/par-logo.png',
-  datomerLogoUrl: 'https://datomer.eu/datomer-logo.png',
+  datomerLogoUrl: 'https://datomer.eu/datomer-logo.png?v=20261010',
   // Aligns with the website design tokens
   bg: '#f7f6f4',
   surface: '#ffffff',
@@ -310,8 +310,8 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
                 <img
                   src="${BRAND.datomerLogoUrl}"
                   alt="Datomer"
-                  width="120"
-                  style="display: inline-block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 120px; height: auto; font-family: ${BRAND.fontStack}; font-size: 14px; font-weight: 700; color: ${BRAND.text};"
+                  width="168"
+                  style="display: inline-block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 168px; height: auto; font-family: ${BRAND.fontStack}; font-size: 14px; font-weight: 700; color: ${BRAND.text};"
                 />
               </p>
               <p style="margin: 0 0 8px;"><strong style="color: ${BRAND.text};">${BRAND.company} AB</strong></p>

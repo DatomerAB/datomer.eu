@@ -5,6 +5,8 @@ import { formatHeading, useLocalizedHeading } from './lib/formatHeading.js'
 import { useLanguage } from './i18n/useLanguage.js'
 import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
 import { DownloadForm } from './components/DownloadForm.jsx'
+import { BetaDownloads } from './components/BetaDownloads.jsx'
+import { useBetaDownloads } from './lib/betaDownloads.js'
 import { PaymentButton } from './components/PaymentButton.jsx'
 import { WaitlistForm } from './components/WaitlistForm.jsx'
 import { NewsletterForm } from './components/NewsletterForm.jsx'
@@ -52,7 +54,7 @@ function useDownloadUrl() {
     fetch('https://raw.githubusercontent.com/DatomerAB/par-releases/main/latest.json?tag=v0.1.9-beta.2026100801')
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (cancelled || !data?.version) return
+        if (cancelled || !data?.version || !data?.platforms?.['darwin-aarch64']) return
         const version = data.version
         const tag = `v${version}`
         const dmg = `https://github.com/DatomerAB/par-releases/releases/download/${tag}/Par_${version}_aarch64.dmg`
@@ -130,11 +132,11 @@ function CompanyAddress({ compact = false }) {
 function DatomerLogo() {
   return (
     <img
-      src="/datomer-logo.png"
+      src="/datomer-logo.png?v=20261010"
       alt="Datomer"
       className="datomer-logo"
-      width="160"
-      height="60"
+      width="1166"
+      height="399"
     />
   )
 }
@@ -235,7 +237,7 @@ function Footer() {
   )
 }
 
-function HomePage({ onDownload }) {
+function HomePage({ onDownload, downloadCatalog }) {
   const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
   const heroVariant = useExperiment('hero-cta-copy', ['control', 'social-proof'])
@@ -633,6 +635,8 @@ function HomePage({ onDownload }) {
           </div>
         </section>
 
+        <BetaDownloads catalog={downloadCatalog} onDownload={onDownload} />
+
         <section className="cta-band" id="download">
           <div className="container">
             <div className="cta-row">
@@ -926,14 +930,24 @@ function PaymentSuccessPage() {
 
 function App() {
   const [showDownloadForm, setShowDownloadForm] = useState(false)
-  const downloadUrl = useDownloadUrl()
+  const legacyDownloadUrl = useDownloadUrl()
+  const downloadCatalog = useBetaDownloads()
+  const [selectedDownload, setSelectedDownload] = useState(null)
+  const downloadUrl = selectedDownload || downloadCatalog.platforms['macos-arm64']?.[0]?.url ||
+    downloadCatalog.platforms['windows-x64-cpu']?.[0]?.url || legacyDownloadUrl
+  const downloadPlatform = Object.keys(downloadCatalog.platforms).find(platform =>
+    downloadCatalog.platforms[platform].some(entry => entry.url === downloadUrl)) || 'macos-arm64'
+  const openDownload = (url) => {
+    setSelectedDownload(typeof url === 'string' ? url : null)
+    setShowDownloadForm(true)
+  }
 
   return (
     <div className="page-shell">
       <ScrollToTop />
-      <TopBar onDownload={() => setShowDownloadForm(true)} />
+      <TopBar onDownload={openDownload} />
       <Routes>
-        <Route path="/" element={<HomePage onDownload={() => setShowDownloadForm(true)} />} />
+        <Route path="/" element={<HomePage onDownload={openDownload} downloadCatalog={downloadCatalog} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/get-started" element={<GetStartedPage onDownload={() => setShowDownloadForm(true)} />} />
@@ -947,7 +961,7 @@ function App() {
       </Routes>
       <Footer />
       {showDownloadForm && (
-        <DownloadForm downloadUrl={downloadUrl} onClose={() => setShowDownloadForm(false)} />
+        <DownloadForm downloadUrl={downloadUrl} downloadPlatform={downloadPlatform} onClose={() => setShowDownloadForm(false)} />
       )}
       <CookieConsent />
     </div>

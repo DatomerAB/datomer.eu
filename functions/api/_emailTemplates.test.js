@@ -11,6 +11,22 @@ import {
 } from './_emailTemplates.js'
 
 describe('email templates', () => {
+  it('uses the approved Datomer logo in every shared email while preserving the Par header', () => {
+    const contact = { name: 'Brand Tester', email: 'brand@example.com', message: 'Brand preview' }
+    const waitlist = { ...contact, type: 'waitlist', interests: {} }
+    const emails = [
+      buildContactSupportEmail(contact),
+      buildContactConfirmationEmail(contact),
+      buildWaitlistSupportEmail(waitlist),
+      buildWaitlistConfirmationEmail(waitlist),
+      buildDailySummaryEmail({ rows: [], events: [], dateLabel: '2026-10-10' }),
+    ]
+    for (const email of emails) {
+      expect(email.html).toContain('src="https://datomer.eu/datomer-logo.png?v=20261010"')
+      expect(email.html).toContain('src="https://datomer.eu/par-logo.png"')
+    }
+  })
+
   it('extracts first name', () => {
     expect(getFirstName('Anna Svensson')).toBe('Anna')
     expect(getFirstName('Björn')).toBe('Björn')

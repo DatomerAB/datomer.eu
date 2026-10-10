@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate sharp, high-resolution themed Datomer brand assets.
 
-This script uses the vector-quality master logo (brand-assets/datomer-logo-hires.png)
+This script uses the approved public/datomer-logo.png without recoloring its artwork
 to produce themed logo, banner, and social-post variations. Taglines are rendered
 with larger, heavier type and a subtle shadow so they stay crisp and legible at
 all sizes.
@@ -12,7 +12,7 @@ import math
 import random
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'brand-assets')
-DATOMER_LOGO_PATH = os.path.join(OUT_DIR, 'datomer-logo-hires.png')
+DATOMER_LOGO_PATH = os.path.join(os.path.dirname(__file__), '..', 'public', 'datomer-logo.png')
 
 # Aligned with Pär brand image palettes.
 PALETTES = {
@@ -456,12 +456,11 @@ def create_datomer_logo_only(palette, variant_name, themed_logo_no_shadow):
 
 
 def main():
-    original = Image.open(DATOMER_LOGO_PATH)
-    text_mask, accent_mask = extract_datomer_logo_masks(original)
+    original = Image.open(DATOMER_LOGO_PATH).convert('RGBA')
 
     for name, palette in PALETTES.items():
         print(f"\nGenerating {palette['name']} Datomer variants...")
-        themed_no_shadow = create_themed_datomer_logo(original, text_mask, accent_mask, palette, add_shadow=False)
+        themed_no_shadow = original
         create_datomer_logo(palette, name, themed_no_shadow)
         create_datomer_banner(palette, name, themed_no_shadow)
         create_datomer_social_post(palette, name, themed_no_shadow)

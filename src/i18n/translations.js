@@ -1,5 +1,19 @@
 export const translations = {
   en: {
+    betaDownloads: {
+      title: 'Beta releases',
+      latest: 'Latest',
+      previous: 'Previous',
+      download: 'Download',
+      downloadWindows: 'Download for Windows',
+      downloadLinux: 'Download for Linux',
+      platforms: {
+        'macos-arm64': 'macOS · Apple Silicon',
+        'windows-x64-cpu': 'Windows · x64 CPU',
+        'windows-x64-gpu': 'Windows · x64 GPU',
+        'linux-x64-cpu': 'Linux · x64 CPU',
+      },
+    },
     nav: {
       product: 'Product',
       features: 'Features',
@@ -455,6 +469,20 @@ export const translations = {
     },
   },
   sv: {
+    betaDownloads: {
+      title: 'Betaversioner',
+      latest: 'Senaste',
+      previous: 'Föregående',
+      download: 'Ladda ner',
+      downloadWindows: 'Ladda ner för Windows',
+      downloadLinux: 'Ladda ner för Linux',
+      platforms: {
+        'macos-arm64': 'macOS · Apple Silicon',
+        'windows-x64-cpu': 'Windows · x64 CPU',
+        'windows-x64-gpu': 'Windows · x64 GPU',
+        'linux-x64-cpu': 'Linux · x64 CPU',
+      },
+    },
     nav: {
       product: 'Produkt',
       features: 'Funktioner',

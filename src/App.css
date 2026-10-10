@@ -112,14 +112,14 @@
   width: auto;
   display: block;
   flex-shrink: 0;
-  opacity: 0.9;
-  filter: grayscale(1) contrast(1.1);
+  opacity: 1;
+  filter: none;
   transition: opacity var(--transition-fast), filter var(--transition-fast);
 }
 
 .datomer-link:hover .datomer-logo {
   opacity: 1;
-  filter: grayscale(0.2) contrast(1.2);
+  filter: none;
 }
 
 .icon {
@@ -1320,16 +1320,16 @@
 }
 
 .footer-company .datomer-logo {
-  height: 48px;
+  height: 56px;
   width: auto;
-  opacity: 0.85;
-  filter: grayscale(1) contrast(1.1);
+  opacity: 1;
+  filter: none;
   transition: opacity var(--transition-fast), filter var(--transition-fast);
 }
 
 .footer-company:hover .datomer-logo {
   opacity: 1;
-  filter: grayscale(0.2) contrast(1.2);
+  filter: none;
 }
 
 .footer-links {

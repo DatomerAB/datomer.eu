@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "platforms": {
+    "macos-arm64": [
+      {
+        "tag": "v0.1.9-beta.2026100804",
+        "name": "Par_0.1.9-beta.2026100804_aarch64.dmg",
+        "url": "https://github.com/DatomerAB/par-releases/releases/download/v0.1.9-beta.2026100804/Par_0.1.9-beta.2026100804_aarch64.dmg"
+      },
+      {
+        "tag": "v0.1.9-beta.2026100801",
+        "name": "Par_0.1.9-beta.2026100801_aarch64.dmg",
+        "url": "https://github.com/DatomerAB/par-releases/releases/download/v0.1.9-beta.2026100801/Par_0.1.9-beta.2026100801_aarch64.dmg"
+      }
+    ]
+  }
+}

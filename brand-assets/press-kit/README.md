@@ -15,9 +15,9 @@ All files are high-resolution and ready for print or web use.
 
 ### Logos
 
-- `datomer-logo.svg` — Vector Datomer wordmark (preferred)
-- `datomer-logo-hires.png` — 3544 × 504 px transparent PNG
-- `datomer-logo.png` — 1772 × 252 px transparent PNG
+- `datomer-logo.svg` — SVG compatibility wrapper containing the approved PNG artwork
+- `datomer-logo-hires.png` — Compatibility alias of the approved artwork, without artificial upscaling
+- `datomer-logo.png` — Approved Datomer wordmark and tagline at original resolution
 - `par-logo.png` — Pär symbol on transparent background
 - `par-logo-themed.png` — Pär themed profile logo
 - `par-logo-white.png` — Pär logo on white background

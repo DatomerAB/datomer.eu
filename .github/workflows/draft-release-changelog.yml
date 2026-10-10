@@ -57,6 +57,7 @@ jobs:
 
   draft:
     needs: runner-selection
+    if: ${{ !github.event.client_payload.download_catalog_url }}
     runs-on: ${{ fromJSON(needs.runner-selection.outputs.runs_on) }}
     steps:
       - name: Checkout
@@ -231,7 +232,7 @@ jobs:
                   @{ title = 'Source'; value = $env:SOURCE_REPO; short = $true }
                 )
                 footer = 'Pär by Datomer'
-                footer_icon = 'https://datomerab.github.io/par-public/assets/landing/datomer-logo.png'
+                footer_icon = 'https://datomerab.github.io/par-public/assets/landing/datomer-logo.png?v=20261010'
               }
             )
           } | ConvertTo-Json -Depth 8 -Compress
