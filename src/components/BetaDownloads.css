@@ -13,9 +13,42 @@
   gap: 2rem;
 }
 
+.beta-download-platform-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .beta-download-platform h3 {
   font-size: 1.1rem;
   letter-spacing: 0;
+}
+
+.beta-download-variant-label,
+.beta-download-variant-control span {
+  color: var(--muted, #60656d);
+  font-size: 0.9rem;
+}
+
+.beta-download-variant-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.beta-download-variant-control select {
+  min-height: 2.5rem;
+  max-width: 12rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border, #dedede);
+  border-radius: 4px;
+  background: var(--surface, #fff);
+  color: inherit;
+  font: inherit;
 }
 
 .beta-download-platform ul {

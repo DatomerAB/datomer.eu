@@ -937,6 +937,7 @@ function App() {
     downloadCatalog.platforms['windows-x64-cpu']?.[0]?.url || legacyDownloadUrl
   const downloadPlatform = Object.keys(downloadCatalog.platforms).find(platform =>
     downloadCatalog.platforms[platform].some(entry => entry.url === downloadUrl)) || 'macos-arm64'
+  const downloadPlatformMetadata = downloadCatalog.platform_metadata?.[downloadPlatform]
   const openDownload = (url) => {
     setSelectedDownload(typeof url === 'string' ? url : null)
     setShowDownloadForm(true)
@@ -950,7 +951,7 @@ function App() {
         <Route path="/" element={<HomePage onDownload={openDownload} downloadCatalog={downloadCatalog} />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/get-started" element={<GetStartedPage onDownload={() => setShowDownloadForm(true)} />} />
+        <Route path="/get-started" element={<GetStartedPage downloadCatalog={downloadCatalog} onDownload={openDownload} />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
@@ -961,7 +962,12 @@ function App() {
       </Routes>
       <Footer />
       {showDownloadForm && (
-        <DownloadForm downloadUrl={downloadUrl} downloadPlatform={downloadPlatform} onClose={() => setShowDownloadForm(false)} />
+        <DownloadForm
+          downloadUrl={downloadUrl}
+          downloadPlatform={downloadPlatform}
+          downloadPlatformMetadata={downloadPlatformMetadata}
+          onClose={() => setShowDownloadForm(false)}
+        />
       )}
       <CookieConsent />
     </div>

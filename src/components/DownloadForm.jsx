@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
 import { getTrackingPayload } from '../analytics/tracking.js'
+import { getPlatformPresentation } from '../lib/betaDownloads.js'
 
 const STORAGE_KEY = 'par-download-info'
 
@@ -42,7 +43,7 @@ function readStoredForm() {
   }
 }
 
-export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', onClose, action = 'download-form' }) {
+export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', downloadPlatformMetadata, onClose, action = 'download-form' }) {
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
   const [form, setForm] = useState(readStoredForm)
@@ -150,8 +151,8 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', on
   }
 
   const countryName = (c) => (lang === 'sv' ? c.nameSv : c.nameEn)
-  const submitLabel = downloadPlatform.startsWith('windows') ? t('betaDownloads.downloadWindows') :
-    downloadPlatform.startsWith('linux') ? t('betaDownloads.downloadLinux') : t('downloadForm.submit')
+  const platformLabel = getPlatformPresentation(downloadPlatform, downloadPlatformMetadata, lang).os
+  const submitLabel = `${t('downloadForm.downloadFor')} ${platformLabel}`
 
   return (
     <div className="modal-overlay" onClick={onClose}>

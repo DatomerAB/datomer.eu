@@ -33,6 +33,9 @@ describe('Get Started page', () => {
     expect(screen.getByRole('heading', { name: /Get Started With Pär/i, level: 1 })).toBeTruthy()
     expect(screen.getByRole('heading', { name: /Before you start/i })).toBeTruthy()
     expect(screen.getByText(/Drag Pär onto the Applications folder/i)).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Mac' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Windows' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Linux' })).toBeTruthy()
   })
 
   it('renders markdown tables from the synced document', async () => {
@@ -43,14 +46,15 @@ describe('Get Started page', () => {
     expect(tables.length).toBeGreaterThanOrEqual(3)
   })
 
-  it('opens the download modal from the page CTA', async () => {
+  it('opens the download modal from a selected platform asset', async () => {
     render(<App />, { wrapper: Wrapper })
     await new Promise((resolve) => setTimeout(resolve, 0))
 
     // Scoped by name: the cookie consent banner is also role="dialog".
     expect(screen.queryByRole('dialog', { name: /Download Pär beta/i })).toBeNull()
-    fireEvent.click(screen.getAllByRole('button', { name: /Download for Mac/i })[0])
+    fireEvent.click(screen.getByRole('link', { name: 'Download APPIMAGE' }))
     expect(screen.getByRole('dialog', { name: /Download Pär beta/i })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Download for Linux' })).toBeTruthy()
   })
 
   it('does not render a second download form inline on the page', async () => {

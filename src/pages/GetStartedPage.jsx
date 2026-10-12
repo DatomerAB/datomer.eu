@@ -1,8 +1,9 @@
 import { useLanguage } from '../i18n/useLanguage.js'
 import { useLocalizedHeading } from '../lib/formatHeading.js'
+import { BetaDownloads } from '../components/BetaDownloads.jsx'
 import { getGetStartedHtml } from '../content/get-started/index.js'
 
-export function GetStartedPage({ onDownload }) {
+export function GetStartedPage({ downloadCatalog, onDownload }) {
   const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
   const html = getGetStartedHtml(lang)
@@ -12,22 +13,16 @@ export function GetStartedPage({ onDownload }) {
       <header className="page-header">
         <h1>{formatHeading(t('getStarted.title'))}</h1>
         <p className="lede">{t('getStarted.intro')}</p>
-        <div className="cta-row">
-          <button type="button" className="button button-primary" onClick={onDownload}>
-            {t('getStarted.downloadMac')}
-          </button>
-        </div>
-        <p className="get-started-note">{t('getStarted.requirementsNote')}</p>
       </header>
+
+      <BetaDownloads catalog={downloadCatalog} onDownload={onDownload} />
 
       <div className="prose" dangerouslySetInnerHTML={{ __html: html }} />
 
       <section className="get-started-footer-cta">
         <h2>{formatHeading(t('getStarted.readyTitle'))}</h2>
         <p>{t('getStarted.readyText')}</p>
-        <button type="button" className="button button-primary" onClick={onDownload}>
-          {t('getStarted.downloadMac')}
-        </button>
+        <a className="button button-primary" href="#beta-releases-title">{t('getStarted.downloadOptions')}</a>
       </section>
     </main>
   )

@@ -21,9 +21,11 @@ describe('App renders without raw translation keys', () => {
       ok: String(request).includes('downloads.json') || request === '/api/waitlist',
       json: () => Promise.resolve(String(request).includes('downloads.json') ? catalog : { ok: true }),
     }))
-    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
     render(<App />, { wrapper: Wrapper })
+    await screen.findByText('1.0.0-beta.10')
     fireEvent.click(await screen.findByRole('link', { name: 'Download EXE' }))
+    expect(screen.getByRole('dialog', { name: /Download Pär beta/i })).toBeTruthy()
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
     fireEvent.change(screen.getByRole('textbox', { name: /Full name/ }), { target: { value: 'Beta Tester' } })
     fireEvent.change(screen.getByRole('textbox', { name: /Email address/ }), { target: { value: 'beta@example.com' } })
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'SE' } })
