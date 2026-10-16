@@ -47,33 +47,33 @@
     ],
     "macos-arm64": [
       {
+        "name": "Par_0.1.9-beta.2026101602_aarch64.dmg",
+        "sha256": "9112c2ad4aa0cb030d3e9ee7a5c7fa7cd1f12c7425bf5f2a0551e5c76eed77df",
+        "tag": "v0.1.9-beta.2026101602",
+        "url": "https://github.com/DatomerAB/par-releases/releases/download/v0.1.9-beta.2026101602/Par_0.1.9-beta.2026101602_aarch64.dmg"
+      },
+      {
         "name": "Par_0.1.9-beta.2026101201_aarch64.dmg",
         "sha256": "d107a8959c643eea6d2c60e20d030f9d1c545eb918e05c50896c34a723d34dda",
         "tag": "v0.1.9-beta.2026101201",
         "url": "https://github.com/DatomerAB/par-releases/releases/download/v0.1.9-beta.2026101201/Par_0.1.9-beta.2026101201_aarch64.dmg"
-      },
-      {
-        "name": "Par_0.1.9-beta.2026101103_aarch64.dmg",
-        "sha256": "084d9061d5b3869b2ba4e34a975ba4a226e90132d44561aa56e385c8507c3227",
-        "tag": "v0.1.9-beta.2026101103",
-        "url": "https://github.com/DatomerAB/par-releases/releases/download/v0.1.9-beta.2026101103/Par_0.1.9-beta.2026101103_aarch64.dmg"
       }
     ],
     "windows-x64-cpu": [
+      {
+        "name": "Par_0.1.9-beta.2026101602_x64-setup-cpu.exe",
+        "sha256": "dbc2d0eb1e9425f76d4690a51dff7a653b01026af1c97fceab2f248216fab2d4",
+        "tag": "v0.1.9-beta.2026101602",
+        "url": "https://github.com/DatomerAB/par-releases/releases/download/v0.1.9-beta.2026101602/Par_0.1.9-beta.2026101602_x64-setup-cpu.exe"
+      },
       {
         "name": "Par_0.1.9-beta.2026101201_x64-setup-cpu.exe",
         "sha256": "25763c4ed643a01a62dbfa50bfafce6bb8ac4086166655e5323a229bc91bae8e",
         "tag": "v0.1.9-beta.2026101201",
         "url": "https://github.com/DatomerAB/par-releases/releases/download/v0.1.9-beta.2026101201/Par_0.1.9-beta.2026101201_x64-setup-cpu.exe"
-      },
-      {
-        "name": "Par_0.1.9-beta.2026101103_x64-setup-cpu.exe",
-        "sha256": "0400382438dfb1c5211ce1cba59f45a7d700684d38dcfc0472c9b20c2d3bb2b6",
-        "tag": "v0.1.9-beta.2026101103",
-        "url": "https://github.com/DatomerAB/par-releases/releases/download/v0.1.9-beta.2026101103/Par_0.1.9-beta.2026101103_x64-setup-cpu.exe"
       }
     ]
   },
-  "revision": "26aca6ed90e85355d1979c20741998b7470bc07591a97a1db902a9a090d95ab7",
+  "revision": "7dbfd422eecb5b2d0d08ec5c50e41b3ab0e3c513d0b78a6e7d54ea78d59f2d92",
   "schema_version": 1
 }
