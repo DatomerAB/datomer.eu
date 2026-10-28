@@ -61,6 +61,30 @@ configured Cloudflare preview with test services and preview database bindings.
 Errors are shown by the existing forms; no local success responses are fabricated.
 Middleware behavior is covered by `functions/_middleware.test.js`.
 
+### Crawler-readable homepage preview
+
+`npm run build` also renders the existing company and product homepages in English
+and Swedish. It writes internal HTML variants to `dist/__prerender/` using a
+temporary server bundle in `dist-ssr/`. Neither directory belongs in Git.
+Pages middleware selects the correct variant by hostname and `?lang=sv`; React
+hydrates that content instead of replacing it. Other routes still use client rendering.
+There is no second set of page copy, components, or styles.
+
+Vite's preview server does not select these variants. To test the generated HTML
+and hydration through Pages, run the following in separate terminals after building
+(use your installed Wrangler executable):
+
+```bash
+wrangler pages dev dist --ip 127.0.0.1 --port 4173 --inspector-port 9243
+wrangler pages dev dist --ip 127.0.0.1 --port 4174 --inspector-port 9244
+```
+
+Port 4173 selects the company and 4174 selects Pär. Stop any Vite preview using
+those ports first. Only test UI/navigation locally unless preview-only API
+credentials and database bindings have been configured. Wrangler may load
+`.env.local`; never submit forms or start checkout with production credentials.
+See [DEPLOYMENT.md](DEPLOYMENT.md#homepage-pre-rendering) for rollout and rollback.
+
 The product's existing pages, feature copy, pricing behavior, download catalog,
 and release history are retained. New product purpose/development text lives in
 `src/content/productPurpose.js`; it does not certify existing feature claims or

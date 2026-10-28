@@ -4,11 +4,13 @@ import App from './App.jsx'
 import { CompanyPage } from './pages/CompanyPage.jsx'
 import { legacyProductDestination, siteForUrl } from './lib/site.js'
 import { SiteMetadata } from './components/SiteMetadata.jsx'
+import { useBrowserReady, useSiteUrl } from './lib/RenderContext.jsx'
 
 export default function SiteApp() {
   const location = useLocation()
-  const url = new URL(`${location.pathname}${location.search}${location.hash}`, window.location.origin)
-  const destination = legacyProductDestination(url)
+  const url = useSiteUrl()
+  const ready = useBrowserReady()
+  const destination = ready ? legacyProductDestination(url) : null
   useEffect(() => {
     if (destination) window.location.replace(destination)
   }, [destination])

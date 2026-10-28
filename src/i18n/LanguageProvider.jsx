@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useInRouterContext, useSearchParams } from 'react-router-dom'
 import { translations } from './translations'
 import { LanguageContext } from './LanguageContext.js'
+import { RenderContext, useBrowserReady } from '../lib/RenderContext.jsx'
 
 const EMPTY_SEARCH_PARAMS = new URLSearchParams()
 const ignoreSearchParams = () => {}
@@ -39,9 +40,11 @@ function RoutedLanguageProvider({ children }) {
 }
 
 function LanguageStateProvider({ children, searchParams = EMPTY_SEARCH_PARAMS, setSearchParams = ignoreSearchParams }) {
-  const [lang, setLangState] = useState(() => {
+  const rendering = useContext(RenderContext)
+  const ready = useBrowserReady()
+  const [selectedLang, setLangState] = useState(() => {
     if (typeof window === 'undefined') {
-      return parseLanguage(searchParams.get('lang')) || DEFAULT_LANGUAGE
+      return rendering?.language || parseLanguage(searchParams.get('lang')) || DEFAULT_LANGUAGE
     }
     const queryLang = parseLanguage(searchParams.get('lang'))
     if (queryLang) return queryLang
@@ -51,6 +54,7 @@ function LanguageStateProvider({ children, searchParams = EMPTY_SEARCH_PARAMS, s
     const browser = parseLanguage(navigator.language)
     return browser || DEFAULT_LANGUAGE
   })
+  const lang = rendering && !ready ? rendering.language : selectedLang
 
   const setLang = (next) => {
     const code = parseLanguage(next) || DEFAULT_LANGUAGE

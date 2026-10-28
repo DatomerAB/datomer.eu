@@ -23,6 +23,7 @@ import { Icon } from './components/Icon.jsx'
 import { siteForUrl, siteLinks } from './lib/site.js'
 import { resolveTopic, topicContent } from './content/contactTopics.js'
 import { productPurpose } from './content/productPurpose.js'
+import { useSiteUrl } from './lib/RenderContext.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -198,6 +199,7 @@ function TopBar({ onDownload }) {
 
 function Footer() {
   const { t } = useLanguage()
+  const url = useSiteUrl()
 
   return (
     <footer className="footer">
@@ -224,7 +226,7 @@ function Footer() {
           </nav>
 
           <div className="footer-company" aria-label="Datomer company details">
-            <a href={siteLinks(new URL(window.location.href)).company} aria-label="Datomer AB">
+            <a href={siteLinks(url).company} aria-label="Datomer AB">
               <DatomerLogo />
             </a>
           </div>
@@ -723,7 +725,7 @@ export function ContactPage() {
   const formatHeading = useLocalizedHeading()
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const [searchParams] = useSearchParams()
-  const site = siteForUrl(new URL(window.location.href))
+  const site = siteForUrl(useSiteUrl())
   const topic = resolveTopic(searchParams.get('topic'), site)
   const { subject, message: prefill } = topicContent(topic, lang)
   const [form, setForm] = useState({ name: '', email: '' })

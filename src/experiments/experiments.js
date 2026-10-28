@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { analytics } from '../analytics/analytics.js'
+import { useBrowserReady } from '../lib/RenderContext.jsx'
 
 const STORAGE_KEY = 'par-experiments'
 const VISITOR_KEY = 'par-visitor-id'
@@ -45,5 +46,7 @@ export function getVariant(testName, variants = ['control', 'treatment']) {
 }
 
 export function useExperiment(testName, variants = ['control', 'treatment']) {
-  return useMemo(() => getVariant(testName, variants), [testName, variants.join(',')])
+  const ready = useBrowserReady()
+  const variantKey = variants.join(',')
+  return useMemo(() => ready ? getVariant(testName, variantKey.split(',')) : variantKey.split(',')[0], [ready, testName, variantKey])
 }
