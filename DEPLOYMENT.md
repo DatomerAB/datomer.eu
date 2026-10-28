@@ -165,7 +165,73 @@ deployment. AI training policy and Cloudflare settings are unchanged here.
 Regression tests compare server and React metadata across both sites, both
 languages, public routes, trailing slashes, unknown routes, and preview hosts,
 and verify that page components do not override the shared values.
-IndexNow submission remains a separate post-deployment automation phase.
+IndexNow submission runs separately from deployment as described below.
+
+## IndexNow production notifications
+
+The `Notify IndexNow after production deployment` workflow listens for the
+external **Cloudflare Pages** check completing successfully. It does not publish
+the website or run on a plain push before deployment has finished. The workflow
+uses the existing runner-selection setup, checks out trusted `main`, and requires
+read-only GitHub access to branch/check information. No new account secret,
+Cloudflare token, or IndexNow API credential is required.
+
+The build writes `dist/deployment.json` with the commit supplied by
+`CF_PAGES_COMMIT_SHA` (or `GITHUB_SHA`/local Git during other builds). It contains
+only the public Git commit identifier. The notification script verifies:
+
+1. The event belongs to the Cloudflare app and current `main` commit; old and
+   preview deployment events are skipped.
+2. The latest Cloudflare check for that commit completed successfully.
+3. Each production host serves the expected commit in `/deployment.json`.
+4. Each host serves the exact public key at `/indexnow-key.txt`.
+5. Its live sitemap matches the shared canonical public route list.
+
+`public/indexnow-key.txt` is a **public ownership-verification token**, not an
+authentication secret. The same file is published on both owned hosts, and each
+submission explicitly supplies that host's key location. Never replace this file
+with a private API token. When rotating the verification token, deploy it first
+before submitting with the replacement.
+
+Each verified production deployment submits a small snapshot of the public URL
+list: currently 10 URLs for Datomer and 20 for Pär, including English and Swedish.
+The lists come from the same route/language helpers as the sitemap, not browser
+history or analytics. Company `/about` aliases, payment confirmations, beta
+redirects, preview hosts, campaign parameters, and personal data are excluded.
+Submissions go to `https://api.indexnow.org/indexnow`, which shares them with
+participating engines. They do not submit directly to Google.
+
+HTTP 200 means received; 202 means received with key verification pending.
+Neither means a page is indexed or will rank higher. Transient network errors,
+HTTP 429, and server errors are retried up to three times with request timeouts
+and bounded delays. `Retry-After` is honored; a delay beyond the job's budget
+fails with an instruction to rerun later rather than retrying too soon.
+Invalid key/payload responses fail immediately.
+
+Errors are logged, produce a failed notification job, and appear in the GitHub
+Actions summary. Both hosts are attempted independently. This separate workflow
+cannot roll back, break, or mark the Cloudflare deployment itself unsuccessful.
+If the live revision has not propagated yet, the job fails closed; rerun once
+both hosts show the expected revision. A retry can repeat previously received
+URLs; it does not change content or submit private information.
+
+### First activation and operational checks
+
+1. Merge/deploy this change, then confirm both production `/deployment.json`
+   files show the deployed commit and both `/indexnow-key.txt` files contain
+   the verification token.
+2. Open **Actions > Notify IndexNow after production deployment**. Confirm the
+   successful Cloudflare check triggered a run. If it did not trigger during
+   first activation, use **Run workflow**, selecting **main**. Manual runs
+   repeat the same deployment verification and cannot submit an unverified build.
+3. Check the summary for both hosts and HTTP 200/202 receipt. Key validation
+   failures or rate limits need investigation/retry, not a website redeploy.
+4. Review indexing in Bing Webmaster Tools over time; receipt is not evidence
+   of indexing. Cloudflare/WAF crawler restrictions remain independent.
+
+Disable this workflow in GitHub Actions to stop notifications without changing
+the website. Local tests mock all outbound requests; running the test suite
+does not notify search engines. Live receipt can only be verified after release.
 
 ## Website analytics and campaign reporting
 
