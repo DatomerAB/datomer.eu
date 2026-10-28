@@ -247,7 +247,7 @@ export const translations = {
         'Pär supports GGUF models natively and can connect to Ollama. You can bring your own models or use recommended local models for chat, code, vision, and reasoning.',
       q3: 'Is there a Windows or Linux version?',
       a3:
-        'This beta campaign is for Mac only. Windows and Linux are not part of this campaign. Existing downloads for those platforms remain in the download list; check their version and setup requirements separately. Pär Web is a separate option that is not available yet.',
+        'Mac and Windows beta downloads are available. The Mac beta requires an Apple-chip Mac, M1 or newer. The Windows beta is for 64-bit Intel or AMD PCs, not Windows on ARM. The download list also includes an older Linux build; check its version and the setup guide before choosing it. Pär Web is a separate option that is not available yet.',
       q4: 'Can I export my data?',
       a4:
         'Export and import are included in Plus, Pro, and Enterprise. They are not listed in the Free plan. Check the options in your installed version before moving your data.',
@@ -265,7 +265,7 @@ export const translations = {
       waitlistPlaceholder: 'Enter your email',
       joinWaitlist: 'Join Waitlist',
       waitlistHint: 'Get notified about beta spots, updates, and launch notes.',
-      disclaimer: 'This beta campaign is for Mac only. Requires macOS 11 or later and an Apple-chip Mac, M1 or newer. Not for Intel Macs.',
+      disclaimer: 'Mac beta: requires macOS 11 or later and an Apple-chip Mac, M1 or newer. Not for Intel Macs. See the setup guide for other downloads.',
     },
     waitlist: {
       sending: 'Joining…',
@@ -691,7 +691,7 @@ export const translations = {
         'Pär stöder GGUF-modeller direkt och kan ansluta till Ollama. Du kan använda egna modeller eller rekommenderade lokala modeller för chatt, kod, bild och resonemang.',
       q3: 'Finns det en Windows- eller Linux-version?',
       a3:
-        'Den här betakampanjen gäller endast Mac. Windows och Linux ingår inte i kampanjen. Befintliga nedladdningar för dessa plattformar finns kvar i nedladdningslistan; kontrollera deras version och installationskrav separat. Pär Web är ett separat alternativ som ännu inte är tillgängligt.',
+        'Betaversioner för Mac och Windows finns att ladda ner. Mac-betan kräver en Mac med Apple-chip, M1 eller senare. Windows-betan är för 64-bitars datorer med Intel eller AMD, inte Windows på ARM. Nedladdningslistan innehåller även en äldre Linux-version; kontrollera versionen och installationsguiden innan du väljer den. Pär Web är ett separat alternativ som ännu inte är tillgängligt.',
       q4: 'Kan jag exportera mina data?',
       a4:
         'Export och import ingår i Plus, Pro och Enterprise. De finns inte med i Gratis-abonnemanget. Kontrollera alternativen i din installerade version innan du flyttar dina data.',
@@ -709,7 +709,7 @@ export const translations = {
       waitlistPlaceholder: 'Ange din e-post',
       joinWaitlist: 'Gå med i väntelistan',
       waitlistHint: 'Få besked om betaplatser, uppdateringar och lanseringsnoteringar.',
-      disclaimer: 'Den här betakampanjen gäller endast Mac. Kräver macOS 11 eller senare och en Mac med Apple-chip, M1 eller senare. Inte för Intel-Mac.',
+      disclaimer: 'Mac-beta: kräver macOS 11 eller senare och en Mac med Apple-chip, M1 eller senare. Inte för Intel-Mac. Se installationsguiden för andra nedladdningar.',
     },
     waitlist: {
       sending: 'Går med…',

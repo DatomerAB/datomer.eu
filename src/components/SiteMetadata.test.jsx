@@ -21,6 +21,8 @@ const CASES = [
   'https://datomer.eu/missing?lang=en',
   'https://par.datomer.eu/missing?lang=sv',
   'https://branch.pages.dev/press?lang=sv',
+  'https://par.datomer.eu/campaigns/mac-beta?lang=en&utm_campaign=mac-beta',
+  'https://par.datomer.eu/campaigns/mac-beta?lang=sv&utm_campaign=mac-beta',
 ]
 
 afterEach(() => {

@@ -27,10 +27,9 @@ describe('release-evidenced beta messaging', () => {
     expect(screen.getByText(copy.faq.a3)).toBeVisible()
     expect(copy.faq.a3).toContain('Windows')
     expect(copy.faq.a3).toContain('Linux')
-    const campaignScope = lang === 'en' ? 'campaign is for Mac only' : 'betakampanjen gäller endast Mac'
-    expect(copy.faq.a3).toContain(campaignScope)
-    expect(copy.cta.disclaimer).toContain(campaignScope)
-    expect(productPurpose[lang].compatibility).toContain(campaignScope)
+    expect(copy.faq.a3).toContain('ARM')
+    expect(copy.cta.disclaimer).not.toMatch(/campaign|kampanj/)
+    expect(productPurpose[lang].compatibility).not.toMatch(/campaign|kampanj/)
     expect(screen.getByText(copy.cta.disclaimer)).toBeVisible()
     expect(copy.cta.disclaimer).toContain('M1')
     expect(copy.cta.disclaimer).not.toMatch(/recommended|rekommenderas/)

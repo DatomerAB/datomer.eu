@@ -1,6 +1,6 @@
 export const productPurpose = {
   en: {
-    compatibility: 'This beta campaign is for Mac only: Apple chips, M1 or newer. Not for Intel Macs.',
+    compatibility: 'Mac beta: for Macs with Apple chips, M1 or newer. Not for Intel Macs.',
     betaNotice: 'Pär is in beta. Features may change, and answers can be wrong. Check important information.',
     purposeLink: 'Our purpose and what we’re working on',
     visionTitle: 'Our vision',
@@ -33,7 +33,7 @@ export const productPurpose = {
     releaseLink: 'Read release notes',
   },
   sv: {
-    compatibility: 'Den här betakampanjen gäller endast Mac: Apple-chip, M1 eller senare. Inte för Intel-Mac.',
+    compatibility: 'Mac-beta: för Mac med Apple-chip, M1 eller senare. Inte för Intel-Mac.',
     betaNotice: 'Pär är i beta. Funktioner kan ändras och svar kan vara felaktiga. Kontrollera viktig information.',
     purposeLink: 'Vårt syfte och det vi arbetar med',
     visionTitle: 'Vår vision',

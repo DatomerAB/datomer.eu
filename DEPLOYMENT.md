@@ -188,10 +188,9 @@ layout, prices, checkout, or download selection:
   The catalog also lists an older Linux build; this is not evidence that Linux
   has the current Mac/Windows feature set.
 - The campaign owner confirmed that **this beta campaign is Mac-only**, excluding
-  Windows and Linux. The hero compatibility notice, final disclaimer, and FAQ
-  make that scope explicit in both languages. Existing non-Mac downloads remain
-  available outside the campaign; prices, checkout, and download selection are
-  unchanged.
+  Windows and Linux. Campaign-specific wording lives on the separate landing
+  page, not the general product homepage. Existing non-Mac downloads remain
+  available outside the campaign; prices and checkout are unchanged.
 - The Mac setup guide requires Apple Silicon, M1 or newer. The final homepage
   disclaimer must not describe it as merely recommended.
 - `data_export` and `data_import` are listed in Plus, Pro, and Enterprise, not
@@ -230,6 +229,31 @@ release date or readiness promise. The release-tagged README itself calls out
 outstanding real-model and freshly rebuilt installed-app verification.
 Synced models, historical release entries, and upstream product files were not
 edited. Follow-up upstream corrections require separate linked PRs.
+
+## Campaign landing pages
+
+The Mac beta destination is `https://par.datomer.eu/campaigns/mac-beta`, with
+`?lang=sv` for Swedish. Add public UTM campaign labels to advertising links.
+Existing consent-aware page/campaign tracking and download conversion handling
+apply; there is no new tracking provider, waitlist conversion, or submission
+endpoint. LinkedIn still requires the configured partner/conversion identifiers
+and optional marketing consent.
+
+`src/content/campaigns.js` contains localized campaign content; the reusable
+`CampaignPage` uses existing layout classes, language controls, legal footer,
+consent UI, and the same download form. The page has a Mac-only primary action
+and no pricing or waitlist sections. It selects only the Mac catalog entry,
+never the general download fallback. If no Mac entry is available it disables
+the action and displays an error. Download URLs remain
+runtime release data, not campaign copy.
+
+Campaign routes have server/client `noindex, nofollow` metadata and are excluded
+from the shared sitemap/IndexNow route list. Unknown campaign slugs and campaign
+paths on the company domain remain 404. The main product site retains neutral
+platform information and factual plan corrections. These landing pages are
+client-rendered like other non-homepage routes; metadata is server supplied.
+Review each campaign's localized copy and feature evidence before adding a new
+entry. No publishing dates or availability are inferred automatically.
 
 ## IndexNow production notifications
 
