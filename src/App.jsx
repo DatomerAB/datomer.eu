@@ -24,6 +24,8 @@ import { siteForUrl, siteLinks } from './lib/site.js'
 import { resolveTopic, topicContent } from './content/contactTopics.js'
 import { productPurpose } from './content/productPurpose.js'
 import { useSiteUrl } from './lib/RenderContext.jsx'
+import { campaigns } from './content/campaigns.js'
+import { CampaignPage } from './pages/CampaignPage.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -982,11 +984,17 @@ function PaymentSuccessPage() {
 }
 
 function App() {
+  const { lang } = useLanguage()
+  const location = useLocation()
+  const campaignSlug = location.pathname.replace(/\/$/, '').slice('/campaigns/'.length)
+  const campaign = Object.hasOwn(campaigns, campaignSlug) ? campaigns[campaignSlug] : null
+  const isCampaign = location.pathname.startsWith('/campaigns/') && Boolean(campaign)
   const [showDownloadForm, setShowDownloadForm] = useState(false)
   const legacyDownloadUrl = useDownloadUrl()
   const downloadCatalog = useBetaDownloads()
   const [selectedDownload, setSelectedDownload] = useState(null)
-  const downloadUrl = selectedDownload || downloadCatalog.platforms['macos-arm64']?.[0]?.url ||
+  const macDownload = downloadCatalog.platforms['macos-arm64']?.[0]?.url
+  const downloadUrl = isCampaign ? macDownload : selectedDownload || downloadCatalog.platforms['macos-arm64']?.[0]?.url ||
     downloadCatalog.platforms['windows-x64-cpu']?.[0]?.url || legacyDownloadUrl
   const downloadPlatform = Object.keys(downloadCatalog.platforms).find(platform =>
     downloadCatalog.platforms[platform].some(entry => entry.url === downloadUrl)) || 'macos-arm64'
@@ -999,7 +1007,13 @@ function App() {
   return (
     <div className="page-shell">
       <ScrollToTop />
-      <TopBar onDownload={openDownload} />
+      {isCampaign ? <header className="topbar"><nav className="nav container" aria-label="Pär">
+        <Link to={lang === 'sv' ? '/?lang=sv' : '/'} className="par-brand">
+          <img src="/par-logo.png" alt="" className="brand-symbol" width="44" height="44" />
+          <span className="par-wordmark">Pär</span>
+        </Link>
+        <LanguageSwitcher />
+      </nav></header> : <TopBar onDownload={openDownload} />}
       <Routes>
         <Route path="/" element={<HomePage onDownload={openDownload} downloadCatalog={downloadCatalog} />} />
         <Route path="/about" element={<AboutPage />} />
@@ -1012,6 +1026,9 @@ function App() {
         <Route path="/press" element={<PressPage />} />
         <Route path="/models" element={<ModelAttributionPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
+        {Object.entries(campaigns).map(([slug, content]) =>
+          <Route key={slug} path={`/campaigns/${slug}`} element={<CampaignPage campaign={content}
+            onDownload={openDownload} downloadUrl={macDownload} />} />)}
       </Routes>
       <Footer />
       {showDownloadForm && (

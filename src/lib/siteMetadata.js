@@ -1,6 +1,7 @@
 import { COMPANY_URL, PRODUCT_URL, PRODUCT_PATHS, siteForUrl } from './site.js'
 import { companyMeta, companyCanonicalPath } from './companyMeta.js'
 import { PRODUCT_DESCRIPTIONS, PRODUCT_TITLES, COMPANY_FACTS } from './seoMeta.js'
+import { campaigns } from '../content/campaigns.js'
 
 const SITE_URL = PRODUCT_URL
 const DEFAULT_TITLE = PRODUCT_TITLES.en
@@ -279,14 +280,17 @@ export function getSiteMetadata(url, language) {
   const search = new URLSearchParams(url.search)
   if (language) search.set('lang', language)
   const meta = metaForRoute(normalizedPath, search, site)
-  const notFound = !(site === 'company' ? COMPANY_ROUTES : PRODUCT_ROUTES).includes(normalizedPath)
+  const campaign = site === 'product' && normalizedPath.startsWith('/campaigns/')
+    ? campaigns[normalizedPath.slice('/campaigns/'.length)]?.[meta.lang] : null
+  const notFound = !campaign && !(site === 'company' ? COMPANY_ROUTES : PRODUCT_ROUTES).includes(normalizedPath)
   return {
     ...meta,
+    ...(campaign ? { title: campaign.title, description: campaign.description } : {}),
     site,
     siteUrl,
     preview,
     notFound,
-    robots: preview || notFound || normalizedPath === '/payment-success'
+    robots: preview || notFound || campaign || normalizedPath === '/payment-success'
       ? 'noindex, nofollow'
       : 'index, follow, max-image-preview:large, max-snippet:-1',
     siteName: site === 'company' ? 'Datomer AB' : 'Pär by Datomer',

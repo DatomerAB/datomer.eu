@@ -71,7 +71,7 @@ export const translations = {
       fileIntelligence: { title: 'Local File Intelligence', badge: 'Plus+', text: 'Drag in text, PDFs, and images. Build a personal knowledge base from folders on your machine.' },
       routines: { title: 'Routines & Templates', badge: 'Plus+', text: 'Saved workflows like Morning Briefing, Weekly Review, and Inbox Zero run on your schedule.' },
       semanticCache: { title: 'Semantic Cache', badge: 'Plus+', text: 'Near-instant answers to repeated questions without re-running the model.' },
-      portability: { title: 'Full Data Portability', badge: 'All Tiers', text: 'Export and import your vault, conversations, and profiles anytime. Your data is always yours.' },
+      portability: { title: 'Take Your Data With You', badge: 'Plus+', text: 'Export and import your data with Plus, Pro, or Enterprise. Check the options in your version before moving to another device.' },
       homeHub: { title: 'Pär Home Hub & Mobile PWA', badge: 'Plus+', text: 'Turn your Mac into a private home hub over local Wi-Fi. Connect phone or tablet via 6-digit PIN or QR code with zero cloud reliance.' },
     },
     privacyHome: {
@@ -234,7 +234,7 @@ export const translations = {
         '2 GB free disk space for the app; additional space for models',
         'Supports GGUF models and Ollama models',
       ],
-      note: 'Beta builds are currently unsigned. On first launch, right-click the app and select Open, then confirm in System Settings → Privacy & Security if prompted.',
+      note: 'Follow the setup guide for your download. Installation steps and security prompts differ between Mac and Windows.',
     },
     faq: {
       eyebrow: 'Frequently Asked Questions',
@@ -247,10 +247,10 @@ export const translations = {
         'Pär supports GGUF models natively and can connect to Ollama. You can bring your own models or use recommended local models for chat, code, vision, and reasoning.',
       q3: 'Is there a Windows or Linux version?',
       a3:
-        'Pär Desktop is available for macOS today. Pär Web, which supports Windows, Linux, and Chromebook by talking to your own local backend, is coming soon.',
+        'Mac and Windows beta downloads are available. The Mac beta requires an Apple-chip Mac, M1 or newer. The Windows beta is for 64-bit Intel or AMD PCs, not Windows on ARM. The download list also includes an older Linux build; check its version and the setup guide before choosing it. Pär Web is a separate option that is not available yet.',
       q4: 'Can I export my data?',
       a4:
-        'Yes. Full data portability is available on all tiers. You can export and import your vault, conversations, and profiles anytime.',
+        'Export and import are included in Plus, Pro, and Enterprise. They are not listed in the Free plan. Check the options in your installed version before moving your data.',
       q5: 'How does licensing work?',
       a5:
         'Pär is one brand with one license and multiple deployment options. Start free, upgrade to Plus for persistent memory, or choose Pro / Enterprise for teams and advanced controls.',
@@ -265,7 +265,7 @@ export const translations = {
       waitlistPlaceholder: 'Enter your email',
       joinWaitlist: 'Join Waitlist',
       waitlistHint: 'Get notified about beta spots, updates, and launch notes.',
-      disclaimer: 'Beta release. Requires macOS 11+. Apple Silicon recommended. GGUF models run natively; Ollama is optional.',
+      disclaimer: 'Mac beta: requires macOS 11 or later and an Apple-chip Mac, M1 or newer. Not for Intel Macs. See the setup guide for other downloads.',
     },
     waitlist: {
       sending: 'Joining…',
@@ -542,7 +542,7 @@ export const translations = {
       fileIntelligence: { title: 'Lokal Filintelligens', badge: 'Plus+', text: 'Dra in text, PDF:er och bilder. Bygg en personlig kunskapsbas från mappar på din dator.' },
       routines: { title: 'Rutiner Och Mallar', badge: 'Plus+', text: 'Sparade arbetsflöden som Morgonbriefing, Veckogenomgång och Inkorg Noll körs enligt ditt schema.' },
       semanticCache: { title: 'Semantiskt Cache', badge: 'Plus+', text: 'Nästan omedelbara svar på upprepade frågor utan att köra modellen igen.' },
-      portability: { title: 'Full Dataportabilitet', badge: 'Alla Nivåer', text: 'Exportera och importera ditt valv, konversationer och profiler när som helst. Dina data är alltid dina.' },
+      portability: { title: 'Ta Med Dig Dina Data', badge: 'Plus+', text: 'Exportera och importera dina data med Plus, Pro eller Enterprise. Kontrollera alternativen i din version innan du byter enhet.' },
       homeHub: { title: 'Pär Home Hub & Mobil PWA', badge: 'Plus+', text: 'Gör din Mac till en privat hemmahubb över lokalt Wi-Fi. Anslut mobil eller surfplatta via 6-siffrig PIN eller QR-kod helt utan moln.' },
     },
     privacyHome: {
@@ -678,7 +678,7 @@ export const translations = {
         '2 GB ledigt diskutrymme för appen; ytterligare utrymme för modeller',
         'Stöder GGUF-modeller och Ollama-modeller',
       ],
-      note: 'Beta-versionerna är för närvarande osignerade. Vid första starten, högerklicka på appen och välj Öppna, bekräfta sedan i Systeminställningar → Integritet & säkerhet om du tillfrågas.',
+      note: 'Följ installationsguiden för din nedladdning. Installationssteg och säkerhetsfrågor skiljer sig mellan Mac och Windows.',
     },
     faq: {
       eyebrow: 'Vanliga Frågor',
@@ -691,10 +691,10 @@ export const translations = {
         'Pär stöder GGUF-modeller direkt och kan ansluta till Ollama. Du kan använda egna modeller eller rekommenderade lokala modeller för chatt, kod, bild och resonemang.',
       q3: 'Finns det en Windows- eller Linux-version?',
       a3:
-        'Pär Desktop finns för macOS idag. Pär Web, som stöder Windows, Linux och Chromebook genom att prata med ditt eget lokala backend, kommer snart.',
+        'Betaversioner för Mac och Windows finns att ladda ner. Mac-betan kräver en Mac med Apple-chip, M1 eller senare. Windows-betan är för 64-bitars datorer med Intel eller AMD, inte Windows på ARM. Nedladdningslistan innehåller även en äldre Linux-version; kontrollera versionen och installationsguiden innan du väljer den. Pär Web är ett separat alternativ som ännu inte är tillgängligt.',
       q4: 'Kan jag exportera mina data?',
       a4:
-        'Ja. Full dataportabilitet finns på alla nivåer. Du kan exportera och importera ditt valv, konversationer och profiler när som helst.',
+        'Export och import ingår i Plus, Pro och Enterprise. De finns inte med i Gratis-abonnemanget. Kontrollera alternativen i din installerade version innan du flyttar dina data.',
       q5: 'Hur fungerar licensiering?',
       a5:
         'Pär är ett varumärke med en licens och flera distributionsalternativ. Börja gratis, uppgradera till Plus för bestående minne, eller välj Pro / Enterprise för team och avancerad kontroll.',
@@ -709,7 +709,7 @@ export const translations = {
       waitlistPlaceholder: 'Ange din e-post',
       joinWaitlist: 'Gå med i väntelistan',
       waitlistHint: 'Få besked om betaplatser, uppdateringar och lanseringsnoteringar.',
-      disclaimer: 'Betaversion. Kräver macOS 11+. Apple Silicon rekommenderas. GGUF-modeller körs direkt; Ollama är valfritt.',
+      disclaimer: 'Mac-beta: kräver macOS 11 eller senare och en Mac med Apple-chip, M1 eller senare. Inte för Intel-Mac. Se installationsguiden för andra nedladdningar.',
     },
     waitlist: {
       sending: 'Går med…',
