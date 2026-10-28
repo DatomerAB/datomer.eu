@@ -3,10 +3,13 @@
 // execute JavaScript still see correct titles, descriptions, canonical URLs,
 // Open Graph, Twitter Cards, hreflang links, and JSON-LD for each route.
 
-const SITE_URL = 'https://datomer.eu'
-const DEFAULT_TITLE = 'Pär by Datomer — Your AI. On your device.'
-const DEFAULT_DESCRIPTION =
-  'Pär is the personal AI companion that actually remembers you. Local-first, private by design, running on your own hardware with GGUF or Ollama models.'
+import { COMPANY_URL, PRODUCT_URL, PRODUCT_PATHS, siteForUrl, legacyProductDestination } from '../src/lib/site.js'
+import { companyMeta, companyCanonicalPath } from '../src/lib/companyMeta.js'
+import { PRODUCT_DESCRIPTIONS, PRODUCT_TITLES, COMPANY_FACTS, escapeAttr, safeJson } from '../src/lib/seoMeta.js'
+
+const SITE_URL = PRODUCT_URL
+const DEFAULT_TITLE = PRODUCT_TITLES.en
+const DEFAULT_DESCRIPTION = PRODUCT_DESCRIPTIONS.en
 
 const LOCALE = {
   en: 'en_US',
@@ -21,7 +24,7 @@ function pageTitle(title) {
 // Keep in sync with SUPPORTED_LANGUAGES in src/i18n/LanguageProvider.jsx.
 const ENABLED_LANGUAGES = ['en', 'sv']
 
-function metaForRoute(pathname, searchParams) {
+function metaForRoute(pathname, searchParams, site = 'product') {
   const lang = ENABLED_LANGUAGES.includes(searchParams.get('lang'))
     ? searchParams.get('lang')
     : 'en'
@@ -29,20 +32,9 @@ function metaForRoute(pathname, searchParams) {
 
   const routes = {
     '/': {
-      en: {
-        title: DEFAULT_TITLE,
-        description: DEFAULT_DESCRIPTION,
-      },
-      sv: {
-        title: 'Pär by Datomer — Din AI. På din enhet.',
-        description:
-          'Pär är den personliga AI-kompisen som verkligen kommer ihåg dig. Lokal först, privat av design, och körs på din egen hårdvara med GGUF- eller Ollama-modeller.',
-      },
-      de: {
-        title: 'Pär by Datomer — Deine KI. Auf deinem Gerät.',
-        description:
-          'Pär ist der persönliche KI-Begleiter, der sich wirklich an dich erinnert. Lokal zuerst, privat von Grund auf, auf deiner eigenen Hardware mit GGUF- oder Ollama-Modellen.',
-      },
+      en: { title: PRODUCT_TITLES.en, description: PRODUCT_DESCRIPTIONS.en },
+      sv: { title: PRODUCT_TITLES.sv, description: PRODUCT_DESCRIPTIONS.sv },
+      de: { title: PRODUCT_TITLES.de, description: PRODUCT_DESCRIPTIONS.de },
     },
     '/about': {
       en: {
@@ -211,31 +203,32 @@ function metaForRoute(pathname, searchParams) {
     },
   }
 
-  const data = routes[basePath]?.[lang] ?? {
+  const siteUrl = site === 'company' ? COMPANY_URL : SITE_URL
+  const data = site === 'company' ? companyMeta(basePath, lang) : routes[basePath]?.[lang] ?? {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
   }
 
-  const canonicalPath = basePath === '/' ? '' : basePath
-  const canonical = `${SITE_URL}${canonicalPath}`
-  const localizedCanonical = lang === 'en' ? canonical : `${canonical}${canonicalPath.includes('?') ? '&' : '?'}lang=${lang}`
-  const ogUrl = lang === 'en' ? canonical : `${SITE_URL}${canonicalPath}?lang=${lang}`
+  const seoPath = site === 'company' ? companyCanonicalPath(basePath) : basePath
+  const canonical = `${siteUrl}${seoPath}`
+  const localizedCanonical = lang === 'en' ? canonical : `${canonical}?lang=${lang}`
+  const ogUrl = localizedCanonical
 
   return {
     ...data,
     lang,
     canonical: localizedCanonical,
     ogUrl,
-    pathname: basePath,
+    pathname: seoPath,
   }
 }
 
-function hreflangLinks(pathname) {
-  const base = pathname === '/' ? '' : pathname
+function hreflangLinks(pathname, siteUrl = SITE_URL) {
+  const base = pathname
   const urls = [
-    { hrefLang: 'en', href: `${SITE_URL}${base}` },
-    { hrefLang: 'sv', href: `${SITE_URL}${base}?lang=sv` },
-    { hrefLang: 'x-default', href: `${SITE_URL}${base}` },
+    { hrefLang: 'en', href: `${siteUrl}${base}` },
+    { hrefLang: 'sv', href: `${siteUrl}${base}?lang=sv` },
+    { hrefLang: 'x-default', href: `${siteUrl}${base}` },
   ]
   return urls
     .map(
@@ -249,9 +242,12 @@ function organizationJsonLd() {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Datomer AB',
-    url: SITE_URL,
-    logo: `${SITE_URL}/datomer-logo.png`,
+    '@id': `${COMPANY_URL}/#organization`,
+    name: COMPANY_FACTS.name,
+    url: COMPANY_URL,
+    slogan: COMPANY_FACTS.slogan,
+    knowsAbout: COMPANY_FACTS.services,
+    logo: `${COMPANY_URL}/datomer-logo.png`,
     email: 'hello@datomer.eu',
     address: {
       '@type': 'PostalAddress',
@@ -265,7 +261,7 @@ function organizationJsonLd() {
       'https://www.linkedin.com/company/35694620/',
     ],
   }
-  return `    <script type="application/ld+json">${JSON.stringify(data)}</script>`
+  return `    <script type="application/ld+json">${safeJson(data)}</script>`
 }
 
 function softwareJsonLd() {
@@ -287,12 +283,40 @@ function softwareJsonLd() {
       name: 'Datomer AB',
     },
   }
-  return `    <script type="application/ld+json">${JSON.stringify(data)}</script>`
+  return `    <script type="application/ld+json">${safeJson(data)}</script>`
 }
 
+const COMPANY_ROUTES = ['/', '/about', '/contact', '/privacy', '/terms', '/cookies']
+const PRODUCT_ROUTES = [...COMPANY_ROUTES, ...PRODUCT_PATHS]
+
 export async function onRequest(context) {
-  const { request, env, next } = context
+  const { request, next } = context
   const url = new URL(request.url)
+  const site = siteForUrl(url)
+  const siteUrl = site === 'company' ? COMPANY_URL : PRODUCT_URL
+  const preview = !['datomer.eu', 'www.datomer.eu', 'par.datomer.eu'].includes(url.hostname)
+  const destination = legacyProductDestination(url)
+  if (['GET', 'HEAD'].includes(request.method) && destination) {
+    return Response.redirect(destination, 301)
+  }
+  if (request.method === 'GET' && url.pathname === '/sitemap.xml') {
+    // The company /about route duplicates the home page, so only the product site lists it.
+    const paths = [...(site === 'company' ? ['/', '/contact', '/privacy', '/terms', '/cookies'] : ['/', '/about', '/contact', '/privacy', '/terms', '/cookies']),
+      ...(site === 'product' ? PRODUCT_PATHS.filter(path => !['/beta', '/payment-success'].includes(path)) : [])]
+    const entries = paths.map(path => `<url><loc>${siteUrl}${path}</loc>${
+      ['en', 'sv', 'x-default'].map(lang =>
+        `<xhtml:link rel="alternate" hreflang="${lang}" href="${siteUrl}${path}${lang === 'sv' ? '?lang=sv' : ''}" />`
+      ).join('')
+    }</url>`).join('')
+    return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${entries}</urlset>`, {
+      headers: { 'content-type': 'application/xml; charset=utf-8' },
+    })
+  }
+  if (request.method === 'GET' && url.pathname === '/robots.txt') {
+    return new Response(preview ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`, {
+      headers: { 'content-type': 'text/plain; charset=utf-8' },
+    })
+  }
 
   // Only rewrite HTML document responses. Skip API routes, Functions, and
   // static assets by file extension. The actual content-type check below
@@ -314,37 +338,47 @@ export async function onRequest(context) {
   }
 
   const html = await res.text()
-  const meta = metaForRoute(url.pathname, url.searchParams)
+  const meta = metaForRoute(url.pathname, url.searchParams, site)
+  const normalizedPath = url.pathname.replace(/\/$/, '') || '/'
+  // The SPA shell answers every path with 200; report unknown paths as 404 so they never get indexed.
+  const notFound = !(site === 'company' ? COMPANY_ROUTES : PRODUCT_ROUTES).includes(normalizedPath)
+  const noindex = preview || notFound
+  const siteName = site === 'company' ? 'Datomer AB' : 'Pär by Datomer'
+  const image = `${siteUrl}/${site === 'company' ? 'og-image-datomer.png' : 'og-image-aurora.png'}`
 
   const seoInject = [
-    `    <link rel="canonical" href="${meta.canonical}" />`,
-    hreflangLinks(meta.pathname),
+    `    <link rel="canonical" href="${escapeAttr(meta.canonical)}" />`,
+    hreflangLinks(meta.pathname, siteUrl),
+    noindex
+      ? '    <meta name="robots" content="noindex, nofollow" />'
+      : '    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />',
     ``,
-    `    <meta property="og:site_name" content="Pär by Datomer" />`,
-    `    <meta property="og:title" content="${meta.title}" />`,
-    `    <meta property="og:description" content="${meta.description}" />`,
+    `    <meta property="og:site_name" content="${siteName}" />`,
+    `    <meta property="og:title" content="${escapeAttr(meta.title)}" />`,
+    `    <meta property="og:description" content="${escapeAttr(meta.description)}" />`,
     `    <meta property="og:type" content="website" />`,
-    `    <meta property="og:url" content="${meta.ogUrl}" />`,
-    `    <meta property="og:image" content="${SITE_URL}/og-image-aurora.png" />`,
+    `    <meta property="og:url" content="${escapeAttr(meta.ogUrl)}" />`,
+    `    <meta property="og:image" content="${image}" />`,
     `    <meta property="og:locale" content="${LOCALE[meta.lang]}" />`,
     ``,
     `    <meta name="twitter:card" content="summary_large_image" />`,
-    `    <meta name="twitter:title" content="${meta.title}" />`,
-    `    <meta name="twitter:description" content="${meta.description}" />`,
-    `    <meta name="twitter:image" content="${SITE_URL}/og-image-aurora.png" />`,
+    `    <meta name="twitter:title" content="${escapeAttr(meta.title)}" />`,
+    `    <meta name="twitter:description" content="${escapeAttr(meta.description)}" />`,
+    `    <meta name="twitter:image" content="${image}" />`,
     ``,
     organizationJsonLd(),
-    softwareJsonLd(),
+    site === 'product' ? softwareJsonLd() : '',
   ].join('\n')
 
   // Preserve the original <head> contents (Vite scripts, styles, GA) while
   // replacing title/description/html-lang and removing/overwriting SEO tags.
   let newHtml = html
     .replace(/<html[^>]*>/i, `<html lang="${meta.lang}">`)
-    .replace(/<title>.*?<\/title>/i, `<title>${meta.title}</title>`)
+    .replace(/(<link rel="(?:icon|apple-touch-icon)"[^>]*href=")[^"]+(")/gi, `$1/${site === 'company' ? 'datomer-logo.png?v=20261010' : 'par-logo.png'}$2`)
+    .replace(/<title>.*?<\/title>/i, () => `<title>${escapeAttr(meta.title)}</title>`)
     .replace(
-      /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i,
-      `<meta name="description" content="${meta.description}" />`
+      /<meta\s+name="description"\s+content="[^"]*"[^>]*>/i,
+      () => `<meta name="description" content="${escapeAttr(meta.description)}" />`
     )
     // Remove existing canonical, hreflang, OG, Twitter, and JSON-LD tags so
     // we don't produce duplicates when a crawler reads the response.
@@ -358,8 +392,8 @@ export async function onRequest(context) {
     .replace(/(<\/head>)/i, `\n${seoInject}\n  $1`)
 
   return new Response(newHtml, {
-    status: res.status,
-    statusText: res.statusText,
+    status: notFound ? 404 : res.status,
+    statusText: notFound ? 'Not Found' : res.statusText,
     headers: {
       ...Object.fromEntries(res.headers.entries()),
       'content-type': 'text/html; charset=utf-8',

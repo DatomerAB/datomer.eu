@@ -1,4 +1,5 @@
 import { marked } from 'marked'
+import { demoteHeadings } from '../../lib/demoteHeadings.js'
 import par_0_1_9_beta_2026100801 from './2026-10-08-par-0.1.9-beta.2026100801.md?raw'
 import par_0_1_9_beta_2026100202 from './2026-10-02-par-0.1.9-beta.2026100202.md?raw'
 import par_0_1_9_beta_2026092401 from './2026-09-25-par-0.1.9-beta.2026092401.md?raw'
@@ -119,6 +120,7 @@ const posts = [
 export function getChangelogPosts() {
   return posts.map((post) => ({
     ...post,
-    html: marked.parse(post.raw),
+    // Post titles are already <h2>, so body headings start at <h3>.
+    html: demoteHeadings(marked.parse(post.raw), 2),
   }))
 }

@@ -26,6 +26,49 @@ Pushes to either branch deploy automatically via GitHub Actions and Cloudflare P
 
 ## Local development
 
+### Company and product previews
+
+The same codebase serves two sites:
+
+| Address | Experience |
+| --- | --- |
+| `https://datomer.eu` | Datomer AB company, services, purpose, and contact |
+| `https://par.datomer.eu` | Existing Pär product site, downloads, setup, and updates |
+
+Preview them side by side in separate terminals:
+
+```bash
+npm run dev:company
+npm run dev:product
+```
+
+- Company: http://127.0.0.1:5173/
+- Product: http://127.0.0.1:5174/
+- Add `?lang=sv` to either address to preview Swedish.
+
+The local ports select the site; internal language changes retain that identity.
+Links between company and product stay local. `npm run dev` also uses the
+company experience when Vite runs on its default port 5173.
+
+For a production-bundle UI preview, run `npm run build`, then use
+`npm run preview:company` (port 4173) and `npm run preview:product` (port 4174).
+Keep the same hostname (`localhost` or `127.0.0.1`) for both when testing links.
+
+Vite serves the frontend only: it does **not** run `/api/*` Pages Functions or
+the production metadata/redirect middleware. Do not expect real form submissions
+or checkout to work in these UI previews. They require a separate, properly
+configured Cloudflare preview with test services and preview database bindings.
+Errors are shown by the existing forms; no local success responses are fabricated.
+Middleware behavior is covered by `functions/_middleware.test.js`.
+
+The product's existing pages, feature copy, pricing behavior, download catalog,
+and release history are retained. New product purpose/development text lives in
+`src/content/productPurpose.js`; it does not certify existing feature claims or
+promise unreleased functionality. Company copy lives in `src/content/company.js`.
+German remains disabled.
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the domain split and pre-production checks.
+
 ```bash
 npm install
 npm run dev

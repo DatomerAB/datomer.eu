@@ -2,6 +2,67 @@
 
 This project deploys through Cloudflare Pages using GitHub branches.
 
+## Company and product domain split
+
+Both custom domains use the existing Pages project and deployment:
+
+- `datomer.eu` serves the new Datomer AB company experience.
+- `par.datomer.eu` serves the existing Pär website.
+- `www.datomer.eu` continues to redirect to the company domain.
+- Pages preview hostnames default to the product experience and are marked
+  `noindex`; use the documented local ports to review both experiences locally.
+
+The user has connected `par.datomer.eu` to `datomer-eu.pages.dev`. Do not remove
+either custom domain or change DNS as part of a frontend deployment.
+No deployment is needed for local review. Do not push to `main` or `staging`
+until the requested local review is complete: those branches deploy automatically.
+
+### Route ownership
+
+All existing Pär routes remain on the product domain, including `/about`,
+`/contact`, `/privacy`, `/terms`, `/cookies`, `/models`, and `/payment-success`.
+The company domain has its own homepage/About, contact, and shared legal routes.
+The existing legal content is reused; review it for both sites before launch.
+
+Old company-domain product routes (`/get-started`, `/blog`, `/press`, `/models`,
+`/payment-success`, and `/beta`) redirect to the corresponding product destination,
+preserving query parameters. Legacy homepage fragments (`#download`, `#product`,
+`#features`, `#pricing`, and `#faq`) are handled in the browser because fragments
+are not sent to the server. The company root itself is not redirected.
+API requests, assets, and payment webhooks are not redirected.
+
+Pages middleware supplies host-specific crawler metadata, robots directives, and
+sitemaps. React manages metadata after startup and on navigation. Product software
+structured data must not appear on the company site. Unknown/preview hosts are
+not indexed as a second production site.
+
+### Review and release checklist
+
+1. Follow the local company/product preview instructions in [README.md](README.md).
+   Review both languages at desktop and mobile widths, especially service wording,
+   logo legibility, LinkedIn destinations, contact, product links, and beta notices.
+2. Run `npm run lint`, `npm run test`, and `npm run build`.
+3. Before any production deployment, obtain approval for the local preview.
+   Then verify both host identities in a Cloudflare preview/runtime. A Vite
+   preview alone does not run Pages Functions, crawler metadata, or server redirects.
+4. Ensure Turnstile permits the company and product hostnames and that preview
+   tests use preview credentials and the preview D1 binding.
+5. Test real contact/download submissions in the configured preview, including
+   company-versus-product confirmation branding. Use controlled addresses.
+6. Test checkout with Stripe test settings, verifying success/cancel URLs and
+   language/query preservation. Never use a real purchase to validate the preview.
+7. Verify HTTPS, deep links, old product routes and fragments, both sitemaps,
+   browser/server metadata, and the unchanged Windows/Linux download options.
+8. Review existing Pär feature/pricing claims against the distributed build before
+   broader wording changes. Mission/objectives are goals; development text is not
+   a promise of availability or a delivery date.
+9. After approval, coordinate separate linked changes in `DatomerAB/par-public`
+   and, if needed, `DatomerAB/Par` so fallback/setup/release links point to
+   `par.datomer.eu`. Keep the independent fallback site and upstream sync intact.
+10. Retain the previous deployment for rollback without removing working database
+    bindings. Publishing this split changes what `datomer.eu` displays immediately;
+    do not promote before the product domain and redirects are verified.
+
 ## Branch to environment mapping
 
 - main -> production

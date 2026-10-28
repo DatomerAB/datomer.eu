@@ -4,6 +4,9 @@
   color: var(--text);
 }
 
+.product-beta-notice { max-width: 700px; margin: 20px auto; font-size: .9rem; color: var(--text-secondary); }
+.product-beta-notice p { margin-bottom: 6px; }
+
 .container {
   width: min(1200px, calc(100% - 48px));
   margin: 0 auto;
@@ -2295,6 +2298,14 @@
   box-shadow: 0 0 0 3px rgba(193, 79, 68, 0.08);
 }
 
+.contact-form textarea.contact-subject {
+  min-height: 0;
+  resize: none;
+  background: var(--accent-soft);
+  color: var(--text-secondary);
+  cursor: default;
+}
+
 /* Styles markdown rendered from Pär docs and changelog entries. */
 .prose {
   color: var(--text-secondary);
@@ -2471,4 +2482,3 @@
   margin: 0 0 18px;
   color: var(--text-secondary);
 }
-

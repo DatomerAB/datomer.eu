@@ -3,6 +3,8 @@ import { sendSupportEmail } from './_email.js'
 import { insertSubmission } from './_db.js'
 import { buildContactSupportEmail, buildContactConfirmationEmail } from './_emailTemplates.js'
 import { getTrackingMeta } from './_tracking.js'
+import { siteForUrl } from '../../src/lib/site.js'
+import { resolveTopic, topicContent } from '../../src/content/contactTopics.js'
 
 export async function onRequestPost(context) {
   const { request, env, waitUntil } = context
@@ -17,7 +19,7 @@ export async function onRequestPost(context) {
     })
   }
 
-  const { name, email, message, locale = 'en', turnstileToken } = body
+  const { name, email, message, locale = 'en', topic, turnstileToken } = body
 
   if (!name || !email || !message) {
     return new Response(JSON.stringify({ error: 'Name, email, and message are required.' }), {
@@ -39,20 +41,24 @@ export async function onRequestPost(context) {
   const cleanedMessage = String(message).trim()
   const createdAt = new Date().toISOString()
   const tracking = getTrackingMeta({ request, env, body })
+  const site = siteForUrl(new URL(request.url))
+  const { subject: topicSubject } = topicContent(resolveTopic(topic, site), 'en')
 
   const supportEmail = buildContactSupportEmail({
     name: cleanedName,
     email: cleanedEmail,
     message: cleanedMessage,
     locale,
+    topicSubject,
     action: tracking.action,
     environment: tracking.environment,
     country: tracking.country,
     city: tracking.city,
+    site,
   })
   await sendSupportEmail({ env, ...supportEmail })
 
-  const confirmationEmail = buildContactConfirmationEmail({ name: cleanedName, message: cleanedMessage, locale })
+  const confirmationEmail = buildContactConfirmationEmail({ name: cleanedName, message: cleanedMessage, locale, site })
   await sendSupportEmail({ env, to: [cleanedEmail], ...confirmationEmail })
 
   // Non-blocking: store submission for daily summary.
@@ -62,7 +68,7 @@ export async function onRequestPost(context) {
       createdAt,
       email: cleanedEmail,
       name: cleanedName,
-      subject: `Contact form: enquiry from ${cleanedName}`,
+      subject: `${topicSubject} — ${cleanedName}`,
       message: cleanedMessage,
       body: `Name: ${cleanedName}\nEmail: ${cleanedEmail}\nMessage:\n${cleanedMessage}`,
       metadata: {

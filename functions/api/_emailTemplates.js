@@ -6,9 +6,11 @@ const BRAND = {
   product: 'Pär',
   tagline: 'Your AI. On Your Device.',
   contactEmail: 'hello@datomer.eu',
-  website: 'https://datomer.eu',
-  parLogoUrl: 'https://datomer.eu/par-logo.png',
+  website: 'https://par.datomer.eu',
+  companyUrl: 'https://datomer.eu',
+  parLogoUrl: 'https://par.datomer.eu/par-logo.png',
   datomerLogoUrl: 'https://datomer.eu/datomer-logo.png?v=20261010',
+  datomerIconUrl: 'https://datomer.eu/datomer-icon.png',
   // Aligns with the website design tokens
   bg: '#f7f6f4',
   surface: '#ffffff',
@@ -22,7 +24,8 @@ const BRAND = {
   radius: '16px',
   radiusSm: '12px',
   shadow: '0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -2px rgba(15, 23, 42, 0.04)',
-  fontStack: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+  // Single quotes: this value is placed inside style="..." attributes.
+  fontStack: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
 }
 
 const EMAIL_I18N = {
@@ -53,7 +56,7 @@ const EMAIL_I18N = {
     waitlistConfirmationPreview: 'Welcome to Pär',
     waitlistConfirmationSubjectSuffix: '— Pär',
     waitlistConfirmationTitle: (name) => `Hi ${name}`,
-    waitlistConfirmationBody1: (name) => `Hi ${name}, welcome to Pär.`,
+    waitlistConfirmationBody1: () => 'Welcome to Pär.',
     waitlistConfirmationBody2: (interests) => `You selected: <strong style="color: ${BRAND.text};">${interests}</strong>. We have noted your preferences and will only send you what you asked for.`,
     waitlistConfirmationBeta: 'Beta access is limited and rolled out in batches. We will notify you as soon as a spot opens up for you.',
     waitlistConfirmationUpdates: 'Expect transparent, low-volume updates. No spam, no tracking pixels, no third-party data sharing.',
@@ -67,7 +70,7 @@ const EMAIL_I18N = {
       }
       return map[action] || 'the Pär beta'
     },
-    downloadConfirmationBody: (name, action) => `Hi ${name}, thank you for downloading <strong style="color: ${BRAND.text};">${EMAIL_I18N.en.downloadContext(action)}</strong>.`,
+    downloadConfirmationBody: (action) => `Thank you for downloading <strong style="color: ${BRAND.text};">${EMAIL_I18N.en.downloadContext(action)}</strong>.`,
     downloadConfirmationBody2: 'Your download should start automatically. We will email you when updates, new features, and the public launch are ready.',
     dailySummaryNoSubmissions: 'No submissions or website activity in the last 25 hours',
     dailySummaryNoSubmissionsBody: 'There were no new submissions or website events in the last 25 hours. The next summary will arrive tomorrow.',
@@ -113,7 +116,7 @@ const EMAIL_I18N = {
     waitlistConfirmationPreview: 'Välkommen till Pär',
     waitlistConfirmationSubjectSuffix: '— Pär',
     waitlistConfirmationTitle: (name) => `Hej ${name}`,
-    waitlistConfirmationBody1: (name) => `Hej ${name}, välkommen till Pär.`,
+    waitlistConfirmationBody1: () => 'Välkommen till Pär.',
     waitlistConfirmationBody2: (interests) => `Du valde: <strong style="color: ${BRAND.text};">${interests}</strong>. Vi har noterat dina preferenser och skickar bara det du bett om.`,
     waitlistConfirmationBeta: 'Betaåtkomst är begränsad och rullas ut i omgångar. Vi meddelar dig så snart en plats öppnas för dig.',
     waitlistConfirmationUpdates: 'Räkna med transparenta, fåtaliga uppdateringar. Ingen skräppost, inga spårningspixlar, ingen delning med tredje part.',
@@ -127,7 +130,7 @@ const EMAIL_I18N = {
       }
       return map[action] || 'Pär-beta'
     },
-    downloadConfirmationBody: (name, action) => `Hej ${name}, tack för att du laddar ned <strong style="color: ${BRAND.text};">${EMAIL_I18N.sv.downloadContext(action)}</strong>.`,
+    downloadConfirmationBody: (action) => `Tack för att du laddar ned <strong style="color: ${BRAND.text};">${EMAIL_I18N.sv.downloadContext(action)}</strong>.`,
     downloadConfirmationBody2: 'Din nedladdning bör starta automatiskt. Vi mejlar dig när uppdateringar, nya funktioner och den offentliga lanseringen är redo.',
     dailySummaryNoSubmissions: 'Inga inskick eller webbplatsaktiviteter de senaste 25 timmarna',
     dailySummaryNoSubmissionsBody: 'Det kom inga nya inskick eller webbplatshändelser de senaste 25 timmarna. Nästa sammanfattning kommer i morgon.',
@@ -173,7 +176,7 @@ const EMAIL_I18N = {
     waitlistConfirmationPreview: 'Willkommen bei Pär',
     waitlistConfirmationSubjectSuffix: '— Pär',
     waitlistConfirmationTitle: (name) => `Hallo ${name}`,
-    waitlistConfirmationBody1: (name) => `Hallo ${name}, willkommen bei Pär.`,
+    waitlistConfirmationBody1: () => 'Willkommen bei Pär.',
     waitlistConfirmationBody2: (interests) => `Sie haben gewählt: <strong style="color: ${BRAND.text};">${interests}</strong>. Wir haben Ihre Präferenzen notiert und senden Ihnen nur das, worum Sie gebeten haben.`,
     waitlistConfirmationBeta: 'Der Beta-Zugang ist begrenzt und wird schrittweise freigegeben. Wir benachrichtigen Sie, sobald ein Platz für Sie frei ist.',
     waitlistConfirmationUpdates: 'Erwarten Sie transparente, seltene Updates. Kein Spam, keine Tracking-Pixel, keine Weitergabe an Dritte.',
@@ -187,7 +190,7 @@ const EMAIL_I18N = {
       }
       return map[action] || 'die Pär-Beta'
     },
-    downloadConfirmationBody: (name, action) => `Hallo ${name}, vielen Dank, dass Sie <strong style="color: ${BRAND.text};">${EMAIL_I18N.de.downloadContext(action)}</strong> herunterladen.`,
+    downloadConfirmationBody: (action) => `Vielen Dank, dass Sie <strong style="color: ${BRAND.text};">${EMAIL_I18N.de.downloadContext(action)}</strong> herunterladen.`,
     downloadConfirmationBody2: 'Ihr Download sollte automatisch starten. Wir schreiben Ihnen, wenn Updates, neue Funktionen und der öffentliche Start bereit sind.',
     dailySummaryNoSubmissions: 'Keine Einsendungen oder Website-Aktivitäten in den letzten 25 Stunden',
     dailySummaryNoSubmissionsBody: 'In den letzten 25 Stunden gab es keine neuen Einsendungen oder Website-Ereignisse. Die nächste Zusammenfassung kommt morgen.',
@@ -234,7 +237,29 @@ function emailButton(href, label) {
   return `<a href="${href}" style="display: inline-block; padding: 12px 24px; background-color: ${BRAND.accent}; color: #ffffff; text-decoration: none; border-radius: 999px; font-weight: 600; font-size: 15px;">${escapeHtml(label)}</a>`
 }
 
-export function emailWrapper({ title, previewText, contentHtml, contentText, footerExtra = '', locale = 'en' }) {
+// Table-based so it renders in Outlook and Gmail, which ignore most modern CSS.
+function footerLinkButton({ href, logo, label, domain, highlighted }) {
+  const border = highlighted ? BRAND.accent : '#e4e2de'
+  const background = highlighted ? BRAND.accentLight : BRAND.surface
+  return `<a href="${href}" style="text-decoration: none; display: inline-block;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border: 1px solid ${border}; border-radius: 999px; background-color: ${background};">
+      <tr>
+        <td style="padding: 8px 6px 8px 14px; vertical-align: middle;"><img src="${logo}" alt="" width="22" height="22" style="display: block; border: 0; width: 22px; height: 22px; border-radius: 6px;" /></td>
+        <td style="padding: 8px 16px 8px 4px; vertical-align: middle; text-align: left; font-family: ${BRAND.fontStack}; line-height: 1.25;">
+          <span style="display: block; font-size: 13px; font-weight: 700; color: ${BRAND.text};">${label}</span>
+          <span style="display: block; font-size: 11px; color: ${BRAND.textSecondary};">${domain}</span>
+        </td>
+      </tr>
+    </table>
+  </a>`
+}
+
+export function emailWrapper({ title, previewText, contentHtml, contentText, footerExtra = '', locale = 'en', site = 'product' }) {
+  const companySite = site === 'company'
+  const website = companySite ? 'https://datomer.eu' : BRAND.website
+  const headerLogo = companySite ? BRAND.datomerLogoUrl : BRAND.parLogoUrl
+  const brandName = companySite ? 'Datomer AB' : `${BRAND.product} by ${BRAND.company} AB`
+  const footerPrivacy = companySite ? '' : i18n(locale).footerPrivacy
   const preview = previewText ? escapeHtml(previewText) : `${BRAND.product} by ${BRAND.company}`
   const footerHtml = footerExtra
     ? `<tr><td style="padding: 0 32px 16px; color: ${BRAND.textSecondary}; font-size: 14px; line-height: 1.5; text-align: center;">${footerExtra}</td></tr>`
@@ -242,7 +267,7 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
   const footerText = footerExtra ? `${footerExtra}\n\n` : ''
 
   const html = `<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html lang="${locale}" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -280,10 +305,10 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
           <!-- Logo -->
           <tr>
             <td align="center" style="padding-bottom: 28px;">
-              <a href="${BRAND.website}" style="text-decoration: none; display: inline-block;">
+              <a href="${website}" style="text-decoration: none; display: inline-block;">
                 <img
-                  src="${BRAND.parLogoUrl}"
-                  alt="Pär by Datomer"
+                  src="${headerLogo}"
+                  alt="${brandName}"
                   width="180"
                   style="display: block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 180px; height: auto; font-family: ${BRAND.fontStack}; font-size: 26px; font-weight: 800; color: ${BRAND.text};"
                 />
@@ -306,18 +331,24 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
           ${footerHtml}
           <tr>
             <td style="padding: 28px 32px 0; text-align: center; color: ${BRAND.textMuted}; font-size: 13px; line-height: 1.6;">
-              <p style="margin: 0 0 12px;">
-                <img
-                  src="${BRAND.datomerLogoUrl}"
-                  alt="Datomer"
-                  width="168"
-                  style="display: inline-block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 168px; height: auto; font-family: ${BRAND.fontStack}; font-size: 14px; font-weight: 700; color: ${BRAND.text};"
-                />
+              <p style="margin: 0 0 16px;">
+                <a href="${BRAND.companyUrl}" style="text-decoration: none;">
+                  <img
+                    src="${BRAND.datomerLogoUrl}"
+                    alt="Datomer"
+                    width="150"
+                    style="display: inline-block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 150px; height: auto; font-family: ${BRAND.fontStack}; font-size: 14px; font-weight: 700; color: ${BRAND.text};"
+                  />
+                </a>
               </p>
-              <p style="margin: 0 0 8px;"><strong style="color: ${BRAND.text};">${BRAND.company} AB</strong></p>
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: 0 auto 20px;">
+                <tr>
+                  <td style="padding: 0 6px;">${footerLinkButton({ href: BRAND.companyUrl, logo: BRAND.datomerIconUrl, label: 'Datomer AB', domain: 'datomer.eu', highlighted: companySite })}</td>
+                  <td style="padding: 0 6px;">${footerLinkButton({ href: BRAND.website, logo: BRAND.parLogoUrl, label: 'Pär', domain: 'par.datomer.eu', highlighted: !companySite })}</td>
+                </tr>
+              </table>
               <p style="margin: 0 0 4px;">${i18n(locale).footerEmail} <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a></p>
-              <p style="margin: 0 0 16px;"><a href="${BRAND.website}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.website.replace(/^https:\/\//, '')}</a></p>
-              <p style="margin: 0; font-size: 12px;">${i18n(locale).footerPrivacy}</p>
+              <p style="margin: 12px 0 0; font-size: 12px;">${footerPrivacy}</p>
             </td>
           </tr>
         </table>
@@ -327,7 +358,9 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
 </body>
 </html>`
 
-  const text = `${title}\n${'='.repeat(title.length)}\n\n${contentText}\n\n${footerText}---\n${BRAND.product} by ${BRAND.company} AB\n${i18n(locale).footerEmail}: ${BRAND.contactEmail}\nWebsite: ${BRAND.website}\n\n${i18n(locale).footerPrivacy}`
+  // Most builders already start their text with the title, so only add it when missing.
+  const heading = contentText.startsWith(title) ? '' : `${title}\n${'='.repeat(title.length)}\n\n`
+  const text = `${heading}${contentText}\n\n${footerText}---\n${brandName}\n${i18n(locale).footerEmail}: ${BRAND.contactEmail}\nDatomer AB: ${BRAND.companyUrl}\nPär: ${BRAND.website}\n\n${footerPrivacy}`
 
   return { html, text }
 }
@@ -354,11 +387,26 @@ function interestsSentence(interests) {
 
 // --- Contact form ---
 
-export function buildContactSupportEmail({ name, email, message, locale = 'en', action, environment, country, city }) {
-  const firstName = getFirstName(name)
+function contactStrings(locale, site) {
   const strings = i18n(locale)
+  if (site !== 'company') return strings
+  const swedish = locale === 'sv'
+  return {
+    ...strings,
+    contactSupportBody: name => swedish ? `${name} kontaktade oss via Datomers webbplats.` : `${name} reached out through the Datomer website.`,
+    contactConfirmationSubject: swedish ? 'Vi har tagit emot ditt meddelande — Datomer AB' : 'We received your message — Datomer AB',
+    contactConfirmationBody1: swedish ? 'Vi har tagit emot ditt meddelande och återkommer så snart vi kan.' : 'We have received your message and will get back to you as soon as we can.',
+    contactConfirmationPrivacy: swedish ? 'Vi använder uppgifterna i ditt meddelande för att hantera din förfrågan.' : 'We use the details in your message to handle your enquiry.',
+  }
+}
+
+export function buildContactSupportEmail({ name, email, message, locale = 'en', topicSubject, action, environment, country, city, site = 'product' }) {
+  const firstName = getFirstName(name)
+  const strings = contactStrings(locale, site)
   const title = strings.contactSupportTitle
-  const subject = `New message from ${firstName} — ${BRAND.product}`
+  const subject = topicSubject
+    ? `${topicSubject} — ${firstName}`
+    : `New message from ${firstName} — ${site === 'company' ? 'Datomer AB' : BRAND.product}`
 
   const fields = [
     { label: strings.labelName, value: escapeHtml(name) },
@@ -382,13 +430,13 @@ export function buildContactSupportEmail({ name, email, message, locale = 'en', 
 
   const contentText = `${title}\n\n${strings.contactSupportBody(name)}\n\n${fields.map((f) => `${f.label}: ${f.value.replace(/<[^>]+>/g, '')}`).join('\n')}`
 
-  const { html, text } = emailWrapper({ title, locale, previewText: strings.contactSupportPreview(firstName), contentHtml, contentText })
+  const { html, text } = emailWrapper({ title, locale, site, previewText: strings.contactSupportPreview(firstName), contentHtml, contentText })
   return { subject, html, text, replyTo: email }
 }
 
-export function buildContactConfirmationEmail({ name, message, locale = 'en' }) {
+export function buildContactConfirmationEmail({ name, message, locale = 'en', site = 'product' }) {
   const firstName = getFirstName(name)
-  const strings = i18n(locale)
+  const strings = contactStrings(locale, site)
   const title = strings.contactConfirmationTitle(firstName)
   const subject = strings.contactConfirmationSubject
 
@@ -404,7 +452,7 @@ export function buildContactConfirmationEmail({ name, message, locale = 'en' }) 
 
   const contentText = `${title}\n\n${strings.contactConfirmationBody1}\n\n${strings.contactConfirmationBody2} ${BRAND.contactEmail}.\n\n${strings.labelMessage}:\n${message}\n\n${strings.contactConfirmationPrivacy}`
 
-  const { html, text } = emailWrapper({ title, locale, previewText: strings.contactConfirmationPreview, contentHtml, contentText })
+  const { html, text } = emailWrapper({ title, locale, site, previewText: strings.contactConfirmationPreview, contentHtml, contentText })
   return { subject, html, text }
 }
 
@@ -469,8 +517,7 @@ function waitlistConfirmationSubject({ type, interests, action }) {
   return 'Welcome — Pär'
 }
 
-function waitlistConfirmationBody({ type, interests, name, locale = 'en', action }) {
-  const firstName = getFirstName(name)
+function waitlistConfirmationBody({ type, interests, locale = 'en', action }) {
   const strings = i18n(locale)
   const list = formatInterests(interests)
   const sentence = interestsSentence(interests)
@@ -480,13 +527,13 @@ function waitlistConfirmationBody({ type, interests, name, locale = 'en', action
 
   if (type === 'download') {
     return {
-      html: `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody(escapeHtml(firstName), action)}</p><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody2}</p>`,
-      text: `${strings.salutation(firstName)}, ${strings.downloadConfirmationBody(firstName, action).replace(/<[^>]+>/g, '')} ${strings.downloadConfirmationBody2}`,
+      html: `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody(action)}</p><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody2}</p>`,
+      text: `${strings.downloadConfirmationBody(action).replace(/<[^>]+>/g, '')} ${strings.downloadConfirmationBody2}`,
     }
   }
 
-  let html = `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistConfirmationBody1(escapeHtml(firstName))}</p>`
-  let text = strings.waitlistConfirmationBody1(firstName)
+  let html = `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistConfirmationBody1()}</p>`
+  let text = strings.waitlistConfirmationBody1()
 
   if (sentence) {
     html += `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.waitlistConfirmationBody2(escapeHtml(sentence))}</p>`
@@ -550,7 +597,7 @@ export function buildWaitlistConfirmationEmail({ type, name, email, interests, l
   const strings = i18n(locale)
   const subject = `${waitlistConfirmationSubject({ type, interests, action })} ${strings.waitlistConfirmationSubjectSuffix}`
   const title = `${strings.salutation(firstName)}`
-  const { html: bodyHtml, text: bodyText } = waitlistConfirmationBody({ type, interests, name, locale, action })
+  const { html: bodyHtml, text: bodyText } = waitlistConfirmationBody({ type, interests, locale, action })
 
   const contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>${bodyHtml}`
   const contentText = `${title}\n\n${bodyText}`

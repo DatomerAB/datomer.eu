@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { useLocalizedHeading } from '../lib/formatHeading.js'
 import { SEO, HreflangLinks } from '../components/SEO.jsx'
@@ -67,6 +68,8 @@ export function PressPage() {
           <h2>{formatHeading(t('press.contact'))}</h2>
           <p>{t('press.contactText')}</p>
           <p>
+            <Link to="/contact?topic=press">{t('press.contactForm')}</Link>
+            {' · '}
             <a href="mailto:hello@datomer.eu">hello@datomer.eu</a>
           </p>
         </section>

@@ -51,7 +51,7 @@ describe('contact handler', () => {
 
     const [, supportOptions] = resendCalls[0]
     const supportBody = JSON.parse(supportOptions.body)
-    expect(supportBody.subject).toBe('New message from Test — Pär')
+    expect(supportBody.subject).toBe('Pär — Product question — Test')
     expect(supportBody.from).toBe('Pär by Datomer <from@example.com>')
     expect(supportBody.reply_to).toBe('test@example.com')
     expect(supportBody.to).toEqual(['to@example.com'])
@@ -103,5 +103,25 @@ describe('contact handler', () => {
 
     const response = await onRequestPost({ request, env: {} })
     expect(response.status).toBe(400)
+  })
+
+  it('derives the subject from the site and ignores topics from another site', async () => {
+    const env = { TURNSTILE_SECRET_KEY: 's', RESEND_API_KEY: 're_1', RESEND_FROM_EMAIL: 'f@example.com', CONTACT_TO_EMAIL: 't@example.com' }
+    const send = (url, topic) => onRequestPost({
+      env,
+      request: new Request(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: 'Ann', email: 'a@example.com', message: 'Hi', topic, turnstileToken: 't' }),
+      }),
+    })
+    const subjectOf = () => JSON.parse(fetchSpy.mock.calls.filter((c) => String(c[0]).includes('resend.com')).at(-2)[1].body).subject
+
+    await send('https://datomer.eu/api/contact', 'consulting')
+    expect(subjectOf()).toBe('Datomer AB — Consulting enquiry — Ann')
+    await send('https://datomer.eu/api/contact', 'press')
+    expect(subjectOf()).toBe('Datomer AB — Consulting enquiry — Ann')
+    await send('https://par.datomer.eu/api/contact', 'press')
+    expect(subjectOf()).toBe('Pär — Press enquiry — Ann')
   })
 })
