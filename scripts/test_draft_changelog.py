@@ -78,3 +78,27 @@ def test_exits_when_cache_buster_is_missing(tmp_path):
         module._update_download_urls(_dmg("v0.2.0"), "v0.2.0")
 
     assert excinfo.value.code == 1
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        None,
+        "A customer-facing improvement.",
+        "A customer-facing improvement.\n\n## Download\n\n"
+        "[Download](https://github.com/DatomerAB/par-releases/releases/download/v0.2.0/Par.dmg)",
+        "A customer-facing improvement.\n\n## Download\n\n"
+        "[Download](https://datomer.eu/#download)",
+    ],
+)
+def test_generated_download_links_use_product_site(tmp_path, body):
+    module = _load_module(tmp_path / "App.jsx")
+    module.CHANGELOG_DIR = tmp_path / "changelog"
+
+    path, _, _, _ = module._generate_post("v0.2.0", _dmg("v0.2.0"), None, body)
+
+    post = path.read_text(encoding="utf-8")
+    assert "[Download" in post
+    assert "(https://par.datomer.eu/#download)" in post
+    assert "https://datomer.eu" not in post
+    assert ".dmg)" not in post

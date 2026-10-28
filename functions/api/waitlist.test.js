@@ -47,6 +47,25 @@ describe('waitlist handler', () => {
     return fetchSpy.mock.calls.filter((call) => String(call[0]).includes('resend.com'))
   }
 
+  it.each(['datomer.eu', 'par.datomer.eu'])('stores the actual %s origin with campaign attribution', async hostname => {
+    const request = new Request(`https://${hostname}/api/waitlist`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Download User', email: 'test@example.com', country: 'SE', type: 'download',
+        analyticsConsent: true, campaign: { utm_source: 'linkedin', utm_campaign: 'beta' },
+        hostname: 'spoofed', turnstileToken: 'token',
+      }),
+    })
+    const response = await onRequestPost({ request, env: baseEnv })
+    expect(response.status).toBe(200)
+    expect(insertSubmission).toHaveBeenCalledWith(baseEnv, expect.objectContaining({
+      source: 'download', metadata: expect.objectContaining({
+        hostname, site: hostname === 'datomer.eu' ? 'company' : 'product',
+        campaign: { utm_source: 'linkedin', utm_campaign: 'beta' },
+      }),
+    }))
+  })
+
   it('sends a tagged waitlist email with beta interest', async () => {
     const request = makeRequest({
       email: 'waitlist@example.com',

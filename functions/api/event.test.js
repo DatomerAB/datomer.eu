@@ -40,7 +40,7 @@ describe('event handler', () => {
       sessionId: 'abcdefghijklmnop',
       type: 'pageview',
       pagePath: '/',
-      metadata: { environment: 'production' },
+      metadata: { environment: 'production', hostname: 'datomer.eu', site: 'company', campaign: {}, sessionStartedAt: null },
     })
   })
 
@@ -55,6 +55,29 @@ describe('event handler', () => {
     expect(verifyTurnstileToken).toHaveBeenCalledWith('challenge-token', 'secret')
     expect(result.eventToken).toEqual(expect.any(String))
     expect(result.expiresAt).toBeGreaterThan(Date.now())
+  })
+
+  it('derives site identity from the request and only stores allowed campaign metadata', async () => {
+    insertEvent.mockResolvedValueOnce({ success: true })
+    const { token } = await createEventSessionToken('abcdefghijklmnop', 'secret')
+    const request = new Request('https://par.datomer.eu/api/event', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: 'abcdefghijklmnop', type: 'pageview', pagePath: '/get-started', eventToken: token,
+        metadata: {
+          hostname: 'datomer.eu', site: 'company', environment: 'spoofed',
+          campaign: { utm_source: 'linkedin', utm_campaign: 'beta', email: 'private@example.com', utm_term: 'private@example.com' },
+          sessionStartedAt: '2026-01-01T10:00:00.000Z', email: 'private@example.com',
+        },
+      }),
+    })
+    const response = await onRequestPost({ request, env: { TURNSTILE_SECRET_KEY: 'secret' } })
+    expect(response.status).toBe(200)
+    expect(insertEvent.mock.calls[0][1].metadata).toEqual({
+      hostname: 'par.datomer.eu', site: 'product', environment: 'production',
+      campaign: { utm_source: 'linkedin', utm_campaign: 'beta' },
+      sessionStartedAt: '2026-01-01T10:00:00.000Z',
+    })
   })
 
   it('reports storage failure instead of acknowledging a lost event', async () => {

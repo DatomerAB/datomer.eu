@@ -131,8 +131,9 @@ describe('email templates', () => {
     const { subject, html, text } = buildDailySummaryEmail({ rows: [], events: [], dateLabel: '2026-08-27' })
 
     expect(subject).toBe('Datomer daily summary — 0 submissions, 0 events — 2026-08-27')
-    expect(html).toContain('No submissions or website activity in the last 25 hours')
-    expect(text).toContain('No submissions or website activity in the last 25 hours')
+    expect(html).toContain('No recorded submissions or website events in the last 25 hours')
+    expect(text).toContain('No recorded submissions or website events in the last 25 hours')
+    expect(text).toContain('This does not mean there were no visitors')
   })
 
   it('builds a daily summary email grouped by environment, source and action', () => {

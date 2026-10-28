@@ -1,6 +1,7 @@
 import { sendSupportEmail } from './_email.js'
 import { getSubmissionsInRange, getEventsInRange, pruneOldSubmissions } from './_db.js'
 import { buildDailySummaryEmail } from './_emailTemplates.js'
+import { campaignLabel, readWebsiteMetadata, websiteLabel } from './_websiteSummary.js'
 
 export const DEFAULT_SUMMARY_TO_EMAIL = 'dailysummary@datomer.eu'
 export const RETENTION_DAYS = 30
@@ -57,7 +58,7 @@ function seconds(ms) {
 }
 
 export function buildCsv(rows) {
-  const headers = ['environment', 'action', 'category', 'time', 'from_email', 'name', 'country', 'city', 'time_on_site_seconds', 'subject', 'message', 'body', 'metadata']
+  const headers = ['environment', 'action', 'category', 'time', 'from_email', 'name', 'country', 'city', 'time_on_site_seconds', 'subject', 'message', 'body', 'metadata', 'website', 'hostname', 'page_path', 'campaign']
   const lines = [headers.join(',')]
   for (const row of rows) {
     const metadata = parseMetadata(row)
@@ -75,6 +76,10 @@ export function buildCsv(rows) {
       row.message || '',
       row.body || '',
       JSON.stringify(metadata),
+      websiteLabel(metadata),
+      metadata.hostname || '',
+      metadata.pagePath || '',
+      campaignLabel(metadata),
     ]
     lines.push(values.map(escapeCsv).join(','))
   }
@@ -82,16 +87,19 @@ export function buildCsv(rows) {
 }
 
 export function buildEventsCsv(rows) {
-  const headers = ['session_id', 'time', 'type', 'page_path', 'metadata']
+  const headers = ['session_id', 'time', 'type', 'page_path', 'metadata', 'website', 'hostname', 'campaign']
   const lines = [headers.join(',')]
   for (const row of rows) {
-    const metadata = parseMetadata(row)
+    const metadata = readWebsiteMetadata(row)
     const values = [
       row.session_id || '',
       formatLocalTime(row.created_at),
       row.type || '',
       row.page_path || '',
       JSON.stringify(metadata),
+      websiteLabel(metadata),
+      metadata.hostname || '',
+      campaignLabel(metadata),
     ]
     lines.push(values.map(escapeCsv).join(','))
   }
@@ -135,7 +143,7 @@ export async function runDailySummary(env, ctx, options = {}) {
   const eventsCsvBase64 = utf8ToBase64(eventsCsv)
   const eventsFilename = `datomer-events-${end.slice(0, 10)}.csv`
 
-  const { subject, html: summaryHtml, text: summaryText } = buildDailySummaryEmail({ rows, events, dateLabel: end.slice(0, 10) })
+  const { subject, html: summaryHtml, text: summaryText } = buildDailySummaryEmail({ rows, events, dateLabel: end.slice(0, 10), windowStart: start, windowEnd: end })
   let html = summaryHtml
   let text = summaryText
   const attachments = []

@@ -10,6 +10,9 @@ on:
       - 'functions/api/_dailySummary.js'
       - 'functions/api/_db.js'
       - 'functions/api/_email.js'
+      - 'functions/api/_emailTemplates.js'
+      - 'functions/api/_websiteSummary.js'
+      - 'src/lib/campaign.js'
       - '.github/workflows/deploy-daily-summary.yml'
   workflow_dispatch:
     inputs:

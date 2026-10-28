@@ -1,13 +1,16 @@
 import { analytics } from './analytics.js'
+import { sanitizeCampaign } from '../lib/campaign.js'
 
 const SESSION_KEY = 'par-session-id'
 const SESSION_STARTED_KEY = 'par-session-started-at'
+const ATTRIBUTION_KEY = 'par-session-attribution'
 const EVENT_TOKEN_KEY = 'par-event-token'
 const EVENT_TOKEN_SESSION_KEY = 'par-event-token-session-id'
 const EVENT_TOKEN_EXPIRES_KEY = 'par-event-token-expires-at'
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000
 const TURNSTILE_SCRIPT_ID = 'cf-turnstile-script'
 const TURNSTILE_SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+const pendingEventTokens = new Map()
 
 function getTurnstileSiteKey() {
   return import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
@@ -39,6 +42,9 @@ function setSessionId(id) {
   try {
     sessionStorage.setItem(SESSION_KEY, id)
     sessionStorage.setItem(SESSION_STARTED_KEY, String(Date.now()))
+    sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify({
+      campaign: sanitizeCampaign(Object.fromEntries(new URLSearchParams(window.location.search))),
+    }))
     clearEventToken()
   } catch {
     // ignore
@@ -50,6 +56,7 @@ function clearSession() {
   try {
     sessionStorage.removeItem(SESSION_KEY)
     sessionStorage.removeItem(SESSION_STARTED_KEY)
+    sessionStorage.removeItem(ATTRIBUTION_KEY)
     clearEventToken()
   } catch {
     // ignore
@@ -91,6 +98,28 @@ export function getTimeOnSiteMs() {
 export function getPagePath() {
   if (typeof window === 'undefined') return ''
   return window.location.pathname
+}
+
+function getAttribution() {
+  try {
+    const raw = sessionStorage.getItem(ATTRIBUTION_KEY)
+    let campaign = {}
+    if (raw) {
+      campaign = sanitizeCampaign(JSON.parse(raw).campaign)
+    }
+    const current = sanitizeCampaign(Object.fromEntries(new URLSearchParams(window.location.search)))
+    if (Object.keys(current).length) {
+      campaign = current
+      sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify({ campaign }))
+    }
+    return {
+      campaign,
+      sessionStartedAt: new Date(Number(sessionStorage.getItem(SESSION_STARTED_KEY))).toISOString(),
+    }
+  } catch (error) {
+    console.warn('Could not read website campaign attribution.', error)
+    return { campaign: {}, sessionStartedAt: null }
+  }
 }
 
 function clearEventToken() {
@@ -180,7 +209,7 @@ async function requestTurnstileToken() {
   })
 }
 
-async function getEventToken(sessionId) {
+async function requestEventToken(sessionId) {
   try {
     const cachedToken = sessionStorage.getItem(EVENT_TOKEN_KEY)
     const cachedSessionId = sessionStorage.getItem(EVENT_TOKEN_SESSION_KEY)
@@ -196,7 +225,10 @@ async function getEventToken(sessionId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sessionId, type: 'session', turnstileToken }),
     })
-    if (!response.ok) return null
+    if (!response.ok) {
+      console.warn('Website analytics authorization failed:', response.status)
+      return null
+    }
 
     const result = await response.json()
     if (!result.eventToken || !Number.isFinite(result.expiresAt)) return null
@@ -204,9 +236,18 @@ async function getEventToken(sessionId) {
     sessionStorage.setItem(EVENT_TOKEN_SESSION_KEY, sessionId)
     sessionStorage.setItem(EVENT_TOKEN_EXPIRES_KEY, String(result.expiresAt))
     return result.eventToken
-  } catch {
+  } catch (error) {
+    console.warn('Website analytics authorization failed.', error)
     return null
   }
+}
+
+function getEventToken(sessionId) {
+  if (!pendingEventTokens.has(sessionId)) {
+    const pending = requestEventToken(sessionId).finally(() => pendingEventTokens.delete(sessionId))
+    pendingEventTokens.set(sessionId, pending)
+  }
+  return pendingEventTokens.get(sessionId)
 }
 
 async function postEvent({ sessionId, type, pagePath, metadata = {}, isActive = () => true }) {
@@ -221,8 +262,9 @@ async function postEvent({ sessionId, type, pagePath, metadata = {}, isActive = 
       body: JSON.stringify({ sessionId, type, pagePath, metadata, eventToken }),
     })
     if (response.status === 401) clearEventToken()
-  } catch {
-    // ignore network errors
+    if (!response.ok) console.warn('Website analytics event was not stored:', response.status)
+  } catch (error) {
+    console.warn('Website analytics event could not be sent.', error)
   }
 }
 
@@ -235,19 +277,31 @@ export function startTracking() {
 
   let active = true
   const sendEvent = (event) => postEvent({ ...event, isActive: () => active })
-  const pagePath = getPagePath()
-  sendEvent({ sessionId, type: 'pageview', pagePath })
+  const event = (type) => ({
+    sessionId: ensureSession(),
+    type,
+    pagePath: getPagePath(),
+    metadata: getAttribution(),
+  })
+  let lastPage = getPagePath()
+  sendEvent(event('pageview'))
+  const handlePageChange = () => {
+    if (getPagePath() === lastPage) return
+    lastPage = getPagePath()
+    sendEvent(event('pageview'))
+  }
+  window.addEventListener('par-page-change', handlePageChange)
 
   const heartbeatInterval = 20000
   const heartbeat = setInterval(() => {
-    sendEvent({ sessionId, type: 'heartbeat', pagePath: getPagePath() })
+    if (!document.hidden) sendEvent(event('heartbeat'))
   }, heartbeatInterval)
 
   const handleVisibility = () => {
     if (document.hidden) {
-      sendEvent({ sessionId, type: 'hidden', pagePath: getPagePath() })
+      sendEvent(event('hidden'))
     } else {
-      sendEvent({ sessionId, type: 'visible', pagePath: getPagePath() })
+      sendEvent(event('visible'))
     }
   }
   document.addEventListener('visibilitychange', handleVisibility)
@@ -256,6 +310,7 @@ export function startTracking() {
     active = false
     clearInterval(heartbeat)
     document.removeEventListener('visibilitychange', handleVisibility)
+    window.removeEventListener('par-page-change', handlePageChange)
   }
 }
 
@@ -265,7 +320,9 @@ export function getTrackingPayload() {
   }
 
   return {
-    sessionId: getSessionIdOrNull(),
+    sessionId: ensureSession(),
+    analyticsConsent: true,
+    ...getAttribution(),
     timeOnSiteMs: getTimeOnSiteMs(),
     pagePath: getPagePath(),
   }

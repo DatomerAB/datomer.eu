@@ -12,6 +12,9 @@ export default function SiteApp() {
   useEffect(() => {
     if (destination) window.location.replace(destination)
   }, [destination])
+  useEffect(() => {
+    if (!destination) window.dispatchEvent(new Event('par-page-change'))
+  }, [destination, location.pathname, location.search])
   if (destination) return <a href={destination}>Pär →</a>
   return <><SiteMetadata />{siteForUrl(url) === 'company' ? <CompanyPage /> : <App />}</>
 }

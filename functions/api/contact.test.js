@@ -1,5 +1,10 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { onRequestPost } from './contact.js'
+import { insertSubmission } from './_db.js'
+
+vi.mock('./_db.js', () => ({
+  insertSubmission: vi.fn(() => Promise.resolve({ success: true })),
+}))
 
 vi.mock('./_turnstile.js', () => ({
   verifyTurnstileToken: vi.fn(() => Promise.resolve({ success: true })),
@@ -9,6 +14,7 @@ describe('contact handler', () => {
   let fetchSpy
 
   beforeEach(() => {
+    vi.mocked(insertSubmission).mockClear()
     fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}', { status: 200 }))
   })
 
@@ -103,6 +109,30 @@ describe('contact handler', () => {
 
     const response = await onRequestPost({ request, env: {} })
     expect(response.status).toBe(400)
+  })
+
+  it('stores the company origin and consented campaign for the summary', async () => {
+    const pending = []
+    const request = new Request('https://datomer.eu/api/contact', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Test User', email: 'test@example.com', message: 'Hello',
+        analyticsConsent: true, campaign: { utm_source: 'linkedin', utm_campaign: 'consulting' },
+        hostname: 'spoofed', turnstileToken: 'token',
+      }),
+    })
+    const response = await onRequestPost({
+      request, env: { TURNSTILE_SECRET_KEY: 'secret' }, waitUntil: promise => pending.push(promise),
+    })
+    await Promise.all(pending)
+    expect(response.status).toBe(200)
+    expect(insertSubmission).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({
+      source: 'contact',
+      metadata: expect.objectContaining({
+        hostname: 'datomer.eu', site: 'company',
+        campaign: { utm_source: 'linkedin', utm_campaign: 'consulting' },
+      }),
+    }))
   })
 
   it('derives the subject from the site and ignores topics from another site', async () => {

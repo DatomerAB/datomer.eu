@@ -77,6 +77,10 @@ export async function onRequestPost(context) {
     message: null,
     body: detailsText,
     metadata: {
+      hostname: tracking.hostname,
+      site: tracking.site,
+      campaign: tracking.campaign,
+      sessionStartedAt: tracking.sessionStartedAt,
       type: payload.type,
       phone: payload.phone,
       locale: payload.locale,
