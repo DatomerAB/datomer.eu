@@ -54,6 +54,51 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', do
   const [turnstileToken, setTurnstileToken] = useState(null)
   const [pendingSubmit, setPendingSubmit] = useState(false)
   const turnstileRef = useRef(null)
+  const dialogRef = useRef(null)
+  const titleRef = useRef(null)
+
+  useEffect(() => {
+    const opener = document.activeElement
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    dialogRef.current.querySelector('input')?.focus()
+    return () => {
+      document.body.style.overflow = previousOverflow
+      if (opener instanceof HTMLElement && opener.isConnected) opener.focus()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (done) titleRef.current?.focus()
+  }, [done])
+
+  useEffect(() => {
+    const handleKeyDown = event => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        onClose()
+      }
+      if (event.key !== 'Tab') return
+      const dialog = dialogRef.current
+      const controls = [...dialog.querySelectorAll('a[href], button, input, select, textarea, iframe, [tabindex]')]
+        .filter(element => !element.disabled && element.tabIndex >= 0 && !element.hidden)
+      const first = controls[0]
+      const last = controls.at(-1)
+      const active = document.activeElement
+      if (!controls.length) {
+        event.preventDefault()
+        titleRef.current?.focus()
+      } else if (event.shiftKey && (active === first || !controls.includes(active))) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && (active === last || !controls.includes(active))) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
 
   useEffect(() => {
     let cancelled = false
@@ -158,11 +203,11 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', do
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="download-form-title" onClick={(e) => e.stopPropagation()}>
+      <div ref={dialogRef} className="modal" role="dialog" aria-modal="true" aria-labelledby="download-form-title" onClick={(e) => e.stopPropagation()}>
         <button type="button" className="modal-close" onClick={onClose} aria-label={t('common.close', { defaultValue: 'Close' })}>
           ×
         </button>
-        <h2 id="download-form-title">{t('downloadForm.title')}</h2>
+        <h2 ref={titleRef} tabIndex={-1} id="download-form-title">{t('downloadForm.title')}</h2>
         <p>{t('downloadForm.subtitle')}</p>
         {done ? (
           <div className="form-success">
@@ -204,7 +249,7 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', do
                 ))}
               </select>
             </label>
-            {error && <p className="form-error">{error}</p>}
+            {error && <p role="alert" className="form-error">{error}</p>}
             <Turnstile
               ref={turnstileRef}
               siteKey={TURNSTILE_SITE_KEY}

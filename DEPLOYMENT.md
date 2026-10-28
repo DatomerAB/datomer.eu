@@ -232,6 +232,52 @@ edited. Follow-up upstream corrections require separate linked PRs.
 
 ## Campaign landing pages
 
+### Product imagery and visual polish
+
+The shared product/campaign preview uses the owner's supplied dark-appearance
+Mac screenshot with SHA-256
+`8ef8dbd8b1a39d0784ef526716aa6c0330d7aaccf5f4f3e1167e3914c0566830`.
+This replaces the initial light screenshot. The owner identified that earlier
+light capture's installed build as `0.1.9-beta.2026101601`; the dark capture does
+not show a release identifier, so no exact build is claimed for it. No release
+catalog was changed. The website itself retains its light/coral theme.
+
+Optimized full-frame copies live under `public/product/` at 640, 960 and 1216px
+width (approximately 12, 21 and 34KB). The original attachment is not altered.
+The shared caption in `src/content/productVisuals.js` discloses Pro-profile
+context, English UI, optional online features and the illustrative/unverified
+travel answer. Do not remove these qualifications or imply visa/price advice is verified.
+The screenshot is an example, not certification of every visible feature.
+Routines/integration captures were reviewed but are not published in the hero.
+
+Review the screenshot, build and permissions whenever replacing it. Keep
+responsive sources, explicit dimensions, accessible alt text, and a larger-image
+link. No new tracking, external image hosting or runtime UI dependency is needed.
+Before rollout, compare EN/SV previews and run lint/tests/build, including homepage
+pre-render/hydration and metadata parity checks.
+
+The product homepage groups its existing nine features into three user-oriented
+sections using `src/content/productOverview.js`. All nine feature descriptions and
+Plus+ badges stay visible, with simpler wording; pricing and anchors remain intact. Simple examples
+replace the repetitive capability/proof blocks. Development work is explicitly
+qualified on the homepage as well as About. This presentation change is not a
+new certification of the inherited feature claims.
+
+Shared actions use the darker coral `--action` token (6.1:1 against white).
+Cookie acceptance/rejection use equal-weight buttons. Reduced-motion styling,
+visible focus, and download-dialog keyboard containment/Escape/focus return are
+included. Dialog changes do not change submission or conversion conditions.
+
+The local product-bundle comparison used one warm-up and three alternating
+samples per variant at 375px and 1440px, without network/CPU throttling and with
+external requests blocked. Median LCP was 112→100ms on mobile and 112→128ms on
+desktop; measured CLS was 0. The desktop difference exceeds the relative 10%
+investigation threshold: the new screenshot became LCP instead of the heading
+and introduces an image fetch/decode. Asset sizes remain 12–34KB. These tiny
+localhost timings, including integrated-browser visibility changes, are not a
+production Core Web Vitals certification. Recheck real-device/production results
+after an approved rollout rather than claiming the redesign is faster.
+
 The Mac beta destination is `https://par.datomer.eu/campaigns/mac-beta`, with
 `?lang=sv` for Swedish. Add public UTM campaign labels to advertising links.
 Existing consent-aware page/campaign tracking and download conversion handling

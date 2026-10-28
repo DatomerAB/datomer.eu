@@ -26,6 +26,8 @@ describe('company website', () => {
     for (const [title] of companyContent.en.services) expect(screen.getByRole('heading', { name: title })).toBeVisible()
     expect(screen.getByRole('heading', { name: 'Our mission' })).toBeVisible()
     expect(screen.getByRole('heading', { name: 'Our vision' })).toBeVisible()
+    expect(screen.getByRole('complementary', { name: companyContent.en.processTitle })).toBeVisible()
+    for (const [title] of companyContent.en.process) expect(screen.getByRole('heading', { name: title })).toBeVisible()
     expect(screen.getByRole('link', { name: 'Connect on LinkedIn ↗' })).toHaveAttribute('href', 'https://www.linkedin.com/in/jayceee')
     expect(screen.getByRole('link', { name: 'Explore Pär →' }).href).toMatch(/:5174\/$/)
     expect(document.title).toBe(companyContent.en.title)

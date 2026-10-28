@@ -28,7 +28,7 @@ export const translations = {
       variantBadge: 'Built for Repeat Users',
       headline: 'Your AI. On Your Device.',
       lede:
-        'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware, no cloud required. Bring your own GGUF models or Ollama models.',
+        'Ask questions, explore ideas, and draft replies with an AI model on your own Mac. Choose when to use web search or connected services. Features depend on your plan and setup.',
       downloadMac: 'Download for Mac',
       seeHowItWorks: 'See How It Works',
       setupGuide: 'Beta Download & Setup Guide',
@@ -38,41 +38,16 @@ export const translations = {
       encryptedVault: { title: 'Encrypted Vault', text: 'SQLCipher AES-256 encryption keeps your data safe.' },
       ownTheKeys: { title: 'You Own The Keys', text: 'Your memory, files, and profile stay under your control.' },
     },
-    proof: {
-      localFirst: { strong: 'Local-First', span: 'No cloud required' },
-      encrypted: { strong: 'Encrypted Vault', span: 'AES-256 protected' },
-      oneAgent: { strong: 'One Agent', span: 'For your digital life' },
-    },
-    capabilities: {
-      eyebrow: 'Why Pär Is Different',
-      headline: 'Most AI Assistants Start Every Conversation From Zero.',
-      subtitle:
-        'Pär Builds A Living Model Of Who You Are, What You Are Working On, And What Matters To You — And Keeps It Under Your Control.',
-      knowsYou: {
-        title: 'Knows You',
-        text: 'Persistent, encrypted memory means Pär remembers every conversation. Your profile, goals, and style are injected into every response.',
-      },
-      knowsWorld: {
-        title: 'Knows Your World',
-        text: 'Connect calendar, email, tasks, and notes. Pär can pull live web context when you want it, or stay fully offline and private.',
-      },
-      actsForYou: {
-        title: 'Acts For You',
-        text: 'Smart model routing picks the best local model for each task. Routines, web search, and document exports get things done.',
-      },
-    },
     features: {
-      eyebrow: 'Built For Serious Daily Use',
-      headline: 'Everything You Expect From A Modern AI Assistant, Designed Around Privacy And Ownership.',
-      persistentMemory: { title: 'Persistent Memory', badge: 'Plus+', text: 'Cross-session history stored encrypted on-device. Find past conversations by meaning, not just keyword.' },
-      contextGraph: { title: 'Personal Context Graph', badge: 'Plus+', text: 'A unified, continuously updated view of your profile, commitments, and live external state.' },
-      modelRouting: { title: 'Smart Model Routing', badge: 'Plus+', text: 'Automatically chooses the right local model for chat, code, vision, or reasoning tasks.' },
-      integrations: { title: 'Live Integrations', badge: 'Plus+', text: 'Gmail, Google Calendar, Notion, Todoist, Slack, GitHub, and more — read and write on your behalf.' },
-      fileIntelligence: { title: 'Local File Intelligence', badge: 'Plus+', text: 'Drag in text, PDFs, and images. Build a personal knowledge base from folders on your machine.' },
-      routines: { title: 'Routines & Templates', badge: 'Plus+', text: 'Saved workflows like Morning Briefing, Weekly Review, and Inbox Zero run on your schedule.' },
-      semanticCache: { title: 'Semantic Cache', badge: 'Plus+', text: 'Near-instant answers to repeated questions without re-running the model.' },
+      persistentMemory: { title: 'Find Earlier Conversations', badge: 'Plus+', text: 'Keep conversation history encrypted on your device. Find past conversations by meaning, not just exact words.' },
+      contextGraph: { title: 'Your Profile And Context', badge: 'Plus+', text: 'Bring your profile, commitments, and information from connected services together.' },
+      modelRouting: { title: 'A Model For Each Task', badge: 'Plus+', text: 'Automatically select a local model for conversations, code, images, or working through a problem.' },
+      integrations: { title: 'Connect Your Tools', badge: 'Plus+', text: 'Connect supported services such as Gmail, Google Calendar, Notion, Todoist, Slack, and GitHub. What Pär can read or change depends on the service and your setup.' },
+      fileIntelligence: { title: 'Work With Your Files', badge: 'Plus+', text: 'Add supported text, PDFs, and images, or use folders on your computer to help Pär answer questions.' },
+      routines: { title: 'Repeat Everyday Tasks', badge: 'Plus+', text: 'Save recurring tasks, such as a morning brief or weekly review, and choose when they run.' },
+      semanticCache: { title: 'Reuse Earlier Answers', badge: 'Plus+', text: 'Reuse saved answers to repeated questions instead of asking the model to generate them again.' },
       portability: { title: 'Take Your Data With You', badge: 'Plus+', text: 'Export and import your data with Plus, Pro, or Enterprise. Check the options in your version before moving to another device.' },
-      homeHub: { title: 'Pär Home Hub & Mobile PWA', badge: 'Plus+', text: 'Turn your Mac into a private home hub over local Wi-Fi. Connect phone or tablet via 6-digit PIN or QR code with zero cloud reliance.' },
+      homeHub: { title: 'Connect Nearby Devices', badge: 'Plus+', text: 'Use your Mac as a hub on local Wi-Fi. Connect a phone or tablet with a PIN or QR code. Check the setup guide for requirements.' },
     },
     privacyHome: {
       eyebrow: 'Privacy Is Not A Feature',
@@ -103,10 +78,10 @@ export const translations = {
         text: 'macOS app with on-device models and a local vault in ~/.peer/. Everything stays on your Mac.',
         best: 'Best For Mac Users',
       },
-      web: {
-        title: 'Pär Web',
-        text: 'Runs on your browser, talks to your local backend. Windows, Linux, and Chromebook support.',
-        best: 'Best For Cross-Platform',
+      windows: {
+        title: 'Pär for Windows',
+        text: 'A desktop beta for 64-bit Windows PCs with Intel or AMD processors. Not for Windows on ARM. Check the download list and setup guide for requirements.',
+        best: 'For Windows Users',
       },
       cloud: {
         title: 'Pär Cloud',
@@ -499,7 +474,7 @@ export const translations = {
       variantBadge: 'Byggt För Återkommande Användare',
       headline: 'Din AI. På Din Enhet.',
       lede:
-        'Pär är den personliga AI-kompisen som faktiskt kommer ihåg dig. Den lär sig dina mål, kopplar ihop sig med dina verktyg och körs helt på din egen hårdvara — inget moln behövs. Använd dina egna GGUF-modeller eller Ollama-modeller.',
+        'Ställ frågor, bolla idéer och skriv utkast med en AI-modell på din egen Mac. Välj när du vill använda webbsökning eller anslutna tjänster. Funktioner beror på abonnemang och inställningar.',
       downloadMac: 'Ladda ner för Mac',
       seeHowItWorks: 'Se hur det fungerar',
       setupGuide: 'Beta-Nedladdning & Installationsguide',
@@ -509,41 +484,16 @@ export const translations = {
       encryptedVault: { title: 'Krypterat Valv', text: 'SQLCipher AES-256-kryptering håller dina data säkra.' },
       ownTheKeys: { title: 'Du Äger Nycklarna', text: 'Ditt minne, dina filer och din profil förblir under din kontroll.' },
     },
-    proof: {
-      localFirst: { strong: 'Lokal-Först', span: 'Inget moln krävs' },
-      encrypted: { strong: 'Krypterat Valv', span: 'AES-256-skyddat' },
-      oneAgent: { strong: 'En Agent', span: 'För ditt digitala liv' },
-    },
-    capabilities: {
-      eyebrow: 'Det Som Skiljer Pär',
-      headline: 'De Flesta AI-Assistenter Börjar Varje Konversation Från Noll.',
-      subtitle:
-        'Pär Bygger En Levande Modell Av Vem Du Är, Vad Du Arbetar Med Och Vad Som Betyder Något För Dig — Och Håller Den Under Din Kontroll.',
-      knowsYou: {
-        title: 'Känner Dig',
-        text: 'Bestående, krypterat minne innebär att Pär kommer ihåg varje konversation. Din profil, dina mål och din stil matas in i varje svar.',
-      },
-      knowsWorld: {
-        title: 'Känner Din Värld',
-        text: 'Koppla ihop kalender, e-post, uppgifter och anteckningar. Pär kan hämta live webbkontext när du vill, eller förbli helt offline och privat.',
-      },
-      actsForYou: {
-        title: 'Handlar Åt Dig',
-        text: 'Smart modellroutning väljer den bästa lokala modellen för varje uppgift. Rutiner, webbsökning och dokumentexport får saker gjorda.',
-      },
-    },
     features: {
-      eyebrow: 'Byggt För Seriös Daglig Användning',
-      headline: 'Allt Du Förväntar Dig Av En Modern AI-Assistent, Utformat Kring Integritet Och Ägandeskap.',
-      persistentMemory: { title: 'Bestående Minne', badge: 'Plus+', text: 'Sessionsöverskridande historik lagrad krypterat på enheten. Hitta tidigare konversationer efter innebörd, inte bara nyckelord.' },
-      contextGraph: { title: 'Personlig Kontextgraf', badge: 'Plus+', text: 'En enhetlig, kontinuerligt uppdaterad vy av din profil, åtaganden och live extern status.' },
-      modelRouting: { title: 'Smart Modellroutning', badge: 'Plus+', text: 'Väljer automatiskt rätt lokala modell för chatt, kod, bild eller resonemangsuppgifter.' },
-      integrations: { title: 'Live-Integrationer', badge: 'Plus+', text: 'Gmail, Google Kalender, Notion, Todoist, Slack, GitHub och fler — läs och skriv i dina verktyg.' },
-      fileIntelligence: { title: 'Lokal Filintelligens', badge: 'Plus+', text: 'Dra in text, PDF:er och bilder. Bygg en personlig kunskapsbas från mappar på din dator.' },
-      routines: { title: 'Rutiner Och Mallar', badge: 'Plus+', text: 'Sparade arbetsflöden som Morgonbriefing, Veckogenomgång och Inkorg Noll körs enligt ditt schema.' },
-      semanticCache: { title: 'Semantiskt Cache', badge: 'Plus+', text: 'Nästan omedelbara svar på upprepade frågor utan att köra modellen igen.' },
+      persistentMemory: { title: 'Hitta Tidigare Samtal', badge: 'Plus+', text: 'Spara samtalshistoriken krypterat på din enhet. Hitta tidigare samtal efter innebörd, inte bara exakta ord.' },
+      contextGraph: { title: 'Din Profil Och Ditt Sammanhang', badge: 'Plus+', text: 'Samla din profil, dina åtaganden och information från anslutna tjänster.' },
+      modelRouting: { title: 'En Modell För Varje Uppgift', badge: 'Plus+', text: 'Välj automatiskt en lokal modell för samtal, kod, bilder eller för att tänka igenom ett problem.' },
+      integrations: { title: 'Anslut Dina Verktyg', badge: 'Plus+', text: 'Anslut tjänster som stöds, som Gmail, Google Kalender, Notion, Todoist, Slack och GitHub. Vad Pär kan läsa eller ändra beror på tjänsten och dina inställningar.' },
+      fileIntelligence: { title: 'Arbeta Med Dina Filer', badge: 'Plus+', text: 'Lägg till text, PDF:er och bilder som stöds, eller använd mappar på din dator för att hjälpa Pär svara på frågor.' },
+      routines: { title: 'Upprepa Vardagens Uppgifter', badge: 'Plus+', text: 'Spara återkommande uppgifter, som en morgonöversikt eller veckogenomgång, och välj när de ska köras.' },
+      semanticCache: { title: 'Återanvänd Tidigare Svar', badge: 'Plus+', text: 'Återanvänd sparade svar på återkommande frågor i stället för att be modellen skapa dem igen.' },
       portability: { title: 'Ta Med Dig Dina Data', badge: 'Plus+', text: 'Exportera och importera dina data med Plus, Pro eller Enterprise. Kontrollera alternativen i din version innan du byter enhet.' },
-      homeHub: { title: 'Pär Home Hub & Mobil PWA', badge: 'Plus+', text: 'Gör din Mac till en privat hemmahubb över lokalt Wi-Fi. Anslut mobil eller surfplatta via 6-siffrig PIN eller QR-kod helt utan moln.' },
+      homeHub: { title: 'Anslut Enheter I Närheten', badge: 'Plus+', text: 'Använd din Mac som en hubb på lokalt Wi-Fi. Anslut en mobil eller surfplatta med PIN eller QR-kod. Läs om kraven i installationsguiden.' },
     },
     privacyHome: {
       eyebrow: 'Integritet Är Inte En Funktion',
@@ -574,10 +524,10 @@ export const translations = {
         text: 'macOS-app med lokala modeller och ett lokalt valv i ~/.peer/. Allt stannar på din Mac.',
         best: 'Bäst För Mac-Användare',
       },
-      web: {
-        title: 'Pär Web',
-        text: 'Körs i din webbläsare, pratar med ditt eget lokala backend. Stöd för Windows, Linux och Chromebook.',
-        best: 'Bäst För Flera Plattformar',
+      windows: {
+        title: 'Pär för Windows',
+        text: 'En skrivbordsbeta för 64-bitars Windows-datorer med Intel- eller AMD-processor. Inte för Windows på ARM. Läs om kraven i nedladdningslistan och installationsguiden.',
+        best: 'För Windows-Användare',
       },
       cloud: {
         title: 'Pär Cloud',
