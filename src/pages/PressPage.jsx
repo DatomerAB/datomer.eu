@@ -1,21 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { useLocalizedHeading } from '../lib/formatHeading.js'
-import { SEO, HreflangLinks } from '../components/SEO.jsx'
 
 export function PressPage() {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
   return (
     <>
-      <SEO
-        title="Press Kit"
-        description="Press kit for Pär by Datomer. Download logos, screenshots, and company facts for journalists and reviewers."
-        pathname="/press"
-        lang={lang}
-      />
-      <HreflangLinks pathname="/press" />
       <main className="section container legal-page">
         <header className="page-header">
           <h1>{formatHeading(t('press.title'))}</h1>

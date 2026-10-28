@@ -150,6 +150,35 @@ describe('meta middleware', () => {
     expect(text).toContain('noindex, nofollow')
   })
 
+  it.each(['Googlebot', 'bingbot', 'OAI-SearchBot'])('serves the same public HTML to %s and visitors', async agent => {
+    const url = 'https://par.datomer.eu/press?lang=sv'
+    const browser = await (await onRequest(makeContext(new Request(url), SHELL))).text()
+    const bot = await (await onRequest(makeContext(new Request(url, {
+      headers: { 'User-Agent': agent },
+    }), SHELL))).text()
+    expect(bot).toBe(browser)
+  })
+
+  it('keeps preview robots closed without overriding production training-crawler controls', async () => {
+    const preview = await onRequest(makeContext(new Request('https://branch.pages.dev/robots.txt'), ''))
+    expect(await preview.text()).toBe('User-agent: *\nDisallow: /\n')
+    for (const host of ['datomer.eu', 'par.datomer.eu']) {
+      const robots = await (await onRequest(makeContext(new Request(`https://${host}/robots.txt`), ''))).text()
+      expect(robots).toBe(`User-agent: *\nAllow: /\nSitemap: https://${host}/sitemap.xml\n`)
+      expect(robots).not.toContain('GPTBot')
+    }
+  })
+
+  it('keeps payment confirmation out of indexes and removes stale robots tags', async () => {
+    const ctx = makeContext(makeRequest('/payment-success?session_id=private'), SHELL.replace(
+      '</head>', '<meta name="robots" content="index, follow" /></head>',
+    ))
+    const text = await (await onRequest(ctx)).text()
+    expect(text.match(/<meta name="robots"/g)).toHaveLength(1)
+    expect(text).toContain('<meta name="robots" content="noindex, nofollow" />')
+    expect(text).not.toContain('session_id')
+  })
+
   it('rewrites title and description for /press', async () => {
     const req = makeRequest('/press')
     const ctx = makeContext(req, SHELL)

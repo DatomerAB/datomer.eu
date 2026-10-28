@@ -6,7 +6,6 @@ import { CookieConsent } from '../components/CookieConsent.jsx'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { companyContent } from '../content/company.js'
 import { siteLinks } from '../lib/site.js'
-import { companyMeta } from '../lib/companyMeta.js'
 import './CompanyPage.css'
 import { useSiteUrl } from '../lib/RenderContext.jsx'
 
@@ -19,11 +18,8 @@ export function CompanyPage() {
   const home = `/${suffix}`
   const product = `${siteLinks(url).product}/${suffix}`
   useEffect(() => {
-    document.title = companyMeta(location.pathname, lang).title
-    document.querySelector('meta[name="description"]')?.setAttribute('content', c.description)
-    document.querySelector('link[rel="icon"]')?.setAttribute('href', '/datomer-logo.png?v=20261010')
     if (!location.hash) window.scrollTo(0, 0)
-  }, [c, lang, location.pathname, location.hash])
+  }, [lang, location.pathname, location.hash])
   const content = (
     <main id="company-main">
       <section className="company-hero container">
