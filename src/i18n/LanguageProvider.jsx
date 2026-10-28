@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useInRouterContext, useSearchParams } from 'react-router-dom'
 import { translations } from './translations'
 import { LanguageContext } from './LanguageContext.js'
 
-function useSearchParamsSafe() {
-  try {
-    return useSearchParams()
-  } catch {
-    const empty = new URLSearchParams()
-    return [empty, () => {}]
-  }
-}
+const EMPTY_SEARCH_PARAMS = new URLSearchParams()
+const ignoreSearchParams = () => {}
 
 // 'de' stays here so translations/meta can be re-enabled without rewiring.
 export const ALL_LANGUAGES = ['en', 'sv', 'de']
@@ -33,7 +27,18 @@ function interpolate(template, params) {
 }
 
 export function LanguageProvider({ children }) {
-  const [searchParams, setSearchParams] = useSearchParamsSafe()
+  const inRouter = useInRouterContext()
+  return inRouter
+    ? <RoutedLanguageProvider>{children}</RoutedLanguageProvider>
+    : <LanguageStateProvider>{children}</LanguageStateProvider>
+}
+
+function RoutedLanguageProvider({ children }) {
+  const [searchParams, setSearchParams] = useSearchParams()
+  return <LanguageStateProvider searchParams={searchParams} setSearchParams={setSearchParams}>{children}</LanguageStateProvider>
+}
+
+function LanguageStateProvider({ children, searchParams = EMPTY_SEARCH_PARAMS, setSearchParams = ignoreSearchParams }) {
   const [lang, setLangState] = useState(() => {
     if (typeof window === 'undefined') {
       return parseLanguage(searchParams.get('lang')) || DEFAULT_LANGUAGE

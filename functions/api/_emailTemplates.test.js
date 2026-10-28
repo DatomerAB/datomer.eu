@@ -11,6 +11,16 @@ import {
 } from './_emailTemplates.js'
 
 describe('email templates', () => {
+  it.each(['en', 'sv'])('keeps company enquiries separate from product emails in %s', locale => {
+    const contact = { name: 'Test User', email: 'test@example.com', message: 'Data strategy', site: 'company', locale }
+    for (const email of [buildContactSupportEmail(contact), buildContactConfirmationEmail(contact)]) {
+      expect(email.subject).toContain('Datomer AB')
+      expect(email.html).toContain('href="https://datomer.eu"')
+      expect(email.html).toContain('href="https://par.datomer.eu"')
+      expect(email.text).toContain('https://datomer.eu')
+      expect(email.text).toContain('https://par.datomer.eu')
+    }
+  })
   it('uses the approved Datomer logo in every shared email while preserving the Par header', () => {
     const contact = { name: 'Brand Tester', email: 'brand@example.com', message: 'Brand preview' }
     const waitlist = { ...contact, type: 'waitlist', interests: {} }
@@ -23,7 +33,7 @@ describe('email templates', () => {
     ]
     for (const email of emails) {
       expect(email.html).toContain('src="https://datomer.eu/datomer-logo.png?v=20261010"')
-      expect(email.html).toContain('src="https://datomer.eu/par-logo.png"')
+      expect(email.html).toContain('src="https://par.datomer.eu/par-logo.png"')
     }
   })
 
@@ -166,5 +176,41 @@ describe('email templates', () => {
 
     const support = buildWaitlistSupportEmail({ type: 'download', name: 'Anna Svensson', email: 'anna@example.com', action: 'download-pricing-free' })
     expect(support.subject).toBe('Anna downloaded the Pär free tier')
+  })
+
+  it.each([
+    ['en', 'Hi Anna'],
+    ['sv', 'Hej Anna'],
+    ['de', 'Hallo Anna'],
+  ])('greets by name only once in %s download and waitlist confirmations', (locale, greeting) => {
+    const count = (value) => value.split(greeting).length - 1
+    const download = buildWaitlistConfirmationEmail({ type: 'download', name: 'Anna', email: 'a@example.com', locale, action: 'download-hero' })
+    const waitlist = buildWaitlistConfirmationEmail({ type: 'waitlist', name: 'Anna', email: 'a@example.com', locale, interests: { productUpdates: true, betaAccess: true } })
+    for (const email of [download, waitlist]) {
+      expect(count(email.html.replace(/<title>.*?<\/title>/, ''))).toBe(1)
+      expect(count(email.text)).toBe(1)
+    }
+  })
+
+  it.each(['product', 'company'])('links to both Datomer and Pär in the %s email footer', (site) => {
+    const email = buildContactConfirmationEmail({ name: 'Anna', message: 'Hi', site })
+    expect(email.html).toContain('href="https://datomer.eu"')
+    expect(email.html).toContain('href="https://par.datomer.eu"')
+    expect(email.html).toContain('datomer-icon.png')
+    expect(email.text).toContain('Datomer AB: https://datomer.eu')
+    expect(email.text).toContain('Pär: https://par.datomer.eu')
+  })
+
+  it('does not repeat the title in the plain-text body', () => {
+    const { text } = buildWaitlistConfirmationEmail({ type: 'download', name: 'Anna', email: 'a@example.com', action: 'download-hero' })
+    expect(text.split('Hi Anna').length - 1).toBe(1)
+  })
+
+  it('never puts double quotes inside inline style attributes', () => {
+    const { html } = buildContactConfirmationEmail({ name: 'Anna', message: 'Hi' })
+    const styles = [...html.matchAll(/style="([^"]*)"/g)].map((m) => m[1])
+    expect(styles.some((value) => value.includes('font-family'))).toBe(true)
+    expect(html).not.toMatch(/style="[^">]*font-family:[^">]*&quot;/)
+    expect(html).not.toMatch(/font-family: [^;"]*"[A-Za-z]/)
   })
 })

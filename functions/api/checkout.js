@@ -37,7 +37,7 @@ export async function onRequestPost(context) {
     })
   }
 
-  const origin = request.headers.get('origin') || env.SITE_URL || 'https://datomer.eu'
+  const origin = request.headers.get('origin') || env.SITE_URL || 'https://par.datomer.eu'
 
   try {
     const session = await fetch('https://api.stripe.com/v1/checkout/sessions', {

@@ -356,6 +356,7 @@ export const translations = {
       intro: 'For questions, support, or partnership inquiries, reach out to us at',
       name: 'Name',
       email: 'Email',
+      subject: 'Subject',
       message: 'Message',
       submit: 'Send message',
       sending: 'Sending…',
@@ -364,6 +365,7 @@ export const translations = {
       turnstileError: 'Security check failed. Please try again.',
     },
     press: {
+      contactForm: 'Press enquiry form',
       title: 'Press Kit',
       intro: 'Download logos, banners, and company facts for journalists, reviewers, and partners.',
       downloadKit: 'Download full press kit (ZIP)',
@@ -817,6 +819,7 @@ export const translations = {
       intro: 'För frågor, support eller samarbetsförfrågningar, kontakta oss på',
       name: 'Namn',
       email: 'E-post',
+      subject: 'Ämne',
       message: 'Meddelande',
       submit: 'Skicka meddelande',
       sending: 'Skickar…',
@@ -825,6 +828,7 @@ export const translations = {
       turnstileError: 'Säkerhetskontrollen misslyckades. Försök igen.',
     },
     press: {
+      contactForm: 'Pressförfrågan',
       title: 'Pressmaterial',
       intro: 'Ladda ner logotyper, banners och fakta för journalister, recensenter och partners.',
       downloadKit: 'Ladda ner komplett presskit (ZIP)',

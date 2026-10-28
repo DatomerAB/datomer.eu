@@ -1,9 +1,10 @@
 import { Helmet } from 'react-helmet-async'
+import { COMPANY_URL, PRODUCT_URL } from '../lib/site.js'
+import { PRODUCT_DESCRIPTIONS, PRODUCT_TITLES, COMPANY_FACTS, safeJson } from '../lib/seoMeta.js'
 
-const SITE_URL = 'https://datomer.eu'
-const DEFAULT_TITLE = 'Pär by Datomer — Your AI. On your device.'
-const DEFAULT_DESCRIPTION =
-  'Pär is the personal AI companion that actually remembers you. Local-first, private by design, running on your own hardware with GGUF or Ollama models.'
+const SITE_URL = PRODUCT_URL
+const DEFAULT_TITLE = PRODUCT_TITLES.en
+const DEFAULT_DESCRIPTION = PRODUCT_DESCRIPTIONS.en
 const DEFAULT_IMAGE = `${SITE_URL}/og-image-aurora.png`
 
 export function SEO({
@@ -16,7 +17,8 @@ export function SEO({
   lang = 'en',
   jsonLd = null,
 }) {
-  const url = pathname ? `${SITE_URL}${pathname}` : SITE_URL
+  const baseUrl = pathname ? `${SITE_URL}${pathname}` : SITE_URL
+  const url = lang === 'sv' ? `${baseUrl}?lang=sv` : baseUrl
   const pageTitle = title === DEFAULT_TITLE ? title : `${title} — Pär by Datomer`
 
   return (
@@ -41,7 +43,7 @@ export function SEO({
       <meta name="twitter:image" content={image} />
 
       {jsonLd && (
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{safeJson(jsonLd)}</script>
       )}
     </Helmet>
   )
@@ -51,9 +53,12 @@ export function OrganizationJsonLd() {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Datomer AB',
-    url: SITE_URL,
-    logo: `${SITE_URL}/datomer-logo.png`,
+    '@id': `${COMPANY_URL}/#organization`,
+    name: COMPANY_FACTS.name,
+    url: COMPANY_URL,
+    slogan: COMPANY_FACTS.slogan,
+    knowsAbout: COMPANY_FACTS.services,
+    logo: `${COMPANY_URL}/datomer-logo.png`,
     email: 'hello@datomer.eu',
     address: {
       '@type': 'PostalAddress',
@@ -69,7 +74,7 @@ export function OrganizationJsonLd() {
   }
   return (
     <Helmet>
-      <script type="application/ld+json">{JSON.stringify(data)}</script>
+      <script type="application/ld+json">{safeJson(data)}</script>
     </Helmet>
   )
 }
@@ -95,7 +100,7 @@ export function SoftwareApplicationJsonLd() {
   }
   return (
     <Helmet>
-      <script type="application/ld+json">{JSON.stringify(data)}</script>
+      <script type="application/ld+json">{safeJson(data)}</script>
     </Helmet>
   )
 }
@@ -129,7 +134,7 @@ export function FAQPageJsonLd({ faqs }) {
   }
   return (
     <Helmet>
-      <script type="application/ld+json">{JSON.stringify(data)}</script>
+      <script type="application/ld+json">{safeJson(data)}</script>
     </Helmet>
   )
 }

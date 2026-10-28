@@ -1,6 +1,6 @@
 import './App.css'
 import { useEffect, useRef, useState } from 'react'
-import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import { Routes, Route, Link, useLocation, useSearchParams } from 'react-router-dom'
 import { formatHeading, useLocalizedHeading } from './lib/formatHeading.js'
 import { useLanguage } from './i18n/useLanguage.js'
 import { LanguageSwitcher } from './components/LanguageSwitcher.jsx'
@@ -20,6 +20,9 @@ import { ModelAttributionPage } from './pages/ModelAttributionPage.jsx'
 import { AiDisclaimerBanner } from './components/AiDisclaimerBanner.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
+import { siteForUrl, siteLinks } from './lib/site.js'
+import { resolveTopic, topicContent } from './content/contactTopics.js'
+import { productPurpose } from './content/productPurpose.js'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -221,7 +224,9 @@ function Footer() {
           </nav>
 
           <div className="footer-company" aria-label="Datomer company details">
-            <DatomerLogo />
+            <a href={siteLinks(new URL(window.location.href)).company} aria-label="Datomer AB">
+              <DatomerLogo />
+            </a>
           </div>
         </div>
 
@@ -401,6 +406,7 @@ function HomePage({ onDownload, downloadCatalog }) {
             <p className="hero-setup-link">
               <Link to="/get-started">{t('hero.setupGuide')}</Link>
             </p>
+            <ProductBetaNotice />
 
             <div className="hero-highlights" aria-label="Core promises">
               {highlights.map((item) => (
@@ -664,7 +670,9 @@ function HomePage({ onDownload, downloadCatalog }) {
 }
 
 function AboutPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const purpose = productPurpose[lang]
+  const suffix = lang === 'sv' ? '?lang=sv' : ''
   const formatHeading = useLocalizedHeading()
 
   return (
@@ -672,6 +680,22 @@ function AboutPage() {
       <h1>{formatHeading(t('about.title'))}</h1>
       <p>{t('about.intro')}</p>
       <p>{t('about.mission')}</p>
+      <section>
+        <h2>{purpose.visionTitle}</h2><p>{purpose.vision}</p>
+        <h2>{purpose.missionTitle}</h2><p>{purpose.mission}</p>
+        <h2>{purpose.objectivesTitle}</h2>
+        <ul>{purpose.objectives.map(text => <li key={text}>{text}</li>)}</ul>
+        <p>{purpose.objectivesNote}</p>
+        <h2>{purpose.valuesTitle}</h2>
+        {purpose.values.map(([title, text]) => <p key={title}><strong>{title}: </strong>{text}</p>)}
+      </section>
+      <section>
+        <h2>{purpose.availableTitle}</h2><p>{purpose.availableText}</p>
+        <p><Link to={`/get-started${suffix}`}>{purpose.setupLink}</Link> · <Link to={`/blog${suffix}`}>{purpose.releaseLink}</Link></p>
+        <h2>{purpose.developmentTitle}</h2>
+        <p><strong>{purpose.developmentStatus}</strong></p>
+        <p>{purpose.developmentText}</p><p>{purpose.developmentNote}</p>
+      </section>
 
       <h2>{formatHeading(t('about.companyTitle'))}</h2>
       <CompanyAddress />
@@ -684,18 +708,36 @@ function AboutPage() {
   )
 }
 
-function ContactPage() {
-  const { t } = useLanguage()
+function ProductBetaNotice() {
+  const { lang } = useLanguage()
+  const purpose = productPurpose[lang]
+  return <aside className="product-beta-notice">
+    <p>{purpose.compatibility}</p>
+    <p>{purpose.betaNotice}</p>
+    <Link to={`/about${lang === 'sv' ? '?lang=sv' : ''}`}>{purpose.purposeLink}</Link>
+  </aside>
+}
+
+export function ContactPage() {
+  const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [searchParams] = useSearchParams()
+  const site = siteForUrl(new URL(window.location.href))
+  const topic = resolveTopic(searchParams.get('topic'), site)
+  const { subject, message: prefill } = topicContent(topic, lang)
+  const [form, setForm] = useState({ name: '', email: '' })
+  // null until the visitor edits, so the prefill follows the active language and topic.
+  const [editedMessage, setEditedMessage] = useState(null)
+  const message = editedMessage ?? prefill
   const [status, setStatus] = useState({ loading: false, success: false, error: '' })
   const turnstileRef = useRef(null)
   const [turnstileToken, setTurnstileToken] = useState(null)
 
   const handleChange = (event) => {
     const { name, value } = event.target
-    setForm((current) => ({ ...current, [name]: value }))
+    if (name === 'message') setEditedMessage(value)
+    else setForm((current) => ({ ...current, [name]: value }))
   }
 
   const handleVerify = (token) => {
@@ -726,7 +768,7 @@ function ContactPage() {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, turnstileToken: token }),
+        body: JSON.stringify({ ...form, message, topic, locale: lang, turnstileToken: token }),
       })
       const data = await response.json().catch(() => ({}))
 
@@ -735,7 +777,8 @@ function ContactPage() {
       }
 
       setStatus({ loading: false, success: true, error: '' })
-      setForm({ name: '', email: '', message: '' })
+      setForm({ name: '', email: '' })
+      setEditedMessage(null)
       turnstileRef.current?.reset?.()
       setTurnstileToken(null)
     } catch (err) {
@@ -761,8 +804,12 @@ function ContactPage() {
           <input name="email" type="email" value={form.email} onChange={handleChange} required autoComplete="email" />
         </label>
         <label>
+          <span>{t('contact.subject')}</span>
+          <textarea name="subject" value={subject} readOnly rows="2" className="contact-subject" />
+        </label>
+        <label>
           <span>{t('contact.message')}</span>
-          <textarea name="message" value={form.message} onChange={handleChange} required rows="6" />
+          <textarea name="message" value={message} onChange={handleChange} required rows="6" />
         </label>
         <Turnstile
           ref={turnstileRef}
@@ -785,7 +832,7 @@ function ContactPage() {
   )
 }
 
-function PrivacyPage() {
+export function PrivacyPage() {
   const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
@@ -833,7 +880,7 @@ function PrivacyPage() {
   )
 }
 
-function TermsPage() {
+export function TermsPage() {
   const { t, lang } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
@@ -875,7 +922,7 @@ function TermsPage() {
   )
 }
 
-function CookiesPage() {
+export function CookiesPage() {
   const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
 
