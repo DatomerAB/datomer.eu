@@ -1,5 +1,6 @@
 import { insertEvent } from './_db.js'
 import { verifyTurnstileToken } from './_turnstile.js'
+import { getCampaignMeta, getWebsiteContext } from './_tracking.js'
 
 const EVENT_TOKEN_TTL_MS = 30 * 60 * 1000
 const EVENT_TYPES = new Set(['pageview', 'heartbeat', 'hidden', 'visible'])
@@ -109,7 +110,7 @@ export async function onRequestPost(context) {
     })
   }
 
-  if (pagePath != null && (typeof pagePath !== 'string' || !pagePath.startsWith('/') || pagePath.length > 512)) {
+  if (pagePath != null && (typeof pagePath !== 'string' || !pagePath.startsWith('/') || pagePath.length > 512 || /[?#]/.test(pagePath))) {
     return new Response(JSON.stringify({ error: 'Invalid page path.' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
@@ -123,13 +124,15 @@ export async function onRequestPost(context) {
     })
   }
 
+  const website = getWebsiteContext(request)
   const result = await insertEvent(env, {
     sessionId,
     type,
     pagePath,
     metadata: {
-      environment: env.ENVIRONMENT || 'unknown',
-      ...metadata,
+      ...getCampaignMeta(metadata),
+      ...website,
+      environment: env.ENVIRONMENT || (website.site === 'preview' ? 'preview' : 'production'),
     },
   })
 

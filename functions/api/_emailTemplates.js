@@ -1,5 +1,6 @@
 // Shared, branded email templates for all form handlers.
 // Every public-facing email uses the same layout, tone, signature, and privacy-first messaging.
+import { buildWebsiteSummary, readWebsiteMetadata } from './_websiteSummary.js'
 
 const BRAND = {
   company: 'Datomer',
@@ -72,8 +73,8 @@ const EMAIL_I18N = {
     },
     downloadConfirmationBody: (action) => `Thank you for downloading <strong style="color: ${BRAND.text};">${EMAIL_I18N.en.downloadContext(action)}</strong>.`,
     downloadConfirmationBody2: 'Your download should start automatically. We will email you when updates, new features, and the public launch are ready.',
-    dailySummaryNoSubmissions: 'No submissions or website activity in the last 25 hours',
-    dailySummaryNoSubmissionsBody: 'There were no new submissions or website events in the last 25 hours. The next summary will arrive tomorrow.',
+    dailySummaryNoSubmissions: 'No recorded submissions or website events in the last 25 hours',
+    dailySummaryNoSubmissionsBody: 'No submissions or website events were recorded in the last 25 hours. This does not mean there were no visitors: declined consent, blocked requests or collection failures can leave visits unrecorded. The next summary will arrive tomorrow.',
     dailySummaryTitle: 'Daily website activity and download summary',
     dailySummaryBody: (count) => `There were <strong style="color: ${BRAND.text};">${count}</strong> submission${count === 1 ? '' : 's'} in the last 25 hours. The full list is attached as a CSV file.`,
     paymentSupportTitle: 'New purchase',
@@ -132,8 +133,8 @@ const EMAIL_I18N = {
     },
     downloadConfirmationBody: (action) => `Tack för att du laddar ned <strong style="color: ${BRAND.text};">${EMAIL_I18N.sv.downloadContext(action)}</strong>.`,
     downloadConfirmationBody2: 'Din nedladdning bör starta automatiskt. Vi mejlar dig när uppdateringar, nya funktioner och den offentliga lanseringen är redo.',
-    dailySummaryNoSubmissions: 'Inga inskick eller webbplatsaktiviteter de senaste 25 timmarna',
-    dailySummaryNoSubmissionsBody: 'Det kom inga nya inskick eller webbplatshändelser de senaste 25 timmarna. Nästa sammanfattning kommer i morgon.',
+    dailySummaryNoSubmissions: 'Inga registrerade inskick eller webbplatshändelser de senaste 25 timmarna',
+    dailySummaryNoSubmissionsBody: 'Inga inskick eller webbplatshändelser registrerades de senaste 25 timmarna. Det betyder inte att webbplatsen saknade besökare: nekat samtycke, blockerade anrop eller insamlingsfel kan göra att besök inte registreras. Nästa sammanfattning kommer i morgon.',
     dailySummaryTitle: 'Daglig sammanfattning av webbplatsaktivitet och nedladdningar',
     dailySummaryBody: (count) => `Det fanns <strong style="color: ${BRAND.text};">${count}</strong> inskick de senaste 25 timmarna. Den fullständiga listan finns bifogad som CSV.`,
     paymentSupportTitle: 'Nytt köp',
@@ -192,8 +193,8 @@ const EMAIL_I18N = {
     },
     downloadConfirmationBody: (action) => `Vielen Dank, dass Sie <strong style="color: ${BRAND.text};">${EMAIL_I18N.de.downloadContext(action)}</strong> herunterladen.`,
     downloadConfirmationBody2: 'Ihr Download sollte automatisch starten. Wir schreiben Ihnen, wenn Updates, neue Funktionen und der öffentliche Start bereit sind.',
-    dailySummaryNoSubmissions: 'Keine Einsendungen oder Website-Aktivitäten in den letzten 25 Stunden',
-    dailySummaryNoSubmissionsBody: 'In den letzten 25 Stunden gab es keine neuen Einsendungen oder Website-Ereignisse. Die nächste Zusammenfassung kommt morgen.',
+    dailySummaryNoSubmissions: 'Keine erfassten Einsendungen oder Website-Ereignisse in den letzten 25 Stunden',
+    dailySummaryNoSubmissionsBody: 'In den letzten 25 Stunden wurden keine Einsendungen oder Website-Ereignisse erfasst. Das bedeutet nicht, dass es keine Besucher gab: fehlende Einwilligung, blockierte Anfragen oder Erfassungsfehler können Besuche ungezählt lassen. Die nächste Zusammenfassung kommt morgen.',
     dailySummaryTitle: 'Tägliche Zusammenfassung der Website-Aktivitäten und Downloads',
     dailySummaryBody: (count) => `Es gab <strong style="color: ${BRAND.text};">${count}</strong> Einsendungen in den letzten 25 Stunden. Die vollständige Liste ist als CSV angehängt.`,
     paymentSupportTitle: 'Neuer Kauf',
@@ -672,7 +673,7 @@ export function buildPaymentConfirmationEmail({ plan, email, licenseKey, locale 
   return { subject, html, text }
 }
 
-export function buildDailySummaryEmail({ rows, events = [], dateLabel }) {
+export function buildDailySummaryEmail({ rows, events = [], dateLabel, windowStart = `${dateLabel}T00:00:00.000Z`, windowEnd = `${dateLabel}T23:59:59.999Z` }) {
   const title = `Datomer daily summary — ${dateLabel}`
   const subject = `Datomer daily summary — ${rows.length} submission${rows.length === 1 ? '' : 's'}, ${events.length} event${events.length === 1 ? '' : 's'} — ${dateLabel}`
   const strings = EMAIL_I18N.en
@@ -710,10 +711,12 @@ export function buildDailySummaryEmail({ rows, events = [], dateLabel }) {
   const typeCounts = {}
   const pageCounts = {}
   for (const event of events) {
-    if (event.session_id) sessionIds.add(event.session_id)
+    if (event.session_id) sessionIds.add(`${readWebsiteMetadata(event).hostname || 'unknown'}:${event.session_id}`)
     typeCounts[event.type] = (typeCounts[event.type] || 0) + 1
-    const page = event.page_path || 'unknown'
-    pageCounts[page] = (pageCounts[page] || 0) + 1
+    if (event.type === 'pageview') {
+      const page = event.page_path || 'unknown'
+      pageCounts[page] = (pageCounts[page] || 0) + 1
+    }
   }
   const uniqueSessions = sessionIds.size
   const topPages = Object.entries(pageCounts)
@@ -727,6 +730,24 @@ export function buildDailySummaryEmail({ rows, events = [], dateLabel }) {
 
   let contentHtml = `<h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${strings.dailySummaryTitle}</h1><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.dailySummaryBody(rows.length)}</p>`
   let contentText = `${strings.dailySummaryTitle}\n\n${strings.dailySummaryBody(rows.length).replace(/<[^>]+>/g, '')}`
+
+  const websiteSummary = buildWebsiteSummary(rows, events, windowStart, windowEnd)
+  const measurementNote = `Reporting window: ${windowStart} to ${windowEnd} (UTC). Sessions and page visits cover analytics-consenting visitors only. New sessions means sessions started in this window, not first-ever visitors. A person may have multiple sessions or visit both sites. Heartbeats are not page visits. Form totals include stored submissions even without analytics consent; those have no campaign attribution. Cloudflare aggregate traffic is not included. Campaign labels describe the observed website session, not LinkedIn ad attribution.`
+  contentHtml += `<p style="color: ${BRAND.textSecondary};">${escapeHtml(measurementNote)}</p>`
+  contentText += `\n\n${measurementNote}`
+  for (const [heading, items] of [
+    ['Activity by site', websiteSummary.sites],
+    ['Activity by page', websiteSummary.pages],
+    ['Activity by campaign', websiteSummary.campaigns],
+  ]) {
+    contentHtml += `<h2 style="color: ${BRAND.accent};">${heading}</h2><table role="table" width="100%" cellpadding="6" style="border-collapse: collapse; font-size: 13px;"><thead><tr>${['Site / page / campaign', 'Sessions', 'New sessions', 'Page visits', 'Download requests', 'Enquiries', 'Waitlist'].map(label => `<th scope="col" style="text-align: left;">${label}</th>`).join('')}</tr></thead><tbody>`
+    contentText += `\n\n${heading}`
+    for (const item of items) {
+      contentHtml += `<tr>${[item.label, item.sessions, item.newSessions, item.pageviews, item.downloads, item.enquiries, item.waitlist].map(value => `<td style="border-top: 1px solid ${BRAND.border}; overflow-wrap: anywhere;">${escapeHtml(value)}</td>`).join('')}</tr>`
+      contentText += `\n${item.label}: ${item.sessions} sessions; ${item.newSessions} new sessions; ${item.pageviews} page visits; ${item.downloads} download requests; ${item.enquiries} enquiries; ${item.waitlist} waitlist signups`
+    }
+    contentHtml += '</tbody></table>'
+  }
 
   contentHtml += `<p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 15px; line-height: 1.6;">Average time on site: <strong style="color: ${BRAND.text};">${avgTime}s</strong><br>Top countries: ${topCountries.map(([c, n]) => `${escapeHtml(c)} (${n})`).join(', ') || '—'}</p>`
   contentText += `\n\nAverage time on site: ${avgTime}s\nTop countries: ${topCountries.map(([c, n]) => `${c} (${n})`).join(', ') || '—'}`

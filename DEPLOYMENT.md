@@ -36,6 +36,12 @@ sitemaps. React manages metadata after startup and on navigation. Product softwa
 structured data must not appear on the company site. Unknown/preview hosts are
 not indexed as a second production site.
 
+Release automation also targets the product domain: `update-beta-downloads.yml`
+verifies the deployed catalog revision at `https://par.datomer.eu/`, and
+`scripts/draft_changelog.py` generates download links to
+`https://par.datomer.eu/#download`. Repository names, GitHub release/catalog URLs,
+and the independent daily-summary Worker deployment are unchanged.
+
 ### Review and release checklist
 
 1. Follow the local company/product preview instructions in [README.md](README.md).
@@ -63,7 +69,58 @@ not indexed as a second production site.
     bindings. Publishing this split changes what `datomer.eu` displays immediately;
     do not promote before the product domain and redirects are verified.
 
-## LinkedIn beta campaign measurement
+## Website analytics and campaign reporting
+
+### Daily website activity and campaign reporting
+
+Both websites send consented first-party website events to their own `/api/event`
+endpoint. React route changes generate pageviews; visibility and heartbeat events
+are recorded separately and are not counted as page visits. Pages Functions attach
+the actual request hostname/site to events and form submissions before storing them
+in the shared D1 database. The daily-summary Worker reads that database, not website
+pages. Its deployment workflow includes the shared email/report dependencies.
+
+The email and CSV exports distinguish company, Pär, preview and unknown/legacy
+records. The email groups results by site, page and campaign, showing sessions,
+sessions started in the report window, page visits, accepted download requests,
+stored enquiries and waitlist signups. This does not add LinkedIn waitlist
+conversion tracking. Records without a hostname remain unknown; historical
+campaigns cannot be reconstructed.
+
+Use public campaign codes in `utm_source`, `utm_medium`, `utm_campaign`,
+`utm_content` and `utm_term`, using only letters, digits, dots, underscores or
+hyphens (maximum 100 characters per label). Never include personal data.
+Campaign labels are saved in session storage only after analytics consent,
+preserved through internal navigation and cleared on withdrawal/session reset.
+A new tagged URL updates the session attribution for subsequent events/results;
+untagged navigation retains it. No ad click IDs or complete query strings are
+stored. Sessions are separate per browser tab and hostname and restart after
+the existing 30-minute session lifetime. They are not unique people or first-ever
+visitors, and counts across pages/campaigns must not be added as unique visitors.
+
+The existing rolling 25-hour report window and 30-day retention remain unchanged.
+Consecutive daily reports overlap by one hour; do not sum them as disjoint days.
+Page visits require consent and working browser/Turnstile requests. Stored form
+totals can include visitors without analytics consent; those results are
+unattributed. This is website campaign attribution, not LinkedIn's attribution model.
+
+#### Aggregate traffic, including requests without browser analytics
+
+Cloudflare HTTP Traffic analytics is a separate operational view, not a second
+browser tracker. In the Cloudflare dashboard select `datomer.eu`, open
+**Analytics > HTTP Traffic**, and filter by hostname for `datomer.eu` and
+`par.datomer.eu` where the account plan supports those filters. Review HTML/page
+requests separately from assets, bots and threats. HTTP requests and Cloudflare's
+visitor estimates are not equivalent to consented sessions or confirmed people.
+Available filters, sampling, retention and API access depend on the Cloudflare plan.
+
+Reference: [Cloudflare Zone Analytics](https://developers.cloudflare.com/analytics/account-and-zone-analytics/zone-analytics/).
+Aggregate Cloudflare metrics are **not included in the daily email**. Adding them
+requires confirming account/zone access, plan-supported GraphQL datasets and an
+appropriately scoped analytics-read token stored as a Worker secret. Do not copy
+private account credentials into source or treat missing API data as zero traffic.
+
+### Insight Tag activation
 
 The optional Insight Tag is restricted to `par.datomer.eu`. It is never enabled
 on the company domain or Cloudflare preview hostnames. For local consent review,

@@ -72,6 +72,10 @@ export async function onRequestPost(context) {
       message: cleanedMessage,
       body: `Name: ${cleanedName}\nEmail: ${cleanedEmail}\nMessage:\n${cleanedMessage}`,
       metadata: {
+        hostname: tracking.hostname,
+        site: tracking.site,
+        campaign: tracking.campaign,
+        sessionStartedAt: tracking.sessionStartedAt,
         locale,
         action: tracking.action,
         environment: tracking.environment,

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { getTrackingPayload, getSessionIdOrNull, startTracking } from './tracking.js'
+import { ensureSession, getTrackingPayload, getSessionIdOrNull, resetSession, startTracking } from './tracking.js'
 
 function createStorage() {
   const values = new Map()
@@ -79,5 +79,51 @@ describe('tracking payload', () => {
 
     expect(eventCalls[0]).toMatchObject({ type: 'session', turnstileToken: 'turnstile-proof' })
     expect(eventCalls[1]).toMatchObject({ type: 'pageview', eventToken: 'signed-session-token' })
+  })
+
+  it('keeps allowed campaign labels across page navigation and clears them with the session', () => {
+    localStorage.setItem('par-cookie-consent', 'accepted')
+    window.history.replaceState({}, '', '/?utm_source=linkedin&utm_campaign=beta&utm_term=private%40example.com&email=private%40example.com')
+    const first = getTrackingPayload()
+    expect(first.campaign).toEqual({ utm_source: 'linkedin', utm_campaign: 'beta' })
+    window.history.replaceState({}, '', '/get-started')
+    expect(getTrackingPayload()).toMatchObject({ campaign: first.campaign, sessionId: first.sessionId })
+    resetSession()
+    expect(sessionStorage.getItem('par-session-attribution')).toBeNull()
+    localStorage.setItem('par-cookie-consent', 'declined')
+    expect(getTrackingPayload()).toEqual({ sessionId: null, timeOnSiteMs: null, pagePath: null })
+  })
+
+  it('records client-side page changes once and removes the listener on cleanup', async () => {
+    localStorage.setItem('par-cookie-consent', 'accepted')
+    const sessionId = ensureSession()
+    sessionStorage.setItem('par-event-token', 'signed-session-token')
+    sessionStorage.setItem('par-event-token-session-id', sessionId)
+    sessionStorage.setItem('par-event-token-expires-at', String(Date.now() + 60_000))
+    const fetchMock = vi.fn(async () => new Response('{}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    const stop = startTracking()
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
+    window.history.replaceState({}, '', '/contact')
+    window.dispatchEvent(new Event('par-page-change'))
+    window.dispatchEvent(new Event('par-page-change'))
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({
+      type: 'pageview', pagePath: '/contact', metadata: { campaign: {} },
+    })
+    stop()
+    window.history.replaceState({}, '', '/privacy')
+    window.dispatchEvent(new Event('par-page-change'))
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not send page visits or save campaign labels without consent', () => {
+    vi.stubGlobal('fetch', vi.fn())
+    window.history.replaceState({}, '', '/?utm_campaign=beta')
+    const stop = startTracking()
+    window.dispatchEvent(new Event('par-page-change'))
+    stop()
+    expect(fetch).not.toHaveBeenCalled()
+    expect(sessionStorage.getItem('par-session-attribution')).toBeNull()
   })
 })

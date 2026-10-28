@@ -109,7 +109,7 @@ def _generate_post(tag: str, dmg_url: str, title: str | None, body: str | None) 
 
     # Link to the website download form so visitors hit the polished landing
     # page (and its analytics/waitlist fallback) instead of a raw GitHub asset.
-    download_url = "https://datomer.eu/#download"
+    download_url = "https://par.datomer.eu/#download"
 
     lines = [f"# {headline}", ""]
     if body and body.strip():
@@ -117,10 +117,10 @@ def _generate_post(tag: str, dmg_url: str, title: str | None, body: str | None) 
         # on the public blog.
         public_body = re.split(r"\n## Engineering notes\n", body.strip(), maxsplit=1)[0]
         # If the body already ends with its own Download section, reuse it but
-        # rewrite any direct GitHub DMG link to the website form.
+        # rewrite direct DMG links and legacy company-site download links.
         if re.search(r"\n## Download\s*\n", public_body):
             public_body = re.sub(
-                r"\[([^\]]+)\]\(https?://github\.com/[^\)]+\.dmg\)",
+                r"\[([^\]]+)\]\(https?://(?:github\.com/[^\)]+\.dmg|(?:www\.)?datomer\.eu/?#download)\)",
                 rf"[\1]({download_url})",
                 public_body,
             )
