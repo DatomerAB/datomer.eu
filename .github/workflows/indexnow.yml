@@ -1,0 +1,52 @@
+name: Notify IndexNow after production deployment
+
+on:
+  check_run:
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: indexnow-production
+  cancel-in-progress: false
+
+jobs:
+  runner-selection:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.check_run.name == 'Cloudflare Pages' &&
+       github.event.check_run.app.slug == 'cloudflare-workers-and-pages' &&
+       github.event.check_run.conclusion == 'success')
+    uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@d2839636e84e6a6816f2c7b6d8df885dbbaefbf2
+    with:
+      runner_preference: ${{ vars.RUNNER_PREFERENCE || 'self-hosted-preferred' }}
+      self_hosted_labels: '["self-hosted"]'
+      controller_labels: '["self-hosted"]'
+      github_hosted_label: ubuntu-latest
+      wait_minutes: ${{ fromJSON(vars.RUNNER_WAIT_MINUTES || '30') }}
+    secrets:
+      runner_check_token: ${{ secrets.SELF_HOSTED_RUNNER_CHECK_TOKEN }}
+    permissions:
+      actions: read
+
+  notify:
+    needs: runner-selection
+    runs-on: ${{ fromJSON(needs.runner-selection.outputs.runs_on) }}
+    timeout-minutes: 10
+    steps:
+      - name: Checkout trusted production branch
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Verify deployment and notify IndexNow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/submit-indexnow.mjs

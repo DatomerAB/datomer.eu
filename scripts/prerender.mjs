@@ -1,7 +1,12 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { execFileSync } from 'node:child_process'
 import { renderHomepage } from '../dist-ssr/entry-prerender.js'
 
 const shell = await readFile(new URL('../dist/index.html', import.meta.url), 'utf8')
+const commit = process.env.CF_PAGES_COMMIT_SHA || process.env.GITHUB_SHA
+  || execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()
+if (!/^[a-f0-9]{40}$/.test(commit)) throw new Error('Invalid deployment commit')
+await writeFile(new URL('../dist/deployment.json', import.meta.url), JSON.stringify({ commit }) + '\n')
 for (const [site, origin] of [['company', 'https://datomer.eu'], ['product', 'https://par.datomer.eu']]) {
   for (const language of ['en', 'sv']) {
     const body = renderHomepage(origin, language)
