@@ -10,7 +10,7 @@ import { RenderContext } from './lib/RenderContext.jsx'
 // React 19 owns live metadata. Remove the crawler-only HTML metadata before
 // mounting so client navigation cannot leave duplicate or stale domain tags.
 document.head.querySelectorAll(
-  'title, meta[name="description"], link[rel="icon"], link[rel="apple-touch-icon"], link[rel="canonical"], link[rel="alternate"][hreflang], meta[property^="og:"], meta[name^="twitter:"], script[type="application/ld+json"]',
+  'title, meta[name="description"], meta[name="robots"], link[rel="icon"], link[rel="apple-touch-icon"], link[rel="canonical"], link[rel="alternate"][hreflang], meta[property^="og:"], meta[name^="twitter:"], script[type="application/ld+json"]',
 ).forEach(element => element.remove())
 
 const root = document.getElementById('root')

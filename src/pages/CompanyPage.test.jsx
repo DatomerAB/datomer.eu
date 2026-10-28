@@ -1,13 +1,20 @@
-import { describe, it, expect, vi } from 'vitest'
+import { afterEach, describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import { CompanyPage } from './CompanyPage.jsx'
 import { LanguageProvider } from '../i18n/LanguageProvider.jsx'
 import { companyContent } from '../content/company.js'
+import { SiteMetadata } from '../components/SiteMetadata.jsx'
+
+afterEach(() => vi.unstubAllGlobals())
 
 function renderCompany(path = '/') {
   vi.stubGlobal('localStorage', { getItem: vi.fn(() => null), setItem: vi.fn() })
-  return render(<MemoryRouter initialEntries={[path]}><LanguageProvider><CompanyPage /></LanguageProvider></MemoryRouter>)
+  vi.stubGlobal('location', { origin: 'http://127.0.0.1:5173' })
+  return render(<HelmetProvider><MemoryRouter initialEntries={[path]}>
+    <LanguageProvider><SiteMetadata /><CompanyPage /></LanguageProvider>
+  </MemoryRouter></HelmetProvider>)
 }
 
 describe('company website', () => {
