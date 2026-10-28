@@ -290,12 +290,19 @@ const COMPANY_ROUTES = ['/', '/about', '/contact', '/privacy', '/terms', '/cooki
 const PRODUCT_ROUTES = [...COMPANY_ROUTES, ...PRODUCT_PATHS]
 
 export async function onRequest(context) {
-  const { request, next } = context
+  const { request, next, env } = context
   const url = new URL(request.url)
   const site = siteForUrl(url)
   const siteUrl = site === 'company' ? COMPANY_URL : PRODUCT_URL
   const preview = !['datomer.eu', 'www.datomer.eu', 'par.datomer.eu'].includes(url.hostname)
   const destination = legacyProductDestination(url)
+  // Generated variants are internal assets, not additional indexable pages.
+  if (url.pathname.startsWith('/__prerender/')) {
+    return new Response('Not Found', {
+      status: 404,
+      headers: { 'X-Robots-Tag': 'noindex, nofollow' },
+    })
+  }
   if (['GET', 'HEAD'].includes(request.method) && destination) {
     return Response.redirect(destination, 301)
   }
@@ -331,7 +338,29 @@ export async function onRequest(context) {
     return next()
   }
 
-  const res = await next()
+  let res
+  let prerendered = false
+  if (url.pathname === '/' && env?.ASSETS && env.PRERENDER_HOMEPAGES !== 'false') {
+    const language = url.searchParams.get('lang') === 'sv' ? 'sv' : 'en'
+    const assetUrl = new URL(`/__prerender/${site}/${language}/index.html`, url)
+    const candidate = await env.ASSETS.fetch(new Request(assetUrl, {
+      headers: { Accept: 'text/html' },
+    }))
+    const generatedHtml = await candidate.clone().text()
+    if (!candidate.ok || !candidate.headers.get('content-type')?.includes('text/html')
+      || !generatedHtml.includes(`data-prerendered="${site}"`)
+      || !generatedHtml.includes(`data-language="${language}"`)) {
+      console.error(`[prerender] Missing homepage asset: ${site}/${language}`)
+      return new Response('Homepage temporarily unavailable', {
+        status: 503,
+        headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' },
+      })
+    }
+    res = candidate
+    prerendered = true
+  } else {
+    res = await next()
+  }
   const contentType = res.headers.get('content-type') || ''
   if (!contentType.includes('text/html')) {
     return res
@@ -366,13 +395,16 @@ export async function onRequest(context) {
     `    <meta name="twitter:description" content="${escapeAttr(meta.description)}" />`,
     `    <meta name="twitter:image" content="${image}" />`,
     ``,
-    organizationJsonLd(),
-    site === 'product' ? softwareJsonLd() : '',
+    prerendered ? '' : organizationJsonLd(),
+    !prerendered && site === 'product' ? softwareJsonLd() : '',
   ].join('\n')
 
   // Preserve the original <head> contents (Vite scripts, styles, GA) while
   // replacing title/description/html-lang and removing/overwriting SEO tags.
-  let newHtml = html
+  // Keep the hydrated body intact, including SVG titles and React-owned JSON-LD.
+  const headEnd = html.search(/<\/head>/i)
+  const headLength = headEnd < 0 ? html.length : headEnd + '</head>'.length
+  let newHtml = html.slice(0, headLength)
     .replace(/<html[^>]*>/i, `<html lang="${meta.lang}">`)
     .replace(/(<link rel="(?:icon|apple-touch-icon)"[^>]*href=")[^"]+(")/gi, `$1/${site === 'company' ? 'datomer-logo.png?v=20261010' : 'par-logo.png'}$2`)
     .replace(/<title>.*?<\/title>/i, () => `<title>${escapeAttr(meta.title)}</title>`)
@@ -390,12 +422,14 @@ export async function onRequest(context) {
     .replace(/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>\s*/gi, '')
     // Insert the fresh SEO block before </head>.
     .replace(/(<\/head>)/i, `\n${seoInject}\n  $1`)
+  newHtml += html.slice(headLength)
 
   return new Response(newHtml, {
     status: notFound ? 404 : res.status,
     statusText: notFound ? 'Not Found' : res.statusText,
     headers: {
-      ...Object.fromEntries(res.headers.entries()),
+      ...Object.fromEntries([...res.headers.entries()].filter(([name]) =>
+        !['content-length', 'content-encoding', 'etag', 'last-modified'].includes(name))),
       'content-type': 'text/html; charset=utf-8',
       'cache-control': 'public, max-age=0, must-revalidate',
     },

@@ -8,14 +8,16 @@ import { companyContent } from '../content/company.js'
 import { siteLinks } from '../lib/site.js'
 import { companyMeta } from '../lib/companyMeta.js'
 import './CompanyPage.css'
+import { useSiteUrl } from '../lib/RenderContext.jsx'
 
 export function CompanyPage() {
   const { lang } = useLanguage()
   const c = companyContent[lang]
   const location = useLocation()
+  const url = useSiteUrl()
   const suffix = lang === 'en' ? '' : `?lang=${lang}`
   const home = `/${suffix}`
-  const product = `${siteLinks(new URL(window.location.href)).product}/${suffix}`
+  const product = `${siteLinks(url).product}/${suffix}`
   useEffect(() => {
     document.title = companyMeta(location.pathname, lang).title
     document.querySelector('meta[name="description"]')?.setAttribute('content', c.description)

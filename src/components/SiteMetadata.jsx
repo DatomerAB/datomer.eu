@@ -7,11 +7,12 @@ import { companyContent } from '../content/company.js'
 import { PRODUCT_DESCRIPTIONS, PRODUCT_TITLES } from '../lib/seoMeta.js'
 import { companyCanonicalPath } from '../lib/companyMeta.js'
 import { OrganizationJsonLd, SoftwareApplicationJsonLd } from './SEO.jsx'
+import { useSiteUrl } from '../lib/RenderContext.jsx'
 
 export function SiteMetadata() {
   const { pathname } = useLocation()
   const { lang, t } = useLanguage()
-  const url = new URL(window.location.href)
+  const url = useSiteUrl()
   const company = siteForUrl(url) === 'company'
   const origin = company ? COMPANY_URL : PRODUCT_URL
   const canonicalPath = company ? companyCanonicalPath(pathname) : pathname

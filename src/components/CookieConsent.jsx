@@ -3,10 +3,16 @@ import { useLanguage } from '../i18n/useLanguage.js'
 import { analytics } from '../analytics/analytics.js'
 import { resetSession, startTracking } from '../analytics/tracking.js'
 import { hasLinkedInChoice, hasLinkedInConsent, isLinkedInEnabled, loadLinkedIn, setLinkedInConsent } from '../analytics/linkedin.js'
+import { useBrowserReady } from '../lib/RenderContext.jsx'
 
 const STORAGE_KEY = 'par-cookie-consent'
 
 export function CookieConsent() {
+  const ready = useBrowserReady()
+  return ready ? <BrowserCookieConsent /> : null
+}
+
+function BrowserCookieConsent() {
   const { t } = useLanguage()
   const trackingCleanupRef = useRef(null)
   const linkedInEnabled = isLinkedInEnabled()

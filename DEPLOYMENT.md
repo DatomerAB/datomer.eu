@@ -69,6 +69,50 @@ and the independent daily-summary Worker deployment are unchanged.
     bindings. Publishing this split changes what `datomer.eu` displays immediately;
     do not promote before the product domain and redirects are verified.
 
+## Homepage pre-rendering
+
+The build now produces four crawler-readable homepage variants from the existing
+React components: company/product, each in English and Swedish. Pages Functions
+serve them for `GET /`, with `?lang=sv` selecting Swedish and all other queries
+selecting English. Campaign parameters do not create extra build variants.
+React hydrates the same tree; CSS, visible copy, navigation, pricing, downloads,
+and forms are unchanged. Non-homepage routes remain client-rendered in this phase.
+
+Only public content is rendered during the build. Cookie choices, saved language,
+and experiment assignments are applied in the browser after the deterministic
+initial hydration; a saved preference may therefore change the initial language
+or experiment badge shortly after startup. Explicit language queries take
+precedence. No form submissions, tracking requests, or catalog refreshes happen
+at build time. The existing download catalog still refreshes in the browser.
+
+Middleware keeps the generated body intact and supplies host/language metadata in
+the head. React-owned structured data remains in the generated body so hydration
+preserves it. Preview hosts remain `noindex`; requests to internal
+`/__prerender/` paths return 404/noindex.
+
+Before rollout:
+
+1. Run lint, tests, and the complete build. Confirm all four variants are generated.
+2. Use the local Pages runtime described in [README.md](README.md) to check raw
+   HTML for a single main heading, readable page content, and correct metadata.
+3. Check both languages/sites for hydration errors, navigation, language switching,
+   consent controls, pricing controls, and the download dialog. Compare mobile,
+   tablet, and desktop layouts against the current experience.
+4. After approval/deployment, repeat raw HTML and browser checks on both production
+   hosts, including their sitemaps and robots files. Local verification does not
+   prove a production rollout.
+
+If a generated asset is missing or invalid, the homepage returns 503/no-store
+and logs a diagnostic rather than silently serving an empty successful page.
+For an emergency rollback, set the Pages environment variable
+`PRERENDER_HOMEPAGES=false` and redeploy. This restores the previous client-rendered
+homepage without changing components or removing other functionality. Remove
+the override and redeploy to re-enable pre-rendering. Retain the prior deployment
+as the normal whole-release rollback option.
+
+This phase does not add IndexNow submissions, new content pages, or automated
+social posts. Those remain separate, reviewable follow-up changes.
+
 ## Website analytics and campaign reporting
 
 ### Daily website activity and campaign reporting

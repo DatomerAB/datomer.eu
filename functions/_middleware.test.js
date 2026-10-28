@@ -40,6 +40,80 @@ const SHELL = `<!doctype html>
 </html>`
 
 describe('meta middleware', () => {
+  it.each([
+    ['datomer.eu', 'company', 'en'],
+    ['datomer.eu', 'company', 'sv'],
+    ['par.datomer.eu', 'product', 'en'],
+    ['par.datomer.eu', 'product', 'sv'],
+  ])('serves the generated %s homepage in %s/%s', async (hostname, site, language) => {
+    const ctx = makeContext(new Request(`https://${hostname}/?lang=${language}&utm_campaign=beta`), SHELL)
+    const body = SHELL.replace('<div id="root"></div>', `<div id="root" data-prerendered="${site}" data-language="${language}"><main><h1>Existing homepage</h1></main></div>`)
+    ctx.env.ASSETS = { fetch: vi.fn(async () => new Response(body, {
+      headers: { 'content-type': 'text/html', etag: '"original"', 'content-length': '123' },
+    })) }
+    const response = await onRequest(ctx)
+    const html = await response.text()
+    expect(response.status).toBe(200)
+    expect(ctx.next).not.toHaveBeenCalled()
+    expect(ctx.env.ASSETS.fetch.mock.calls[0][0].url).toBe(`https://${hostname}/__prerender/${site}/${language}/index.html`)
+    expect(html).toContain('<h1>Existing homepage</h1>')
+    expect(html).toContain(`<html lang="${language}">`)
+    expect(html).not.toContain('utm_campaign')
+    expect(html.match(/rel="canonical"/g)).toHaveLength(1)
+    expect(response.headers.has('content-length')).toBe(false)
+    expect(response.headers.has('etag')).toBe(false)
+  })
+
+  it('can explicitly roll back to the existing shell', async () => {
+    const ctx = makeContext(makeRequest('/'), SHELL)
+    ctx.env = { PRERENDER_HOMEPAGES: 'false', ASSETS: { fetch: vi.fn() } }
+    const response = await onRequest(ctx)
+    expect(response.status).toBe(200)
+    expect(ctx.env.ASSETS.fetch).not.toHaveBeenCalled()
+    expect(ctx.next).toHaveBeenCalledOnce()
+    expect(await response.text()).not.toContain('data-prerendered')
+  })
+
+  it.each([
+    [200, 'text/html', SHELL],
+    [404, 'text/html', '<div data-prerendered="product" data-language="en"></div>'],
+    [200, 'text/html', '<div data-prerendered="company" data-language="en"></div>'],
+    [200, 'text/html', '<div data-prerendered="product" data-language="sv"></div>'],
+    [200, 'text/plain', '<div data-prerendered="product" data-language="en"></div>'],
+  ])('reports an invalid generated page (%s, %s, %s) instead of an empty success', async (status, type, body) => {
+    const ctx = makeContext(makeRequest('/'), SHELL)
+    ctx.env.ASSETS = { fetch: vi.fn(async () => new Response(body, {
+      status, headers: { 'content-type': type },
+    })) }
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const response = await onRequest(ctx)
+    expect(response.status).toBe(503)
+    expect(response.headers.get('cache-control')).toBe('no-store')
+    expect(log).toHaveBeenCalledOnce()
+    log.mockRestore()
+  })
+
+  it('does not prerender non-home routes and keeps preview HTML noindex', async () => {
+    const ctx = makeContext(makeRequest('/contact'), SHELL)
+    ctx.env.ASSETS = { fetch: vi.fn() }
+    await onRequest(ctx)
+    expect(ctx.env.ASSETS.fetch).not.toHaveBeenCalled()
+    const preview = makeContext(new Request('https://branch.pages.dev/'), SHELL)
+    preview.env.ASSETS = { fetch: vi.fn(async () => new Response(
+      SHELL.replace('<div id="root"></div>', '<div id="root" data-prerendered="product" data-language="en">Pär</div>'),
+      { headers: { 'content-type': 'text/html' } },
+    )) }
+    expect(await (await onRequest(preview)).text()).toContain('noindex, nofollow')
+  })
+
+  it('blocks public access to internal generated variants', async () => {
+    const ctx = makeContext(makeRequest('/__prerender/product/en/index.html'), SHELL)
+    const response = await onRequest(ctx)
+    expect(response.status).toBe(404)
+    expect(response.headers.get('x-robots-tag')).toContain('noindex')
+    expect(ctx.next).not.toHaveBeenCalled()
+  })
+
   it.each(['en', 'sv'])('serves distinct company metadata in %s without product schema', async lang => {
     const ctx = makeContext(new Request(`https://datomer.eu/?lang=${lang}`), SHELL)
     const res = await onRequest(ctx)
