@@ -1,22 +1,27 @@
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/useLanguage.js'
+import { ProductPreview } from '../components/ProductPreview.jsx'
 
 export function CampaignPage({ campaign, onDownload, downloadUrl }) {
   const { lang } = useLanguage()
   const c = campaign[lang]
   const suffix = lang === 'sv' ? '?lang=sv' : ''
   return <main>
-    <section className="hero">
-      <div className="container hero-inner">
+    <section className="hero campaign-hero">
+      <div className="container hero-layout">
+        <div className="hero-copy">
         <p className="hero-badge">{c.label}</p>
         <h1>{c.heading}</h1>
         <p className="lede">{c.intro}</p>
         <div className="cta-row">
           <button type="button" className="button button-primary" disabled={!downloadUrl}
             onClick={() => onDownload(downloadUrl)}>{c.download}</button>
-          <Link className="button button-secondary" to={`/get-started${suffix}`}>{c.setup}</Link>
+          <Link className="hero-guide-link" to={`/get-started${suffix}`}>{c.setup} <span aria-hidden="true">→</span></Link>
         </div>
+        <p className="campaign-compatibility">{c.compatibility}</p>
         {!downloadUrl && <p role="alert">{c.unavailable}</p>}
+        </div>
+        <ProductPreview />
       </div>
     </section>
     <section className="section container">

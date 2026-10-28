@@ -26,6 +26,8 @@ import { productPurpose } from './content/productPurpose.js'
 import { useSiteUrl } from './lib/RenderContext.jsx'
 import { campaigns } from './content/campaigns.js'
 import { CampaignPage } from './pages/CampaignPage.jsx'
+import { ProductPreview } from './components/ProductPreview.jsx'
+import { featureGroups, productOverview } from './content/productOverview.js'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -247,7 +249,9 @@ function Footer() {
 }
 
 function HomePage({ onDownload, downloadCatalog }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const overview = productOverview[lang]
+  const purpose = productPurpose[lang]
   const formatHeading = useLocalizedHeading()
   const heroVariant = useExperiment('hero-cta-copy', ['control', 'social-proof'])
 
@@ -257,32 +261,17 @@ function HomePage({ onDownload, downloadCatalog }) {
     { icon: 'key', title: t('highlights.ownTheKeys.title'), text: t('highlights.ownTheKeys.text') },
   ]
 
-  const capabilities = [
-    {
-      title: t('capabilities.knowsYou.title'),
-      text: t('capabilities.knowsYou.text'),
-    },
-    {
-      title: t('capabilities.knowsWorld.title'),
-      text: t('capabilities.knowsWorld.text'),
-    },
-    {
-      title: t('capabilities.actsForYou.title'),
-      text: t('capabilities.actsForYou.text'),
-    },
-  ]
-
-  const features = [
-    { title: t('features.portability.title'), badge: t('features.portability.badge'), text: t('features.portability.text') },
-    { title: t('features.homeHub.title'), badge: t('features.homeHub.badge'), text: t('features.homeHub.text') },
-    { title: t('features.persistentMemory.title'), badge: t('features.persistentMemory.badge'), text: t('features.persistentMemory.text') },
-    { title: t('features.contextGraph.title'), badge: t('features.contextGraph.badge'), text: t('features.contextGraph.text') },
-    { title: t('features.modelRouting.title'), badge: t('features.modelRouting.badge'), text: t('features.modelRouting.text') },
-    { title: t('features.integrations.title'), badge: t('features.integrations.badge'), text: t('features.integrations.text') },
-    { title: t('features.fileIntelligence.title'), badge: t('features.fileIntelligence.badge'), text: t('features.fileIntelligence.text') },
-    { title: t('features.routines.title'), badge: t('features.routines.badge'), text: t('features.routines.text') },
-    { title: t('features.semanticCache.title'), badge: t('features.semanticCache.badge'), text: t('features.semanticCache.text') },
-  ]
+  const features = {
+    persistentMemory: { title: t('features.persistentMemory.title'), badge: t('features.persistentMemory.badge'), text: t('features.persistentMemory.text') },
+    contextGraph: { title: t('features.contextGraph.title'), badge: t('features.contextGraph.badge'), text: t('features.contextGraph.text') },
+    fileIntelligence: { title: t('features.fileIntelligence.title'), badge: t('features.fileIntelligence.badge'), text: t('features.fileIntelligence.text') },
+    integrations: { title: t('features.integrations.title'), badge: t('features.integrations.badge'), text: t('features.integrations.text') },
+    routines: { title: t('features.routines.title'), badge: t('features.routines.badge'), text: t('features.routines.text') },
+    modelRouting: { title: t('features.modelRouting.title'), badge: t('features.modelRouting.badge'), text: t('features.modelRouting.text') },
+    portability: { title: t('features.portability.title'), badge: t('features.portability.badge'), text: t('features.portability.text') },
+    homeHub: { title: t('features.homeHub.title'), badge: t('features.homeHub.badge'), text: t('features.homeHub.text') },
+    semanticCache: { title: t('features.semanticCache.title'), badge: t('features.semanticCache.badge'), text: t('features.semanticCache.text') },
+  }
 
   const deployments = [
     {
@@ -292,10 +281,10 @@ function HomePage({ onDownload, downloadCatalog }) {
       best: t('deployments.desktop.best'),
     },
     {
-      status: t('deployments.comingSoon'),
-      title: t('deployments.web.title'),
-      text: t('deployments.web.text'),
-      best: t('deployments.web.best'),
+      status: t('deployments.available'),
+      title: t('deployments.windows.title'),
+      text: t('deployments.windows.text'),
+      best: t('deployments.windows.best'),
     },
     {
       status: t('deployments.comingSoon'),
@@ -387,8 +376,9 @@ function HomePage({ onDownload, downloadCatalog }) {
 
   return (
     <main id="top">
-      <section className="hero" id="about">
-          <div className="container hero-inner">
+      <section className="hero product-hero" id="about">
+        <div className="container hero-layout">
+          <div className="hero-copy">
             <div className="hero-badge">
               <span className="dot" aria-hidden="true" />
               {heroVariant === 'social-proof' ? t('hero.variantBadge') : t('hero.badge')}
@@ -411,52 +401,36 @@ function HomePage({ onDownload, downloadCatalog }) {
               <Link to="/get-started">{t('hero.setupGuide')}</Link>
             </p>
             <ProductBetaNotice />
-
-            <div className="hero-highlights" aria-label="Core promises">
-              {highlights.map((item) => (
-                <div key={item.title} className="hero-highlight">
-                  <span className="hero-highlight-icon" aria-hidden="true"><Icon name={item.icon} /></span>
-                  <div>
-                    <strong>{formatHeading(item.title)}</strong>
-                    <span>{item.text}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
-        </section>
-
-        <div className="proof-bar">
-          <div className="container proof-grid">
-            <div className="proof-item">
-              <strong>{t('proof.localFirst.strong')}</strong>
-              <span>{t('proof.localFirst.span')}</span>
-            </div>
-            <div className="proof-item">
-              <strong>{t('proof.encrypted.strong')}</strong>
-              <span>{t('proof.encrypted.span')}</span>
-            </div>
-            <div className="proof-item">
-              <strong>{t('proof.oneAgent.strong')}</strong>
-              <span>{t('proof.oneAgent.span')}</span>
-            </div>
-          </div>
+          <ProductPreview />
         </div>
+      </section>
+      <div className="container">
+        <div className="hero-highlights product-highlights" aria-label="Core promises">
+          {highlights.map((item) => (
+            <div key={item.title} className="hero-highlight">
+              <span className="hero-highlight-icon" aria-hidden="true"><Icon name={item.icon} /></span>
+              <div>
+                <strong>{formatHeading(item.title)}</strong>
+                <span>{item.text}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
         <section className="section container capabilities-section" id="product">
           <div className="section-heading">
-            <p className="eyebrow">{formatHeading(t('capabilities.eyebrow'))}</p>
-            <h2>{formatHeading(t('capabilities.headline'))}</h2>
-            <p className="section-subtitle">
-              {formatHeading(t('capabilities.subtitle'))}
-            </p>
+            <p className="eyebrow">{overview.examplesLabel}</p>
+            <h2>{overview.examplesTitle}</h2>
           </div>
 
-          <div className="capability-grid">
-            {capabilities.map((item) => (
-              <article key={item.title} className="capability-card">
-                <h3>{formatHeading(item.title)}</h3>
-                <p>{item.text}</p>
+          <div className="capability-grid everyday-examples">
+            {overview.examples.map(([title, text], index) => (
+              <article key={title} className="capability-card">
+                <span className="example-number" aria-hidden="true">0{index + 1}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
               </article>
             ))}
           </div>
@@ -465,21 +439,37 @@ function HomePage({ onDownload, downloadCatalog }) {
         <section className="section section-alt" id="features">
           <div className="container">
             <div className="section-heading">
-              <p className="eyebrow">{formatHeading(t('features.eyebrow'))}</p>
-              <h2>{formatHeading(t('features.headline'))}</h2>
+              <p className="eyebrow">{overview.featuresLabel}</p>
+              <h2>{overview.featuresTitle}</h2>
+              <p className="section-subtitle">{overview.featuresNote}</p>
             </div>
 
-            <div className="feature-grid">
-              {features.map((feature) => (
-                <article key={feature.title} className="feature-card">
-                  <div className="feature-card-header">
-                    <h3>{formatHeading(feature.title)}</h3>
-                    <span className="feature-badge">{feature.badge}</span>
+            <div className="feature-groups">
+              {featureGroups.map(group => (
+                <section key={group.id} className="feature-group" aria-labelledby={`features-${group.id}`}>
+                  <header className="feature-group-heading">
+                    <h3 id={`features-${group.id}`}>{overview.groups[group.id][0]}</h3>
+                    <p>{overview.groups[group.id][1]}</p>
+                  </header>
+                  <div className="feature-group-items">
+                    {group.features.map(key => <article key={key} className="feature-detail">
+                      <div className="feature-detail-heading">
+                        <h4>{formatHeading(features[key].title)}</h4>
+                        <span className="feature-badge">{features[key].badge}</span>
+                      </div>
+                      <p>{features[key].text}</p>
+                    </article>)}
                   </div>
-                  <p>{feature.text}</p>
-                </article>
+                </section>
               ))}
             </div>
+            <aside className="development-note" aria-labelledby="homepage-development">
+              <h3 id="homepage-development">{purpose.developmentTitle}</h3>
+              <strong>{purpose.developmentStatus}</strong>
+              <p>{purpose.developmentText}</p>
+              <p>{purpose.developmentNote}</p>
+              <Link to={`/about${lang === 'sv' ? '?lang=sv' : ''}`}>{overview.developmentLink}</Link>
+            </aside>
           </div>
         </section>
 

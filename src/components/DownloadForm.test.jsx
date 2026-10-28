@@ -48,6 +48,29 @@ describe('DownloadForm', () => {
     await waitFor(() => {
       expect(screen.getByRole('combobox')).toHaveValue('SE')
     })
+
+  })
+
+  it('keeps keyboard focus in the dialog, handles Escape, and restores the opener', () => {
+    const opener = document.createElement('button')
+    document.body.append(opener)
+    opener.focus()
+    const onClose = vi.fn()
+    const previousOverflow = document.body.style.overflow
+    const { unmount } = render(<DownloadForm downloadUrl={downloadUrl} onClose={onClose} />, { wrapper: Wrapper })
+    expect(screen.getByRole('textbox', { name: /Full name/i })).toHaveFocus()
+    expect(document.body.style.overflow).toBe('hidden')
+    screen.getByRole('button', { name: 'Close' }).focus()
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
+    expect(screen.getByRole('button', { name: /Download for Mac/i })).toHaveFocus()
+    fireEvent.keyDown(document, { key: 'Tab' })
+    expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus()
+    fireEvent.keyDown(document, { key: 'Escape' })
+    expect(onClose).toHaveBeenCalledOnce()
+    unmount()
+    expect(opener).toHaveFocus()
+    expect(document.body.style.overflow).toBe(previousOverflow)
+    opener.remove()
   })
 
   it('submits the form and stores the data', async () => {
@@ -80,6 +103,7 @@ describe('DownloadForm', () => {
       expect.stringContaining('anna@example.com')
     )
     expect(screen.getByText(/Thanks! Your download should start automatically./i)).toBeTruthy()
+    await waitFor(() => expect(screen.getByRole('heading', { name: /Download Pär beta/i })).toHaveFocus())
     expect(clickSpy).toHaveBeenCalledTimes(1)
     expect(clickSpy.mock.instances[0].href).toBe(downloadUrl)
     expect(trackLinkedInConversion).toHaveBeenCalledExactlyOnceWith('download')

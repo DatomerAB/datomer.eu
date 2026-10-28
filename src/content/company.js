@@ -8,6 +8,12 @@ export const companyContent = {
     headlineEnd: 'Optimize costs and improve efficiency.',
     intro: 'We help organizations plan and build useful data and AI systems. From a clear strategy to a working platform, we consider privacy from the start.',
     cta: 'Let’s talk about your goals',
+    processTitle: 'A clear way forward',
+    process: [
+      ['Understand the need', 'Start with what you want to improve and what stands in the way.'],
+      ['Agree the approach', 'Set clear priorities, responsibilities and practical next steps.'],
+      ['Build and improve', 'Put the plan into practice, review it together and refine it.'],
+    ],
     servicesTitle: 'From the first question to a working solution',
     servicesIntro: 'Get strategic advice, hands-on implementation, or support connecting the two.',
     services: [
@@ -62,6 +68,12 @@ export const companyContent = {
     headlineEnd: 'Optimera kostnader och förbättra effektiviteten.',
     intro: 'Vi hjälper organisationer att planera och bygga användbara data- och AI-system. Från en tydlig strategi till en fungerande plattform tar vi hänsyn till integritet från början.',
     cta: 'Prata med oss om dina mål',
+    processTitle: 'En tydlig väg framåt',
+    process: [
+      ['Förstå behovet', 'Börja med vad du vill förbättra och vad som står i vägen.'],
+      ['Enas om vägen', 'Sätt tydliga prioriteringar, ansvar och praktiska nästa steg.'],
+      ['Bygg och förbättra', 'Genomför planen, följ upp tillsammans och förbättra.'],
+    ],
     servicesTitle: 'Från första frågan till en fungerande lösning',
     servicesIntro: 'Få strategisk rådgivning, praktiskt genomförande eller hjälp att knyta ihop de två.',
     services: [

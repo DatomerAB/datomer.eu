@@ -16,6 +16,13 @@ describe('release-evidenced beta messaging', () => {
       <LanguageProvider><App /></LanguageProvider>
     </MemoryRouter>)
     const copy = translations[lang]
+    const windowsCard = screen.getByText(copy.deployments.windows.text).closest('article')
+    expect(within(windowsCard).getByText(copy.deployments.windows.title)).toBeVisible()
+    expect(within(windowsCard).getByText(copy.deployments.available)).toBeVisible()
+    expect(within(windowsCard).queryByText(copy.deployments.comingSoon)).not.toBeInTheDocument()
+    expect(copy.deployments.windows.text).toContain('ARM')
+    expect(copy.deployments.windows.text).not.toMatch(/Linux|Chromebook|browser|webbläsare/)
+    expect(screen.queryByRole('heading', { name: 'Pär Web' })).not.toBeInTheDocument()
     const card = screen.getByText(copy.features.portability.text).closest('article')
     expect(within(card).getByText('Plus+')).toBeVisible()
     fireEvent.click(screen.getByText(copy.faq.q4))

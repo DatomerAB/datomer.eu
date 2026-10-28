@@ -23,13 +23,21 @@ export function CompanyPage() {
   const content = (
     <main id="company-main">
       <section className="company-hero container">
-        <p className="eyebrow">{c.eyebrow}</p>
-        <h1>{c.headline}<br /><span>{c.headlineEnd}</span></h1>
-        <p className="company-intro">{c.intro}</p>
-        <div className="company-actions">
-          <Link className="button button-primary" to={`/contact${suffix}`}>{c.cta}</Link>
-          <a className="button button-secondary" href={product}>{c.nav.product} →</a>
+        <div>
+          <p className="eyebrow">{c.eyebrow}</p>
+          <h1>{c.headline}<br /><span>{c.headlineEnd}</span></h1>
+          <p className="company-intro">{c.intro}</p>
+          <div className="company-actions">
+            <Link className="button button-primary" to={`/contact${suffix}`}>{c.cta}</Link>
+            <a className="button button-secondary" href={product}>{c.nav.product} →</a>
+          </div>
         </div>
+        <aside className="company-process" aria-label={c.processTitle}>
+          <h2>{c.processTitle}</h2>
+          <ol>{c.process.map(([title, text]) => <li key={title}>
+            <h3>{title}</h3><p>{text}</p>
+          </li>)}</ol>
+        </aside>
       </section>
       <section id="services" className="company-section container">
         <p className="eyebrow">{c.nav.services}</p>
