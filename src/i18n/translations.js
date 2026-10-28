@@ -279,6 +279,14 @@ export const translations = {
       text: 'We use cookies to understand how visitors use our site and to improve it.',
       accept: 'Accept',
       decline: 'Decline',
+      analytics: 'Website analytics (optional)',
+      marketing: 'LinkedIn advertising measurement (optional)',
+      save: 'Save choices',
+      rejectAll: 'Reject optional cookies',
+      settings: 'Cookie settings',
+      linkedinDetails: 'Only if you choose to allow it, we use the LinkedIn Insight Tag on the Pär website to measure ads and beta download requests. LinkedIn receives information such as the page address, referring site, IP address, browser, device and time of visit, and may match visits to your LinkedIn account using cookies. We do not send your form answers or any data from the Pär app to LinkedIn.',
+      linkedinPrivacy: 'LinkedIn privacy policy',
+      withdrawal: 'You can change your choice below at any time. Withdrawing consent stops future LinkedIn measurement on this website; it does not erase information already received by LinkedIn. LinkedIn cookies may remain until they expire or you clear them through your browser. LinkedIn may process information outside the EEA; see its privacy policy for retention and transfer details.',
     },
     newsletter: {
       title: 'Get Launch Notes',
@@ -451,7 +459,7 @@ export const translations = {
       title: 'Cookie Policy',
       updated: 'Last updated',
       intro:
-        'Datomer AB uses cookies and similar technologies only where necessary for the operation of the website.',
+        'Datomer AB uses essential cookies to operate the website. Optional analytics and, where enabled on the Pär website, LinkedIn advertising measurement require your consent.',
       typesTitle: 'Cookies We Use',
       essential: 'Essential Cookies',
       essentialText: 'required for the site to function, such as routing and security.',
@@ -459,7 +467,7 @@ export const translations = {
       analyticsText: 'help us understand how visitors use the site. These are only used with your consent where required by law.',
       manageTitle: 'Managing Cookies',
       manageText:
-        'You can manage or disable cookies through your browser settings. Disabling essential cookies may affect site functionality.',
+        'Use Cookie settings below to change your optional cookie choices. You can also remove existing cookies through your browser settings. Disabling essential cookies may affect site functionality.',
     },
   },
   sv: {
@@ -715,6 +723,14 @@ export const translations = {
       text: 'Vi använder cookies för att förstå hur besökare använder vår webbplats och för att förbättra den.',
       accept: 'Godkänn',
       decline: 'Avböj',
+      analytics: 'Webbplatsanalys (valfritt)',
+      marketing: 'Mätning av LinkedIn-annonser (valfritt)',
+      save: 'Spara val',
+      rejectAll: 'Avvisa valfria cookies',
+      settings: 'Cookieinställningar',
+      linkedinDetails: 'Endast om du godkänner det använder vi LinkedIn Insight Tag på Pärs webbplats för att mäta annonser och begäran om betanedladdning. LinkedIn får uppgifter som sidans adress, hänvisande webbplats, IP-adress, webbläsare, enhet och besökstid, och kan koppla besök till ditt LinkedIn-konto med cookies. Vi skickar inte dina formulärsvar eller data från Pär-appen till LinkedIn.',
+      linkedinPrivacy: 'LinkedIns integritetspolicy',
+      withdrawal: 'Du kan ändra ditt val nedan när som helst. Om du återkallar samtycket stoppas framtida LinkedIn-mätning på denna webbplats; information som LinkedIn redan har tagit emot raderas inte. LinkedIn-cookies kan finnas kvar tills de löper ut eller du tar bort dem i webbläsaren. LinkedIn kan behandla uppgifter utanför EES; se deras integritetspolicy för lagringstider och överföringar.',
     },
     newsletter: {
       title: 'Få Lanseringsnyheter',
@@ -914,7 +930,7 @@ export const translations = {
       title: 'Cookiepolicy',
       updated: 'Senast uppdaterad',
       intro:
-        'Datomer AB använder cookies och liknande tekniker endast där det är nödvändigt för webbplatsens drift.',
+        'Datomer AB använder nödvändiga cookies för webbplatsens drift. Valfri analys och, där det är aktiverat på Pärs webbplats, mätning av LinkedIn-annonser kräver ditt samtycke.',
       typesTitle: 'Cookies Vi Använder',
       essential: 'Nödvändiga Cookies',
       essentialText: 'krävs för att webbplatsen ska fungera, till exempel för routning och säkerhet.',
@@ -922,7 +938,7 @@ export const translations = {
       analyticsText: 'hjälper oss att förstå hur besökare använder webbplatsen. Dessa används endast med ditt samtycke där lagen kräver det.',
       manageTitle: 'Hantera Cookies',
       manageText:
-        'Du kan hantera eller inaktivera cookies via din webbläsares inställningar. Inaktivering av nödvändiga cookies kan påverka webbplatsens funktionalitet.',
+        'Använd Cookieinställningar nedan för att ändra dina val för valfria cookies. Du kan också ta bort befintliga cookies i webbläsarens inställningar. Inaktivering av nödvändiga cookies kan påverka webbplatsens funktionalitet.',
     },
   },
 }

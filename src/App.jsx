@@ -10,7 +10,7 @@ import { useBetaDownloads } from './lib/betaDownloads.js'
 import { PaymentButton } from './components/PaymentButton.jsx'
 import { WaitlistForm } from './components/WaitlistForm.jsx'
 import { NewsletterForm } from './components/NewsletterForm.jsx'
-import { CookieConsent } from './components/CookieConsent.jsx'
+import { CookieConsent, CookieSettingsButton, LinkedInPrivacyNotice } from './components/CookieConsent.jsx'
 import { Turnstile } from './components/Turnstile.jsx'
 import aiDisclaimers from './data/ai_disclaimers.json'
 import { BlogPage } from './pages/BlogPage.jsx'
@@ -840,7 +840,7 @@ export function PrivacyPage() {
     <main className="section container legal-page">
       <h1>{formatHeading(t('privacy.title'))}</h1>
       <p>
-        <strong>{t('privacy.updated')}:</strong> 23 August 2026
+        <strong>{t('privacy.updated')}:</strong> 28 October 2026
       </p>
       <p>
         {t('privacy.intro')}
@@ -870,6 +870,8 @@ export function PrivacyPage() {
 
       <h2>{t('privacy.thirdTitle')}</h2>
       <p>{t('privacy.thirdText')}</p>
+      <LinkedInPrivacyNotice />
+      <CookieSettingsButton />
 
       <h2>{t('privacy.rightsTitle')}</h2>
       <p>
@@ -930,7 +932,7 @@ export function CookiesPage() {
     <main className="section container legal-page">
       <h1>{formatHeading(t('cookies.title'))}</h1>
       <p>
-        <strong>{t('cookies.updated')}:</strong> 23 August 2026
+        <strong>{t('cookies.updated')}:</strong> 28 October 2026
       </p>
       <p>{t('cookies.intro')}</p>
 
@@ -946,6 +948,8 @@ export function CookiesPage() {
 
       <h2>{t('cookies.manageTitle')}</h2>
       <p>{t('cookies.manageText')}</p>
+      <CookieSettingsButton />
+      <LinkedInPrivacyNotice />
     </main>
   )
 }
