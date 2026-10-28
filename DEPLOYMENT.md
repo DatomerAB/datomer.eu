@@ -167,6 +167,70 @@ languages, public routes, trailing slashes, unknown routes, and preview hosts,
 and verify that page components do not override the shared values.
 IndexNow submission runs separately from deployment as described below.
 
+## Beta campaign claim review
+
+The 2026-10-28 review used the public release
+`v0.1.9-beta.2026101602`. Its annotated tag in `DatomerAB/Par` resolves to
+`fdd73e3e4f832432186b54e21483e5d720cb8f72`, also the product's main revision at
+review time. Evidence was read through authenticated GitHub access; no installer
+was run and no installed-app feature certification is implied.
+
+The review compared the website against the release-tagged
+`docs/GET_STARTED.md`, `config/license_tiers.json`,
+`config/sales_tier_packages.json`, and README, together with the public
+`DatomerAB/par-releases` release assets and runtime download catalog.
+
+Confirmed copy corrections, applied in both English and Swedish without changing
+layout, prices, checkout, or download selection:
+
+- The public release includes Mac and Windows installers. Existing
+  Windows downloads do not make Windows part of the current beta campaign.
+  The catalog also lists an older Linux build; this is not evidence that Linux
+  has the current Mac/Windows feature set.
+- The campaign owner confirmed that **this beta campaign is Mac-only**, excluding
+  Windows and Linux. The hero compatibility notice, final disclaimer, and FAQ
+  make that scope explicit in both languages. Existing non-Mac downloads remain
+  available outside the campaign; prices, checkout, and download selection are
+  unchanged.
+- The Mac setup guide requires Apple Silicon, M1 or newer. The final homepage
+  disclaimer must not describe it as merely recommended.
+- `data_export` and `data_import` are listed in Plus, Pro, and Enterprise, not
+  Free. Both the feature badge and FAQ now reflect that contract; exact migration
+  coverage still needs installed-app testing.
+- The setup guide distinguishes Mac/Windows installation prompts. A blanket
+  assertion that all beta builds are unsigned was removed in favor of directing
+  users to the platform's guide.
+
+The README's marketing tier names conflict with the release-tagged sales
+catalog; the catalog uses Free/Plus/Pro/Enterprise and matches this site's names.
+Do not rename plans based on the README table alone or change Stripe amounts
+without verifying the live price configuration.
+
+### Remaining launch verification
+
+Documented capabilities are not the same as tested behavior in a downloaded app.
+Before using broad feature claims in campaign posts, verify these with the
+installed release and the relevant plan:
+
+- Memory retention and deletion: avoid promising that Pär remembers everything
+  or every conversation without plan, storage, and model limitations.
+- Optional connections: verify what each integration can read/write and what is
+  sent to the connected provider. The site's broad local-only/cloud-redaction
+  wording must not be used as proof that no information leaves the device.
+- Home Hub: test pairing, local-network boundaries, and plan/device limits.
+- Routines: verify which routines can be scheduled and which require approval.
+- Export/import: verify supported content and a real restore/migration.
+- Privacy/security statements: verify encryption, cloud-context handling, and
+  backup behavior; do not infer guarantees from feature names.
+- Paid plans: verify displayed currency, amount, billing interval, seat minimums,
+  and actual entitlements against Stripe and an installed license.
+
+Document-review/report workflows remain explicitly **in development**, with no
+release date or readiness promise. The release-tagged README itself calls out
+outstanding real-model and freshly rebuilt installed-app verification.
+Synced models, historical release entries, and upstream product files were not
+edited. Follow-up upstream corrections require separate linked PRs.
+
 ## IndexNow production notifications
 
 The `Notify IndexNow after production deployment` workflow listens for the

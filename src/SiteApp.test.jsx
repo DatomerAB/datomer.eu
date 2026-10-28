@@ -31,7 +31,7 @@ describe('site entry routing', () => {
   it('retains the product homepage and makes beta requirements clear', async () => {
     renderSite('https://par.datomer.eu/')
     expect(screen.getAllByText('Local Inference')[0]).toBeVisible()
-    expect(screen.getByText(/Not for Intel Macs/)).toBeVisible()
+    for (const notice of screen.getAllByText(/Not for Intel Macs/)) expect(notice).toBeVisible()
     expect(screen.queryByRole('heading', { name: 'Data governance' })).not.toBeInTheDocument()
     await waitFor(() => expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute('href', 'https://par.datomer.eu/'))
   })
