@@ -2,6 +2,9 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { DownloadForm } from './DownloadForm.jsx'
 import { LanguageProvider } from '../i18n/LanguageProvider.jsx'
+import { trackLinkedInConversion } from '../analytics/linkedin.js'
+
+vi.mock('../analytics/linkedin.js', () => ({ trackLinkedInConversion: vi.fn() }))
 
 function Wrapper({ children }) {
   return <LanguageProvider>{children}</LanguageProvider>
@@ -11,6 +14,7 @@ describe('DownloadForm', () => {
   const downloadUrl = 'https://example.com/par.dmg'
 
   beforeEach(() => {
+    vi.mocked(trackLinkedInConversion).mockClear()
     vi.stubGlobal(
       'fetch',
       vi.fn((url) => {
@@ -78,6 +82,7 @@ describe('DownloadForm', () => {
     expect(screen.getByText(/Thanks! Your download should start automatically./i)).toBeTruthy()
     expect(clickSpy).toHaveBeenCalledTimes(1)
     expect(clickSpy.mock.instances[0].href).toBe(downloadUrl)
+    expect(trackLinkedInConversion).toHaveBeenCalledExactlyOnceWith('download')
   })
 
   it('shows storage failures without downloading and allows a successful retry', async () => {
@@ -99,12 +104,14 @@ describe('DownloadForm', () => {
 
     expect(await screen.findByText(error)).toBeTruthy()
     expect(clickSpy).not.toHaveBeenCalled()
+    expect(trackLinkedInConversion).not.toHaveBeenCalled()
     expect(screen.queryByText(/Thanks! Your download should start automatically./i)).toBeNull()
 
     fireEvent.click(screen.getByRole('button', { name: /Download for Mac/i }))
 
     expect(await screen.findByText(/Thanks! Your download should start automatically./i)).toBeTruthy()
     expect(clickSpy).toHaveBeenCalledTimes(1)
+    expect(trackLinkedInConversion).toHaveBeenCalledExactlyOnceWith('download')
     expect(screen.queryByText(error)).toBeNull()
   })
 })

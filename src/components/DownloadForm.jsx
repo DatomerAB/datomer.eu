@@ -3,6 +3,7 @@ import { useLanguage } from '../i18n/useLanguage.js'
 import { Turnstile } from './Turnstile.jsx'
 import { getTrackingPayload } from '../analytics/tracking.js'
 import { getPlatformPresentation } from '../lib/betaDownloads.js'
+import { trackLinkedInConversion } from '../analytics/linkedin.js'
 
 const STORAGE_KEY = 'par-download-info'
 
@@ -102,6 +103,7 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', do
         throw new Error(data.error || 'Submission failed')
       }
       setDone(true)
+      trackLinkedInConversion('download')
       if (downloadUrl) {
         const a = document.createElement('a')
         a.href = downloadUrl

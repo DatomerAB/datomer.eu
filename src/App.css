@@ -2073,6 +2073,8 @@
 
 /* Cookie banner */
 .cookie-banner {
+  max-height: 85vh;
+  overflow-y: auto;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -2110,8 +2112,29 @@
 
 .cookie-banner-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   flex-shrink: 0;
+}
+
+.cookie-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0.65rem 0;
+  color: #cbd5e1;
+  text-align: left;
+}
+
+.cookie-option input {
+  flex-shrink: 0;
+  width: auto;
+  margin-top: 0.25rem;
+}
+
+.cookie-banner-copy a {
+  color: #fff;
+  text-decoration: underline;
 }
 
 /* Modal & download form */

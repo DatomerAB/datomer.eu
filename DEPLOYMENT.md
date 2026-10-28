@@ -63,6 +63,61 @@ not indexed as a second production site.
     bindings. Publishing this split changes what `datomer.eu` displays immediately;
     do not promote before the product domain and redirects are verified.
 
+## LinkedIn beta campaign measurement
+
+The optional Insight Tag is restricted to `par.datomer.eu`. It is never enabled
+on the company domain or Cloudflare preview hostnames. For local consent review,
+development port `5174` is also allowed when a Partner ID is configured.
+Do not use production advertising IDs for local testing.
+
+No tag or tracking pixel loads until the visitor separately opts into LinkedIn
+advertising measurement. Existing analytics consent does not grant marketing
+consent. Analytics and LinkedIn have independent choices; the Cookies page
+allows visitors to reopen settings. Revoking loaded LinkedIn tracking reloads
+the page without the tag. Third-party cookies already set may require browser
+removal; previously received data is not erased by withdrawing website consent.
+
+To activate after local review:
+
+1. Obtain the Partner ID from the correct LinkedIn Campaign Manager account.
+2. Create one **event-specific** website conversion associated with that tag:
+   **Beta download request**. Copy its conversion ID.
+   Do not add URL rules that also count the same form action.
+3. Configure these public, build-time Vite variables in Cloudflare Pages:
+   - `VITE_LINKEDIN_PARTNER_ID`
+   - `VITE_LINKEDIN_DOWNLOAD_CONVERSION_ID`
+   Leave them unset to keep the integration inactive. IDs must be positive
+   numeric strings. Changes require a fresh frontend build/deployment.
+4. Review the English/Swedish consent and policy wording, LinkedIn terms,
+   retention and international-transfer details with the privacy owner.
+   Do not enable enhanced conversions, automatic form collection or additional
+   LinkedIn tracking through Campaign Manager without a separate privacy review.
+   Never place personal data in campaign URLs, query strings or page titles:
+   LinkedIn receives page URLs and visitor/device information after opt-in.
+5. Test using a controlled advertising/test setup: before consent and after
+   rejection there must be no requests to LinkedIn; analytics-only acceptance
+   must not enable LinkedIn. On explicit LinkedIn acceptance the script loads
+   once. Check that the company site remains untracked by LinkedIn.
+6. Submit the download form successfully and verify its conversion in the
+   LinkedIn tools. Failed submissions, opening a form, and clicking its button
+   without success must not count. Waitlist submissions must not send a LinkedIn
+   conversion; the waitlist form remains available. Test withdrawal and reload as well.
+7. Obtain deployment approval, publish, and confirm tag/conversion activity in
+   Campaign Manager. Ad blockers, declined consent and LinkedIn attribution
+   rules mean reported conversions will not equal all database submissions.
+
+Conversions are sent only after successful API responses, with a conversion ID
+and no form values. A download conversion means an accepted **download request**,
+not proof that the file finished downloading or the Pär app was installed.
+No activity from inside the Pär application is connected to this integration.
+
+For the first campaign, link to `https://par.datomer.eu/#download` with non-personal
+campaign parameters such as `utm_source=linkedin&utm_medium=paid_social&utm_campaign=par_beta`.
+Associate only the beta download request conversion with the first campaign in
+Campaign Manager. Waitlist conversion measurement is out of scope for this
+campaign. Set an initial budget and audience before launching; compare cost per
+download request before increasing spend.
+
 ## Branch to environment mapping
 
 - main -> production
