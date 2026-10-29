@@ -252,15 +252,41 @@ Reproducible favicon/avatar exports and source artwork are kept in
 [`brand-assets/`](brand-assets/README.md), together with sender activation steps.
 Optional `RESEND_COMPANY_FROM_EMAIL` / `RESEND_COMPANY_FROM_NAME` and
 `RESEND_PRODUCT_FROM_EMAIL` / `RESEND_PRODUCT_FROM_NAME` bindings allow separate
-verified senders without changing existing delivery when unset. Pages configuration
-prepares `hello@datomer.eu` for company mail and `Par@datomer.eu` for product mail.
+verified senders, with the corresponding brand mailbox as the code default. Existing
+generic environment overrides remain supported. Pages configuration
+prepares `hello@datomer.eu` for company mail and `par@datomer.eu` for product mail.
 Matching `RESEND_COMPANY_TO_EMAIL` / `RESEND_PRODUCT_TO_EMAIL` bindings route
 enquiry notifications to their respective inboxes without changing explicit
 customer recipients. Confirm both inboxes and Resend verification before rollout.
 Inbox avatars require provider/domain setup; deploying
 HTML icons alone does not activate BIMI or change the inbox sender picture.
 The two addresses share a domain, so default BIMI cannot reliably distinguish
-their inbox avatars. The independent daily-summary Worker configuration is unchanged.
+their inbox avatars. The independent daily-summary Worker sends as Pär from
+`par@datomer.eu`; its internal report recipient remains `dailysummary@datomer.eu`.
+Deploy the Worker separately to activate its sender change.
+
+### Local AI and confidential-work messaging
+
+Product copy in EN/SV centers on confidential work on the user's device, without
+a central Pär server for conversations or personal context. Web search and
+connected services can send information to their providers when used; do not
+replace that boundary with blanket promises that nothing leaves the device.
+Financial-assessment and contract-review workflows are explicitly in development,
+require human review, and are not presented as dependable beta features.
+Vision and mission remain unchanged. Plan restrictions, prices, download
+selection and Mac-only campaign eligibility remain intact.
+
+The Pär Cloud card has been removed. Mac/Windows platform cards remain, and
+press copy distinguishes the older listed Linux build from the current betas.
+The downloadable press factsheet carries the same positioning and contact split.
+Website contact links, email templates and Pages enquiry routing use
+`par@datomer.eu` for Pär and `hello@datomer.eu` for general Datomer enquiries.
+
+The setup guides and diagrams have canonical sources in `DatomerAB/Par`:
+`docs/GET_STARTED*.md` and `docs/images/par-{private,home-hub}-mode.svg`.
+Matching wording changes must land upstream as a separate, linked PR before a
+future guide sync, or the mirrored website changes may be overwritten. Use
+`scripts/build_public_doc.py` there to validate public-region extraction.
 
 ### Product imagery and visual polish
 

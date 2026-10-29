@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import App from './App'
 import { LanguageProvider } from './i18n/LanguageProvider.jsx'
+import { getGetStartedHtml } from './content/get-started/index.js'
 
 function Wrapper({ children, initialEntries = ['/get-started'] }) {
   return (
@@ -13,6 +14,18 @@ function Wrapper({ children, initialEntries = ['/get-started'] }) {
 }
 
 describe('Get Started page', () => {
+  it.each(['en', 'sv'])('qualifies local processing, online services and workflow status in %s', lang => {
+    const html = getGetStartedHtml(lang)
+    expect(html).toContain(lang === 'en' ? 'central Pär server' : 'central Pär-server')
+    expect(html).toContain(lang === 'en' ? 'may be sent to their providers' : 'kan information som behövs för förfrågningarna skickas till deras leverantörer')
+    expect(html).toContain(lang === 'en' ? 'not dependable features of the current beta' : 'inte tillförlitliga funktioner i den aktuella betan')
+    expect(html).toContain(lang === 'en' ? 'Local chat can work offline' : 'Lokal chatt kan fungera offline')
+    expect(html).toContain(lang === 'en' ? 'conversation history between sessions requires Plus' : 'samtalshistorik mellan sessioner kräver Plus')
+    expect(html).toContain('mailto:par@datomer.eu')
+    expect(html).not.toContain('hello@datomer.eu')
+    expect(html).not.toMatch(/Nothing leaves|Nothing is uploaded|100% offline|offline forever|Full stop|Ingenting lämnar|Ingenting laddas upp|100 % offline|offline för alltid|Stannar på din dator\. Punkt/)
+  })
+
   beforeEach(() => {
     globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false }))
     vi.stubGlobal('localStorage', {

@@ -1,13 +1,14 @@
 // Shared, branded email templates for all form handlers.
 // Every public-facing email uses the same layout, tone, signature, and privacy-first messaging.
 import { buildWebsiteSummary, readWebsiteMetadata } from './_websiteSummary.js'
+import { CONTACT_EMAILS } from '../../src/lib/site.js'
 
 const BRAND = {
   company: 'Datomer',
   product: 'Pär',
   tagline: 'Your AI. On Your Device.',
-  contactEmail: 'Par@datomer.eu',
-  companyContactEmail: 'hello@datomer.eu',
+  contactEmail: CONTACT_EMAILS.product,
+  companyContactEmail: CONTACT_EMAILS.company,
   website: 'https://par.datomer.eu',
   companyUrl: 'https://datomer.eu',
   parLogoUrl: 'https://par.datomer.eu/par-logo.png',

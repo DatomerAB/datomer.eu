@@ -1,5 +1,6 @@
 export const COMPANY_URL = 'https://datomer.eu'
 export const PRODUCT_URL = 'https://par.datomer.eu'
+export const CONTACT_EMAILS = { company: 'hello@datomer.eu', product: 'par@datomer.eu' }
 export const PRODUCT_PATHS = ['/get-started', '/blog', '/press', '/models', '/payment-success', '/beta', '/purpose']
 export const PRODUCT_HASHES = ['#download', '#product', '#features', '#pricing', '#faq']
 

@@ -2,6 +2,12 @@
 
 A separate Cloudflare Worker that runs once per day at 06:00 UTC, queries the previous 25 hours of form submissions and consented website events from the shared D1 database, and emails a summary with CSV attachments to `dailysummary@datomer.eu`. Because the report runs daily with a rolling 25-hour window, consecutive emails overlap by one hour.
 
+Both environments send as `Pär by Datomer <par@datomer.eu>`. The internal summary
+recipient is separate from public enquiry routing: Pär enquiries use
+`par@datomer.eu`, while general company enquiries use `hello@datomer.eu`.
+Verify the sender with Resend and confirm the mailbox can receive replies before
+deploying this configuration.
+
 Browser events are collected only after visitors accept analytics consent. A Turnstile-verified session token authorizes event writes for 30 minutes; page paths omit query strings. The report includes event totals, unique anonymous sessions, event types, and top pages. Download entries identify people who completed the download form; they do not verify that a file transfer completed. If D1 cannot be read, the Worker sends a failure notice instead of a zero-count report.
 
 ## Why a separate Worker?

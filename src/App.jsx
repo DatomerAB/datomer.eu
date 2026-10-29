@@ -20,7 +20,7 @@ import { ModelAttributionPage } from './pages/ModelAttributionPage.jsx'
 import { AiDisclaimerBanner } from './components/AiDisclaimerBanner.jsx'
 import { useExperiment } from './experiments/experiments.js'
 import { Icon } from './components/Icon.jsx'
-import { siteForUrl, siteLinks } from './lib/site.js'
+import { CONTACT_EMAILS, siteForUrl, siteLinks } from './lib/site.js'
 import { resolveTopic, topicContent } from './content/contactTopics.js'
 import { productPurpose } from './content/productPurpose.js'
 import { useSiteUrl } from './lib/RenderContext.jsx'
@@ -38,7 +38,6 @@ const COMPANY = {
   postcode: '123 64',
   city: 'Farsta',
   country: 'Sweden',
-  email: 'hello@datomer.eu',
   domain: 'datomer.eu',
 }
 
@@ -290,12 +289,6 @@ function HomePage({ onDownload, downloadCatalog }) {
       text: t('deployments.windows.text'),
       best: t('deployments.windows.best'),
     },
-    {
-      status: t('deployments.comingSoon'),
-      title: t('deployments.cloud.title'),
-      text: t('deployments.cloud.text'),
-      best: t('deployments.cloud.best'),
-    },
   ]
 
   const [billingInterval, setBillingInterval] = useState('monthly')
@@ -388,9 +381,11 @@ function HomePage({ onDownload, downloadCatalog }) {
               {heroVariant === 'social-proof' ? t('hero.variantBadge') : t('hero.badge')}
             </div>
             <h1>{formatHeading(t('hero.headline'))}</h1>
+            <p><strong>{t('hero.workTitle')}</strong></p>
             <p className="lede">
               {t('hero.lede')}
             </p>
+            <p>{t('hero.workflowNote')}</p>
 
             <div className="cta-row">
               <button type="button" className="button button-primary" onClick={onDownload}>
@@ -471,6 +466,7 @@ function HomePage({ onDownload, downloadCatalog }) {
               <h3 id="homepage-development">{purpose.developmentTitle}</h3>
               <strong>{purpose.developmentStatus}</strong>
               <p>{purpose.developmentText}</p>
+              <p>{purpose.reviewNote}</p>
               <p>{purpose.developmentNote}</p>
               <Link to={`/about${lang === 'sv' ? '?lang=sv' : ''}`}>{overview.developmentLink}</Link>
             </aside>
@@ -505,7 +501,7 @@ function HomePage({ onDownload, downloadCatalog }) {
                 <strong>{formatHeading(t('privacyHome.pillars.encryptedVault'))}</strong>
               </div>
               <div className="privacy-pillar">
-                <Icon name="arrowRight" />
+                <Icon name="key" />
                 <strong>{formatHeading(t('privacyHome.pillars.ownTheKeys'))}</strong>
               </div>
             </div>
@@ -536,6 +532,7 @@ function HomePage({ onDownload, downloadCatalog }) {
             <div className="section-heading">
               <p className="eyebrow">{formatHeading(t('pricing.eyebrow'))}</p>
               <h2>{formatHeading(t('pricing.headline'))}</h2>
+              <p>{t('pricing.historyNote')}</p>
             </div>
 
             <div className="billing-toggle" role="group" aria-label={t('pricing.billing.monthly')}>
@@ -694,6 +691,7 @@ function AboutPage() {
         <h2>{purpose.developmentTitle}</h2>
         <p><strong>{purpose.developmentStatus}</strong></p>
         <p>{purpose.developmentText}</p><p>{purpose.developmentNote}</p>
+        <p>{purpose.reviewNote}</p>
       </section>
 
       <h2>{formatHeading(t('about.companyTitle'))}</h2>
@@ -701,7 +699,7 @@ function AboutPage() {
 
       <h2>{formatHeading(t('about.contactTitle'))}</h2>
       <p>
-        {t('about.emailLabel')}: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+        {t('about.emailLabel')}: <a href={`mailto:${CONTACT_EMAILS.product}`}>{CONTACT_EMAILS.product}</a>
       </p>
     </main>
   )
@@ -723,6 +721,7 @@ export function ContactPage() {
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const [searchParams] = useSearchParams()
   const site = siteForUrl(useSiteUrl())
+  const contactEmail = CONTACT_EMAILS[site]
   const topic = resolveTopic(searchParams.get('topic'), site)
   const { subject, message: prefill } = topicContent(topic, lang)
   const [form, setForm] = useState({ name: '', email: '' })
@@ -790,7 +789,7 @@ export function ContactPage() {
       <h1>{formatHeading(t('contact.title'))}</h1>
       <p>
         {t('contact.intro')}{' '}
-        <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
       </p>
 
       <form className="contact-form" onSubmit={handleSubmit}>
@@ -834,6 +833,7 @@ export function ContactPage() {
 export function PrivacyPage() {
   const { t } = useLanguage()
   const formatHeading = useLocalizedHeading()
+  const contactEmail = CONTACT_EMAILS[siteForUrl(useSiteUrl())]
 
   return (
     <main className="section container legal-page">
@@ -848,7 +848,7 @@ export function PrivacyPage() {
       <h2>{t('privacy.controllerTitle')}</h2>
       <CompanyAddress />
       <p>
-        {t('about.emailLabel')}: <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+        {t('about.emailLabel')}: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
       </p>
 
       <h2>{t('privacy.whatTitle')}</h2>
@@ -875,7 +875,7 @@ export function PrivacyPage() {
       <h2>{t('privacy.rightsTitle')}</h2>
       <p>
         {t('privacy.rightsText')}{' '}
-        <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
       </p>
     </main>
   )

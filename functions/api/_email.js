@@ -1,12 +1,11 @@
+import { CONTACT_EMAILS } from '../../src/lib/site.js'
+
 const RESEND_ENDPOINT = 'https://api.resend.com/emails'
-const DEFAULT_FROM_EMAIL = 'hello@datomer.eu'
 const DEFAULT_FROM_NAME = 'Pär by Datomer'
-const DEFAULT_TO_EMAIL = 'hello@datomer.eu'
 
 function buildFromAddress(email, name) {
-  const address = email || DEFAULT_FROM_EMAIL
   const displayName = name || DEFAULT_FROM_NAME
-  return `${displayName} <${address}>`
+  return `${displayName} <${email}>`
 }
 
 export async function sendSupportEmail({ env, to, subject, html, text, replyTo, attachments, site = 'product' }) {
@@ -16,13 +15,14 @@ export async function sendSupportEmail({ env, to, subject, html, text, replyTo, 
   }
 
   const prefix = site === 'company' ? 'RESEND_COMPANY' : 'RESEND_PRODUCT'
+  const defaultEmail = CONTACT_EMAILS[site === 'company' ? 'company' : 'product']
   const recipients = Array.isArray(to) && to.length > 0
-    ? to : [env[`${prefix}_TO_EMAIL`] || env.CONTACT_TO_EMAIL || DEFAULT_TO_EMAIL]
+    ? to : [env[`${prefix}_TO_EMAIL`] || env.CONTACT_TO_EMAIL || defaultEmail]
   const siteFromEmail = env[`${prefix}_FROM_EMAIL`]
-  const fromEmail = siteFromEmail || env.RESEND_FROM_EMAIL || DEFAULT_FROM_EMAIL
+  const fromEmail = siteFromEmail || env.RESEND_FROM_EMAIL || defaultEmail
   const siteFromName = site === 'company' ? 'Datomer AB' : DEFAULT_FROM_NAME
   const fromName = env[`${prefix}_FROM_NAME`]
-    || (siteFromEmail ? siteFromName : env.RESEND_FROM_NAME || DEFAULT_FROM_NAME)
+    || (siteFromEmail ? siteFromName : env.RESEND_FROM_NAME || siteFromName)
   const from = buildFromAddress(fromEmail, fromName)
 
   console.log('[sendSupportEmail] sending from', from, 'to', recipients, 'subject:', subject)

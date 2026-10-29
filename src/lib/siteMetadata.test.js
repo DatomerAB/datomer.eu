@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { alternateLinks, getSiteMetadata, sitemapPaths } from './siteMetadata.js'
-import { safeJson } from './seoMeta.js'
+import { PRODUCT_DESCRIPTIONS, safeJson } from './seoMeta.js'
 
 describe('shared discovery contracts', () => {
   it('canonicalizes company aliases and trailing slashes without campaign or private parameters', () => {
@@ -18,7 +18,8 @@ describe('shared discovery contracts', () => {
     expect(press.canonical).toBe('https://par.datomer.eu/press?lang=sv')
     expect(press.locale).toBe('sv_SE')
     expect(press.structuredData.map(data => data['@type'])).toEqual(['Organization', 'SoftwareApplication'])
-    expect(press.structuredData[1].description).toContain('Pär är')
+    expect(press.structuredData[1].description).toBe(PRODUCT_DESCRIPTIONS.sv)
+    expect(press.structuredData[1].operatingSystem).toBe('macOS, Windows')
     const blog = getSiteMetadata(new URL('https://par.datomer.eu/blog'))
     expect(blog.title).toBe('Changelog & Updates — Pär by Datomer')
   })

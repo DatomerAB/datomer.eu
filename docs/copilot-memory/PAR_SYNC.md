@@ -5,6 +5,10 @@
 - `config/website_models.json` → `src/data/models.json`
 - `NOTICE.md` → `docs/NOTICE.md`
 - Release events via `repository_dispatch` event `release-published`
+- `docs/GET_STARTED*.md` → `src/content/get-started/GET_STARTED*.md`, and
+  `docs/images/` → `public/get-started/`, via the manual `sync-get-started.yml`
+  workflow. Change canonical guide copy and diagrams in Pär as well as any
+  coordinated website mirror update; use separate, linked PRs.
 
 ## Workflows
 

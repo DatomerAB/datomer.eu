@@ -6,7 +6,7 @@
 
 **Din AI. Din enhet. Din data.**
 
-Pär är en privat AI-kompis som bor på din egen dator. Inget moln. Ingen spårning. Ingenting lämnar din maskin.
+Pär körs lokalt på din enhet, utan en central Pär-server för dina samtal eller ditt personliga sammanhang. Du väljer om du vill använda webbsökning eller anslutna tjänster, som kan skicka information till sina leverantörer.
 
 Du chattar igång på ungefär **10 minuter** — det mesta av tiden går åt till att vänta på en nedladdning.
 
@@ -14,13 +14,15 @@ Du chattar igång på ungefär **10 minuter** — det mesta av tiden går åt ti
 
 ## Vad kan du göra med Pär?
 
-Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag ett. Så här kan du använda appen:
+Ställ frågor, bolla idéer och skriv utkast med lokal AI. Funktioner beror på abonnemang, inställningar och version; samtalshistorik mellan sessioner kräver Plus eller högre. Här är en guide till appen:
+
+Arbetsflöden för ekonomiska bedömningar och konfidentiell avtalsgranskning är under utveckling, inte tillförlitliga funktioner i den aktuella betan. Du granskar resultaten och bestämmer nästa steg.
 
 ### 1. 💬 Chatt — Mer än bara konversation
 - **Fäst dina favoritsvar och chattar** — Stjärnmärk viktiga svar eller fäst hela konversationer högst upp i listan så att du aldrig tappar bort dem.
 - **Byt tonläge** — Matcha ditt humör eller mål med ett klick: förinställt på *Koncis* för snabba och direkta svar, eller välj *Vänlig*, *Professionell*, *Övertygande* eller *Verkställande*.
 - **Importera befintlig kontext och regler** — Dra och släpp dina befintliga `SKILL.md`-, `CLAUDE.md`-, `.cursorrules`- eller instruktionsfiler direkt i chatten eller spara dem permanent som en Persona.
-- **Live webbsökning** — Slå på webbsökning när du behöver färska nyheter, sportresultat eller fakta. När du inte gör det förblir Pär 100 % offline.
+- **Live webbsökning** — Välj webbsökning när du behöver aktuell information. Sökförfrågningar skickas till externa leverantörer. Lokal chatt kan fungera offline efter installationen; webbsökning och anslutna tjänster kräver internet.
 - **Bifoga dokument och anteckningar** — Dra in anteckningar, PDF:er eller kod och ställ frågor direkt om innehållet.
 - **Smart minne** — Pär kommer ihåg ditt namn, dina mål och din stil mellan sessioner, så du slipper förklara dig varje gång.
 - **Tanke- och resonemangsprocess vid behov** — Modellens interna resonemang (`<think>`) hålls snyggt hopfällt i en expanderbar tanke-flik så att dina svar förblir rena och överskådliga.
@@ -47,9 +49,9 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
   <img src="/get-started/tasks-screen.webp" alt="Pär Uppgifter — att göra-lista och åtgärdspunkter" width="100%" style="border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
 </p>
 
-### 4. 🔗 Integrationer — Koppla ihop dina verktyg säkert
+### 4. 🔗 Integrationer — Välj vilka verktyg du ansluter
 - **Samla din värld** — Anslut populära verktyg som Google Kalender, Gmail, Notion, Todoist med flera.
-- **Allt stannar på din enhet** — Dina anslutningar och lösenord ligger säkert låsta på din egen dator. Ingenting skickas till våra servrar.
+- **Anslut på dina villkor** — Granska varje tjänsts behörigheter innan du ansluter den. Förfrågningar och information som behövs för att använda tjänsten kan skickas till dess leverantör.
 - **Kontextmedveten hjälp** — Ställ frågor som *"Vad har jag inbokat idag?"* eller *"Sammanfatta mina senaste olästa mejl"* utan att hoppa mellan tio olika appar.
 
 ---
@@ -63,7 +65,7 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
 | En Mac med Apple Silicon (M1, M2, M3, M4…) | Pär använder din Macs chip för att tänka |
 | macOS 11 (Big Sur) eller nyare | Klicka på Apple-logotypen  → *Om denna Mac* för att kontrollera |
 | ~10 GB ledigt diskutrymme | För appen och din AI-modell |
-| Wi-Fi — **bara för installationen** | Efter detta fungerar Pär offline för alltid |
+| Internet för installation och internetanslutna funktioner | Lokal chatt kan fungera offline när appen och en modell är installerade |
 
 > **Osäker på vilken Mac du har?** Klicka på Apple-logotypen  → *Om denna Mac*. Står det "Apple M1/M2/M3/M4" är du redo.
 
@@ -74,7 +76,7 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
 | En 64-bitars PC med Windows 10 (21H2) eller Windows 11 | Pär använder din dators processor för att tänka |
 | Microsoft Visual C++ 2015–2022 Redistributable (64-bitars) | Behövs av den del av Pär som kör din AI-modell. Den laddas ner gratis från Microsoft |
 | ~10 GB ledigt diskutrymme | För appen och din AI-modell |
-| Wi-Fi — **bara för installationen** | Efter detta fungerar Pär offline för alltid |
+| Internet för installation och internetanslutna funktioner | Lokal chatt kan fungera offline när appen och en modell är installerade |
 
 > **Windows-stödet är i beta.** Räkna med några extra säkerhetsfrågor första gången du installerar och startar Pär — stegen nedan guidar dig genom varje steg.
 
@@ -123,12 +125,12 @@ Pär är utformat för att kännas enkelt, hjälpsamt och helt privat från dag 
 </p>
 
 **1 · Välkommen**
-Ett kort löfte: noll telemetri, 100 % bearbetning på enheten och helt krypterad lagring. Klicka på **Fortsätt →**
+Pär använder lokala AI-modeller och ett krypterat lokalt valv. Valfria internetanslutna tjänster har egna behörigheter och integritetspolicyer. Klicka på **Fortsätt →**
 
 **2 · Berätta om dig för Pär**
 Ditt namn, språk, land, mål (med snabbvalsknappar) och kommunikationsstil.
 Du kan även importera dina befintliga `SKILL.md`- eller `CLAUDE.md`-regler med ett klick direkt här.
-*Det är så här Pär gör att svaren känns anpassade för dig. Det lämnar aldrig din dator.* Klicka på **Fortsätt →**
+*Det här hjälper Pär att anpassa svaren till dig. Din profil sparas lokalt. Granska vad du delar när du använder anslutna tjänster.* Klicka på **Fortsätt →**
 
 **3 · Välj din AI-modell** ← *det viktigaste steget, se nedan*
 
@@ -212,14 +214,14 @@ Du ser *"Aktiverad — välkommen till Pär…"* och ditt nya märke visas direk
 Pär skapades från grunden med en enkel princip: **din data tillhör dig**.
 
 ### 1. Privat läge (på din dator)
-Som standard körs Pär helt och hållet på din egen dator. AI-hjärnan körs direkt på din PC-processor eller ditt Apple Silicon-chip, och alla meddelanden, minnen och inställningar sparas i ett krypterat valv på maskinen. Ingenting skickas till något moln eller extern företagsserver.
+Pärs lokala AI-modeller körs på din dator. Sparade samtal och personligt sammanhang lagras i ett krypterat lokalt valv, inte på en central Pär-server. Lokal chatt kan fungera offline efter installationen. Om du väljer webbsökning eller anslutna tjänster kan information som behövs för förfrågningarna skickas till deras leverantörer. Granska behörigheter innan du delar konfidentiell information.
 
 ![Pär Privat Läge](/get-started/par-private-mode.svg)
 
 ### 2. Home Hub-läge (på din telefon eller surfplatta)
-När du aktiverar **Home Hub** fungerar din dator som en privat, säker hemmaserver. Din mobil eller surfplatta ansluter direkt till den över ditt lokala Wi-Fi med en engångs PIN-kod (6 siffror) eller QR-kod.
+När du aktiverar **Home Hub** kör din dator Pär för dina kopplade enheter hemma. Din mobil eller surfplatta ansluter direkt till den över ditt lokala Wi-Fi med en engångs PIN-kod (6 siffror) eller QR-kod.
 - **Din dator gör alla tunga AI-beräkningar:** AI-modellerna lämnar den aldrig.
-- **Mobilen är ett fönster, inte en databas:** Ingen data skickas utanför hemmet.
+- **Mobilen ansluter till din dator:** Home Hub använder ditt lokala nätverk i stället för en central Pär-server. Valfri webbsökning och anslutna tjänster kan fortfarande skicka information till sina leverantörer.
 - **Integritet för hela familjen:** I Pär Pro får varje hushållsmedlem sin egen isolerade konversationshistorik och personliga minne som andra inte kan se.
 
 ![Pär Home Hub](/get-started/par-home-hub-mode.svg)
@@ -257,18 +259,18 @@ När enheten har kopplats förblir den ansluten tills du kopplar bort den från 
 - **iPhone (Safari)**: Tryck på Dela-knappen (fyrkant med uppåtpil) → tryck på **Lägg till på hemskärmen**.
 - **Android (Chrome)**: Tryck på menyikonen med tre punkter ⋮ → tryck på **Installera app** eller **Lägg till på startskärmen**.
 
-Pär startar i helskärmsläge precis som en vanlig app, medan all AI-beräkning och kryptering sker tryggt på din egen dator!
+Pär öppnas i helskärmsläge på din mobil eller surfplatta. Din kopplade dator kör de lokala AI-modellerna och lagrar det krypterade valvet.
 
 ---
 
 ## Var dina saker bor
 
-Allt som Pär vet om dig sparas i en dold mapp på din dator — krypterad, din och möjlig att radera när som helst:
+Pärs lokala valv lagras i en dold mapp på din dator:
 
 - **Mac**: `~/.peer/`
 - **Windows**: `%USERPROFILE%\.peer\`
 
-Ingenting laddas upp. Ingenting analyseras. Det finns ingen "server" som har dina samtal, eftersom det inte finns någon server.
+Pär laddar inte upp valvet till en central Pär-server. Om du väljer webbsökning, anslutna tjänster eller export kan information du delar lämna din enhet. Granska först mottagaren, behörigheterna och integritetspolicyn. Kryptering hjälper till att skydda lagrad information; skydda även din enhet och dina säkerhetskopior.
 
 ---
 
@@ -284,7 +286,7 @@ Ingenting laddas upp. Ingenting analyseras. Det finns ingen "server" som har din
 | Installationen kan inte spara din profil (Windows) | Avsluta Pär, öppna **Aktivitetshanteraren** och avsluta kvarglomda Pär-processer, starta sedan Pär igen och ge det en minut |
 | Slut på diskutrymme | Gå till **Modeller** och ta bort en modell du inte använder |
 
-Behöver du mer hjälp? Hör av dig till **[hello@datomer.eu](mailto:hello@datomer.eu)**.
+Behöver du mer hjälp? Hör av dig till **[par@datomer.eu](mailto:par@datomer.eu)**.
 
 ---
 
@@ -301,14 +303,14 @@ Behöver du mer hjälp? Hör av dig till **[hello@datomer.eu](mailto:hello@datom
 | **Installera** | Mac: dra till Program. Windows: kör installationsprogrammet |
 | **Installation** | 4 skärmar, ~2 minuter |
 | **Modell** | Ett klick, engångsnedladdning |
-| **Fungerar offline** | Alltid, efter installationen |
-| **Din data** | Stannar på din dator. Punkt. |
-| **Hjälp** | [hello@datomer.eu](mailto:hello@datomer.eu) |
+| **Fungerar offline** | Lokal chatt efter installationen; internetanslutna tjänster kräver internet |
+| **Din data** | Sparas lokalt; du väljer vad du delar via anslutna tjänster eller export |
+| **Hjälp** | [par@datomer.eu](mailto:par@datomer.eu) |
 
 ---
 
 <p align="center">
   <img src="/get-started/par-logo.webp" alt="Pär" width="48" height="48" style="border-radius: 12px; vertical-align: middle; margin-right: 8px;" />
   <br/>
-  <em>Pär — av Datomer AB. Utvecklat inom EU med privacy-by-design, konstruerat för fullständig datasuveränitet och offline-driftsäkerhet.</em>
+  <em>Pär — av Datomer AB. Utvecklat inom EU för lokal AI och tydligare val om din information.</em>
 </p>

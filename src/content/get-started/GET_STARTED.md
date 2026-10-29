@@ -6,7 +6,7 @@
 
 **Your AI. Your device. Your data.**
 
-Pär is a private AI companion that lives on your own computer. No cloud. No tracking. Nothing leaves your machine.
+Pär runs locally on your device, without a central Pär server for your conversations or personal context. You choose whether to use web search or connected services, which may send information to their providers.
 
 You'll be chatting in about **10 minutes** — most of that is just waiting for a download.
 
@@ -14,12 +14,14 @@ You'll be chatting in about **10 minutes** — most of that is just waiting for 
 
 ## What can you do with Pär?
 
-Pär is designed to feel simple, helpful, and completely private from day one. Here is what you can do across the app:
+Ask questions, explore ideas and draft replies with local AI. Features depend on your plan, setup and version; conversation history between sessions requires Plus or higher. Here is a guide to the app:
+
+Financial-assessment and confidential contract-review workflows are in development, not dependable features of the current beta. You review the results and decide what happens next.
 
 ### 1. 💬 Chat — More than just conversation
 - **Pin your favorite answers & chats** — Star important replies or pin entire conversations to the top of your list so you never lose them.
 - **Switch speaking tones** — Match your mood or goal with one click: pick *Friendly*, *Professional*, *Concise*, *Persuasive*, or *Executive*.
-- **Live web search** — Turn on web search when you need up-to-the-minute news, sports scores, or facts. When you don't, Pär stays 100% offline.
+- **Live web search** — Choose web search when you need current information. Search requests go to external providers. Local chat can work offline after setup; web search and connected services need an internet connection.
 - **Attach documents & notes** — Drag in notes or PDFs and ask questions directly about what is inside them.
 - **Smart memory** — Pär remembers your name, goals, and style across sessions, so you don't have to explain yourself every time.
 
@@ -45,9 +47,9 @@ Pär is designed to feel simple, helpful, and completely private from day one. H
   <img src="/get-started/tasks-screen.webp" alt="Pär Tasks Screen — Action Items and To-Dos" width="100%" style="border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
 </p>
 
-### 4. 🔗 Integrations — Connect your tools securely
+### 4. 🔗 Integrations — Choose which tools to connect
 - **Bring your world together** — Connect popular tools like Google Calendar, Gmail, Notion, Todoist, and more.
-- **Everything stays on your device** — Your connections and passwords stay locked safely on your own computer. Nothing is sent to our servers.
+- **Connect on your terms** — Review each service’s permissions before connecting it. Requests and information needed to use that service may be sent to its provider.
 - **Context-aware help** — Ask questions like *"What do I have scheduled today?"* or *"Summarize my recent unread emails"* without jumping between ten different apps.
 
 ---
@@ -61,7 +63,7 @@ Pär is designed to feel simple, helpful, and completely private from day one. H
 | A Mac with Apple Silicon (M1, M2, M3, M4…) | Pär uses your Mac's chip to think |
 | macOS 11 (Big Sur) or newer | Click  → *About This Mac* to check |
 | ~10 GB free disk space | For the app and your AI model |
-| Wi-Fi — **just for setup** | After this, Pär works offline forever |
+| Internet access for setup and online features | Local chat can work offline once the app and a model are installed |
 
 > **Not sure which Mac you have?** Click the Apple logo  → *About This Mac*. If it says "Apple M1/M2/M3/M4", you're good.
 
@@ -72,7 +74,7 @@ Pär is designed to feel simple, helpful, and completely private from day one. H
 | A 64-bit PC running Windows 10 (21H2) or Windows 11 | Pär uses your PC's processor to think |
 | Microsoft Visual C++ 2015–2022 Redistributable (64-bit) | Needed by the part of Pär that runs your AI model. It's a free download from Microsoft |
 | ~10 GB free disk space | For the app and your AI model |
-| Wi-Fi — **just for setup** | After this, Pär works offline forever |
+| Internet access for setup and online features | Local chat can work offline once the app and a model are installed |
 
 > **Windows support is in beta.** Expect a few extra security prompts the first time you install and launch Pär — the steps below walk you through each one.
 
@@ -121,11 +123,11 @@ Open **Pär** — from **Launchpad** or your Applications folder on a Mac, or fr
 </p>
 
 **1 · Welcome**
-A quick promise: zero telemetry, 100% on-device processing, and fully encrypted storage. Click **Continue →**
+Pär uses local AI models and an encrypted local vault. Optional online services have their own permissions and privacy policies. Click **Continue →**
 
 **2 · Tell Pär about you**
 Your name, language, country, and — optionally — what you're working toward.
-*This is how Pär makes answers feel like yours. It never leaves your computer.* Click **Continue →**
+*This helps Pär tailor answers to you. Your profile is saved locally. Review what you share when using connected services.* Click **Continue →**
 
 **3 · Choose your AI model** ← *the important one, see below*
 
@@ -209,14 +211,14 @@ You'll see *"Activated — welcome to Pär…"* and your new badge appears insta
 Pär was designed from day one with a simple principle: **your data stays yours**.
 
 ### 1. Private Mode (On Your Computer)
-By default, Pär runs entirely inside your own computer. The AI brain runs on your Apple Silicon chip or your PC's processor, and every message, memory, and setting is saved in an encrypted vault on your machine, protected by your computer's security. Nothing goes to any cloud or external company server.
+Pär’s local AI models run on your computer. Saved conversations and personal context are stored in an encrypted local vault, not on a central Pär server. Local chat can work offline after setup. If you choose web search or connected services, information needed for those requests may be sent to their providers. Review permissions before sharing confidential information.
 
 ![Pär Private Mode Architecture](/get-started/par-private-mode.svg)
 
 ### 2. Home Hub Mode (On Your Phone or Tablet)
-When you turn on **Home Hub**, your computer acts as a private, secure server for your home. Your phone or tablet connects directly to it over your local home Wi-Fi network using a single-use 6-digit PIN or QR code. 
+When you turn on **Home Hub**, your computer runs Pär for your paired devices at home. Your phone or tablet connects directly to it over your local home Wi-Fi network using a single-use 6-digit PIN or QR code.
 - **Your computer does all the heavy thinking:** The AI models never leave it.
-- **Your phone is a window, not a storage drive:** No cloud intermediary is used, and no data is shared outside your house.
+- **Your phone connects to your computer:** Home Hub uses your local network rather than a central Pär server. Optional web search and connected services can still send information to their providers.
 - **Family privacy:** In Pär Pro, each family member gets their own private conversation history and memory that others cannot see.
 
 ![Pär Home Hub Architecture](/get-started/par-home-hub-mode.svg)
@@ -254,18 +256,18 @@ Once paired, the device remains connected until you disconnect it from the Home 
 - **iPhone (Safari)**: Tap the Share button (square with arrow pointing up) → tap **Add to Home Screen**.
 - **Android (Chrome)**: Tap the three dots menu ⋮ → tap **Install app** or **Add to Home screen**.
 
-Pär launches full-screen just like a native app, while all AI thinking and encryption stay safely on your own computer!
+Pär opens full-screen on your phone or tablet. Your paired computer runs the local AI models and holds the encrypted vault.
 
 ---
 
 ## Where your stuff lives
 
-Everything Pär knows about you sits in one hidden folder on your computer — encrypted, yours, and deletable at any time:
+Pär’s local vault is stored in a hidden folder on your computer:
 
 - **Mac**: `~/.peer/`
 - **Windows**: `%USERPROFILE%\.peer\`
 
-Nothing is uploaded. Nothing is analysed. There is no "server" that has your conversations, because there is no server.
+Pär does not upload this vault to a central Pär server. If you choose web search, connected services or exports, information you share may leave your device. Review the destination, permissions and privacy policy first. Encryption helps protect stored information; keep your device and backups protected too.
 
 ---
 
@@ -281,7 +283,7 @@ Nothing is uploaded. Nothing is analysed. There is no "server" that has your con
 | Setup can't save your profile (Windows) | Quit Pär, open **Task Manager** and end any leftover Pär processes, then start Pär again and give it a minute |
 | Ran out of disk space | Go to **Models** and delete a model you don't use |
 
-Still stuck or need a hand? Reach out to **[hello@datomer.eu](mailto:hello@datomer.eu)**.
+Still stuck or need a hand? Reach out to **[par@datomer.eu](mailto:par@datomer.eu)**.
 
 ---
 
@@ -298,14 +300,14 @@ Still stuck or need a hand? Reach out to **[hello@datomer.eu](mailto:hello@datom
 | **Install** | Mac: drag to Applications. Windows: run the installer |
 | **Setup** | 4 screens, ~2 minutes |
 | **Model** | One click, one-time download |
-| **Works offline** | Always, after setup |
-| **Your data** | Stays on your computer. Full stop. |
-| **Help** | [hello@datomer.eu](mailto:hello@datomer.eu) |
+| **Works offline** | Local chat after setup; online services need internet access |
+| **Your data** | Saved locally; you choose what to share through connected services or exports |
+| **Help** | [par@datomer.eu](mailto:par@datomer.eu) |
 
 ---
 
 <p align="center">
   <img src="/get-started/par-logo.webp" alt="Pär" width="48" height="48" style="border-radius: 12px; vertical-align: middle; margin-right: 8px;" />
   <br/>
-  <em>Pär — by Datomer AB. Built in the EU with privacy-by-design, engineered for complete data sovereignty and offline reliability.</em>
+  <em>Pär — by Datomer AB. Built in the EU for local AI and clearer choices about your information.</em>
 </p>

@@ -27,16 +27,18 @@ export const translations = {
       badge: 'Private by Design',
       variantBadge: 'Built for Repeat Users',
       headline: 'Your AI. On Your Device.',
+      workTitle: 'Get confidential work done. On your device.',
       lede:
-        'Ask questions, explore ideas, and draft replies with an AI model on your own Mac. Choose when to use web search or connected services. Features depend on your plan and setup.',
+        'Ask questions, explore ideas and draft replies with local AI. We’re building Pär to help you work through sensitive financial information and confidential contracts—without uploading your documents to a central Pär server.',
+      workflowNote: 'Financial-assessment and contract-review workflows are in development. You review the results and decide what happens next.',
       downloadMac: 'Download for Mac',
       seeHowItWorks: 'See How It Works',
       setupGuide: 'Beta Download & Setup Guide',
     },
     highlights: {
-      localInference: { title: 'Local Inference', text: 'Runs on your device using GGUF or Ollama models.' },
-      encryptedVault: { title: 'Encrypted Vault', text: 'SQLCipher AES-256 encryption keeps your data safe.' },
-      ownTheKeys: { title: 'You Own The Keys', text: 'Your memory, files, and profile stay under your control.' },
+      localInference: { title: 'AI On Your Device', text: 'Work with local AI models without sending your questions to a central Pär server.' },
+      encryptedVault: { title: 'Protected Local Storage', text: 'Encryption helps protect information saved in Pär’s local vault.' },
+      ownTheKeys: { title: 'Your Choice To Connect', text: 'Choose which supported services to connect and review their permissions before sharing information.' },
     },
     features: {
       persistentMemory: { title: 'Find Earlier Conversations', badge: 'Plus+', text: 'Keep conversation history encrypted on your device. Find past conversations by meaning, not just exact words.' },
@@ -47,46 +49,40 @@ export const translations = {
       routines: { title: 'Repeat Everyday Tasks', badge: 'Plus+', text: 'Save recurring tasks, such as a morning brief or weekly review, and choose when they run.' },
       semanticCache: { title: 'Reuse Earlier Answers', badge: 'Plus+', text: 'Reuse saved answers to repeated questions instead of asking the model to generate them again.' },
       portability: { title: 'Take Your Data With You', badge: 'Plus+', text: 'Export and import your data with Plus, Pro, or Enterprise. Check the options in your version before moving to another device.' },
-      homeHub: { title: 'Connect Nearby Devices', badge: 'Plus+', text: 'Use your Mac as a hub on local Wi-Fi. Connect a phone or tablet with a PIN or QR code. Check the setup guide for requirements.' },
+      homeHub: { title: 'Connect Nearby Devices', badge: 'Plus+', text: 'Use your computer as a hub on local Wi-Fi. Connect a phone or tablet with a PIN or QR code. Check the setup guide for requirements.' },
     },
     privacyHome: {
       eyebrow: 'Privacy Is Not A Feature',
       headline: 'It Is The Foundation.',
       text:
-        'Pär runs entirely on your device using local models. Your memory, files, and profile live in an encrypted vault on your device. No silent cloud sync. No training on your data.',
+        'Pär runs locally on your device, not on a central Pär server. Your saved conversations and personal context are stored in an encrypted local vault. You choose whether to use web search or connected services, which may send information to their providers.',
       features: [
-        'Native GGUF support + optional Ollama integration',
-        'SQLCipher AES-256 encrypted vault with native vector store',
-        'Personal context stripped for any optional cloud backend',
-        'App lock with PIN and optional TOTP MFA',
-        'Backup integrity verification',
+        'Use local AI models on your device',
+        'Save information in an encrypted local vault',
+        'Review permissions before using connected services',
+        'Lock the app with a PIN and an optional extra verification code',
+        'Check backups for damage before using them',
       ],
       pillars: {
-        localInference: 'Local Inference',
-        encryptedVault: 'Encrypted Vault',
-        ownTheKeys: 'You Own The Keys',
+        localInference: 'AI On Your Device',
+        encryptedVault: 'Protected Local Storage',
+        ownTheKeys: 'Your Choice To Connect',
       },
     },
     deployments: {
       eyebrow: 'Choose Where It Runs',
-      headline: 'One Brand, One License, Multiple Deployment Options.',
-      subtitle: 'Pick The Privacy Level That Fits Your Hardware.',
+      headline: 'Local AI. Choose Your Device.',
+      subtitle: 'Check Compatibility And Setup Requirements Before Downloading.',
       available: 'Available now',
-      comingSoon: 'Coming soon',
       desktop: {
         title: 'Pär Desktop',
-        text: 'macOS app with on-device models and a local vault in ~/.peer/. Everything stays on your Mac.',
+        text: 'A desktop beta for Macs with Apple chips, M1 or newer. Local models run on your device. Optional connected services use the internet.',
         best: 'Best For Mac Users',
       },
       windows: {
         title: 'Pär for Windows',
         text: 'A desktop beta for 64-bit Windows PCs with Intel or AMD processors. Not for Windows on ARM. Check the download list and setup guide for requirements.',
         best: 'For Windows Users',
-      },
-      cloud: {
-        title: 'Pär Cloud',
-        text: 'We host the model; your personal data stays on your device. PII is redacted by default.',
-        best: 'Best For Users Without Local GPUs',
       },
     },
     language: {
@@ -118,7 +114,8 @@ export const translations = {
     },
     pricing: {
       eyebrow: 'Simple, Transparent Pricing',
-      headline: 'Start Free. Upgrade When You Want Pär To Remember Everything.',
+      headline: 'Start Free. Pick Up Where You Left Off With Plus.',
+      historyNote: 'Plus and higher plans include conversation history between sessions. Check the plan details for features and limits.',
       billing: { monthly: 'Monthly', yearly: 'Yearly' },
       free: {
         name: 'Free',
@@ -216,7 +213,7 @@ export const translations = {
       headline: 'Questions People Ask Before They Get Started.',
       q1: 'Does Pär send my data to the cloud?',
       a1:
-        'No. Pär processes your prompts and data locally on your device and stores your memory, files, and profile in an encrypted vault. Optional cloud backends only receive information stripped of personally identifiable details.',
+        'Pär uses local models to process your questions on your device. It does not use a central Pär server to store your conversations or personal context. If you choose web search or connected services, information needed for those requests may be sent to their providers.',
       q2: 'What models can I use?',
       a2:
         'Pär supports GGUF models natively and can connect to Ollama. You can bring your own models or use recommended local models for chat, code, vision, and reasoning.',
@@ -231,11 +228,11 @@ export const translations = {
         'Pär is one brand with one license and multiple deployment options. Start free, upgrade to Plus for persistent memory, or choose Pro / Enterprise for teams and advanced controls.',
       q6: 'Can I use Pär on my phone or tablet?',
       a6:
-        'Yes. With Pär Home Hub enabled on your Mac, your phone or tablet connects over your local Wi-Fi via a 6-digit PIN or QR code. Install it as a standalone app to chat on the go — all AI thinking stays on your Mac.',
+        'With a supported plan and Home Hub enabled on your computer, you can pair a phone or tablet over the same local Wi-Fi using a PIN or QR code. Your computer runs the local AI models. Optional web search and connected services may send information to their providers. See the setup guide for requirements.',
     },
     cta: {
       eyebrow: 'Ready To Meet Pär?',
-      headline: 'Download The Free Beta For macOS And Keep Your AI Entirely On Your Device.',
+      headline: 'Start With Local AI On Your Device.',
       downloadMac: 'Download for Mac',
       waitlistPlaceholder: 'Enter your email',
       joinWaitlist: 'Join Waitlist',
@@ -289,7 +286,7 @@ export const translations = {
         'Download Pär for your computer and start chatting privately in about 10 minutes. Most of that is just waiting for a download.',
       downloadOptions: 'Choose your download',
       readyTitle: 'Ready To Try Pär?',
-      readyText: 'Download the free beta and keep your AI entirely on your device.',
+      readyText: 'Try local AI on your device. Choose a compatible beta download and follow the setup guide.',
     },
     footer: {
       managedBy: 'Pär is a product of Datomer AB',
@@ -327,7 +324,7 @@ export const translations = {
     about: {
       title: 'About Pär',
       intro:
-        'Pär is the local-first personal AI companion built by Datomer AB. Our mission is to give people an AI that actually remembers them, runs on their own hardware, and keeps their data under their control.',
+        'Pär is a personal AI assistant built by Datomer AB. It runs locally on your device, without a central Pär server for your conversations or personal context. We build it to help you think, create and continue your work—with clear choices about your information and connected services.',
       mission:
         'We believe the future of AI is private. That means your conversations, files, and context should live in an encrypted vault on your device, not on someone else\'s server.',
       companyTitle: 'Company Details',
@@ -357,7 +354,7 @@ export const translations = {
       brandMaterialsText: 'Use these assets when covering Pär or Datomer. The SVG logo scales to any size; the PNGs are high-resolution and ready for print.',
       aboutProduct: 'About The Product',
       aboutProductText:
-        'Pär is the personal AI companion that actually remembers you. It learns your goals, connects to your tools, and runs entirely on your own hardware. No cloud required.',
+        'Pär is a local personal AI application from Datomer AB, being built to help with confidential work, including financial assessments and contract review. Local models run on your device, with no central Pär server storing your conversations or documents. These workflows are in development; features depend on your plan, device and setup. Online services may receive information when you choose to use them.',
       companyDetails: 'Company Details',
       facts: {
         company: 'Company',
@@ -369,7 +366,7 @@ export const translations = {
         product: 'Product',
         productValue: 'Pär — private, local-first AI companion',
         platform: 'Platform',
-        platformValue: 'macOS beta; Windows, Linux, and Web coming soon',
+        platformValue: 'Mac and Windows beta downloads are available. An older Linux build is also listed; check its version and requirements. Pär Web is not yet available.',
         pricing: 'Pricing',
         pricingValue: 'Free; Plus $2/mo or $24/yr; Pro $10/user/mo or $120/user/yr; Enterprise custom',
       },
@@ -390,7 +387,7 @@ export const translations = {
       whatTitle: '2. What Data We Process',
       what: {
         app: 'App Data',
-        appText: 'Pär stores your conversations, files, and personal information in an encrypted local vault on your device. We do not have access to this data.',
+        appText: 'Pär stores saved conversations and personal context in an encrypted local vault on your device, not on a central Pär server. If you use optional web search or connected services, information needed for those requests may be sent to the selected providers. Review their permissions and privacy policies before sharing sensitive information.',
         website: 'Website Data',
         websiteText: 'Our websites, datomer.eu and par.datomer.eu, use standard server logs to operate securely. With your analytics consent, we record website sessions, page paths and public campaign labels to understand visits and form results. We do not use this to identify first-ever visitors or track activity inside the Pär app. You can withdraw analytics consent through Cookie settings.',
         waitlist: 'Waitlist & Email',
@@ -473,16 +470,18 @@ export const translations = {
       badge: 'Privat Från Grunden',
       variantBadge: 'Byggt För Återkommande Användare',
       headline: 'Din AI. På Din Enhet.',
+      workTitle: 'Få konfidentiellt arbete gjort. På din enhet.',
       lede:
-        'Ställ frågor, bolla idéer och skriv utkast med en AI-modell på din egen Mac. Välj när du vill använda webbsökning eller anslutna tjänster. Funktioner beror på abonnemang och inställningar.',
+        'Ställ frågor, bolla idéer och skriv utkast med lokal AI. Vi bygger Pär för att hjälpa dig att arbeta med känslig ekonomisk information och konfidentiella avtal—utan att ladda upp dina dokument till en central Pär-server.',
+      workflowNote: 'Arbetsflöden för ekonomiska bedömningar och avtalsgranskning är under utveckling. Du granskar resultaten och bestämmer nästa steg.',
       downloadMac: 'Ladda ner för Mac',
       seeHowItWorks: 'Se hur det fungerar',
       setupGuide: 'Beta-Nedladdning & Installationsguide',
     },
     highlights: {
-      localInference: { title: 'Lokal Inferens', text: 'Körs på din enhet med GGUF- eller Ollama-modeller.' },
-      encryptedVault: { title: 'Krypterat Valv', text: 'SQLCipher AES-256-kryptering håller dina data säkra.' },
-      ownTheKeys: { title: 'Du Äger Nycklarna', text: 'Ditt minne, dina filer och din profil förblir under din kontroll.' },
+      localInference: { title: 'AI På Din Enhet', text: 'Arbeta med lokala AI-modeller utan att skicka dina frågor till en central Pär-server.' },
+      encryptedVault: { title: 'Skyddad Lokal Lagring', text: 'Kryptering hjälper till att skydda information som sparas i Pärs lokala valv.' },
+      ownTheKeys: { title: 'Du Väljer Vad Du Ansluter', text: 'Välj bland tjänster som stöds och granska deras behörigheter innan du ansluter dem och delar information.' },
     },
     features: {
       persistentMemory: { title: 'Hitta Tidigare Samtal', badge: 'Plus+', text: 'Spara samtalshistoriken krypterat på din enhet. Hitta tidigare samtal efter innebörd, inte bara exakta ord.' },
@@ -493,35 +492,34 @@ export const translations = {
       routines: { title: 'Upprepa Vardagens Uppgifter', badge: 'Plus+', text: 'Spara återkommande uppgifter, som en morgonöversikt eller veckogenomgång, och välj när de ska köras.' },
       semanticCache: { title: 'Återanvänd Tidigare Svar', badge: 'Plus+', text: 'Återanvänd sparade svar på återkommande frågor i stället för att be modellen skapa dem igen.' },
       portability: { title: 'Ta Med Dig Dina Data', badge: 'Plus+', text: 'Exportera och importera dina data med Plus, Pro eller Enterprise. Kontrollera alternativen i din version innan du byter enhet.' },
-      homeHub: { title: 'Anslut Enheter I Närheten', badge: 'Plus+', text: 'Använd din Mac som en hubb på lokalt Wi-Fi. Anslut en mobil eller surfplatta med PIN eller QR-kod. Läs om kraven i installationsguiden.' },
+      homeHub: { title: 'Anslut Enheter I Närheten', badge: 'Plus+', text: 'Använd din dator som en hubb på lokalt Wi-Fi. Anslut en mobil eller surfplatta med PIN eller QR-kod. Läs om kraven i installationsguiden.' },
     },
     privacyHome: {
       eyebrow: 'Integritet Är Inte En Funktion',
       headline: 'Det Är Grunden.',
       text:
-        'Pär kör inferens på din enhet med lokala modeller. Ditt minne, dina filer och din profil lever i ett krypterat valv på din dator. Ingen tyst molnsynkronisering. Ingen träning på dina data.',
+        'Pär körs lokalt på din enhet, inte på en central Pär-server. Dina sparade samtal och ditt personliga sammanhang lagras i ett krypterat lokalt valv. Du väljer om du vill använda webbsökning eller anslutna tjänster, som kan skicka information till sina leverantörer.',
       features: [
-        'Inbyggt GGUF-stöd + valfri Ollama-integration',
-        'SQLCipher AES-256-krypterat valv med inbyggd vektorlagring',
-        'Personlig kontext rensas för valfritt molnbaserat backend',
-        'Applås med PIN och valfri TOTP-MFA',
-        'Verifiering av backupintegritet',
+        'Använd lokala AI-modeller på din enhet',
+        'Spara information i ett krypterat lokalt valv',
+        'Granska behörigheter innan du använder anslutna tjänster',
+        'Lås appen med PIN och en valfri extra verifieringskod',
+        'Kontrollera säkerhetskopior för skador innan de används',
       ],
       pillars: {
-        localInference: 'Lokal Inferens',
-        encryptedVault: 'Krypterat Valv',
-        ownTheKeys: 'Du Äger Nycklarna',
+        localInference: 'AI På Din Enhet',
+        encryptedVault: 'Skyddad Lokal Lagring',
+        ownTheKeys: 'Du Väljer Vad Du Ansluter',
       },
     },
     deployments: {
       eyebrow: 'Välj Var Det Körs',
-      headline: 'Ett Varumärke, En Licens, Flera Distributionsalternativ.',
-      subtitle: 'Välj Den Integritetsnivå Som Passar Din Hårdvara.',
+      headline: 'Lokal AI. Välj Din Enhet.',
+      subtitle: 'Kontrollera Kompatibilitet Och Installationskrav Före Nedladdning.',
       available: 'Tillgänglig nu',
-      comingSoon: 'Kommer snart',
       desktop: {
         title: 'Pär Desktop',
-        text: 'macOS-app med lokala modeller och ett lokalt valv i ~/.peer/. Allt stannar på din Mac.',
+        text: 'En skrivbordsbeta för Mac med Apple-chip, M1 eller senare. Lokala modeller körs på din enhet. Valfria anslutna tjänster använder internet.',
         best: 'Bäst För Mac-Användare',
       },
       windows: {
@@ -529,15 +527,11 @@ export const translations = {
         text: 'En skrivbordsbeta för 64-bitars Windows-datorer med Intel- eller AMD-processor. Inte för Windows på ARM. Läs om kraven i nedladdningslistan och installationsguiden.',
         best: 'För Windows-Användare',
       },
-      cloud: {
-        title: 'Pär Cloud',
-        text: 'Vi hostar modellen; din personliga kontext stannar på din enhet. PII-redigerat som standard.',
-        best: 'Bäst För Användare Utan Lokala GPU:er',
-      },
     },
     pricing: {
       eyebrow: 'Enkel, Transparent Prissättning',
-      headline: 'Börja Gratis. Uppgradera När Du Vill Att Pär Ska Komma Ihåg Allt.',
+      headline: 'Börja Gratis. Fortsätt Där Du Slutade Med Plus.',
+      historyNote: 'Plus och högre abonnemang inkluderar samtalshistorik mellan sessioner. Läs abonnemangsdetaljerna för funktioner och begränsningar.',
       billing: { monthly: 'Månadsvis', yearly: 'Årsvis' },
       free: {
         name: 'Gratis',
@@ -635,7 +629,7 @@ export const translations = {
       headline: 'Frågor Folk Ställer Innan De Kommer Igång.',
       q1: 'Skickar Pär mina data till molnet?',
       a1:
-        'Nej. Pär behandlar dina frågor och data lokalt på din enhet och lagrar ditt minne, filer och profil i ett krypterat valv. Valfria molnbaserade backend får endast information utan personliga identifierare.',
+        'Pär använder lokala modeller för att behandla dina frågor på din enhet. Ingen central Pär-server lagrar dina samtal eller ditt personliga sammanhang. Om du väljer webbsökning eller anslutna tjänster kan information som behövs för förfrågningarna skickas till deras leverantörer.',
       q2: 'Vilka modeller kan jag använda?',
       a2:
         'Pär stöder GGUF-modeller direkt och kan ansluta till Ollama. Du kan använda egna modeller eller rekommenderade lokala modeller för chatt, kod, bild och resonemang.',
@@ -650,11 +644,11 @@ export const translations = {
         'Pär är ett varumärke med en licens och flera distributionsalternativ. Börja gratis, uppgradera till Plus för bestående minne, eller välj Pro / Enterprise för team och avancerad kontroll.',
       q6: 'Kan jag använda Pär på min telefon eller surfplatta?',
       a6:
-        'Ja. Med Pär Home Hub aktiverat på din Mac ansluter din telefon eller surfplatta via ditt lokala Wi-Fi med en 6-siffrig PIN eller QR-kod. Installera den som en fristående app — all AI-beräkning stannar på din Mac.',
+        'Med ett abonnemang som stöds och Home Hub aktiverat på din dator kan du koppla en mobil eller surfplatta via samma lokala Wi-Fi med PIN eller QR-kod. Din dator kör de lokala AI-modellerna. Valfri webbsökning och anslutna tjänster kan skicka information till sina leverantörer. Läs om kraven i installationsguiden.',
     },
     cta: {
       eyebrow: 'Redo Att Träffa Pär?',
-      headline: 'Ladda Ner Den Kostnadsfria Betaversionen För macOS Och Behåll Din AI Helt På Din Enhet.',
+      headline: 'Börja Med Lokal AI På Din Enhet.',
       downloadMac: 'Ladda ner för Mac',
       waitlistPlaceholder: 'Ange din e-post',
       joinWaitlist: 'Gå med i väntelistan',
@@ -708,7 +702,7 @@ export const translations = {
         'Ladda ner Pär till din dator och börja chatta privat på cirka 10 minuter. Det mesta av tiden går åt till att vänta på nedladdningen.',
       downloadOptions: 'Välj nedladdning',
       readyTitle: 'Redo Att Testa Pär?',
-      readyText: 'Ladda ner den kostnadsfria betaversionen och behåll din AI helt på din enhet.',
+      readyText: 'Prova lokal AI på din enhet. Välj en kompatibel betaversion och följ installationsguiden.',
     },
     footer: {
       managedBy: 'Pär är en produkt från Datomer AB',
@@ -773,7 +767,7 @@ export const translations = {
     about: {
       title: 'Om Pär',
       intro:
-        'Pär är den lokala personliga AI-kompisen byggd av Datomer AB. Vår mission är att ge människor en AI som faktiskt kommer ihåg dem, körs på deras egen hårdvara och håller deras data under deras kontroll.',
+        'Pär är en personlig AI-assistent byggd av Datomer AB. Den körs lokalt på din enhet, utan en central Pär-server för dina samtal eller ditt personliga sammanhang. Vi bygger den för att hjälpa dig att tänka, skapa och fortsätta ditt arbete—med tydliga val om din information och anslutna tjänster.',
       mission:
         'Vi tror att framtiden för AI är privat. Det betyder att dina konversationer, filer och kontext ska leva i ett krypterat valv på din enhet, inte på någon annans server.',
       companyTitle: 'Företagsuppgifter',
@@ -803,7 +797,7 @@ export const translations = {
       brandMaterialsText: 'Använd dessa tillgångar när du skriver om Pär eller Datomer. SVG-logotypen skalas till valfri storlek; PNG-filerna är högupplösta och redo för tryck.',
       aboutProduct: 'Om produkten',
       aboutProductText:
-        'Pär är den personliga AI-kompisen som faktiskt kommer ihåg dig. Den lär sig dina mål, kopplar ihop sig med dina verktyg och körs helt på din egen hårdvara. Inget moln behövs.',
+        'Pär är en lokal personlig AI-applikation från Datomer AB som utvecklas för att hjälpa till med konfidentiellt arbete, som ekonomiska bedömningar och avtalsgranskning. Lokala modeller körs på din enhet, utan en central Pär-server som lagrar dina samtal eller dokument. Arbetsflödena är under utveckling; funktioner beror på abonnemang, enhet och inställningar. Internetanslutna tjänster kan ta emot information när du väljer att använda dem.',
       companyDetails: 'Företagsuppgifter',
       facts: {
         company: 'Företag',
@@ -815,7 +809,7 @@ export const translations = {
         product: 'Produkt',
         productValue: 'Pär — privat, lokal-först AI-kompis',
         platform: 'Plattform',
-        platformValue: 'macOS-beta; Windows, Linux och Web kommer snart',
+        platformValue: 'Betaversioner för Mac och Windows finns att ladda ner. En äldre Linux-version finns också; kontrollera version och krav. Pär Web är ännu inte tillgängligt.',
         pricing: 'Prissättning',
         pricingValue: 'Gratis; Plus 20 kr/mån eller 240 kr/år; Pro 100 kr/användare/mån eller 1 200 kr/år; Företag enligt offert',
       },
@@ -836,7 +830,7 @@ export const translations = {
       whatTitle: '2. Vilka Personuppgifter Behandlar Vi',
       what: {
         app: 'Appdata',
-        appText: 'Pär lagrar dina konversationer, filer och personliga kontext i ett krypterat lokalt valv på din enhet. Vi har inte tillgång till dessa data.',
+        appText: 'Pär lagrar sparade samtal och personligt sammanhang i ett krypterat lokalt valv på din enhet, inte på en central Pär-server. Om du använder valfri webbsökning eller anslutna tjänster kan information som behövs för förfrågningarna skickas till de valda leverantörerna. Granska deras behörigheter och integritetspolicyer innan du delar känslig information.',
         website: 'Webbplatsdata',
         websiteText: 'Våra webbplatser, datomer.eu och par.datomer.eu, använder vanliga serverloggar för säker drift. Med ditt samtycke till analys registrerar vi webbplatssessioner, sidornas sökvägar och offentliga kampanjkoder för att förstå besök och formulärresultat. Vi använder inte detta för att identifiera förstagångsbesökare eller spåra aktivitet i Pär-appen. Du kan återkalla samtycket till analys via Cookieinställningar.',
         waitlist: 'Väntelista/E-post',

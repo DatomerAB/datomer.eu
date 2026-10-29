@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/useLanguage.js'
 import { useLocalizedHeading } from '../lib/formatHeading.js'
+import { CONTACT_EMAILS } from '../lib/site.js'
 
 export function PressPage() {
   const { t } = useLanguage()
@@ -62,7 +63,7 @@ export function PressPage() {
           <p>
             <Link to="/contact?topic=press">{t('press.contactForm')}</Link>
             {' · '}
-            <a href="mailto:hello@datomer.eu">hello@datomer.eu</a>
+            <a href={`mailto:${CONTACT_EMAILS.product}`}>{CONTACT_EMAILS.product}</a>
           </p>
         </section>
       </main>

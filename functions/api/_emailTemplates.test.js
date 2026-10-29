@@ -32,10 +32,10 @@ describe('email templates', () => {
     expect(header.getAttribute('width')).toBe('80')
     expect(header.getAttribute('height')).toBe('80')
     expect(email.site).toBe(site)
-    const address = site === 'company' ? 'hello@datomer.eu' : 'Par@datomer.eu'
+    const address = site === 'company' ? 'hello@datomer.eu' : 'par@datomer.eu'
     expect(email.html).toContain(`href="mailto:${address}"`)
     expect(email.text).toContain(address)
-    expect(email.text).not.toContain(site === 'company' ? 'Par@datomer.eu' : 'hello@datomer.eu')
+    expect(email.text).not.toContain(site === 'company' ? 'par@datomer.eu' : 'hello@datomer.eu')
   })
   it('uses the approved Datomer logo in every shared email while preserving the Par header', () => {
     const contact = { name: 'Brand Tester', email: 'brand@example.com', message: 'Brand preview' }
