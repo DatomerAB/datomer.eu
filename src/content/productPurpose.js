@@ -4,9 +4,9 @@ export const productPurpose = {
     betaNotice: 'Pär is in beta. Features may change, and answers can be wrong. Check important information.',
     purposeLink: 'Our purpose and what we’re working on',
     visionTitle: 'Our vision',
-    vision: 'A future where AI helps people do more without giving up their privacy or control of their information.',
+    vision: 'A world where personal AI empowers human potential without requiring the surrender of privacy or data ownership.',
     missionTitle: 'Our mission',
-    mission: 'Build an AI assistant that helps you use your notes, files, and earlier conversations, while keeping you in control of your information.',
+    mission: 'Pär builds private, context-aware AI that seamlessly remembers what matters—enabling people to think, create, and work entirely on their own terms.',
     objectivesTitle: 'What we’re working toward',
     objectives: [
       'Help you pick up where you left off, with less starting over.',
@@ -37,9 +37,9 @@ export const productPurpose = {
     betaNotice: 'Pär är i beta. Funktioner kan ändras och svar kan vara felaktiga. Kontrollera viktig information.',
     purposeLink: 'Vårt syfte och det vi arbetar med',
     visionTitle: 'Vår vision',
-    vision: 'En framtid där AI hjälper människor att göra mer utan att ge upp sin integritet eller kontrollen över sin information.',
+    vision: 'En värld där personlig AI stärker människors möjligheter utan att de behöver ge upp sin integritet eller ägandet av sina data.',
     missionTitle: 'Vårt uppdrag',
-    mission: 'Bygga en AI-assistent som hjälper dig att använda dina anteckningar, filer och tidigare samtal, samtidigt som du behåller kontrollen över din information.',
+    mission: 'Pär bygger privat AI som förstår ditt sammanhang och smidigt minns det som är viktigt — så att du kan tänka, skapa och arbeta helt på dina egna villkor.',
     objectivesTitle: 'Det vi arbetar för',
     objectives: [
       'Hjälpa dig att fortsätta där du slutade, utan att börja om lika ofta.',

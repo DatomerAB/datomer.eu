@@ -21,8 +21,8 @@ describe('homepage rendering without browser globals', () => {
     expect(html).not.toContain('<meta ')
     expect(html).not.toContain('rel="canonical"')
     if (origin === 'https://par.datomer.eu') expect(html).toContain('<title>Pär</title>')
-    expect(html).toContain(origin === 'https://datomer.eu'
-      ? 'href="https://par.datomer.eu/' : 'href="https://datomer.eu"')
+    const otherOrigin = origin === 'https://datomer.eu' ? 'https://par.datomer.eu' : 'https://datomer.eu'
+    expect(html).toContain(`href="${otherOrigin}/${language === 'sv' ? '?lang=sv' : ''}"`)
   })
 
   it('does not make network requests or leak one render into another', () => {

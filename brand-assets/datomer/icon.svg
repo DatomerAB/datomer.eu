@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny-ps" width="512" height="512" viewBox="0 0 512 512">
+  <title>Datomer</title>
+  <desc>The red O from the Datomer wordmark, with two white dots on a white background.</desc>
+  <rect width="512" height="512" fill="#ffffff"/>
+  <circle cx="256" cy="256" r="228" fill="#e32743"/>
+  <circle cx="159" cy="256" r="40" fill="#ffffff"/>
+  <circle cx="353" cy="256" r="40" fill="#ffffff"/>
+</svg>

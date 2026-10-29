@@ -2,6 +2,7 @@ import { COMPANY_URL, PRODUCT_URL, PRODUCT_PATHS, siteForUrl } from './site.js'
 import { companyMeta, companyCanonicalPath } from './companyMeta.js'
 import { PRODUCT_DESCRIPTIONS, PRODUCT_TITLES, COMPANY_FACTS } from './seoMeta.js'
 import { campaigns } from '../content/campaigns.js'
+import { purposePage } from '../content/purposePage.js'
 
 const SITE_URL = PRODUCT_URL
 const DEFAULT_TITLE = PRODUCT_TITLES.en
@@ -21,6 +22,10 @@ function metaForRoute(pathname, searchParams, site = 'product') {
   const basePath = pathname === '' ? '/' : pathname
 
   const routes = {
+    '/purpose': Object.fromEntries(ENABLED_LANGUAGES.map(language => [language, {
+      title: purposePage[language].title,
+      description: purposePage[language].description,
+    }])),
     '/': {
       en: { title: PRODUCT_TITLES.en, description: PRODUCT_DESCRIPTIONS.en },
       sv: { title: PRODUCT_TITLES.sv, description: PRODUCT_DESCRIPTIONS.sv },
@@ -295,7 +300,7 @@ export function getSiteMetadata(url, language) {
       : 'index, follow, max-image-preview:large, max-snippet:-1',
     siteName: site === 'company' ? 'Datomer AB' : 'Pär by Datomer',
     image: `${siteUrl}/${site === 'company' ? 'og-image-datomer.png' : 'og-image-aurora.png'}`,
-    icon: site === 'company' ? '/datomer-logo.png?v=20261010' : '/par-logo.png',
+    icon: site === 'company' ? '/datomer-icon.png?v=20261029' : '/par-logo.png',
     locale: meta.lang === 'sv' ? 'sv_SE' : 'en_US',
     alternates: alternateLinks(meta.pathname, siteUrl),
     structuredData: [organizationData(), ...(site === 'product' ? [softwareData(meta.lang)] : [])],

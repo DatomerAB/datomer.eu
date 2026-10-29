@@ -13,6 +13,22 @@ function Wrapper({ children, initialEntries = ['/'] }) {
 }
 
 describe('App renders without raw translation keys', () => {
+  it.each(['en', 'sv'])('links header and footer brands to the correct homepages in %s', lang => {
+    vi.stubGlobal('localStorage', { getItem: vi.fn(() => null), setItem: vi.fn() })
+    vi.stubGlobal('location', { origin: 'https://par.datomer.eu' })
+    globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false }))
+    render(<App />, { wrapper: ({ children }) => <Wrapper initialEntries={[`/about?lang=${lang}`]}>{children}</Wrapper> })
+    const home = lang === 'sv' ? '/?lang=sv' : '/'
+    const productLinks = screen.getAllByRole('link', { name: 'Pär home' })
+    expect(productLinks).toHaveLength(2)
+    for (const link of productLinks) expect(link).toHaveAttribute('href', home)
+    expect(screen.getByRole('link', { name: 'Datomer AB' })).toHaveAttribute('href', `https://datomer.eu${home}`)
+    fireEvent.click(productLinks[1])
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(lang === 'sv'
+      ? 'Din AI. På Din Enhet.' : 'Your AI. On your device.')
+    vi.unstubAllGlobals()
+  })
+
   it('keeps the selected Windows installer through the existing download form', async () => {
     vi.stubGlobal('localStorage', { getItem: vi.fn(() => null), setItem: vi.fn(), removeItem: vi.fn() })
     const url = 'https://github.com/DatomerAB/par-releases/releases/download/v1.0.0-beta.10/Par-cpu.exe'

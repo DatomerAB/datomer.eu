@@ -28,6 +28,8 @@ import { campaigns } from './content/campaigns.js'
 import { CampaignPage } from './pages/CampaignPage.jsx'
 import { ProductPreview } from './components/ProductPreview.jsx'
 import { featureGroups, productOverview } from './content/productOverview.js'
+import { purposePage } from './content/purposePage.js'
+import { PurposePage } from './pages/PurposePage.jsx'
 
 const COMPANY = {
   name: 'Datomer AB',
@@ -150,14 +152,14 @@ function DatomerLogo() {
 }
 
 function TopBar({ onDownload }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const location = useLocation()
   const isHome = location.pathname === '/'
 
   return (
     <header className="topbar">
       <nav className="nav container" aria-label="Main navigation">
-        <Link to="/" className="par-brand" aria-label="Pär home">
+        <Link to={lang === 'sv' ? '/?lang=sv' : '/'} className="par-brand" aria-label="Pär home">
           <img
             src="/par-logo.png"
             alt=""
@@ -202,23 +204,25 @@ function TopBar({ onDownload }) {
 }
 
 function Footer() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const url = useSiteUrl()
+  const home = lang === 'sv' ? '/?lang=sv' : '/'
 
   return (
     <footer className="footer">
       <div className="container footer-inner">
         <div className="footer-main">
           <div className="footer-brand-group">
-            <div className="footer-brand">
+            <Link to={home} className="footer-brand" aria-label="Pär home">
               <ParLogo />
               <span>Pär</span>
-            </div>
+            </Link>
             <p className="footer-tagline">{t('footer.managedBy')}</p>
           </div>
 
           <nav className="footer-links" aria-label="Site and legal links">
             <Link to="/about">{t('nav.about')}</Link>
+            <Link to={`/purpose${lang === 'sv' ? '?lang=sv' : ''}`}>{purposePage[lang].nav}</Link>
             <Link to="/press">{t('nav.press')}</Link>
             <Link to="/contact">{t('nav.contact')}</Link>
             <Link to="/blog">{t('nav.blog')}</Link>
@@ -230,7 +234,7 @@ function Footer() {
           </nav>
 
           <div className="footer-company" aria-label="Datomer company details">
-            <a href={siteLinks(url).company} aria-label="Datomer AB">
+            <a href={`${siteLinks(url).company}${home}`} aria-label="Datomer AB">
               <DatomerLogo />
             </a>
           </div>
@@ -674,6 +678,7 @@ function AboutPage() {
       <h1>{formatHeading(t('about.title'))}</h1>
       <p>{t('about.intro')}</p>
       <p>{t('about.mission')}</p>
+      <p><Link to={`/purpose${suffix}`}>{purposePage[lang].nav} →</Link></p>
       <section>
         <h2>{purpose.visionTitle}</h2><p>{purpose.vision}</p>
         <h2>{purpose.missionTitle}</h2><p>{purpose.mission}</p>
@@ -1007,6 +1012,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage onDownload={openDownload} downloadCatalog={downloadCatalog} />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/purpose" element={<PurposePage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/get-started" element={<GetStartedPage downloadCatalog={downloadCatalog} onDownload={openDownload} />} />
         <Route path="/blog" element={<BlogPage />} />

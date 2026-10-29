@@ -100,6 +100,41 @@ describe('contact handler', () => {
     expect(data).toEqual({ ok: true })
   })
 
+  it.each([
+    ['datomer.eu', 'Datomer AB <hello@datomer.eu>', 'datomer.eu/datomer-icon.png?v=20261029'],
+    ['par.datomer.eu', 'Pär by Datomer <Par@datomer.eu>', 'par.datomer.eu/par-logo.png'],
+  ])('uses the trusted %s host to select both sender and email icon', async (host, from, icon) => {
+    const request = new Request(`https://${host}/api/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Test', email: 'test@example.com', message: 'Hello',
+        site: host === 'datomer.eu' ? 'product' : 'company',
+        turnstileToken: 'token',
+      }),
+    })
+    await onRequestPost({
+      request,
+      env: {
+        RESEND_API_KEY: 're_test',
+        RESEND_COMPANY_FROM_EMAIL: 'hello@datomer.eu',
+        RESEND_PRODUCT_FROM_EMAIL: 'Par@datomer.eu',
+        RESEND_COMPANY_TO_EMAIL: 'hello@datomer.eu',
+        RESEND_PRODUCT_TO_EMAIL: 'Par@datomer.eu',
+      },
+    })
+    expect(fetchSpy).toHaveBeenCalledTimes(2)
+    for (const [index, [, options]] of fetchSpy.mock.calls.entries()) {
+      const email = JSON.parse(options.body)
+      expect(email.from).toBe(from)
+      expect(email.to).toEqual([index === 0
+        ? host === 'datomer.eu' ? 'hello@datomer.eu' : 'Par@datomer.eu'
+        : 'test@example.com'])
+      const document = new DOMParser().parseFromString(email.html, 'text/html')
+      expect(document.querySelector('img').getAttribute('src')).toBe(`https://${icon}`)
+    }
+  })
+
   it('rejects missing fields', async () => {
     const request = new Request('http://localhost/api/contact', {
       method: 'POST',

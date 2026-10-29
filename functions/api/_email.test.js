@@ -54,6 +54,51 @@ describe('sendSupportEmail', () => {
     expect(body.to).toEqual(['customer@example.com'])
   })
 
+  it.each([
+    ['company', 'Datomer AB <hello@datomer.eu>'],
+    ['product', 'Pär by Datomer <Par@datomer.eu>'],
+  ])('selects the configured %s sender without changing the other brand', async (site, expected) => {
+    await sendSupportEmail({
+      env: {
+        RESEND_API_KEY: 're_test',
+        RESEND_FROM_EMAIL: 'legacy@example.com',
+        RESEND_FROM_NAME: 'Legacy sender',
+        RESEND_COMPANY_FROM_EMAIL: 'hello@datomer.eu',
+        RESEND_PRODUCT_FROM_EMAIL: 'Par@datomer.eu',
+      },
+      site,
+      subject: 'Test',
+      html: '<p>Test</p>',
+      text: 'Test',
+    })
+    expect(JSON.parse(fetchSpy.mock.calls[0][1].body).from).toBe(expected)
+  })
+
+  it('preserves the existing sender until a site-specific sender is configured', async () => {
+    await sendSupportEmail({
+      env: { RESEND_API_KEY: 're_test', RESEND_FROM_EMAIL: 'legacy@example.com', RESEND_FROM_NAME: 'Legacy sender' },
+      site: 'company',
+      subject: 'Test',
+      html: '<p>Test</p>',
+      text: 'Test',
+    })
+    expect(JSON.parse(fetchSpy.mock.calls[0][1].body).from).toBe('Legacy sender <legacy@example.com>')
+  })
+
+  it('allows a site-specific display name', async () => {
+    await sendSupportEmail({
+      env: {
+        RESEND_API_KEY: 're_test',
+        RESEND_PRODUCT_FROM_EMAIL: 'Par@datomer.eu',
+        RESEND_PRODUCT_FROM_NAME: 'Pär',
+      },
+      subject: 'Test',
+      html: '<p>Test</p>',
+      text: 'Test',
+    })
+    expect(JSON.parse(fetchSpy.mock.calls[0][1].body).from).toBe('Pär <Par@datomer.eu>')
+  })
+
   it('returns sent: false when RESEND_API_KEY is missing', async () => {
     const result = await sendSupportEmail({
       env: {},

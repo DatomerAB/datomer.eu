@@ -18,6 +18,20 @@ function renderCompany(path = '/') {
 }
 
 describe('company website', () => {
+  it.each(['en', 'sv'])('links each logo to its own homepage in %s', lang => {
+    renderCompany(`/?lang=${lang}`)
+    const suffix = lang === 'sv' ? '?lang=sv' : ''
+    for (const image of document.querySelectorAll('img[src*="logo"]')) {
+      const link = image.closest('a')
+      expect(link).not.toBeNull()
+      expect(link.getAttribute('href')).toBe(image.src.includes('datomer-logo')
+        ? `/${suffix}` : `http://127.0.0.1:5174/${suffix}`)
+    }
+    fireEvent.click(screen.getAllByRole('link', { name: 'Datomer AB' })[0])
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(lang === 'sv'
+      ? 'Gör din data användbar.' : 'Put your data to work.')
+  })
+
   it('shows all six services, mission, vision, values, product and approved LinkedIn links', () => {
     renderCompany()
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Put your data to work.')

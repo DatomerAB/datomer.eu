@@ -36,7 +36,7 @@ function siteFetcher(origin, site, overrides = {}) {
 describe('host-owned IndexNow submissions', () => {
   it.each([
     ['https://datomer.eu', 'company', 10],
-    ['https://par.datomer.eu', 'product', 20],
+    ['https://par.datomer.eu', 'product', 22],
   ])('submits only canonical public URLs for %s', async (origin, site, count) => {
     const fetch = siteFetcher(origin, site)
     const result = await submitSite(origin, site, KEY, COMMIT, { fetch })
@@ -50,6 +50,10 @@ describe('host-owned IndexNow submissions', () => {
     expect(payload.urlList.every(url => new URL(url).origin === origin)).toBe(true)
     expect(payload.urlList.some(url => /payment-success|\/beta|utm_|session_id/.test(url))).toBe(false)
     expect(payload.urlList).toContain(`${origin}/?lang=sv`)
+    if (site === 'product') {
+      expect(payload.urlList).toContain(`${origin}/purpose`)
+      expect(payload.urlList).toContain(`${origin}/purpose?lang=sv`)
+    }
   })
 
   it.each([
