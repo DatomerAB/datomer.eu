@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { hasLinkedInChoice, isLinkedInEnabled, loadLinkedIn, setLinkedInConsent, trackLinkedInConversion } from './linkedin.js'
 
 describe('LinkedIn website measurement', () => {
@@ -37,6 +39,19 @@ describe('LinkedIn website measurement', () => {
       vi.stubEnv('VITE_LINKEDIN_PARTNER_ID', id)
       expect(isLinkedInEnabled()).toBe(false)
     }
+  })
+
+  it('wires the approved production partner ID through the consent-gated loader', () => {
+    const config = readFileSync(resolve(process.cwd(), '.env.production'), 'utf8')
+    const partnerId = config.match(/^VITE_LINKEDIN_PARTNER_ID=(\d+)$/m)?.[1]
+    expect(partnerId).toBe('11209233')
+    vi.stubEnv('VITE_LINKEDIN_PARTNER_ID', partnerId)
+    loadLinkedIn()
+    expect(document.getElementById('linkedin-insight-tag')).toBeNull()
+    setLinkedInConsent(true)
+    expect(window._linkedin_partner_id).toBe('11209233')
+    expect(window._linkedin_data_partner_ids).toEqual(['11209233'])
+    expect(document.querySelectorAll('#linkedin-insight-tag')).toHaveLength(1)
   })
 
   it('does not load or queue conversions before explicit marketing consent', () => {
