@@ -52,11 +52,28 @@ describe('sendSupportEmail', () => {
     const [, options] = fetchSpy.mock.calls[0]
     const body = JSON.parse(options.body)
     expect(body.to).toEqual(['customer@example.com'])
+    expect(body.from).toBe('Pär by Datomer <par@datomer.eu>')
+  })
+
+  it.each([
+    ['company', 'hello@datomer.eu', 'Datomer AB'],
+    ['product', 'par@datomer.eu', 'Pär by Datomer'],
+  ])('defaults %s sender and enquiries to its own mailbox', async (site, email, name) => {
+    await sendSupportEmail({
+      env: { RESEND_API_KEY: 're_test' },
+      site,
+      subject: 'Test',
+      html: '<p>Test</p>',
+      text: 'Test',
+    })
+    const body = JSON.parse(fetchSpy.mock.calls[0][1].body)
+    expect(body.from).toBe(`${name} <${email}>`)
+    expect(body.to).toEqual([email])
   })
 
   it.each([
     ['company', 'Datomer AB <hello@datomer.eu>'],
-    ['product', 'Pär by Datomer <Par@datomer.eu>'],
+    ['product', 'Pär by Datomer <par@datomer.eu>'],
   ])('selects the configured %s sender without changing the other brand', async (site, expected) => {
     await sendSupportEmail({
       env: {
@@ -64,7 +81,7 @@ describe('sendSupportEmail', () => {
         RESEND_FROM_EMAIL: 'legacy@example.com',
         RESEND_FROM_NAME: 'Legacy sender',
         RESEND_COMPANY_FROM_EMAIL: 'hello@datomer.eu',
-        RESEND_PRODUCT_FROM_EMAIL: 'Par@datomer.eu',
+        RESEND_PRODUCT_FROM_EMAIL: 'par@datomer.eu',
       },
       site,
       subject: 'Test',
@@ -89,14 +106,14 @@ describe('sendSupportEmail', () => {
     await sendSupportEmail({
       env: {
         RESEND_API_KEY: 're_test',
-        RESEND_PRODUCT_FROM_EMAIL: 'Par@datomer.eu',
+        RESEND_PRODUCT_FROM_EMAIL: 'par@datomer.eu',
         RESEND_PRODUCT_FROM_NAME: 'Pär',
       },
       subject: 'Test',
       html: '<p>Test</p>',
       text: 'Test',
     })
-    expect(JSON.parse(fetchSpy.mock.calls[0][1].body).from).toBe('Pär <Par@datomer.eu>')
+    expect(JSON.parse(fetchSpy.mock.calls[0][1].body).from).toBe('Pär <par@datomer.eu>')
   })
 
   it('returns sent: false when RESEND_API_KEY is missing', async () => {

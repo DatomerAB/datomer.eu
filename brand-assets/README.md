@@ -36,7 +36,7 @@ the footer. Remote-image blocking by recipients can still hide these images.
 The visible From domain, authentication and recipient mail provider determine
 inbox branding; the website URL or HTML logo cannot set the inbox avatar.
 The approved addresses are `hello@datomer.eu` for company enquiries and
-`Par@datomer.eu` for products, both for sending and receiving enquiries.
+`par@datomer.eu` for products, both for sending and receiving enquiries.
 Both use the same domain: two local parts on the same domain do not reliably
 provide different default BIMI logos. Separate profile avatars may be set where
 the provider supports them, but distinct inbox logos cannot be promised with
@@ -52,7 +52,7 @@ alignment or delivery. Recheck DNS before activation.
 1. Inventory all legitimate senders (including Zoho and Resend). Verify
    `datomer.eu` in Resend and publish the exact SPF/DKIM records it provides.
    Do not replace existing SPF blindly or add multiple SPF records at one name.
-2. Confirm `Par@datomer.eu` and `hello@datomer.eu` can receive mail in Zoho or
+2. Confirm `par@datomer.eu` and `hello@datomer.eu` can receive mail in Zoho or
    forward to a monitored inbox. Sending-domain verification does not create mailboxes.
 3. The Pages `wrangler.toml` prepares these settings in production and preview.
    Verify sending and receiving before deploying this configuration; do not
@@ -61,7 +61,7 @@ alignment or delivery. Recheck DNS before activation.
    | Brand | From binding | Enquiry recipient binding | Address |
    | --- | --- | --- | --- |
    | Datomer | `RESEND_COMPANY_FROM_EMAIL` | `RESEND_COMPANY_TO_EMAIL` | `hello@datomer.eu` |
-   | Pär | `RESEND_PRODUCT_FROM_EMAIL` | `RESEND_PRODUCT_TO_EMAIL` | `Par@datomer.eu` |
+   | Pär | `RESEND_PRODUCT_FROM_EMAIL` | `RESEND_PRODUCT_TO_EMAIL` | `par@datomer.eu` |
 
    Default names for site-specific addresses are `Datomer AB` and `Pär by Datomer`.
    Optional `RESEND_COMPANY_FROM_NAME` / `RESEND_PRODUCT_FROM_NAME` override them.
@@ -70,8 +70,9 @@ alignment or delivery. Recheck DNS before activation.
    confirmations carry company context; product contact, download, waitlist,
    payment and existing daily-summary messages use product context.
    Explicit customer recipients and support Reply-To addresses are preserved.
-   The independent daily-summary Worker retains its existing configuration;
-   it needs its own bindings if its sender is changed.
+   The independent daily-summary Worker now prepares `par@datomer.eu` as its
+   sender, while its internal recipient remains `dailysummary@datomer.eu`.
+   Deploy it separately from Pages to activate the sender change.
 4. Test delivery and inspect received SPF/DKIM/DMARC results using controlled
    inboxes. Start DMARC monitoring and resolve alignment problems for every
    legitimate sender before enforcing policy. Do not publish an untested reject

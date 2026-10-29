@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" height="100%" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <title>Pär Home Hub Architecture</title>
-  <desc>Simple diagram showing how mobile companion devices securely connect to your Mac over local Wi-Fi without cloud.</desc>
+  <desc>Home Hub connects paired devices to your computer over local Wi-Fi. Optional online services may send information to their providers.</desc>
   <defs>
     <linearGradient id="macGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#f8fafc" />
@@ -17,7 +17,7 @@
 
   <!-- Title -->
   <text x="40" y="40" font-size="20" font-weight="700" fill="#0f172a">Pär Home Hub (Local Mobile Companion)</text>
-  <text x="40" y="64" font-size="14" fill="#64748b">Your phone connects to your Mac over home Wi-Fi. All thinking and data remain on your Mac.</text>
+  <text x="40" y="64" font-size="14" fill="#64748b">Your phone connects over home Wi-Fi. Your computer runs the local AI models.</text>
 
   <!-- Left: Your Mac Box (Hub Server) -->
   <rect x="40" y="94" width="340" height="260" rx="16" fill="url(#macGrad2)" stroke="#0284c7" stroke-width="2" filter="url(#shadow2)" />
@@ -25,7 +25,7 @@
   <circle cx="62" cy="113" r="5" fill="#ef4444" />
   <circle cx="78" cy="113" r="5" fill="#f59e0b" />
   <circle cx="94" cy="113" r="5" fill="#10b981" />
-  <text x="210" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#0369a1">💻 Your Mac (Pär Home Hub)</text>
+  <text x="210" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#0369a1">💻 Your Computer (Pär Home Hub)</text>
 
   <!-- Sub-box Mac Brain -->
   <rect x="65" y="150" width="135" height="150" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" />
@@ -43,7 +43,7 @@
   <text x="287" y="260" text-anchor="middle" font-size="11" fill="#64748b">Per-member</text>
   <text x="287" y="276" text-anchor="middle" font-size="11" fill="#64748b">private storage</text>
 
-  <text x="210" y="332" text-anchor="middle" font-size="12" font-weight="600" fill="#0369a1">⚡ All thinking &amp; data stay on your Mac</text>
+  <text x="210" y="332" text-anchor="middle" font-size="12" font-weight="600" fill="#0369a1">Local AI models &amp; encrypted vault</text>
 
   <!-- Middle: Local Wi-Fi Network Connection -->
   <path d="M 390 224 L 540 224" stroke="url(#wifiGrad)" stroke-width="3" stroke-linecap="round" />
@@ -75,8 +75,8 @@
   <!-- Blocked Cloud -->
   <line x1="380" y1="380" x2="420" y2="380" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4" />
   <text x="440" y="384" font-size="16">☁️</text>
-  <text x="465" y="384" font-size="12" font-weight="700" fill="#dc2626">✕ Cloud bypassed</text>
-  <text x="590" y="384" font-size="12" fill="#64748b">— Zero internet data transfer between your devices</text>
+  <text x="465" y="384" font-size="12" font-weight="700" fill="#dc2626">No central Pär server</text>
+  <text x="40" y="373" font-size="12" fill="#64748b">Optional online services may send information to their providers.</text>
 
   <!-- Tier Limits Footnote -->
   <text x="40" y="405" font-size="12" font-weight="600" fill="#0369a1">Plan capacity:</text>

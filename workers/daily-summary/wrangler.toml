@@ -23,9 +23,9 @@ database_id = "65c67ab8-ca9e-4777-9b38-97989c73a7f8"
 crons = ["0 6 * * *"]
 
 [env.production.vars]
-RESEND_FROM_EMAIL = "hello@datomer.eu"
+RESEND_FROM_EMAIL = "par@datomer.eu"
 RESEND_FROM_NAME = "Pär by Datomer"
-CONTACT_TO_EMAIL = "hello@datomer.eu"
+CONTACT_TO_EMAIL = "par@datomer.eu"
 DAILY_SUMMARY_TO_EMAIL = "dailysummary@datomer.eu"
 ENVIRONMENT = "production"
 
@@ -39,8 +39,8 @@ database_id = "7a83e626-0984-47bb-9235-cd65c6806813"
 crons = ["0 6 * * *"]
 
 [env.preview.vars]
-RESEND_FROM_EMAIL = "hello@datomer.eu"
+RESEND_FROM_EMAIL = "par@datomer.eu"
 RESEND_FROM_NAME = "Pär by Datomer"
-CONTACT_TO_EMAIL = "hello@datomer.eu"
+CONTACT_TO_EMAIL = "par@datomer.eu"
 DAILY_SUMMARY_TO_EMAIL = "dailysummary@datomer.eu"
 ENVIRONMENT = "preview"

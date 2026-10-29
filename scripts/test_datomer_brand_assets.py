@@ -4,6 +4,7 @@ import base64
 import importlib.util
 from pathlib import Path
 from xml.etree import ElementTree
+from zipfile import ZipFile
 
 from PIL import Image
 
@@ -71,3 +72,17 @@ def test_press_kit_svg_contains_the_same_approved_artwork(tmp_path):
     assert generator.copy_asset('datomer-logo.svg', str(target))
     image = ElementTree.parse(target).getroot().find('{http://www.w3.org/2000/svg}image')
     assert base64.b64decode(image.attrib['href'].split(',', 1)[1]) == APPROVED.read_bytes()
+
+
+def test_downloadable_press_factsheet_matches_current_copy_and_contacts():
+    generator = load_script('generate-press-kit')
+    with ZipFile(generator.ZIP_PATH) as archive:
+        content = archive.read('README.md').decode('utf-8')
+    date = content.splitlines()[2].removeprefix('Generated: ')
+    assert content == generator.FACTSHEET.format(date=date, themes=', '.join(generator.THEMES))
+    assert content == (Path(generator.KIT_DIR) / 'README.md').read_text(encoding='utf-8')
+    assert 'Financial-assessment and confidential contract-review workflows are in development' in content
+    assert 'Optional online services may send information to their providers' in content
+    assert '**Pär enquiries:** par@datomer.eu' in content
+    assert '**General Datomer enquiries:** hello@datomer.eu' in content
+    assert 'Windows/Linux/Web coming soon' not in content

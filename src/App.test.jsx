@@ -57,7 +57,7 @@ describe('App renders without raw translation keys', () => {
     render(<App />, { wrapper: Wrapper })
     const highlights = within(screen.getByLabelText('Core promises'))
 
-    for (const title of ['Local Inference', 'Encrypted Vault', 'You Own the Keys']) {
+    for (const title of ['AI on Your Device', 'Protected Local Storage', 'Your Choice to Connect']) {
       const highlight = highlights.getByText(title).closest('.hero-highlight')
       expect(highlight).not.toBeNull()
       expect(highlight.querySelector('.icon svg')).not.toBeNull()

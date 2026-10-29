@@ -6,8 +6,8 @@ describe('homepage rendering without browser globals', () => {
   it.each([
     ['https://datomer.eu', 'en', 'Put your data to work.', 'Data governance'],
     ['https://datomer.eu', 'sv', 'Gör din data användbar.', 'Datastyrning'],
-    ['https://par.datomer.eu', 'en', 'Pär', 'Local Inference'],
-    ['https://par.datomer.eu', 'sv', 'Pär', 'Lokal Inferens'],
+    ['https://par.datomer.eu', 'en', 'Pär', 'AI on Your Device'],
+    ['https://par.datomer.eu', 'sv', 'Pär', 'AI På Din Enhet'],
   ])('renders existing %s/%s content in HTML', (origin, language, headline, text) => {
     const html = renderHomepage(origin, language)
     expect(html).toContain(headline)

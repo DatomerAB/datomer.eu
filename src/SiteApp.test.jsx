@@ -19,6 +19,27 @@ function renderSite(address) {
 }
 
 describe('site entry routing', () => {
+  it.each(['en', 'sv'])('uses the right contact address across both sites in %s', lang => {
+    renderSite(`https://par.datomer.eu/contact?lang=${lang}`)
+    expect(screen.getByRole('link', { name: 'par@datomer.eu' })).toHaveAttribute('href', 'mailto:par@datomer.eu')
+    expect(screen.queryByRole('link', { name: 'hello@datomer.eu' })).not.toBeInTheDocument()
+  })
+
+  it.each([
+    ['datomer.eu', '/', 'hello@datomer.eu'],
+    ['datomer.eu', '/contact', 'hello@datomer.eu'],
+    ['datomer.eu', '/privacy', 'hello@datomer.eu'],
+    ['par.datomer.eu', '/privacy', 'par@datomer.eu'],
+    ['par.datomer.eu', '/about', 'par@datomer.eu'],
+    ['par.datomer.eu', '/press', 'par@datomer.eu'],
+    ['par.datomer.eu', '/get-started', 'par@datomer.eu'],
+  ])('keeps %s%s enquiries at %s', (host, path, email) => {
+    renderSite(`https://${host}${path}`)
+    const links = [...document.querySelectorAll('a[href^="mailto:"]')]
+    expect(links.length).toBeGreaterThan(0)
+    for (const link of links) expect(link).toHaveAttribute('href', `mailto:${email}`)
+  })
+
   it('renders the company site on datomer.eu with governance and correct metadata', async () => {
     renderSite('https://datomer.eu/')
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Put your data to work.')
@@ -30,7 +51,7 @@ describe('site entry routing', () => {
 
   it('retains the product homepage and makes beta requirements clear', async () => {
     renderSite('https://par.datomer.eu/')
-    expect(screen.getAllByText('Local Inference')[0]).toBeVisible()
+    expect(screen.getAllByText('AI on Your Device')[0]).toBeVisible()
     for (const notice of screen.getAllByText(/Not for Intel Macs/)) expect(notice).toBeVisible()
     expect(screen.queryByRole('heading', { name: 'Data governance' })).not.toBeInTheDocument()
     await waitFor(() => expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute('href', 'https://par.datomer.eu/'))
@@ -41,7 +62,7 @@ describe('site entry routing', () => {
     expect(screen.getByRole('heading', { name: 'Our vision' })).toBeVisible()
     expect(screen.getByText('In development — not a promise of availability')).toBeVisible()
     expect(screen.getByText(/not a list of features included in every plan/)).toBeVisible()
-    expect(screen.getByText(/still needs testing in the installed app/)).toBeVisible()
+    expect(screen.getByText(/still need testing in the installed app/)).toBeVisible()
   })
 
   it('preserves Swedish purpose and development qualifications', () => {

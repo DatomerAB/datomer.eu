@@ -161,4 +161,8 @@ The `/models` page is kept in sync with the canonical model catalog in the priva
 
 ## Environment and branding
 
-Public `ENVIRONMENT` and `RESEND_FROM_NAME` variables ensure the site knows whether it is running in `preview` or `production`, and every email is sent as `Pär by Datomer <hello@datomer.eu>`.
+Public `ENVIRONMENT` variables distinguish `preview` from `production`. Site-specific
+sender and enquiry-recipient bindings route Pär mail through `par@datomer.eu` and
+general Datomer mail through `hello@datomer.eu`, with matching brand display names.
+Explicit customer recipients are preserved. See [DEPLOYMENT.md](DEPLOYMENT.md) for
+mailbox/Resend verification and the independently deployed daily-summary Worker.

@@ -254,7 +254,7 @@ export function softwareData(lang = 'en') {
     '@type': 'SoftwareApplication',
     name: 'Pär',
     applicationCategory: 'ProductivityApplication',
-    operatingSystem: 'macOS',
+    operatingSystem: 'macOS, Windows',
     offers: {
       '@type': 'Offer',
       price: '0',

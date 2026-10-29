@@ -45,7 +45,7 @@ describe('company website', () => {
     expect(screen.getByRole('link', { name: 'Connect on LinkedIn ↗' })).toHaveAttribute('href', 'https://www.linkedin.com/in/jayceee')
     expect(screen.getByRole('link', { name: 'Explore Pär →' }).href).toMatch(/:5174\/$/)
     expect(document.title).toBe(companyContent.en.title)
-    expect(screen.queryByText('Local Inference')).not.toBeInTheDocument()
+    expect(screen.queryByText('AI on Your Device')).not.toBeInTheDocument()
   })
 
   it('supports Swedish and retains the company site when navigating to contact', () => {

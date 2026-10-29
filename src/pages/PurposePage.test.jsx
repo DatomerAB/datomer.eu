@@ -19,6 +19,7 @@ describe('Pär purpose page', () => {
     fireEvent.click(screen.getByRole('link', { name: `${purposePage[lang].nav} →` }))
     const main = within(screen.getByRole('main'))
     expect(main.getByRole('heading', { level: 1, name: purposePage[lang].heading })).toBeVisible()
+    expect(main.getByText(purposePage[lang].intro)).toBeVisible()
     const belief = main.getByRole('region', { name: purposePage[lang].beliefTitle })
     expect(within(belief).getByText(purposePage[lang].belief)).toBeVisible()
     expect(main.getByText(productPurpose[lang].vision)).toBeVisible()
