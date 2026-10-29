@@ -488,17 +488,32 @@ allows visitors to reopen settings. Revoking loaded LinkedIn tracking reloads
 the page without the tag. Third-party cookies already set may require browser
 removal; previously received data is not erased by withdrawing website consent.
 
-To activate after local review:
+The owner-supplied public Partner ID `11209233` is configured in
+`.env.production`. Vite includes it in production builds; normal local development
+and test builds do not load this file. The runtime host restriction still prevents
+the tag from loading on company and Pages preview domains. Cloudflare build
+environment variables take precedence, so remove stale Partner ID overrides or
+set them to the same value.
 
-1. Obtain the Partner ID from the correct LinkedIn Campaign Manager account.
+The script loads only after explicit LinkedIn consent. The supplied unconditional
+`noscript` pixel is deliberately omitted because it would bypass that choice.
+The Partner ID is not a download conversion ID; download conversion measurement
+remains inactive until its separate event-specific ID is configured.
+
+To complete activation after local review:
+
+1. Confirm Partner ID `11209233` belongs to the intended Campaign Manager account.
 2. Create one **event-specific** website conversion associated with that tag:
    **Beta download request**. Copy its conversion ID.
    Do not add URL rules that also count the same form action.
 3. Configure these public, build-time Vite variables in Cloudflare Pages:
    - `VITE_LINKEDIN_PARTNER_ID`
    - `VITE_LINKEDIN_DOWNLOAD_CONVERSION_ID`
-   Leave them unset to keep the integration inactive. IDs must be positive
-   numeric strings. Changes require a fresh frontend build/deployment.
+   The Partner ID already defaults to `11209233` through `.env.production`.
+   Leave the conversion ID unset until the conversion is created. To disable the
+   integration, set the Partner ID to an empty value in the build environment
+   or remove it from `.env.production`. IDs must be positive numeric strings.
+   Changes require a fresh frontend build/deployment.
 4. Review the English/Swedish consent and policy wording, LinkedIn terms,
    retention and international-transfer details with the privacy owner.
    Do not enable enhanced conversions, automatic form collection or additional
