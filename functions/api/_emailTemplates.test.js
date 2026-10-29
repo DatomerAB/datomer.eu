@@ -14,12 +14,28 @@ describe('email templates', () => {
   it.each(['en', 'sv'])('keeps company enquiries separate from product emails in %s', locale => {
     const contact = { name: 'Test User', email: 'test@example.com', message: 'Data strategy', site: 'company', locale }
     for (const email of [buildContactSupportEmail(contact), buildContactConfirmationEmail(contact)]) {
+      expect(email.site).toBe('company')
       expect(email.subject).toContain('Datomer AB')
       expect(email.html).toContain('href="https://datomer.eu"')
       expect(email.html).toContain('href="https://par.datomer.eu"')
       expect(email.text).toContain('https://datomer.eu')
       expect(email.text).toContain('https://par.datomer.eu')
     }
+  })
+  it.each(['company', 'product'])('uses the %s site favicon as the email header icon', site => {
+    const email = buildContactConfirmationEmail({ name: 'Test', message: 'Hello', site })
+    const document = new DOMParser().parseFromString(email.html, 'text/html')
+    const header = document.querySelector('img')
+    expect(header.getAttribute('src')).toBe(site === 'company'
+      ? 'https://datomer.eu/datomer-icon.png?v=20261029'
+      : 'https://par.datomer.eu/par-logo.png')
+    expect(header.getAttribute('width')).toBe('80')
+    expect(header.getAttribute('height')).toBe('80')
+    expect(email.site).toBe(site)
+    const address = site === 'company' ? 'hello@datomer.eu' : 'Par@datomer.eu'
+    expect(email.html).toContain(`href="mailto:${address}"`)
+    expect(email.text).toContain(address)
+    expect(email.text).not.toContain(site === 'company' ? 'Par@datomer.eu' : 'hello@datomer.eu')
   })
   it('uses the approved Datomer logo in every shared email while preserving the Par header', () => {
     const contact = { name: 'Brand Tester', email: 'brand@example.com', message: 'Brand preview' }

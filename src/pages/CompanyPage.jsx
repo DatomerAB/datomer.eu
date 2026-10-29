@@ -67,7 +67,7 @@ export function CompanyPage() {
           <article key={title}><h3>{title}</h3><p>{text}</p></article>)}</div>
       </section>
       <section className="container company-product">
-        <img src="/par-logo.png" width="80" height="80" alt="Pär" />
+        <a href={product} aria-label="Pär"><img src="/par-logo.png" width="80" height="80" alt="Pär" /></a>
         <div><p className="eyebrow">{c.productEyebrow}</p><h2>{c.productTitle}</h2><p>{c.productText}</p>
           <a className="button button-primary" href={product}>{c.productCta} →</a></div>
       </section>

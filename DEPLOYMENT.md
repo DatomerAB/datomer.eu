@@ -232,6 +232,36 @@ edited. Follow-up upstream corrections require separate linked PRs.
 
 ## Campaign landing pages
 
+The product-only `/purpose` page ("Our purpose" / "Vårt syfte") presents Pär's
+vision, mission and supplied product/continuity objectives. About and the
+product footer link to it. Objectives are directional, not current-feature or
+release promises; optional-online-service qualifications remain visible.
+Current availability and development details remain on About, linked from the
+purpose page rather than repeated there. Metadata and sitemap entries cover EN/SV; company-host requests
+redirect to the product host using the shared product-route rules.
+
+### Site favicons and email identities
+
+Website brand logos link to their respective homepages, including the product
+logo in the company product panel and both footer brands. Homepage destinations
+retain EN/SV selection and use the existing local-port routing during previews.
+
+Company routes use the red-O icon at `/datomer-icon.png?v=20261029`; product
+routes retain the Pär logo. Email content uses the matching site icon.
+Reproducible favicon/avatar exports and source artwork are kept in
+[`brand-assets/`](brand-assets/README.md), together with sender activation steps.
+Optional `RESEND_COMPANY_FROM_EMAIL` / `RESEND_COMPANY_FROM_NAME` and
+`RESEND_PRODUCT_FROM_EMAIL` / `RESEND_PRODUCT_FROM_NAME` bindings allow separate
+verified senders without changing existing delivery when unset. Pages configuration
+prepares `hello@datomer.eu` for company mail and `Par@datomer.eu` for product mail.
+Matching `RESEND_COMPANY_TO_EMAIL` / `RESEND_PRODUCT_TO_EMAIL` bindings route
+enquiry notifications to their respective inboxes without changing explicit
+customer recipients. Confirm both inboxes and Resend verification before rollout.
+Inbox avatars require provider/domain setup; deploying
+HTML icons alone does not activate BIMI or change the inbox sender picture.
+The two addresses share a domain, so default BIMI cannot reliably distinguish
+their inbox avatars. The independent daily-summary Worker configuration is unchanged.
+
 ### Product imagery and visual polish
 
 The shared product/campaign preview uses the owner's supplied dark-appearance

@@ -6,10 +6,11 @@ import { LanguageProvider } from '../i18n/LanguageProvider.jsx'
 import { SiteMetadata } from './SiteMetadata.jsx'
 import SiteApp from '../SiteApp.jsx'
 import { onRequest } from '../../functions/_middleware.js'
+import { getSiteMetadata } from '../lib/siteMetadata.js'
 
 const SHELL = '<!doctype html><html><head><title>Shell</title><meta name="description" content="Shell"><meta name="robots" content="index, follow"><link rel="icon" href="/par-logo.png"><link rel="apple-touch-icon" href="/par-logo.png"></head><body><div id="root"></div></body></html>'
 const COMPANY_PATHS = ['/', '/about', '/contact', '/privacy', '/terms', '/cookies']
-const PRODUCT_PATHS = [...COMPANY_PATHS, '/get-started', '/blog', '/press', '/models', '/payment-success']
+const PRODUCT_PATHS = [...COMPANY_PATHS, '/get-started', '/blog', '/press', '/models', '/payment-success', '/purpose']
 const CASES = [
   ...['en', 'sv'].flatMap(lang => [
     ...COMPANY_PATHS.map(path => `https://datomer.eu${path}?lang=${lang}&utm_campaign=beta`),
@@ -69,6 +70,15 @@ async function assertParity(address, app = <SiteMetadata />) {
 }
 
 describe('server and browser discovery metadata', () => {
+  it.each([
+    ['https://datomer.eu/', '/datomer-icon.png?v=20261029'],
+    ['https://www.datomer.eu/contact?lang=sv', '/datomer-icon.png?v=20261029'],
+    ['https://par.datomer.eu/', '/par-logo.png'],
+    ['https://par.datomer.eu/campaigns/mac-beta?lang=sv', '/par-logo.png'],
+  ])('uses the correct brand icon for %s', (address, icon) => {
+    expect(getSiteMetadata(new URL(address)).icon).toBe(icon)
+  })
+
   it.each(CASES)('has identical metadata and structured data for %s', async address => {
     await assertParity(address)
   })

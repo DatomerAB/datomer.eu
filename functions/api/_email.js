@@ -9,15 +9,20 @@ function buildFromAddress(email, name) {
   return `${displayName} <${address}>`
 }
 
-export async function sendSupportEmail({ env, to, subject, html, text, replyTo, attachments }) {
+export async function sendSupportEmail({ env, to, subject, html, text, replyTo, attachments, site = 'product' }) {
   if (!env.RESEND_API_KEY) {
     console.error('[sendSupportEmail] missing RESEND_API_KEY')
     return { sent: false, error: 'missing_api_key' }
   }
 
-  const recipients = Array.isArray(to) && to.length > 0 ? to : [env.CONTACT_TO_EMAIL || DEFAULT_TO_EMAIL]
-  const fromEmail = env.RESEND_FROM_EMAIL || DEFAULT_FROM_EMAIL
-  const fromName = env.RESEND_FROM_NAME || DEFAULT_FROM_NAME
+  const prefix = site === 'company' ? 'RESEND_COMPANY' : 'RESEND_PRODUCT'
+  const recipients = Array.isArray(to) && to.length > 0
+    ? to : [env[`${prefix}_TO_EMAIL`] || env.CONTACT_TO_EMAIL || DEFAULT_TO_EMAIL]
+  const siteFromEmail = env[`${prefix}_FROM_EMAIL`]
+  const fromEmail = siteFromEmail || env.RESEND_FROM_EMAIL || DEFAULT_FROM_EMAIL
+  const siteFromName = site === 'company' ? 'Datomer AB' : DEFAULT_FROM_NAME
+  const fromName = env[`${prefix}_FROM_NAME`]
+    || (siteFromEmail ? siteFromName : env.RESEND_FROM_NAME || DEFAULT_FROM_NAME)
   const from = buildFromAddress(fromEmail, fromName)
 
   console.log('[sendSupportEmail] sending from', from, 'to', recipients, 'subject:', subject)

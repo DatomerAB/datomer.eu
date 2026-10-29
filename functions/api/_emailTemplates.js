@@ -6,12 +6,13 @@ const BRAND = {
   company: 'Datomer',
   product: 'Pär',
   tagline: 'Your AI. On Your Device.',
-  contactEmail: 'hello@datomer.eu',
+  contactEmail: 'Par@datomer.eu',
+  companyContactEmail: 'hello@datomer.eu',
   website: 'https://par.datomer.eu',
   companyUrl: 'https://datomer.eu',
   parLogoUrl: 'https://par.datomer.eu/par-logo.png',
   datomerLogoUrl: 'https://datomer.eu/datomer-logo.png?v=20261010',
-  datomerIconUrl: 'https://datomer.eu/datomer-icon.png',
+  datomerIconUrl: 'https://datomer.eu/datomer-icon.png?v=20261029',
   // Aligns with the website design tokens
   bg: '#f7f6f4',
   surface: '#ffffff',
@@ -257,8 +258,9 @@ function footerLinkButton({ href, logo, label, domain, highlighted }) {
 
 export function emailWrapper({ title, previewText, contentHtml, contentText, footerExtra = '', locale = 'en', site = 'product' }) {
   const companySite = site === 'company'
+  const contactEmail = companySite ? BRAND.companyContactEmail : BRAND.contactEmail
   const website = companySite ? 'https://datomer.eu' : BRAND.website
-  const headerLogo = companySite ? BRAND.datomerLogoUrl : BRAND.parLogoUrl
+  const headerLogo = companySite ? BRAND.datomerIconUrl : BRAND.parLogoUrl
   const brandName = companySite ? 'Datomer AB' : `${BRAND.product} by ${BRAND.company} AB`
   const footerPrivacy = companySite ? '' : i18n(locale).footerPrivacy
   const preview = previewText ? escapeHtml(previewText) : `${BRAND.product} by ${BRAND.company}`
@@ -310,8 +312,9 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
                 <img
                   src="${headerLogo}"
                   alt="${brandName}"
-                  width="180"
-                  style="display: block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 180px; height: auto; font-family: ${BRAND.fontStack}; font-size: 26px; font-weight: 800; color: ${BRAND.text};"
+                  width="80"
+                  height="80"
+                  style="display: block; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; width: 80px; height: 80px; font-family: ${BRAND.fontStack}; font-size: 18px; font-weight: 800; color: ${BRAND.text};"
                 />
               </a>
             </td>
@@ -348,7 +351,7 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
                   <td style="padding: 0 6px;">${footerLinkButton({ href: BRAND.website, logo: BRAND.parLogoUrl, label: 'Pär', domain: 'par.datomer.eu', highlighted: !companySite })}</td>
                 </tr>
               </table>
-              <p style="margin: 0 0 4px;">${i18n(locale).footerEmail} <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a></p>
+              <p style="margin: 0 0 4px;">${i18n(locale).footerEmail} <a href="mailto:${contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${contactEmail}</a></p>
               <p style="margin: 12px 0 0; font-size: 12px;">${footerPrivacy}</p>
             </td>
           </tr>
@@ -361,7 +364,7 @@ export function emailWrapper({ title, previewText, contentHtml, contentText, foo
 
   // Most builders already start their text with the title, so only add it when missing.
   const heading = contentText.startsWith(title) ? '' : `${title}\n${'='.repeat(title.length)}\n\n`
-  const text = `${heading}${contentText}\n\n${footerText}---\n${brandName}\n${i18n(locale).footerEmail}: ${BRAND.contactEmail}\nDatomer AB: ${BRAND.companyUrl}\nPär: ${BRAND.website}\n\n${footerPrivacy}`
+  const text = `${heading}${contentText}\n\n${footerText}---\n${brandName}\n${i18n(locale).footerEmail}: ${contactEmail}\nDatomer AB: ${BRAND.companyUrl}\nPär: ${BRAND.website}\n\n${footerPrivacy}`
 
   return { html, text }
 }
@@ -432,29 +435,30 @@ export function buildContactSupportEmail({ name, email, message, locale = 'en', 
   const contentText = `${title}\n\n${strings.contactSupportBody(name)}\n\n${fields.map((f) => `${f.label}: ${f.value.replace(/<[^>]+>/g, '')}`).join('\n')}`
 
   const { html, text } = emailWrapper({ title, locale, site, previewText: strings.contactSupportPreview(firstName), contentHtml, contentText })
-  return { subject, html, text, replyTo: email }
+  return { subject, html, text, replyTo: email, site }
 }
 
 export function buildContactConfirmationEmail({ name, message, locale = 'en', site = 'product' }) {
   const firstName = getFirstName(name)
   const strings = contactStrings(locale, site)
+  const contactEmail = site === 'company' ? BRAND.companyContactEmail : BRAND.contactEmail
   const title = strings.contactConfirmationTitle(firstName)
   const subject = strings.contactConfirmationSubject
 
   const contentHtml = `
     <h1 style="margin: 0 0 16px; font-size: 22px; font-weight: 700; color: ${BRAND.text}; line-height: 1.3;">${escapeHtml(title)}</h1>
     <p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.contactConfirmationBody1}</p>
-    <p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.contactConfirmationBody2} <a href="mailto:${BRAND.contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${BRAND.contactEmail}</a>.</p>
+    <p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.contactConfirmationBody2} <a href="mailto:${contactEmail}" style="color: ${BRAND.accent}; text-decoration: none;">${contactEmail}</a>.</p>
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: ${BRAND.bg}; border-radius: ${BRAND.radiusSm}; margin: 0 0 16px;">
       <tr><td style="padding: 16px;"><div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: ${BRAND.textMuted}; margin-bottom: 4px;">${strings.labelMessage}</div><div style="font-size: 15px; color: ${BRAND.text}; line-height: 1.6;">${lineBreaksToHtml(message)}</div></td></tr>
     </table>
     <p style="margin: 24px 0 0; color: ${BRAND.textMuted}; font-size: 14px; line-height: 1.5;">${strings.contactConfirmationPrivacy}</p>
   `
 
-  const contentText = `${title}\n\n${strings.contactConfirmationBody1}\n\n${strings.contactConfirmationBody2} ${BRAND.contactEmail}.\n\n${strings.labelMessage}:\n${message}\n\n${strings.contactConfirmationPrivacy}`
+  const contentText = `${title}\n\n${strings.contactConfirmationBody1}\n\n${strings.contactConfirmationBody2} ${contactEmail}.\n\n${strings.labelMessage}:\n${message}\n\n${strings.contactConfirmationPrivacy}`
 
   const { html, text } = emailWrapper({ title, locale, site, previewText: strings.contactConfirmationPreview, contentHtml, contentText })
-  return { subject, html, text }
+  return { subject, html, text, site }
 }
 
 // --- Waitlist / newsletter / download ---

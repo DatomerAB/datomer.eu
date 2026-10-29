@@ -11,7 +11,7 @@ describe('site identity', () => {
     expect(siteForUrl(new URL(url))).toBe(site)
   })
 
-  it.each(['/get-started?lang=sv', '/blog', '/models', '/press', '/payment-success?session_id=test', '/#pricing', '/?lang=sv#download'])('preserves old product links: %s', path => {
+  it.each(['/get-started?lang=sv', '/blog', '/models', '/press', '/purpose?lang=sv', '/payment-success?session_id=test', '/#pricing', '/?lang=sv#download'])('preserves old product links: %s', path => {
     expect(legacyProductDestination(new URL(`https://datomer.eu${path}`))).toBe(`https://par.datomer.eu${path}`)
   })
 

@@ -30,6 +30,10 @@ VITE_STRIPE_PUBLISHABLE_KEY = "pk_live_51U7ZY2JjemtoqVYpHTWDR1eDkKPg1fWdb8idyEh8
 VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEZRl56VvoSHPucq"
 RESEND_FROM_EMAIL = "hello@datomer.eu"
 CONTACT_TO_EMAIL = "hello@datomer.eu"
+RESEND_COMPANY_FROM_EMAIL = "hello@datomer.eu"
+RESEND_COMPANY_TO_EMAIL = "hello@datomer.eu"
+RESEND_PRODUCT_FROM_EMAIL = "Par@datomer.eu"
+RESEND_PRODUCT_TO_EMAIL = "Par@datomer.eu"
 
 [[env.production.d1_databases]]
 binding = "DB"
@@ -46,6 +50,10 @@ VITE_STRIPE_PUBLISHABLE_KEY = "pk_test_51U7ZY2JjemtoqVYpdgzC3NYr0Us9FzlE5gisBomI
 VITE_TURNSTILE_SITE_KEY = "0x4AAAAAAEaZMJCV6o1b_ZFh"
 RESEND_FROM_EMAIL = "hello@datomer.eu"
 CONTACT_TO_EMAIL = "hello@datomer.eu"
+RESEND_COMPANY_FROM_EMAIL = "hello@datomer.eu"
+RESEND_COMPANY_TO_EMAIL = "hello@datomer.eu"
+RESEND_PRODUCT_FROM_EMAIL = "Par@datomer.eu"
+RESEND_PRODUCT_TO_EMAIL = "Par@datomer.eu"
 
 [[env.preview.d1_databases]]
 binding = "DB"
