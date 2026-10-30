@@ -6,6 +6,7 @@ import { CompanyPage } from './CompanyPage.jsx'
 import { LanguageProvider } from '../i18n/LanguageProvider.jsx'
 import { companyContent } from '../content/company.js'
 import { SiteMetadata } from '../components/SiteMetadata.jsx'
+import { formatHeading } from '../lib/formatHeading.js'
 
 afterEach(() => vi.unstubAllGlobals())
 
@@ -18,6 +19,22 @@ function renderCompany(path = '/') {
 }
 
 describe('company website', () => {
+  it.each(['en', 'sv'])('uses the shared localized capitalization for all %s homepage headings', lang => {
+    renderCompany(`/?lang=${lang}`)
+    const c = companyContent[lang]
+    const format = lang === 'en' ? formatHeading : text => text
+    const titles = [
+      c.processTitle, ...c.process.map(([title]) => title), c.servicesTitle,
+      ...c.services.map(([title]) => title), c.beliefTitle, c.missionTitle,
+      c.visionTitle, c.objectivesTitle, c.valuesTitle,
+      ...c.values.map(([title]) => title), c.productTitle, c.aboutTitle, c.contactTitle,
+    ]
+    for (const title of titles) {
+      expect(screen.getByRole('heading', { name: format(title) })).toBeVisible()
+    }
+    expect(screen.getAllByRole('heading')).toHaveLength(titles.length + 1)
+  })
+
   it.each(['en', 'sv'])('leads with services rather than location in %s search and About copy', lang => {
     renderCompany(`/?lang=${lang}`)
     const copy = companyContent[lang]
@@ -48,11 +65,11 @@ describe('company website', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Put your data to work.')
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Optimize costs and improve efficiency.')
     expect(screen.getByRole('heading', { level: 1 })).not.toHaveTextContent('Keep people in control')
-    for (const [title] of companyContent.en.services) expect(screen.getByRole('heading', { name: title })).toBeVisible()
-    expect(screen.getByRole('heading', { name: 'Our mission' })).toBeVisible()
-    expect(screen.getByRole('heading', { name: 'Our vision' })).toBeVisible()
-    expect(screen.getByRole('complementary', { name: companyContent.en.processTitle })).toBeVisible()
-    for (const [title] of companyContent.en.process) expect(screen.getByRole('heading', { name: title })).toBeVisible()
+    for (const [title] of companyContent.en.services) expect(screen.getByRole('heading', { name: formatHeading(title) })).toBeVisible()
+    expect(screen.getByRole('heading', { name: 'Our Mission' })).toBeVisible()
+    expect(screen.getByRole('heading', { name: 'Our Vision' })).toBeVisible()
+    expect(screen.getByRole('complementary', { name: formatHeading(companyContent.en.processTitle) })).toBeVisible()
+    for (const [title] of companyContent.en.process) expect(screen.getByRole('heading', { name: formatHeading(title) })).toBeVisible()
     expect(screen.getByRole('link', { name: 'Connect on LinkedIn ↗' })).toHaveAttribute('href', 'https://www.linkedin.com/in/jayceee')
     expect(screen.getByRole('link', { name: 'Explore Pär →' }).href).toMatch(/:5174\/$/)
     expect(document.title).toBe(companyContent.en.title)
@@ -71,7 +88,7 @@ describe('company website', () => {
 
   it('provides a company not-found page', () => {
     renderCompany('/missing')
-    expect(screen.getByRole('heading', { name: 'Page not found' })).toBeVisible()
+    expect(screen.getByRole('heading', { name: 'Page Not Found' })).toBeVisible()
   })
 
   it('keeps English and Swedish content structures in sync', () => {

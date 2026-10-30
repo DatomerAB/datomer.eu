@@ -8,10 +8,12 @@ import { companyContent } from '../content/company.js'
 import { siteLinks } from '../lib/site.js'
 import './CompanyPage.css'
 import { useSiteUrl } from '../lib/RenderContext.jsx'
+import { useLocalizedHeading } from '../lib/formatHeading.js'
 
 export function CompanyPage() {
   const { lang } = useLanguage()
   const c = companyContent[lang]
+  const formatHeading = useLocalizedHeading()
   const location = useLocation()
   const url = useSiteUrl()
   const suffix = lang === 'en' ? '' : `?lang=${lang}`
@@ -24,59 +26,59 @@ export function CompanyPage() {
     <main id="company-main">
       <section className="company-hero container">
         <div>
-          <p className="eyebrow">{c.eyebrow}</p>
-          <h1>{c.headline}<br /><span>{c.headlineEnd}</span></h1>
+          <p className="eyebrow">{formatHeading(c.eyebrow)}</p>
+          <h1>{formatHeading(c.headline)}<br /><span>{formatHeading(c.headlineEnd)}</span></h1>
           <p className="company-intro">{c.intro}</p>
           <div className="company-actions">
             <Link className="button button-primary" to={`/contact${suffix}`}>{c.cta}</Link>
             <a className="button button-secondary" href={product}>{c.nav.product} →</a>
           </div>
         </div>
-        <aside className="company-process" aria-label={c.processTitle}>
-          <h2>{c.processTitle}</h2>
+        <aside className="company-process" aria-label={formatHeading(c.processTitle)}>
+          <h2>{formatHeading(c.processTitle)}</h2>
           <ol>{c.process.map(([title, text]) => <li key={title}>
-            <h3>{title}</h3><p>{text}</p>
+            <h3>{formatHeading(title)}</h3><p>{text}</p>
           </li>)}</ol>
         </aside>
       </section>
       <section id="services" className="company-section container">
-        <p className="eyebrow">{c.nav.services}</p>
-        <h2>{c.servicesTitle}</h2><p>{c.servicesIntro}</p>
+        <p className="eyebrow">{formatHeading(c.nav.services)}</p>
+        <h2>{formatHeading(c.servicesTitle)}</h2><p>{c.servicesIntro}</p>
         <div className="company-service-grid">
           {c.services.map(([title, text], index) => <article key={title}>
             <span className="company-number" aria-hidden="true">0{index + 1}</span>
-            <h3>{title}</h3><p>{text}</p>
+            <h3>{formatHeading(title)}</h3><p>{text}</p>
           </article>)}
         </div>
       </section>
       <section id="approach" className="company-belief">
         <div className="container company-section">
-          <p className="eyebrow">{c.nav.approach}</p>
-          <h2>{c.beliefTitle}</h2><p className="company-intro">{c.belief}</p>
+          <p className="eyebrow">{formatHeading(c.nav.approach)}</p>
+          <h2>{formatHeading(c.beliefTitle)}</h2><p className="company-intro">{c.belief}</p>
           <div className="company-two-column">
-            <article><h3>{c.missionTitle}</h3><p>{c.mission}</p></article>
-            <article><h3>{c.visionTitle}</h3><p>{c.vision}</p></article>
+            <article><h3>{formatHeading(c.missionTitle)}</h3><p>{c.mission}</p></article>
+            <article><h3>{formatHeading(c.visionTitle)}</h3><p>{c.vision}</p></article>
           </div>
-          <h3>{c.objectivesTitle}</h3>
+          <h3>{formatHeading(c.objectivesTitle)}</h3>
           <ul>{c.objectives.map(text => <li key={text}>{text}</li>)}</ul>
         </div>
       </section>
       <section className="company-section container">
-        <h2>{c.valuesTitle}</h2>
+        <h2>{formatHeading(c.valuesTitle)}</h2>
         <div className="company-values">{c.values.map(([title, text]) =>
-          <article key={title}><h3>{title}</h3><p>{text}</p></article>)}</div>
+          <article key={title}><h3>{formatHeading(title)}</h3><p>{text}</p></article>)}</div>
       </section>
       <section className="container company-product">
         <a href={product} aria-label="Pär"><img src="/par-logo.png" width="80" height="80" alt="Pär" /></a>
-        <div><p className="eyebrow">{c.productEyebrow}</p><h2>{c.productTitle}</h2><p>{c.productText}</p>
+        <div><p className="eyebrow">{formatHeading(c.productEyebrow)}</p><h2>{formatHeading(c.productTitle)}</h2><p>{c.productText}</p>
           <a className="button button-primary" href={product}>{c.productCta} →</a></div>
       </section>
       <section id="about" className="company-section container company-two-column">
-        <div><h2>{c.aboutTitle}</h2><p>{c.aboutText}</p>
+        <div><h2>{formatHeading(c.aboutTitle)}</h2><p>{c.aboutText}</p>
           <p><a href="https://www.linkedin.com/company/35694620/">{c.companyLinkedIn} ↗</a></p>
           <p><a href="https://www.linkedin.com/in/jayceee">{c.personalLinkedIn} ↗</a></p>
         </div>
-        <div><h2>{c.contactTitle}</h2><p>{c.contactText}</p>
+        <div><h2>{formatHeading(c.contactTitle)}</h2><p>{c.contactText}</p>
           <Link className="button button-primary" to={`/contact${suffix}`}>{c.nav.contact}</Link>
           <p className="company-email"><a href="mailto:hello@datomer.eu">hello@datomer.eu</a></p>
         </div>
@@ -101,7 +103,7 @@ export function CompanyPage() {
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/cookies" element={<CookiesPage />} />
-      <Route path="*" element={<main className="company-section container"><h1>{c.notFound}</h1><Link to={home}>{c.backHome}</Link></main>} />
+      <Route path="*" element={<main className="company-section container"><h1>{formatHeading(c.notFound)}</h1><Link to={home}>{c.backHome}</Link></main>} />
     </Routes>
     <footer className="footer company-footer"><div className="container footer-inner">
       <div className="footer-main">

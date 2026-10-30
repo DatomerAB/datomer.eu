@@ -43,7 +43,7 @@ describe('site entry routing', () => {
   it('renders the company site on datomer.eu with governance and correct metadata', async () => {
     renderSite('https://datomer.eu/')
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Put your data to work.')
-    expect(screen.getByRole('heading', { name: 'Data governance' })).toBeVisible()
+    expect(screen.getByRole('heading', { name: 'Data Governance' })).toBeVisible()
     expect(screen.queryByRole('heading', { name: 'GDPR implementation' })).not.toBeInTheDocument()
     await waitFor(() => expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute('href', 'https://datomer.eu/'))
     expect(document.querySelector('script[type="application/ld+json"]')?.textContent).not.toContain('SoftwareApplication')
@@ -53,7 +53,7 @@ describe('site entry routing', () => {
     renderSite('https://par.datomer.eu/')
     expect(screen.getAllByText('AI on Your Device')[0]).toBeVisible()
     for (const notice of screen.getAllByText(/Not for Intel Macs/)) expect(notice).toBeVisible()
-    expect(screen.queryByRole('heading', { name: 'Data governance' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Data Governance' })).not.toBeInTheDocument()
     await waitFor(() => expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute('href', 'https://par.datomer.eu/'))
   })
 

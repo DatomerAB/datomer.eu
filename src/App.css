@@ -1373,6 +1373,7 @@
   font-size: 1.05rem;
   letter-spacing: -0.03em;
   color: var(--text);
+  text-decoration: none;
 }
 
 .footer-brand .brand-symbol {
