@@ -272,6 +272,11 @@ than Sweden in both EN/SV. The legal company address and structured location
 remain accurate. Search engines may choose their own snippets and refresh them
 only after recrawling.
 
+Company headings and eyebrow labels reuse Pär's `useLocalizedHeading` helper:
+English headings of up to four words use title case; longer headings use sentence
+case, preserving known names and acronyms. Swedish retains its supplied casing.
+Navigation, body copy and search metadata are not reformatted by this helper.
+
 The three homepage examples now focus on a daily brief, reusable routines and
 confidential document workflows. Only the third is labelled in development,
 with an explicit beta limitation. These cards omit tier/pricing labels; plan
