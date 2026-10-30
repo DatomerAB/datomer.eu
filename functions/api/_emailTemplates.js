@@ -62,7 +62,7 @@ const EMAIL_I18N = {
     waitlistConfirmationBody1: () => 'Welcome to Pär.',
     waitlistConfirmationBody2: (interests) => `You selected: <strong style="color: ${BRAND.text};">${interests}</strong>. We have noted your preferences and will only send you what you asked for.`,
     waitlistConfirmationBeta: 'Beta access is limited and rolled out in batches. We will notify you as soon as a spot opens up for you.',
-    waitlistConfirmationUpdates: 'Expect transparent, low-volume updates. No spam, no tracking pixels, no third-party data sharing.',
+    waitlistConfirmationUpdates: 'We will send occasional updates based on your choices. We use an email-delivery provider to send them. You can unsubscribe at any time.',
     waitlistConfirmationQuestions: 'Questions? Reply to this email or contact us at',
     downloadContext: (action) => {
       const map = {
@@ -74,7 +74,9 @@ const EMAIL_I18N = {
       return map[action] || 'the Pär beta'
     },
     downloadConfirmationBody: (action) => `Thank you for downloading <strong style="color: ${BRAND.text};">${EMAIL_I18N.en.downloadContext(action)}</strong>.`,
-    downloadConfirmationBody2: 'Your download should start automatically. We will email you when updates, new features, and the public launch are ready.',
+    downloadConfirmationBody2: 'Your download should start automatically. Follow the setup guide on the Pär website to get started.',
+    downloadUpdatesYes: 'You chose to receive occasional Pär product updates. You can unsubscribe at any time.',
+    downloadUpdatesNo: 'You have not signed up for product updates with this download.',
     dailySummaryNoSubmissions: 'No recorded submissions or website events in the last 25 hours',
     dailySummaryNoSubmissionsBody: 'No submissions or website events were recorded in the last 25 hours. This does not mean there were no visitors: declined consent, blocked requests or collection failures can leave visits unrecorded. The next summary will arrive tomorrow.',
     dailySummaryTitle: 'Daily website activity and download summary',
@@ -90,7 +92,7 @@ const EMAIL_I18N = {
     paymentConfirmationQuestions: 'Questions? Reply to this email or contact us at',
     footerCompany: `${BRAND.company} AB`,
     footerEmail: 'Email us at',
-    footerPrivacy: `You received this because you interacted with ${BRAND.product}. Your data stays private — we never sell or share it.`,
+    footerPrivacy: `You received this because you interacted with ${BRAND.product}. We do not sell your personal data. Our email-delivery provider processes the information needed to send this email.`,
   },
   sv: {
     salutation: (name) => `Hej ${name}`,
@@ -122,7 +124,7 @@ const EMAIL_I18N = {
     waitlistConfirmationBody1: () => 'Välkommen till Pär.',
     waitlistConfirmationBody2: (interests) => `Du valde: <strong style="color: ${BRAND.text};">${interests}</strong>. Vi har noterat dina preferenser och skickar bara det du bett om.`,
     waitlistConfirmationBeta: 'Betaåtkomst är begränsad och rullas ut i omgångar. Vi meddelar dig så snart en plats öppnas för dig.',
-    waitlistConfirmationUpdates: 'Räkna med transparenta, fåtaliga uppdateringar. Ingen skräppost, inga spårningspixlar, ingen delning med tredje part.',
+    waitlistConfirmationUpdates: 'Vi skickar enstaka uppdateringar utifrån dina val. Vi använder en e-postleverantör för utskicken. Du kan avanmäla dig när som helst.',
     waitlistConfirmationQuestions: 'Frågor? Svara på detta e-postmeddelande eller kontakta oss på',
     downloadContext: (action) => {
       const map = {
@@ -134,7 +136,9 @@ const EMAIL_I18N = {
       return map[action] || 'Pär-beta'
     },
     downloadConfirmationBody: (action) => `Tack för att du laddar ned <strong style="color: ${BRAND.text};">${EMAIL_I18N.sv.downloadContext(action)}</strong>.`,
-    downloadConfirmationBody2: 'Din nedladdning bör starta automatiskt. Vi mejlar dig när uppdateringar, nya funktioner och den offentliga lanseringen är redo.',
+    downloadConfirmationBody2: 'Din nedladdning bör starta automatiskt. Följ installationsguiden på Pärs webbplats för att komma igång.',
+    downloadUpdatesYes: 'Du valde att få enstaka produktuppdateringar om Pär. Du kan avanmäla dig när som helst.',
+    downloadUpdatesNo: 'Du har inte anmält dig till produktuppdateringar med den här nedladdningen.',
     dailySummaryNoSubmissions: 'Inga registrerade inskick eller webbplatshändelser de senaste 25 timmarna',
     dailySummaryNoSubmissionsBody: 'Inga inskick eller webbplatshändelser registrerades de senaste 25 timmarna. Det betyder inte att webbplatsen saknade besökare: nekat samtycke, blockerade anrop eller insamlingsfel kan göra att besök inte registreras. Nästa sammanfattning kommer i morgon.',
     dailySummaryTitle: 'Daglig sammanfattning av webbplatsaktivitet och nedladdningar',
@@ -150,7 +154,7 @@ const EMAIL_I18N = {
     paymentConfirmationQuestions: 'Frågor? Svara på detta e-postmeddelande eller kontakta oss på',
     footerCompany: `${BRAND.company} AB`,
     footerEmail: 'Mejla oss på',
-    footerPrivacy: `Du fick detta e-postmeddelande eftersom du interagerade med ${BRAND.product}. Dina data förblir privata — vi säljer eller delar dem aldrig.`,
+    footerPrivacy: `Du fick detta e-postmeddelande eftersom du interagerade med ${BRAND.product}. Vi säljer inte dina personuppgifter. Vår e-postleverantör behandlar informationen som behövs för att skicka meddelandet.`,
   },
   de: {
     salutation: (name) => `Hallo ${name}`,
@@ -182,7 +186,7 @@ const EMAIL_I18N = {
     waitlistConfirmationBody1: () => 'Willkommen bei Pär.',
     waitlistConfirmationBody2: (interests) => `Sie haben gewählt: <strong style="color: ${BRAND.text};">${interests}</strong>. Wir haben Ihre Präferenzen notiert und senden Ihnen nur das, worum Sie gebeten haben.`,
     waitlistConfirmationBeta: 'Der Beta-Zugang ist begrenzt und wird schrittweise freigegeben. Wir benachrichtigen Sie, sobald ein Platz für Sie frei ist.',
-    waitlistConfirmationUpdates: 'Erwarten Sie transparente, seltene Updates. Kein Spam, keine Tracking-Pixel, keine Weitergabe an Dritte.',
+    waitlistConfirmationUpdates: 'Wir senden gelegentliche Updates entsprechend Ihrer Auswahl über einen E-Mail-Dienstleister. Sie können sich jederzeit abmelden.',
     waitlistConfirmationQuestions: 'Fragen? Antworten Sie auf diese E-Mail oder kontaktieren Sie uns unter',
     downloadContext: (action) => {
       const map = {
@@ -194,7 +198,9 @@ const EMAIL_I18N = {
       return map[action] || 'die Pär-Beta'
     },
     downloadConfirmationBody: (action) => `Vielen Dank, dass Sie <strong style="color: ${BRAND.text};">${EMAIL_I18N.de.downloadContext(action)}</strong> herunterladen.`,
-    downloadConfirmationBody2: 'Ihr Download sollte automatisch starten. Wir schreiben Ihnen, wenn Updates, neue Funktionen und der öffentliche Start bereit sind.',
+    downloadConfirmationBody2: 'Ihr Download sollte automatisch starten. Folgen Sie der Einrichtungsanleitung auf der Pär-Website.',
+    downloadUpdatesYes: 'Sie haben gelegentliche Pär-Produktupdates gewählt. Sie können sich jederzeit abmelden.',
+    downloadUpdatesNo: 'Mit diesem Download haben Sie sich nicht für Produktupdates angemeldet.',
     dailySummaryNoSubmissions: 'Keine erfassten Einsendungen oder Website-Ereignisse in den letzten 25 Stunden',
     dailySummaryNoSubmissionsBody: 'In den letzten 25 Stunden wurden keine Einsendungen oder Website-Ereignisse erfasst. Das bedeutet nicht, dass es keine Besucher gab: fehlende Einwilligung, blockierte Anfragen oder Erfassungsfehler können Besuche ungezählt lassen. Die nächste Zusammenfassung kommt morgen.',
     dailySummaryTitle: 'Tägliche Zusammenfassung der Website-Aktivitäten und Downloads',
@@ -210,7 +216,7 @@ const EMAIL_I18N = {
     paymentConfirmationQuestions: 'Fragen? Antworte auf diese E-Mail oder kontaktiere uns unter',
     footerCompany: `${BRAND.company} AB`,
     footerEmail: 'Schreiben Sie uns an',
-    footerPrivacy: `Sie haben diese E-Mail erhalten, weil Sie mit ${BRAND.product} interagiert haben. Ihre Daten bleiben privat — wir verkaufen oder teilen sie nie.`,
+    footerPrivacy: `Sie haben diese E-Mail erhalten, weil Sie mit ${BRAND.product} interagiert haben. Wir verkaufen Ihre personenbezogenen Daten nicht. Unser E-Mail-Dienstleister verarbeitet die zum Versand nötigen Informationen.`,
   },
 }
 
@@ -532,9 +538,10 @@ function waitlistConfirmationBody({ type, interests, locale = 'en', action }) {
   const wantsChangelog = list.includes('Changelog and release notes')
 
   if (type === 'download') {
+    const updates = wantsUpdates ? strings.downloadUpdatesYes : strings.downloadUpdatesNo
     return {
-      html: `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody(action)}</p><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody2}</p>`,
-      text: `${strings.downloadConfirmationBody(action).replace(/<[^>]+>/g, '')} ${strings.downloadConfirmationBody2}`,
+      html: `<p style="margin: 0 0 16px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody(action)}</p><p style="margin: 0 0 24px; color: ${BRAND.textSecondary}; font-size: 16px; line-height: 1.6;">${strings.downloadConfirmationBody2}</p><p style="color: ${BRAND.textSecondary}; line-height: 1.6;">${updates}</p>`,
+      text: `${strings.downloadConfirmationBody(action).replace(/<[^>]+>/g, '')} ${strings.downloadConfirmationBody2} ${updates}`,
     }
   }
 

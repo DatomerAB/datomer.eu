@@ -190,6 +190,35 @@ describe('waitlist handler', () => {
     const confirmationBody = JSON.parse(confirmationOptions.body)
     expect(confirmationBody.to).toEqual(['download@example.com'])
     expect(confirmationBody.subject).toBe('Your Pär beta download — Pär')
+    expect(confirmationBody.text).toContain('You chose to receive occasional Pär product updates')
+  })
+
+  it.each([undefined, false, 'true', true])('records explicit download update consent for %s and forwards the same choice', async productUpdates => {
+    const env = { ...baseEnv, WAITLIST_WEBHOOK_URL: 'https://example.com/webhook' }
+    const response = await onRequestPost({
+      request: makeRequest({
+        name: 'Test User', email: 'test@example.com', country: 'SE', type: 'download',
+        interests: { productUpdates, betaAccess: true, changelog: true },
+        turnstileToken: 'token',
+      }),
+      env,
+    })
+    expect(response.status).toBe(200)
+    const optedIn = productUpdates === true
+    expect(insertSubmission).toHaveBeenCalledWith(env, expect.objectContaining({
+      metadata: expect.objectContaining({
+        interests: { productUpdates: optedIn },
+        productUpdatesConsent: optedIn,
+        productUpdatesConsentRecordedAt: expect.any(String),
+        productUpdatesConsentVersion: 'download-updates-v1',
+      }),
+    }))
+    const webhook = fetchSpy.mock.calls.find(([url]) => url === env.WAITLIST_WEBHOOK_URL)
+    expect(JSON.parse(webhook[1].body).interests).toEqual({ productUpdates: optedIn })
+    const confirmation = JSON.parse(getResendCalls()[1][1].body)
+    expect(confirmation.text).toContain(optedIn
+      ? 'You chose to receive occasional Pär product updates'
+      : 'You have not signed up for product updates with this download')
   })
 
   it('still returns success when email sending fails', async () => {

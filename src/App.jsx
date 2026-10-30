@@ -254,7 +254,6 @@ function Footer() {
 function HomePage({ onDownload, downloadCatalog }) {
   const { t, lang } = useLanguage()
   const overview = productOverview[lang]
-  const purpose = productPurpose[lang]
   const formatHeading = useLocalizedHeading()
   const heroVariant = useExperiment('hero-cta-copy', ['control', 'social-proof'])
 
@@ -385,7 +384,6 @@ function HomePage({ onDownload, downloadCatalog }) {
             <p className="lede">
               {t('hero.lede')}
             </p>
-            <p>{t('hero.workflowNote')}</p>
 
             <div className="cta-row">
               <button type="button" className="button button-primary" onClick={onDownload}>
@@ -425,14 +423,24 @@ function HomePage({ onDownload, downloadCatalog }) {
           </div>
 
           <div className="capability-grid everyday-examples">
-            {overview.examples.map(([title, text], index) => (
-              <article key={title} className="capability-card">
-                <span className="example-number" aria-hidden="true">0{index + 1}</span>
-                <h3>{title}</h3>
-                <p>{text}</p>
+            {overview.examples.map((example, index) => (
+              <article key={example.icon} className={`capability-card usecase-card${example.status ? ' usecase-development' : ''}`}>
+                <div className="usecase-top" aria-hidden="true">
+                  <span className="usecase-icon"><Icon name={example.icon} /></span>
+                  <span className="example-number">0{index + 1}</span>
+                </div>
+                <div className="usecase-status">
+                  {example.status && <span>{example.status}</span>}
+                </div>
+                <h3>{example.title}</h3>
+                <p>{example.text}</p>
+                {example.note && <small className="usecase-note">{example.note}</small>}
+                {example.status && <Link className="usecase-development-link" to={`/about${lang === 'sv' ? '?lang=sv' : ''}#development`}>{overview.developmentLink} →</Link>}
+                <div className="usecase-outcome">{example.outcome}</div>
               </article>
             ))}
           </div>
+          <p className="usecase-shared-note">{overview.examplesNote}</p>
         </section>
 
         <section className="section section-alt" id="features">
@@ -454,7 +462,6 @@ function HomePage({ onDownload, downloadCatalog }) {
                     {group.features.map(key => <article key={key} className="feature-detail">
                       <div className="feature-detail-heading">
                         <h4>{formatHeading(features[key].title)}</h4>
-                        <span className="feature-badge">{features[key].badge}</span>
                       </div>
                       <p>{features[key].text}</p>
                     </article>)}
@@ -462,14 +469,6 @@ function HomePage({ onDownload, downloadCatalog }) {
                 </section>
               ))}
             </div>
-            <aside className="development-note" aria-labelledby="homepage-development">
-              <h3 id="homepage-development">{purpose.developmentTitle}</h3>
-              <strong>{purpose.developmentStatus}</strong>
-              <p>{purpose.developmentText}</p>
-              <p>{purpose.reviewNote}</p>
-              <p>{purpose.developmentNote}</p>
-              <Link to={`/about${lang === 'sv' ? '?lang=sv' : ''}`}>{overview.developmentLink}</Link>
-            </aside>
           </div>
         </section>
 
@@ -609,8 +608,15 @@ function HomePage({ onDownload, downloadCatalog }) {
           </div>
 
           <div className="requirements-card">
+            <h3>{t('requirements.macTitle')}</h3>
             <ul>
-              {t('requirements.items').map((item) => (
+              {t('requirements.macItems').map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <h3>{t('requirements.windowsTitle')}</h3>
+            <ul>
+              {t('requirements.windowsItems').map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
@@ -674,21 +680,15 @@ function AboutPage() {
     <main className="section container legal-page">
       <h1>{formatHeading(t('about.title'))}</h1>
       <p>{t('about.intro')}</p>
-      <p>{t('about.mission')}</p>
       <p><Link to={`/purpose${suffix}`}>{purposePage[lang].nav} →</Link></p>
       <section>
-        <h2>{purpose.visionTitle}</h2><p>{purpose.vision}</p>
-        <h2>{purpose.missionTitle}</h2><p>{purpose.mission}</p>
-        <h2>{purpose.objectivesTitle}</h2>
-        <ul>{purpose.objectives.map(text => <li key={text}>{text}</li>)}</ul>
-        <p>{purpose.objectivesNote}</p>
         <h2>{purpose.valuesTitle}</h2>
         {purpose.values.map(([title, text]) => <p key={title}><strong>{title}: </strong>{text}</p>)}
       </section>
       <section>
         <h2>{purpose.availableTitle}</h2><p>{purpose.availableText}</p>
         <p><Link to={`/get-started${suffix}`}>{purpose.setupLink}</Link> · <Link to={`/blog${suffix}`}>{purpose.releaseLink}</Link></p>
-        <h2>{purpose.developmentTitle}</h2>
+        <h2 id="development">{purpose.developmentTitle}</h2>
         <p><strong>{purpose.developmentStatus}</strong></p>
         <p>{purpose.developmentText}</p><p>{purpose.developmentNote}</p>
         <p>{purpose.reviewNote}</p>
@@ -954,10 +954,19 @@ export function CookiesPage() {
 }
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [pathname])
+    const target = hash ? document.getElementById(hash.slice(1)) : null
+    if (target) {
+      const headerHeight = document.querySelector('.topbar')?.getBoundingClientRect().height || 0
+      window.scrollTo({
+        top: window.scrollY + target.getBoundingClientRect().top - headerHeight - 24,
+        behavior: 'instant',
+      })
+    } else {
+      window.scrollTo(0, 0)
+    }
+  }, [pathname, hash])
   return null
 }
 

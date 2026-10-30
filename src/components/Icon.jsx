@@ -1,4 +1,21 @@
 const icons = {
+  planner: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="5" width="18" height="16" rx="3" />
+      <path d="M8 3v4m8-4v4M3 11h18m-13 5 2 2 5-5" />
+    </svg>
+  ),
+  repeat: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m17 3 4 4-4 4M3 11v-1a3 3 0 0 1 3-3h15M7 21l-4-4 4-4m14 0v1a3 3 0 0 1-3 3H3" />
+    </svg>
+  ),
+  protectedDocument: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h7M13 2v6h6V6zM8 12h3m-3 4h2M18 11l4 2v4c0 2-2 4-4 5-2-1-4-3-4-5v-4z" />
+      <path d="m16.5 16 1.2 1.2 2-2.4" />
+    </svg>
+  ),
   device: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <rect x="4" y="3" width="16" height="12" rx="2" />

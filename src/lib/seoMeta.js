@@ -5,8 +5,8 @@ export const PRODUCT_TITLES = {
 }
 
 export const PRODUCT_DESCRIPTIONS = {
-  en: 'Ask questions, explore ideas and draft replies with local AI on your device. Pär is developing workflows for confidential financial and contract work, with you in control.',
-  sv: 'Ställ frågor, bolla idéer och skriv utkast med lokal AI på din enhet. Pär utvecklar arbetsflöden för konfidentiellt ekonomiskt arbete och avtal, på dina villkor.',
+  en: 'Bring your day together, turn notes into next steps and reuse routines with Pär, a personal AI assistant that runs on your device. You choose what to connect.',
+  sv: 'Samla dagens arbete, gör anteckningar till nästa steg och återanvänd rutiner med Pär, en personlig AI-assistent på din enhet. Du väljer vad du ansluter.',
   de: 'Pär ist ein privater KI-Assistent, der deine lokalen Notizen und Dateien in fortlaufende, persönliche Intelligenz verwandelt. Dein Kontext bleibt reich, deine Daten bleiben deine.',
 }
 

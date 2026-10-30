@@ -18,6 +18,17 @@ function renderCompany(path = '/') {
 }
 
 describe('company website', () => {
+  it.each(['en', 'sv'])('leads with services rather than location in %s search and About copy', lang => {
+    renderCompany(`/?lang=${lang}`)
+    const copy = companyContent[lang]
+    for (const text of [copy.title, copy.description, copy.aboutText]) {
+      expect(text).not.toMatch(/Sweden|Sverige|svenskt/i)
+    }
+    expect(document.title).toBe(copy.title)
+    expect(document.querySelector('meta[name="description"]')).toHaveAttribute('content', copy.description)
+    expect(screen.getByText(copy.aboutText)).toBeVisible()
+  })
+
   it.each(['en', 'sv'])('links each logo to its own homepage in %s', lang => {
     renderCompany(`/?lang=${lang}`)
     const suffix = lang === 'sv' ? '?lang=sv' : ''

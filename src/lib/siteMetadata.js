@@ -35,12 +35,12 @@ function metaForRoute(pathname, searchParams, site = 'product') {
       en: {
         title: pageTitle('About'),
         description:
-          'Meet the team behind Pär by Datomer. We build local-first, private AI companions that keep your memory and data on your own device.',
+          'Learn about Pär by Datomer, its current beta, privacy choices and development work. Local AI runs on your device; you choose what to connect.',
       },
       sv: {
         title: pageTitle('Om oss'),
         description:
-          'Lär känna teamet bakom Pär by Datomer. Vi bygger lokala, privata AI-kamrater som håller ditt minne och dina data på din egen enhet.',
+          'Läs om Pär by Datomer, den aktuella betan, dina integritetsval och utvecklingen. Lokal AI körs på din enhet; du väljer vad du ansluter.',
       },
       de: {
         title: pageTitle('Über uns'),
@@ -69,12 +69,12 @@ function metaForRoute(pathname, searchParams, site = 'product') {
       en: {
         title: pageTitle('Get Started'),
         description:
-          'Install Pär on your Mac and start chatting privately in about 10 minutes. Step-by-step setup, model downloads, and troubleshooting.',
+          'Set up the Pär beta on a compatible Mac or Windows PC. Follow the guide for installation, model downloads, and troubleshooting.',
       },
       sv: {
         title: pageTitle('Kom igång'),
         description:
-          'Installera Pär på din Mac och börja chatta privat på cirka 10 minuter. Steg-för-steg-guide, modellnedladdningar och felsökning.',
+          'Kom igång med Pärs beta på en kompatibel Mac eller Windows-dator. Följ guiden för installation, modellnedladdning och felsökning.',
       },
     },
     '/blog': {

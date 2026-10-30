@@ -194,7 +194,7 @@ layout, prices, checkout, or download selection:
 - The Mac setup guide requires Apple Silicon, M1 or newer. The final homepage
   disclaimer must not describe it as merely recommended.
 - `data_export` and `data_import` are listed in Plus, Pro, and Enterprise, not
-  Free. Both the feature badge and FAQ now reflect that contract; exact migration
+  Free. The pricing section and FAQ reflect that contract; exact migration
   coverage still needs installed-app testing.
 - The setup guide distinguishes Mac/Windows installation prompts. A blanket
   assertion that all beta builds are unsigned was removed in favor of directing
@@ -267,7 +267,19 @@ Deploy the Worker separately to activate its sender change.
 
 ### Local AI and confidential-work messaging
 
-Product copy in EN/SV centers on confidential work on the user's device, without
+Company search titles, descriptions and About copy lead with services rather
+than Sweden in both EN/SV. The legal company address and structured location
+remain accurate. Search engines may choose their own snippets and refresh them
+only after recrawling.
+
+The three homepage examples now focus on a daily brief, reusable routines and
+confidential document workflows. Only the third is labelled in development,
+with an explicit beta limitation. These cards omit tier/pricing labels; plan
+details remain in Pricing. All three SVG
+icons use the existing deep-coral action token with white artwork. Preserve
+the connected-service disclosure and equivalent EN/SV wording.
+
+Product copy in EN/SV leads with everyday personal-assistant outcomes, without
 a central Pär server for conversations or personal context. Web search and
 connected services can send information to their providers when used; do not
 replace that boundary with blanket promises that nothing leaves the device.
@@ -275,6 +287,32 @@ Financial-assessment and contract-review workflows are explicitly in development
 require human review, and are not presented as dependable beta features.
 Vision and mission remain unchanged. Plan restrictions, prices, download
 selection and Mac-only campaign eligibility remain intact.
+
+The homepage keeps one short, qualified development card linking to
+`/about#development` (with the Swedish query preserved). The long development
+explanation, human-review advice and no-release-date notice remain on About,
+not repeated beneath the feature list. Vision, mission and strategic objectives
+live on Our purpose; About retains the values, beta status and company details.
+Homepage requirements distinguish Mac and Windows, matching the setup guide.
+Home Hub uses the user's computer to serve paired devices or family members;
+it is not a Datomer-hosted model server. Privacy and pricing explicitly name
+multi-factor authentication alongside the app PIN.
+
+Download update emails are optional, unchecked on every new form opening.
+Downloads still receive a transactional confirmation. `/api/waitlist` treats
+only `interests.productUpdates === true` as download opt-in and stores the
+normalized interests plus `productUpdatesConsent`, the server recording time
+and consent-copy version in existing submission metadata (no schema migration).
+Support notifications, confirmation emails and the optional webhook receive the
+same choice. Downstream mailing automations must filter on that explicit opt-in;
+a download is not subscription consent, including historical records without it.
+This does not unsubscribe an existing subscriber. Email copy explains the use
+of an email-delivery provider instead of promising no third-party sharing.
+
+Prices and Stripe configuration are unchanged. The frontend selects the same
+price IDs for EN/SV; this does not establish the configured price currencies.
+Before rollout, verify USD/SEK amounts, intervals and seat minimums against the
+actual Stripe prices and checkout. Do not infer a conversion rate from copy.
 
 The Pär Cloud card has been removed. Mac/Windows platform cards remain, and
 press copy distinguishes the older listed Linux build from the current betas.
@@ -313,8 +351,10 @@ Before rollout, compare EN/SV previews and run lint/tests/build, including homep
 pre-render/hydration and metadata parity checks.
 
 The product homepage groups its existing nine features into three user-oriented
-sections using `src/content/productOverview.js`. All nine feature descriptions and
-Plus+ badges stay visible, with simpler wording; pricing and anchors remain intact. Simple examples
+sections using `src/content/productOverview.js`. All nine feature descriptions
+stay visible, without plan badges; plan details remain in Pricing.
+A shared note explains that availability depends on plan, version and setup.
+Pricing and anchors remain intact. Simple examples
 replace the repetitive capability/proof blocks. Development work is explicitly
 qualified on the homepage as well as About. This presentation change is not a
 new certification of the inherited feature claims.

@@ -5,7 +5,6 @@ import App from '../App.jsx'
 import { LanguageProvider } from '../i18n/LanguageProvider.jsx'
 import { translations } from '../i18n/translations.js'
 import { featureGroups, productOverview } from './productOverview.js'
-import { productPurpose } from './productPurpose.js'
 
 afterEach(() => vi.unstubAllGlobals())
 
@@ -26,20 +25,37 @@ describe('benefit-led product homepage', () => {
       <LanguageProvider><App /></LanguageProvider>
     </MemoryRouter>)
     const c = productOverview[lang]
-    for (const [title, text] of c.examples) {
-      expect(screen.getByRole('heading', { name: title })).toBeVisible()
-      expect(screen.getByText(text)).toBeVisible()
+    const cards = document.querySelectorAll('.usecase-card')
+    expect(cards).toHaveLength(3)
+    for (const example of c.examples) {
+      const card = screen.getByRole('heading', { name: example.title }).closest('article')
+      expect(within(card).getByText(example.text)).toBeVisible()
+      expect(within(card).getByText(example.outcome)).toBeVisible()
+      expect(card.querySelector('.usecase-icon svg')).not.toBeNull()
+      expect(card.textContent).not.toMatch(/Plus|Pro|Enterprise|€|\$/)
+      if (example.status) {
+        expect(within(card).getByText(example.status)).toBeVisible()
+        expect(within(card).getByText(example.note)).toBeVisible()
+      } else {
+        expect(card.querySelector('.usecase-status').textContent).toBe('')
+      }
     }
+    expect(document.querySelectorAll('.usecase-status span')).toHaveLength(1)
+    expect(screen.getByText(c.examplesNote)).toBeVisible()
     expect(screen.getByText(c.featuresNote)).toBeVisible()
     for (const group of featureGroups) {
       const section = screen.getByRole('region', { name: c.groups[group.id][0] })
       for (const key of group.features) {
         const detail = within(section).getByText(translations[lang].features[key].text).closest('article')
-        expect(within(detail).getByText(translations[lang].features[key].badge)).toBeVisible()
+        expect(within(detail).getByRole('heading', { level: 4 })).toBeVisible()
+        expect(detail.querySelector('.feature-badge')).toBeNull()
+        expect(detail.textContent).not.toContain('Plus+')
       }
+      expect(document.querySelectorAll('#pricing .pricing-card')).toHaveLength(4)
     }
-    expect(screen.getByText(productPurpose[lang].developmentStatus)).toBeVisible()
-    expect(screen.getByText(productPurpose[lang].developmentText)).toBeVisible()
+    expect(document.querySelector('.development-note')).toBeNull()
+    expect(screen.getByRole('link', { name: `${c.developmentLink} →` }))
+      .toHaveAttribute('href', `/about${lang === 'sv' ? '?lang=sv' : ''}#development`)
     for (const id of ['about', 'product', 'features', 'pricing', 'faq', 'download']) {
       expect(document.getElementById(id)).toBeTruthy()
     }
@@ -48,5 +64,10 @@ describe('benefit-led product homepage', () => {
     expect(screen.getByRole('button', { name: billing.yearly })).toHaveAttribute('aria-pressed', 'true')
     fireEvent.click(screen.getByRole('button', { name: billing.monthly }))
     expect(screen.getByRole('button', { name: billing.monthly })).toHaveAttribute('aria-pressed', 'true')
+    const scroll = vi.spyOn(window, 'scrollTo')
+    fireEvent.click(screen.getByRole('link', { name: `${c.developmentLink} →` }))
+    expect(document.getElementById('development')).not.toBeNull()
+    expect(scroll).toHaveBeenLastCalledWith(expect.objectContaining({ behavior: 'instant', top: expect.any(Number) }))
+    scroll.mockRestore()
   })
 })

@@ -42,6 +42,9 @@ export async function onRequestPost(context) {
   }
 
   const createdAt = new Date().toISOString()
+  const interests = type === 'download'
+    ? { productUpdates: body.interests?.productUpdates === true }
+    : body.interests || {}
   const payload = {
     name: name ? String(name).trim() : 'Subscriber',
     email: String(email).trim().toLowerCase(),
@@ -50,10 +53,10 @@ export async function onRequestPost(context) {
     type,
     locale,
     timestamp: createdAt,
+    interests,
   }
 
   const sourceLabel = `${payload.type}-form`
-  const interests = body.interests || {}
   const tracking = getTrackingMeta({ request, env, body })
 
   const detailsText = [
@@ -84,7 +87,12 @@ export async function onRequestPost(context) {
       type: payload.type,
       phone: payload.phone,
       locale: payload.locale,
-      interests: body.interests,
+      interests,
+      ...(type === 'download' ? {
+        productUpdatesConsent: interests.productUpdates,
+        productUpdatesConsentRecordedAt: createdAt,
+        productUpdatesConsentVersion: 'download-updates-v1',
+      } : {}),
       action: tracking.action,
       environment: tracking.environment,
       sessionId: tracking.sessionId,
