@@ -57,17 +57,18 @@ describe('site entry routing', () => {
     await waitFor(() => expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute('href', 'https://par.datomer.eu/'))
   })
 
-  it('keeps new product objectives separate from work in progress', () => {
+  it('keeps purpose on its own page and development details on About', () => {
     renderSite('https://par.datomer.eu/about')
-    expect(screen.getByRole('heading', { name: 'Our vision' })).toBeVisible()
+    expect(screen.queryByRole('heading', { name: 'Our vision' })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Our purpose →' })).toHaveAttribute('href', '/purpose')
     expect(screen.getByText('In development — not a promise of availability')).toBeVisible()
-    expect(screen.getByText(/not a list of features included in every plan/)).toBeVisible()
     expect(screen.getByText(/still need testing in the installed app/)).toBeVisible()
   })
 
   it('preserves Swedish purpose and development qualifications', () => {
     renderSite('https://par.datomer.eu/about?lang=sv')
-    expect(screen.getByRole('heading', { name: 'Vår vision' })).toBeVisible()
+    expect(screen.queryByRole('heading', { name: 'Vår vision' })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Vårt syfte →' })).toHaveAttribute('href', '/purpose?lang=sv')
     expect(screen.getByText('Under utveckling — inget löfte om tillgänglighet')).toBeVisible()
   })
 

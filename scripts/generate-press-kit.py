@@ -55,7 +55,8 @@ Features depend on your plan, device and setup.
 ## Brand Assets
 
 This kit contains logos, banners, and social images in multiple colour themes.
-All files are high-resolution and ready for print or web use.
+Images are supplied at their existing resolutions. Check dimensions for your
+intended screen or print size; the Datomer SVG wraps PNG artwork, not vector paths.
 
 ### Logos
 
@@ -83,7 +84,7 @@ palette: {themes}.
 - **Company:** Datomer AB
 - **Org. number:** 559199-6540
 - **Headquarters:** Nyskogavägen 11, 123 64 Farsta, Sweden
-- **Product:** Pär — private, local-first AI companion
+- **Product:** Pär — a personal AI assistant that runs on your device
 - **Platform:** Mac and Windows betas available. An older Linux build is listed; check its version and requirements. Pär Web is not yet available.
 - **Pricing:** Free tier; Plus $2/mo or $24/yr; Pro $10/user/mo or $120/user/yr; Enterprise custom
 - **Pär enquiries:** par@datomer.eu

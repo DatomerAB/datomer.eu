@@ -77,6 +77,7 @@ describe('DownloadForm', () => {
     const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
     const onClose = vi.fn()
     render(<DownloadForm downloadUrl={downloadUrl} onClose={onClose} />, { wrapper: Wrapper })
+    expect(screen.getByRole('checkbox', { name: /product updates/i })).not.toBeChecked()
 
     fireEvent.change(screen.getByRole('textbox', { name: /Full name/i }), {
       target: { value: 'Anna Svensson' },
@@ -107,6 +108,21 @@ describe('DownloadForm', () => {
     expect(clickSpy).toHaveBeenCalledTimes(1)
     expect(clickSpy.mock.instances[0].href).toBe(downloadUrl)
     expect(trackLinkedInConversion).toHaveBeenCalledExactlyOnceWith('download')
+    const submission = globalThis.fetch.mock.calls.find(([url]) => url === '/api/waitlist')
+    expect(JSON.parse(submission[1].body).interests).toEqual({ productUpdates: false })
+  })
+
+  it('only requests product updates after an explicit opt-in', async () => {
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+    render(<DownloadForm downloadUrl={downloadUrl} onClose={() => {}} />, { wrapper: Wrapper })
+    fireEvent.change(screen.getByRole('textbox', { name: /Full name/i }), { target: { value: 'Test User' } })
+    fireEvent.change(screen.getByRole('textbox', { name: /Email address/i }), { target: { value: 'test@example.com' } })
+    await waitFor(() => expect(screen.getByRole('combobox')).toHaveValue('SE'))
+    fireEvent.click(screen.getByRole('checkbox', { name: /product updates/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Download for Mac/i }))
+    await screen.findByText(/Thanks! Your download should start automatically/i)
+    const submission = globalThis.fetch.mock.calls.find(([url]) => url === '/api/waitlist')
+    expect(JSON.parse(submission[1].body).interests).toEqual({ productUpdates: true })
   })
 
   it('shows storage failures without downloading and allows a successful retry', async () => {

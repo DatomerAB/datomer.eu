@@ -11,6 +11,28 @@ import {
 } from './_emailTemplates.js'
 
 describe('email templates', () => {
+  it.each(['en', 'sv', 'de'])('matches download update consent and explains email providers in %s', locale => {
+    const optedIn = buildWaitlistConfirmationEmail({
+      type: 'download', name: 'Test', email: 'test@example.com', locale,
+      interests: { productUpdates: true },
+    })
+    const optedOut = buildWaitlistConfirmationEmail({
+      type: 'download', name: 'Test', email: 'test@example.com', locale,
+      interests: { productUpdates: false },
+    })
+    const expected = {
+      en: ['You chose to receive', 'You have not signed up', 'email-delivery provider'],
+      sv: ['Du valde att få', 'Du har inte anmält dig', 'e-postleverantör'],
+      de: ['Sie haben gelegentliche', 'nicht für Produktupdates', 'E-Mail-Dienstleister'],
+    }[locale]
+    for (const [email, text] of [[optedIn, expected[0]], [optedOut, expected[1]]]) {
+      expect(email.text).toContain(text)
+      expect(email.html).toContain(text)
+      expect(email.text).toContain(expected[2])
+    }
+    expect(optedOut.text).not.toContain(expected[0])
+  })
+
   it.each(['en', 'sv'])('keeps company enquiries separate from product emails in %s', locale => {
     const contact = { name: 'Test User', email: 'test@example.com', message: 'Data strategy', site: 'company', locale }
     for (const email of [buildContactSupportEmail(contact), buildContactConfirmationEmail(contact)]) {

@@ -48,6 +48,7 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', do
   const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
   const { t, lang } = useLanguage()
   const [form, setForm] = useState(readStoredForm)
+  const [productUpdates, setProductUpdates] = useState(false)
   const [busy, setBusy] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(null)
@@ -135,6 +136,7 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', do
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          interests: { productUpdates },
           type: 'download',
           locale: lang,
           action,
@@ -249,6 +251,10 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', do
                 ))}
               </select>
             </label>
+            <label className="download-updates">
+              <input type="checkbox" checked={productUpdates} onChange={event => setProductUpdates(event.target.checked)} />
+              <span className="form-consent">{t('downloadForm.consent')}</span>
+            </label>
             {error && <p role="alert" className="form-error">{error}</p>}
             <Turnstile
               ref={turnstileRef}
@@ -262,7 +268,6 @@ export function DownloadForm({ downloadUrl, downloadPlatform = 'macos-arm64', do
             <button type="submit" className="button button-primary" disabled={busy}>
               {busy ? t('downloadForm.sending') : submitLabel}
             </button>
-            <p className="form-consent">{t('downloadForm.consent')}</p>
           </form>
         )}
       </div>
