@@ -66,6 +66,13 @@ Optional recipient override: edit `DAILY_SUMMARY_TO_EMAIL` in `wrangler.toml` un
 
 ## Manual trigger
 
+In GitHub Actions, select **Trigger production daily summary**, choose the `main`
+branch, and click **Run workflow**. This sends one production summary using the
+existing `PRODUCTION_DAILY_SUMMARY_SECRET`; it does not deploy or change the cron
+schedule. A successful run confirms provider acceptance, not inbox delivery.
+Check Resend's delivery event and the recipient inbox separately. Do not retry
+blindly after a timeout: the first request may already have sent the email.
+
 You can also trigger the summary manually via the protected HTTP endpoint in the Pages project:
 
 ```bash
