@@ -132,7 +132,7 @@ workers/daily-summary/  # Separate Cloudflare Worker for daily summary cron
 
 ## Daily summary
 
-Every form submission is written to D1. A separate Worker runs daily and emails a categorized CSV summary to `dailysummary@datomer.eu`.
+Every form submission is written to D1. A separate Worker runs daily and emails a categorized CSV summary to `hello@datomer.eu`.
 
 Trigger manually from the Worker:
 

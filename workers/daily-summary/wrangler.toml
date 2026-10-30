@@ -26,7 +26,7 @@ crons = ["0 6 * * *"]
 RESEND_FROM_EMAIL = "par@datomer.eu"
 RESEND_FROM_NAME = "Pär by Datomer"
 CONTACT_TO_EMAIL = "par@datomer.eu"
-DAILY_SUMMARY_TO_EMAIL = "dailysummary@datomer.eu"
+DAILY_SUMMARY_TO_EMAIL = "hello@datomer.eu"
 ENVIRONMENT = "production"
 
 # Preview / staging environment
@@ -42,5 +42,5 @@ crons = ["0 6 * * *"]
 RESEND_FROM_EMAIL = "par@datomer.eu"
 RESEND_FROM_NAME = "Pär by Datomer"
 CONTACT_TO_EMAIL = "par@datomer.eu"
-DAILY_SUMMARY_TO_EMAIL = "dailysummary@datomer.eu"
+DAILY_SUMMARY_TO_EMAIL = "hello@datomer.eu"
 ENVIRONMENT = "preview"

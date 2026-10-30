@@ -8,7 +8,7 @@ This section covers the automated daily summary introduced in August 2026. Test 
 
 ### Goal
 
-Ensure every form submission is stored, counted, and included in the daily CSV summary email sent to `dailysummary@datomer.eu`.
+Ensure every form submission is stored, counted, and included in the daily CSV summary email sent to `hello@datomer.eu`.
 
 ### Prerequisites
 
@@ -89,7 +89,7 @@ Ensure every form submission is stored, counted, and included in the daily CSV s
 ### Scenario D5: Verify the summary email
 
 #### Steps
-1. Open the inbox for `dailysummary@datomer.eu`.
+1. Open the inbox for `hello@datomer.eu`.
 2. Find the latest daily summary email.
 3. Open the email and download the CSV attachment.
 4. Open the CSV in a spreadsheet or text editor.
@@ -152,7 +152,7 @@ Ensure every form submission is stored, counted, and included in the daily CSV s
 - [ ] Newsletter form submission stores in D1.
 - [ ] User receives confirmation email after each form.
 - [ ] Worker manual trigger returns `ok: true`.
-- [ ] Summary email arrives at `dailysummary@datomer.eu`.
+- [ ] Summary email arrives at `hello@datomer.eu`.
 - [ ] CSV attachment contains correct data.
 - [ ] Empty day still sends a "no submissions" email.
 - [ ] Pages admin endpoint works with correct token.

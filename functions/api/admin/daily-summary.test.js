@@ -77,7 +77,7 @@ describe('daily-summary admin endpoint', () => {
     expect(sendSupportEmail).toHaveBeenCalledTimes(1)
 
     const call = sendSupportEmail.mock.calls[0][0]
-    expect(call.to).toEqual(['dailysummary@datomer.eu'])
+    expect(call.to).toEqual(['hello@datomer.eu'])
     expect(call.attachments).toHaveLength(1)
     expect(call.attachments[0].filename).toMatch(/datomer-submissions-\d{4}-\d{2}-\d{2}\.csv/)
 

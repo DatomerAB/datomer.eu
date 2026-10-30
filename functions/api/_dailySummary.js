@@ -3,7 +3,7 @@ import { getSubmissionsInRange, getEventsInRange, pruneOldSubmissions } from './
 import { buildDailySummaryEmail } from './_emailTemplates.js'
 import { campaignLabel, readWebsiteMetadata, websiteLabel } from './_websiteSummary.js'
 
-export const DEFAULT_SUMMARY_TO_EMAIL = 'dailysummary@datomer.eu'
+export const DEFAULT_SUMMARY_TO_EMAIL = 'hello@datomer.eu'
 export const RETENTION_DAYS = 30
 // Resend attachment limit is ~10 MB total; stay safely under it.
 export const MAX_ATTACHMENT_BYTES = 9 * 1024 * 1024
