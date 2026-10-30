@@ -30,7 +30,7 @@ jobs:
       self_hosted_labels: '["self-hosted"]'
       controller_labels: '["self-hosted"]'
       github_hosted_label: ubuntu-latest
-      wait_minutes: ${{ inputs.wait_minutes }}
+      wait_minutes: ${{ fromJSON(github.event.inputs.wait_minutes || '30') }}
     secrets:
       runner_check_token: ${{ secrets.SELF_HOSTED_RUNNER_CHECK_TOKEN }}
     permissions:
