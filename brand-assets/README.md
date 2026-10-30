@@ -71,8 +71,8 @@ alignment or delivery. Recheck DNS before activation.
    payment and existing daily-summary messages use product context.
    Explicit customer recipients and support Reply-To addresses are preserved.
    The independent daily-summary Worker now prepares `par@datomer.eu` as its
-   sender, while its internal recipient remains `dailysummary@datomer.eu`.
-   Deploy it separately from Pages to activate the sender change.
+   sender, while its internal recipient is `hello@datomer.eu`.
+   Deploy it separately from Pages to activate sender or recipient changes.
 4. Test delivery and inspect received SPF/DKIM/DMARC results using controlled
    inboxes. Start DMARC monitoring and resolve alignment problems for every
    legitimate sender before enforcing policy. Do not publish an untested reject

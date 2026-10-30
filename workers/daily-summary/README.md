@@ -1,10 +1,10 @@
 # datomer-daily-summary Worker
 
-A separate Cloudflare Worker that runs once per day at 06:00 UTC, queries the previous 25 hours of form submissions and consented website events from the shared D1 database, and emails a summary with CSV attachments to `dailysummary@datomer.eu`. Because the report runs daily with a rolling 25-hour window, consecutive emails overlap by one hour.
+A separate Cloudflare Worker that runs once per day at 06:00 UTC, queries the previous 25 hours of form submissions and consented website events from the shared D1 database, and emails a summary with CSV attachments to `hello@datomer.eu`. Because the report runs daily with a rolling 25-hour window, consecutive emails overlap by one hour.
 
-Both environments send as `Pär by Datomer <par@datomer.eu>`. The internal summary
-recipient is separate from public enquiry routing: Pär enquiries use
-`par@datomer.eu`, while general company enquiries use `hello@datomer.eu`.
+Both environments send as `Pär by Datomer <par@datomer.eu>` and deliver internal
+summaries to `hello@datomer.eu`. Public enquiry routing is unchanged: Pär enquiries
+use `par@datomer.eu`, while general company enquiries use `hello@datomer.eu`.
 Verify the sender with Resend and confirm the mailbox can receive replies before
 deploying this configuration.
 

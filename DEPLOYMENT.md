@@ -262,8 +262,8 @@ Inbox avatars require provider/domain setup; deploying
 HTML icons alone does not activate BIMI or change the inbox sender picture.
 The two addresses share a domain, so default BIMI cannot reliably distinguish
 their inbox avatars. The independent daily-summary Worker sends as Pär from
-`par@datomer.eu`; its internal report recipient remains `dailysummary@datomer.eu`.
-Deploy the Worker separately to activate its sender change.
+`par@datomer.eu`; its internal report recipient is `hello@datomer.eu` in production
+and preview. Deploy the Worker separately to activate its sender or recipient changes.
 
 ### Local AI and confidential-work messaging
 
