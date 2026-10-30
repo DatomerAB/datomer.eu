@@ -1,0 +1,70 @@
+name: Trigger production daily summary
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner_preference:
+        description: "Runner preference"
+        type: choice
+        default: self-hosted-preferred
+        options: [self-hosted-preferred, github-hosted]
+      wait_minutes:
+        description: "Maximum availability wait (0-30 minutes)"
+        type: number
+        default: 30
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trigger-production-daily-summary
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  runner-selection:
+    if: github.ref == 'refs/heads/main'
+    uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@d2839636e84e6a6816f2c7b6d8df885dbbaefbf2
+    with:
+      runner_preference: ${{ inputs.runner_preference }}
+      self_hosted_labels: '["self-hosted"]'
+      controller_labels: '["self-hosted"]'
+      github_hosted_label: ubuntu-latest
+      wait_minutes: ${{ inputs.wait_minutes }}
+    secrets:
+      runner_check_token: ${{ secrets.SELF_HOSTED_RUNNER_CHECK_TOKEN }}
+    permissions:
+      actions: read
+
+  trigger:
+    needs: runner-selection
+    runs-on: ${{ fromJSON(needs.runner-selection.outputs.runs_on) }}
+    timeout-minutes: 5
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Send one production summary
+        shell: bash
+        env:
+          DAILY_SUMMARY_SECRET: ${{ secrets.PRODUCTION_DAILY_SUMMARY_SECRET }}
+        run: |
+          node --input-type=module <<'NODE'
+          const secret = process.env.DAILY_SUMMARY_SECRET;
+          if (!secret) throw new Error('Production daily-summary secret is not configured');
+
+          const response = await fetch('https://datomer-daily-summary-production.jay-tchinnaswamy.workers.dev/', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${secret}` },
+            signal: AbortSignal.timeout(90000),
+          });
+          if (!response.ok) throw new Error(`Daily-summary trigger failed: HTTP ${response.status}`);
+          const result = await response.json();
+          if (result.ok !== true || result.emailResult?.sent !== true) {
+            throw new Error('Daily-summary email was not accepted by the provider');
+          }
+          console.log(`Summary accepted by email provider; submissions: ${result.count}`);
+          console.log('Acceptance does not confirm delivery. Check the email provider delivery event and inbox.');
+          NODE
