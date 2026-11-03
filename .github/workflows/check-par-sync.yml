@@ -3,6 +3,8 @@ name: Check Pär content sync
 # Validates that datomer.eu's product metadata remains identical to the
 # canonical payload generated in the private DatomerAB/Par repository.
 # This is a safety net in case a manual edit bypasses the automated sync.
+# Scheduled checks run alternate Mondays at 06:00 UTC, anchored to 2026-11-02.
+# Off weeks run only runner selection and the cadence gate.
 
 on:
   pull_request:
@@ -30,6 +32,25 @@ concurrency:
   queue: max
 
 jobs:
+  cadence:
+    needs: runner-selection
+    runs-on: ${{ fromJSON(needs.runner-selection.outputs.runs_on) }}
+    timeout-minutes: 2
+    permissions: {}
+    outputs:
+      run_checks: ${{ steps.decide.outputs.run_checks }}
+    steps:
+      - name: Gate alternate Monday checks
+        id: decide
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            // Fixed Monday anchor keeps the cadence stable across year boundaries.
+            const anchor = Date.UTC(2026, 10, 2);
+            const weeks = Math.floor((Date.now() - anchor) / (7 * 86400000));
+            const runChecks = context.eventName !== 'schedule' || weeks % 2 === 0;
+            core.setOutput('run_checks', String(runChecks));
+            core.info(runChecks ? 'Checks enabled' : 'Off week; scheduled checks skipped');
   runner-selection:
     uses: DatomerAB/par-releases/.github/workflows/select-runner.yml@d2839636e84e6a6816f2c7b6d8df885dbbaefbf2
     with:
@@ -44,7 +65,8 @@ jobs:
       actions: read
 
   check-models:
-    needs: runner-selection
+    needs: [runner-selection, cadence]
+    if: needs.cadence.outputs.run_checks == 'true'
     runs-on: ${{ fromJSON(needs.runner-selection.outputs.runs_on) }}
     permissions:
       contents: read

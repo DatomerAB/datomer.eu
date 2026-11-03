@@ -13,7 +13,11 @@
 ## Workflows
 
 - `draft-release-changelog.yml` — creates changelog PR from release dispatch.
-- `check-par-sync.yml` — validates `src/data/models.json` matches Pär.
+- `check-par-sync.yml` — validates `src/data/models.json` and AI metadata match
+  Pär on alternate Mondays at 06:00 UTC, anchored to 2026-11-02 (then November 16,
+  November 30, and so on). Relevant PRs and manual dispatch still run immediately.
+  Off-weeks run only runner selection and the cadence gate. Scheduled changes
+  take effect after merging to the default branch.
 - Cloudflare Pages deploy on merge to `main`.
 
 ## Source of truth

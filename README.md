@@ -24,6 +24,17 @@ Staging deployment refresh: 2026-08-27.
 
 Pushes to either branch deploy automatically via GitHub Actions and Cloudflare Pages.
 
+## Scheduled content checks
+
+The [content-sync workflow](.github/workflows/check-par-sync.yml) compares product
+models and AI metadata with canonical Pär content every other Monday at 06:00 UTC,
+anchored to November 2, 2026 (then November 16, November 30, and so on).
+Relevant pull requests and manual dispatch still run checks immediately.
+A weekly cron runs runner selection and a small cadence gate; full checks are
+skipped on off-weeks. The cadence remains stable across month/year boundaries.
+Schedule changes become active after merging into the default branch.
+This does not change website deployment triggers or the daily-summary Worker.
+
 ## Local development
 
 ### Company and product previews
